@@ -1,0 +1,12 @@
+:markup-in-source: verbatim,attributes,quotes
+:APPS_HOSTNAME_SUFFIX: %APPS_HOSTNAME_SUFFIX%
+:CHE_URL: http://codeready-workspaces.%APPS_HOSTNAME_SUFFIX%
+:USER_ID: %USER_ID%
+:OPENSHIFT_CONSOLE_URL: https://console-openshift-console.%APPS_HOSTNAME_SUFFIX%/topology/ns/my-project{USER_ID}/graph
+
+= Container Concepts and Security
+:navtitle: Container Concepts and Security
+
+_X MINUTE EXERCISE_
+
+In this lab you will learn basic container concepts and important security considerations

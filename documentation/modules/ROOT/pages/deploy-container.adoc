@@ -1,0 +1,12 @@
+:markup-in-source: verbatim,attributes,quotes
+:USER_ID: %USER_ID%
+:OPENSHIFT_CONSOLE_URL: https://console-openshift-console.%APPS_HOSTNAME_SUFFIX%/topology/ns/my-project{USER_ID}/graph
+:WORKSHOP_GIT_REPO: %WORKSHOP_GIT_REPO%
+:WORKSHOP_GIT_REF: %WORKSHOP_GIT_REF%
+
+= Deploy your Container
+:navtitle: Deploy your Container
+
+_10 MINUTE EXERCISE_
+
+In this lab we'll show you how your container can now be deployed on an Enterprise Kubernetes solution like OpenShift

@@ -1,0 +1,11 @@
+= Introduction
+:navtitle: Introduction
+
+_2 MINUTE EXERCISE_
+
+In this workshop you will learn how to create secure containers using the following tools on RHEL:
+
+* **buildah**: build the container
+* **podman**: run the container
+* **skopeo**: distribute the container
+

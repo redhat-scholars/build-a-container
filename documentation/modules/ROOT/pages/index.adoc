@@ -1,0 +1,12 @@
+= Welcome to the Container Workshop
+:page-layout: home
+:!sectids:
+
+[.text-center.strong]
+== Ready to learn about Containers?
+
+This immersive workshop will introduce you to the world of Containers and Containerization from the perspective of Red Hat, a leader in the Enterprise Kubernetes space
+
+image::splash-containers.jpeg[Containers!]
+
+The goal of this hands-workshop is to give you a crash course introduction to containers and their many use cases.  It also provides a platform to learn about Kubernetes and why it has become so prominent in the industry.

@@ -1,0 +1,51 @@
+{
+	"name": "Container Workshop Development",
+	"dockerFile": "Dockerfile",
+	"runArgs": [
+		// FIXME: Due to issues with docker for mac, need to mount the docker socket in this .raw way
+		// see: https://github.com/docker/for-mac/issues/4755
+		"-v", "/var/run/docker.sock.raw:/var/run/docker.sock",
+		
+		"-v", "${env:HOME}/.aws:/home/jboss/.aws",
+		"-v", "${env:HOME}/.kube:/home/jboss/.kube",
+		"-v", "${env:HOME}/.vs-kubernetes:/home/jboss/.vs-kubernetes",
+
+		// use local .oh-my-zsh configuration if it exists (overwriting one in container).
+		// comment the following line out if you want to use local installation on container instead
+		"-v", "${env:HOME}/.oh-my-zsh:/home/jboss/.oh-my-zsh",
+		"-v", "${env:HOME}/.helm:/home/jboss/.helm",
+		"-v", "${env:HOME}/.ssh:/home/jboss/.ssh",
+		// mount npm cache locally
+		"-v", "${env:HOME}/.npm:/home/jboss/.npm",
+
+		// Used for AWS based clusters
+		"-e", "AWS_PROFILE=redhat",
+		"-e", "REGION=ap-southeast-2"
+		//"AWS_PROFILE=${env:AWS_PROFILE}"
+	],
+	"postStartCommand": "rsync -a .devcontainer/workspace-setup/ ${containerWorkspaceFolder}/.vscode/ --ignore-existing",
+	"extensions": [
+		"joaompinto.asciidoctor-vscode",
+		"humao.rest-client",
+		"ms-kubernetes-tools.vscode-kubernetes-tools",
+		"haaaad.ansible"
+	],
+	"files.associations": {
+        "**/ansible/**/*": "ansible",
+		"ansible/": "ansible",
+        // "**/tasks/**/*.yml" : "ansible",
+        // "**/handler/*.yml" : "ansible",
+        // "**/*_vars/**/*.yml" : "ansible",
+        // "**/roles/**/*.yml" : "ansible",
+        // "**/playbooks/**/*.yml" : "ansible",
+        // "**/*ansible*/**/*.yml" : "ansible",
+        // "**/vars/**/*.yml": "ansible",
+        // "**/inventory/*/*": "ansible"
+    },
+	"settings":{
+		"terminal.integrated.shell.linux": "/bin/zsh",
+		"workbench.colorTheme": "Visual Studio 2019 Light",
+		"editor.tabCompletion": "on",
+		"editor.snippetSuggestions": "top"
+	}
+}
