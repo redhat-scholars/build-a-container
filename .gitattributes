@@ -1,0 +1,6 @@
+*.rpm !text !filter !merge !diff
+*.bz2 !text !filter !merge !diff
+*.png !text !filter !merge !diff
+*.svg !text !filter !merge !diff
+*.jpeg !text !filter !merge !diff
+*.gif !text !filter !merge !diff
