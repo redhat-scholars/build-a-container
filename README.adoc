@@ -1,14 +1,14 @@
 See  https://hatmarch.github.io/container-workshop/[workshop documentation] for assets generated from this workshop
 
-[NOTE]
-====
-This repo has *submodules*.  To clone this repo, use this command to also clone submodules:
+// [NOTE]
+// ====
+// This repo has *submodules*.  To clone this repo, use this command to also clone submodules:
 
-----
-git clone --recurse-submodules https://github.com/hatmarch/cdc-data-monolith
-----
+// ----
+// git clone --recurse-submodules https://github.com/hatmarch/cdc-data-monolith
+// ----
 
-====
+// ====
 
 == Documentation Updates
 
