@@ -1,0 +1,67 @@
+# syntax = docker/dockerfile:1.0-experimental
+
+# NOTE because of the special command line flags (e.g --secret) that need to be passed
+# to the docker build process, we are not able to put these commands in the dockerfile 
+# for the devcontainer
+FROM quay.io/mhildenb/operator-builder:rekor-0.2
+
+USER root
+
+# install docker for use with kn func
+RUN --mount=type=secret,id=myuser --mount=type=secret,id=mypass \
+    subscription-manager register  --username=$(cat /run/secrets/myuser) \
+    --password=$(cat /run/secrets/mypass) --auto-attach --force
+
+RUN subscription-manager repos --enable ansible-2.9-for-rhel-8-x86_64-rpms
+
+# Add support for Ansible (with python modules)
+# With npm and gulp: add support for local antora based documentation building
+RUN dnf install -y ansible python3 npm && npm i -g @antora/cli@2.3 @antora/site-generator-default@2.3 \
+    && npm rm --global npx && npm install --global npx && npm install --global gulp \
+    # install useful tools (pinetry for some pgp stuffs)
+    && dnf install -y skopeo wget zsh jq iputils vi git pinentry \
+    # clean up dnf stuff
+    && dnf clean all && rm -r /var/cache/dnf
+
+RUN subscription-manager unregister
+
+# install a suitably old version yq (version 4.x and above won't work)
+# See info here: https://mikefarah.gitbook.io/yq/upgrading-from-v3
+# if you want to upgrade to the new 4.x syntax
+RUN wget https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_386 -O /usr/bin/yq &&\
+    chmod +x /usr/bin/yq
+RUN wget https://github.com/go-swagger/go-swagger/releases/download/v0.26.1/swagger_linux_386 -O /usr/bin/swagger &&\
+    chmod +x /usr/bin/swagger
+
+# install stern
+RUN cd /usr/local/bin && \
+    wget https://github.com/wercker/stern/releases/download/1.11.0/stern_linux_amd64 -O /usr/local/bin/stern && \
+    chmod 755 /usr/local/bin/stern && \
+# install knative
+    wget -qO- https://mirror.openshift.com/pub/openshift-v4/clients/serverless/0.19.1/kn-linux-amd64-0.19.1.tar.gz | tar -zxvf - -C /usr/local/bin ./kn && chmod 755 /usr/local/bin/kn
+
+# install a more modern version of tkn
+RUN curl -L https://mirror.openshift.com/pub/openshift-v4/clients/pipeline/0.15.0/tkn-linux-amd64-0.15.0.tar.gz | \
+    tar -xvzf - -C /usr/local/bin/ tkn && chmod 755 /usr/local/bin/tkn
+
+# overwrite existing oc with the absolute newest version of the openshift client
+RUN curl -L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz | \
+    tar -xvzf - -C /usr/local/bin/ oc && chmod 755 /usr/local/bin/oc && if [[ -f /usr/local/bin/kubectl ]]; then rm /usr/local/bin/kubectl; fi && ln -s /usr/local/bin/oc /usr/local/bin/kubectl
+
+# install the AWS cli
+RUN curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && ./aws/install && rm awscliv2.zip && rm -rf ./aws
+
+# install the latest helm 3 client
+RUN wget https://mirror.openshift.com/pub/openshift-v4/clients/helm/latest/helm-linux-amd64 -O /usr/local/bin/helm && \
+    chmod 755 /usr/local/bin/helm
+    
+RUN chown -R jboss /home/jboss && chgrp -R root /home/jboss
+
+USER jboss
+
+COPY .zshrc.example $HOME/.zshrc
+
+# Default DEMO_HOME directory
+ENV DEMO_HOME /workspaces/container-workshop
+

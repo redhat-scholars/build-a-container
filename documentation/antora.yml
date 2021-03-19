@@ -1,0 +1,7 @@
+name: intro-container-workshop
+title: Build a Container Workshop
+version: "1.0"
+nav:
+  - modules/ROOT/nav.adoc
+
+start_page: ROOT:index.adoc

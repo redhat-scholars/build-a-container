@@ -1,0 +1,54 @@
+:markup-in-source: verbatim,attributes,quotes
+:CHE_URL: http://codeready-workspaces.%APPS_HOSTNAME_SUFFIX%
+:USER_ID: %USER_ID%
+:OPENSHIFT_PASSWORD: %OPENSHIFT_PASSWORD%
+:OPENSHIFT_CONSOLE_URL: https://console-openshift-console.%APPS_HOSTNAME_SUFFIX%/topology/ns/my-project{USER_ID}/graph
+
+= Get your RHEL Virtual Machine
+:navtitle: Get your RHEL Virtual Machine
+
+_10 MINUTE EXERCISE_
+
+In this lab you log into your Red Hat Enterprise Linux virutal machine.  This is the place where you'll be doing the exercises for the bulk of the exercises in this lab.
+
+PLACEHOLDE
+[#what_is_rhel]
+== What is RedHat Enterpise Linux?
+
+
+[#get_your_vm]
+== Getting your VM
+
+PLACHOLDER
+
+[NOTE]
+.Example Note
+====
+Example Note
+====
+
+`
+[sidebar]
+.Example Sidebar
+--
+Example sidebar
+--
+
+[tabs, subs="attributes+,+macros"]
+====
+
+Example Tab 1::
++
+-- 
+Example Tab 1
+--
+
+Example Tab 2::
++
+--
+Placeholder tab 2
+--
+====
+
+
+Now you are ready to get started with the labs!
