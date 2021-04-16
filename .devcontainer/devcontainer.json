@@ -2,10 +2,6 @@
 	"name": "Container Workshop Development",
 	"dockerFile": "Dockerfile",
 	"runArgs": [
-		// FIXME: Due to issues with docker for mac, need to mount the docker socket in this .raw way
-		// see: https://github.com/docker/for-mac/issues/4755
-		"-v", "/var/run/docker.sock.raw:/var/run/docker.sock",
-		
 		"-v", "${env:HOME}/.aws:/home/jboss/.aws",
 		"-v", "${env:HOME}/.kube:/home/jboss/.kube",
 		"-v", "${env:HOME}/.vs-kubernetes:/home/jboss/.vs-kubernetes",
