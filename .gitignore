@@ -37,6 +37,7 @@ istio-1.1.1
 firebase*
 yarn*
 package*
+!package_dependencies.yml
 !package.json
 node_modules
 .firebaserc
