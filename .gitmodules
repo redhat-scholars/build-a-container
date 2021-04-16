@@ -1,0 +1,4 @@
+[submodule "container-workshop-exercises"]
+	path = container-workshop-exercises
+	url = https://github.com/hatmarch/container-workshop-exercises.git
+	branch = master
