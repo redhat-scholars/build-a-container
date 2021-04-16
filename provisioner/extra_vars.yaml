@@ -1,0 +1,25 @@
+# region where the nodes will live
+ec2_region: ap-southeast-2
+
+# name prefix for all the VMs
+ec2_name_prefix: test-a-container
+
+# creates student_total of workbenches for the workshop
+student_total: 1
+
+# Set the right workshop type, like network, rhel or f5 (see above)
+workshop_type: container
+
+#####OPTIONAL VARIABLES
+
+# turn DNS on for control nodes, and set to type in valid_dns_type
+dns_type: aws
+
+# password for Ansible control node
+admin_password: r3dh4t1!
+
+# setup code servers?
+code_server: true
+
+# Sets the Route53 DNS zone to use for Amazon Web Services
+workshop_dns_zone: openshifttc.com
