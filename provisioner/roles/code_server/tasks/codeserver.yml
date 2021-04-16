@@ -62,6 +62,14 @@
   set_fact:
     ext_dest_dir: "/home/{{ username }}/.local/share/code-server/extensions"
 
+- name: Create target directory
+  file: 
+    path: "{{ ext_dest_dir }}"
+    state: directory
+    recurse: true
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
 - name: Download extension files to host
   get_url:
     url: "{{ code_extension_src_url }}/{{ item }}"
