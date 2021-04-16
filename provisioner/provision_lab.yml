@@ -117,11 +117,6 @@
           - {{hostvars['attendance-host'].login_website_information | default("attendance feature is off") }}
           {% endif %}
 
-          FAILURES
-          *******************
-          {{dns_information}}
-          {{callback_information}}
-
     - name: Print Summary Information
       debug:
         msg: "{{summary_information}}"
