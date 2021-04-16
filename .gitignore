@@ -44,3 +44,7 @@ node_modules
 
 secrets/
 gh-publish/
+
+# testing the ansible playbook for creation of the lab
+test-a-container/
+build-a-container/

@@ -1,0 +1,6 @@
+---
+code_server_rpm_url: "https://github.com/cdr/code-server/releases/download/v3.9.3/code-server-3.9.3-amd64.rpm"
+code_extension_src_url: "https://mwh-demo-assets.s3-ap-southeast-2.amazonaws.com/build-a-container"
+extensions_to_install:
+  - bierner.markdown-preview-github-styles-0.1.6.vsix
+  - hnw.vscode-auto-open-markdown-preview-0.0.4.vsix

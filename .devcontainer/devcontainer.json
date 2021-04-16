@@ -14,7 +14,6 @@
 		// comment the following line out if you want to use local installation on container instead
 		"-v", "${env:HOME}/.oh-my-zsh:/home/jboss/.oh-my-zsh",
 		"-v", "${env:HOME}/.helm:/home/jboss/.helm",
-		"-v", "${env:HOME}/.ssh:/home/jboss/.ssh",
 		// mount npm cache locally
 		"-v", "${env:HOME}/.npm:/home/jboss/.npm",
 
