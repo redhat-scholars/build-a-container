@@ -4,3 +4,4 @@ code_extension_src_url: "https://mwh-demo-assets.s3-ap-southeast-2.amazonaws.com
 extensions_to_install:
   - bierner.markdown-preview-github-styles-0.1.6.vsix
   - hnw.vscode-auto-open-markdown-preview-0.0.4.vsix
+  - vscode-mysql-0.4.0.vsix
