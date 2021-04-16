@@ -27,11 +27,15 @@
       - tree
       - sshpass
       - tmux
-      - python3-pip
-      - python3-devel
-      - ansible
+      # - python3-pip
+      # - python3-devel
+      # - ansible
       - gcc
+      # mysql client
+      - mysql
       - bind-utils
+      - podman
+      - buildah
     state: present
   register: dnf_check
   until: dnf_check is not failed

@@ -74,14 +74,14 @@
     accept_hostkey: true
     clone: true
     dest: /tmp/workshops
-    repo: '{{ ansible_workshops_url | default("https://github.com/ansible/workshops.git") }}'
+    repo: '{{ container_exercises_url | default("https://github.com/hatmarch/container-workshop-exercises.git") }}'
     version: '{{ ansible_workshops_version | default("master") }}'
     refspec: '{{ ansible_workshops_refspec | default("") }}'
     force: true
 
 - name: Move relevant exercises to correct location
   copy:
-    src: '{{ "/tmp/workshops/" + exercise_src_location | default("exercises/ansible_rhel") + "/" }}'
+    src: '{{ "/tmp/workshops/" + exercise_src_location | default(".") + "/" }}'
     dest: '{{ "/home/" + username + "/" + exercise_dest_location | default(workshop_type + "-workshop") }}'
     remote_src: true
     owner: "{{ username }}"

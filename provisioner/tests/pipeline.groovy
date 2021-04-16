@@ -73,7 +73,7 @@ ${AWX_NIGHTLY_REPO_URL}"""
                     ).trim()
                     DOTLESS_TOWER_VERSION = TOWER_VERSION.replace('.', '').trim()
                     SHORTENED_ANSIBLE_VERSION = ANSIBLE_VERSION.replace('stable-', '').replace('.', '').trim()
-                    ANSIBLE_WORKSHOPS_URL = "https://github.com/${params.WORKSHOP_FORK}/workshops.git"
+                    container_exercises_url = "https://github.com/${params.WORKSHOP_FORK}/workshops.git"
 
                     if (params.TOWER_VERSION == 'devel') {
                         tower_installer_url = "${AWX_NIGHTLY_REPO_URL}/${params.TOWER_VERSION}/setup/ansible-tower-setup-latest.tar.gz"
@@ -91,7 +91,7 @@ tower_installer_url: ${tower_installer_url}
 gpgcheck: ${gpgcheck}
 aw_repo_url: ${aw_repo_url}
 admin_password: ${ADMIN_PASSWORD}
-ansible_workshops_url: ${ANSIBLE_WORKSHOPS_URL}
+container_exercises_url: ${container_exercises_url}
 ansible_workshops_version: ${params.WORKSHOP_BRANCH}
 ec2_name_prefix: tqe-{{ workshop_type | replace('_', '-') }}-tower${DOTLESS_TOWER_VERSION}-${env.BUILD_ID}-${SHORTENED_ANSIBLE_VERSION}
 EOF
