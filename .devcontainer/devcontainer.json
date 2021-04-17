@@ -12,6 +12,7 @@
 		"-v", "${env:HOME}/.helm:/home/jboss/.helm",
 		// mount npm cache locally
 		"-v", "${env:HOME}/.npm:/home/jboss/.npm",
+		"-v", "${env:HOME}/.gitconfig:/home/jboss/.gitconfig",
 
 		// Used for AWS based clusters
 		"-e", "AWS_PROFILE=redhat",
