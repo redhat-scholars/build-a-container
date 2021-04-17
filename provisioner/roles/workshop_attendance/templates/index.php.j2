@@ -39,11 +39,13 @@ if (!isset($_SESSION['email'])) {
         } else {
           db_execute_prepare('UPDATE `users` set name=?, email=? WHERE id = ?', array(sql_clean_username($_POST['name']), sql_clean_username($_POST['email']), $id));
           $_SESSION['email'] = sql_clean_username($_POST['email']);
+          $_SESSION['id'] = $id;
           Header("Location: /#studentinfo\n\n");
           exit;
         }
       } else {
         $_SESSION['email'] = $student['email'];
+        $_SESSION['id'] = $student['id'];
         Header("Location: /#studentinfo\n\n");
         exit;
       }
@@ -289,13 +291,13 @@ a {
         <div class="row">
             <div class="col-md-8 mx-auto">
               <h1 class="project-name">Build-A-Container<br/><strong class="text-nowrap">Technical Workshops</strong></h1>
-              <h2>The Build-A-Container workshop is intended to teach secure container concepts through instructor-led workshops and self-paced exercises.</h2>
+              <h2>The Build-A-Container workshops are intended to teach secure container concepts through instructor-led workshops and self-paced exercises.</h2>
 
-                <a target=_blank href="https://hatmarch.github.io/container-workshop/?USER=student' . $student['id'] . '" class="btn btn-ghost">Workshop Instructions</a><br><br>
+                <a target=_blank href="https://hatmarch.github.io/container-workshop/?USER=student<?php print $_SESSION['id']; ?>" class="btn btn-ghost">Workshop Instructions</a><br><br>
 
               <h1>Workshop Name: {{ec2_name_prefix}}</h1>
 
-            </div>
+            </div> 
         </div>
       </div>
     </section>
