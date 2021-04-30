@@ -3,7 +3,7 @@
 # NOTE because of the special command line flags (e.g --secret) that need to be passed
 # to the docker build process, we are not able to put these commands in the dockerfile 
 # for the devcontainer
-FROM quay.io/mhildenb/operator-builder:rekor-0.2
+FROM registry.access.redhat.com/ubi8/python-36
 
 USER root
 
@@ -16,10 +16,11 @@ RUN subscription-manager repos --enable ansible-2.9-for-rhel-8-x86_64-rpms
 
 # Add support for Ansible (with python modules)
 # With npm and gulp: add support for local antora based documentation building
-RUN dnf install -y ansible python3 npm && npm i -g @antora/cli@2.3 @antora/site-generator-default@2.3 \
+RUN dnf install -y ansible && pip3 install --upgrade pip \
+    && npm i -g @antora/cli@2.3 @antora/site-generator-default@2.3 \
     && npm rm --global npx && npm install --global npx && npm install --global gulp \
     # install useful tools (pinetry for some pgp stuffs)
-    && dnf install -y skopeo wget zsh jq iputils vi git pinentry \
+    && dnf install -y skopeo wget zsh jq iputils vi git \
     # clean up dnf stuff
     && dnf clean all && rm -r /var/cache/dnf
 
@@ -56,9 +57,9 @@ RUN curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o 
 RUN wget https://mirror.openshift.com/pub/openshift-v4/clients/helm/latest/helm-linux-amd64 -O /usr/local/bin/helm && \
     chmod 755 /usr/local/bin/helm
     
-RUN chown -R jboss /home/jboss && chgrp -R root /home/jboss
+RUN chown -R default:0 /opt/app-root/src
 
-USER jboss
+USER default
 
 COPY .zshrc.example $HOME/.zshrc
 
