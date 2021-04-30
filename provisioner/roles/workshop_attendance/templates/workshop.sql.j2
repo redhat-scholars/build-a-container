@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `users` (
       {% if workshop_type == "windows" %}
         'https://student{{ number }}-code.{{ ec2_name_prefix }}.{{ workshop_dns_zone }}/?folder=vscode-remote%3A%2F%2Fstudent{{ number }}-code.{{ ec2_name_prefix }}.{{ workshop_dns_zone }}%2Fhome%2Fstudent{{ number }}%2Fwindows-workshop%2Fworkshop_project',
       {% else %}
-        'https://student{{ number }}-code.{{ ec2_name_prefix }}.{{ workshop_dns_zone }}',
+        'https://student{{ number }}-code.{{ ec2_name_prefix }}.{{ workshop_dns_zone }}/?folder=/home/student{{ number }}',
       {% endif %}
         'https://student{{ number }}-code.{{ ec2_name_prefix }}.{{ workshop_dns_zone }}',
       {% if workshop_type == "windows" %}
