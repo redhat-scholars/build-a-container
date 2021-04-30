@@ -1,6 +1,6 @@
 {
 	"name": "Container Workshop Development",
-	"dockerFile": "Dockerfile",
+	"dockerFile": "Dockerfile${env:DEVCONTAINER_SUFFIX}",
 	"runArgs": [
 		"-v", "${env:HOME}/.aws:/home/jboss/.aws",
 		"-v", "${env:HOME}/.kube:/home/jboss/.kube",
