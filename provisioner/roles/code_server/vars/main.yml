@@ -5,3 +5,4 @@ extensions_to_install:
   - bierner.markdown-preview-github-styles-0.1.6.vsix
   - hnw.vscode-auto-open-markdown-preview-0.0.4.vsix
   - vscode-mysql-0.4.0.vsix
+  - vscode-browser-preview-0.7.1_vsixhub.com.vsix
