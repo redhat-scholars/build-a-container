@@ -7,5 +7,6 @@
     "workbench.startupEditor": "readme",
     "telemetry.enableTelemetry": false,
     "search.smartCase": true,
-    "git.confirmSync": false
+    "git.confirmSync": false,
+    "browser-preview.chromeExecutable": "/bin/chromium-browser"
 }
