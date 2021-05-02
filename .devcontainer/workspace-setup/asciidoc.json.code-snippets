@@ -27,9 +27,9 @@
     "prefix": "input",
     "body": [
       "[.console-input]",
-      "[source,${1:bash}]",
+      "[source,${1:bash},subs=\"${2:+macros,+attributes}\"]",
       "----",
-      "${2:echo \"Hello World\"}",
+      "${3:echo \"Hello World\"}",
       "----"
     ],
     "description": "Adds Console Input source fragment"
@@ -38,9 +38,9 @@
     "prefix": "output",
     "body": [
       "[.console-output]",
-      "[source,${1:bash}]",
+      "[source,${1:bash},subs=\"${2:+macros,+attributes}\"]",
       "----",
-      "${2:\"Hello World\"}",
+      "${3:\"Hello World\"}",
       "----"
     ],
     "description": "Adds Console Output source fragment"
