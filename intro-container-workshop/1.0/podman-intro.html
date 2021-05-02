@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Running your First Container with Podman :: Build a Container Workshop</title>
+    <link rel="canonical" href="https://hatmarch.github.io/container-workshop/intro-container-workshop/1.0/podman-intro.html">
+    <link rel="prev" href="introduction.html">
+    <link rel="next" href="container-concepts.html">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" href="https://hatmarch.github.io/container-workshop">Build a Container Workshop</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Books</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">CheatSheets</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">CheatSheet A</a>
+            <a class="navbar-item" href="#">CheatSheet B</a>
+            <a class="navbar-item" href="#">CheatSheet C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Upcoming Events</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Event A</a>
+            <a class="navbar-item" href="#">Event B</a>
+            <a class="navbar-item" href="#">Event C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Tutorial A</a>
+            <a class="navbar-item" href="#">Tutorial B</a>
+            <a class="navbar-item" href="#">Tutorial C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="intro-container-workshop" data-version="1.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Build a Container Workshop</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="introduction.html">1. Introduction</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="podman-intro.html">2. Running containers with podman</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="container-concepts.html">3. Container Concepts and Security</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="advanced-container-concepts.html">4. Advanced Container Concepts</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="build-your-own-container.html">5. Build your own Secure Container</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deploy-container.html">6. Deploying your Container</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Build a Container Workshop</span>
+    <span class="version">1.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Build a Container Workshop</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">1.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Build a Container Workshop</a></li>
+    <li><a href="podman-intro.html">2. Running containers with podman</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/hatmarch/container-workshop/edit/master/documentation/modules/ROOT/pages/podman-intro.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Running your First Container with Podman</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>10 MINUTE EXERCISE</em></p>
+</div>
+<div class="paragraph">
+<p>In this exercise we&#8217;re going to use podman to download and run a container that will run a local Apache webserver on your instance</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_local_browser"><a class="anchor" href="#_local_browser"></a>Local Browser</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Let&#8217;s first prove that there is no Apache server currently running on your instance.  To do this, we will use a built-in code-server browser.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open the code-server <code>Browser Preview</code> by clicking the browser preview button on the panel on the left</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/browser-preview.png" alt="browser preview">
+</div>
+</div>
+</li>
+<li>
+<p>This will open a nested browser on the right side of the screen.  Type in <code>www.redhat.com</code> (or your favorite website) in the browser bar to see that it&#8217;s just a typical browser</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/browser-preview-window.png" alt="browser preview window">
+</div>
+<div class="title">Figure 1. Just your average web browser</div>
+</div>
+</li>
+<li>
+<p>Navigate to <code>localhost:8081</code>, which instructs the browser to connect to port 8081 of your local instance</p>
+</li>
+<li>
+<p>You should find that there is nothing there but a blank screen</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/empty-browser-preview.png" alt="empty browser preview">
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_add_a_website_by_running_a_container"><a class="anchor" href="#_add_a_website_by_running_a_container"></a>Add a website by running a container</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now we&#8217;re going to use podman to quickly create a running website on this instance!</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>From inside the terminal, run the following command (see the footnotes for the breakdown of the different elements of the command):</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \<i class="conum" data-value="1"></i><b>(1)</b>
+    -dt \<i class="conum" data-value="2"></i><b>(2)</b>
+    -p 8081:80/tcp \<i class="conum" data-value="3"></i><b>(3)</b>
+    quay.io/mhildenb/container-workshop-httpd:0.0.1 <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>podman</code> command has a number of subcommands.  <code>run</code> indicates that we want to run a given container image</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Run the container in "daemon" mode (in the background) and assign a "pseudo-tty" to it</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>This indicates that we want local port 8081 forwarded to port 80 in the container</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>This is the name of the image (including the image registry where the container is normally located) that we want to run</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>After the image is "pulled" you should see something like the following in the terminal which represents the id of the running container</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Trying to pull quay.io/mhildenb/container-workshop-httpd:0.0.1...
+Getting image source signatures
+Copying blob b5f2e1583bc1 done
+Copying config 68f54f9c95 done
+Writing manifest to image destination
+Storing signatures
+4e9c38ac10eb38e9b8364e56aa52eb77ae09062160e61b3f20b60a5af829ba2c <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This is the id of the running container.</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Compare the id there to the output of the following <code>podman</code> command:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman ps</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>You should see in the output something like the following that shows you that the container is running</p>
+<div class="listingblock console-output">
+<div class="title">NOTE: notice that the beginning of the CONTAINER ID matches the id the was output from the <code>podman run</code> command</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER ID  IMAGE                                            COMMAND               CREATED      STATUS          PORTS                 NAMES
+4e9c38ac10eb  quay.io/mhildenb/container-workshop-httpd:0.0.1  /usr/sbin/httpd -...  3 hours ago  Up 3 hours ago  0.0.0.0:8081-&gt;80/tcp  quirky_hertz</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Finally, return to the Browser Preview panel and hit the reload button.  You should see the following web page indicating that an Apache webserver is running:</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/apache-test-page.png" alt="apache test page">
+</div>
+<div class="title">Figure 2. Test Page</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_stopping_the_container_and_apache_server"><a class="anchor" href="#_stopping_the_container_and_apache_server"></a>Stopping the Container (and Apache server)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Before we continue, let&#8217;s stop the container that is running in the background (thanks to the <code>-d</code> flag)</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>You can stop the container by setting <code>CONTAINER_ID</code> to the first few characters of the <code>CONTAINER ID</code> listed above in the output of the <code>podman ps</code> command:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER_ID=&lt;paste in your container id&gt;
+podman stop ${CONTAINER_ID}</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Alternatively, you can use this command to find and kill any container that reports as <code>UP</code></p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman stop $(podman ps -a | grep Up | cut -d" " -f1)</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">4e9c38ac10eb38e9b8364e56aa52eb77ae09062160e61b3f20b60a5af829ba2c<i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>#&lt;.&gt; This will match the <code>CONTAINER ID</code> of any running container that was stopped</p>
+</div>
+</li>
+<li>
+<p>Confirm that the container is stopped by hitting refresh in the Browser Preview.  You should again see a blank page as there is not longer anything listening on port 8081</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="introduction.html" class="query-params-link">1. Introduction</a></span>
+  <span class="next"><a href="container-concepts.html" class="query-params-link">3. Container Concepts and Security</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

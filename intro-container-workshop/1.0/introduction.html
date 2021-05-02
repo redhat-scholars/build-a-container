@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Introduction :: Build a Container Workshop (Dev Mode)</title>
-    <link rel="canonical" href="http://localhost:3000/rhs-build-course/index.html/intro-container-workshop/1.0/introduction.html">
+    <title>Introduction to Code Server :: Build a Container Workshop</title>
+    <link rel="canonical" href="https://hatmarch.github.io/container-workshop/intro-container-workshop/1.0/introduction.html">
     <link rel="prev" href="index.html">
-    <link rel="next" href="rhel-and-vm.html">
+    <link rel="next" href="podman-intro.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../../_/css/site.css">
 <link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
@@ -18,40 +18,56 @@
     <div class="navbar-brand">
       <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
           src="../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
-      <a class="navbar-item" style="font-size: 24px; color: white" href="http://localhost:3000/rhs-build-course/index.html">Build a Container Workshop (Dev Mode)</a>
+      <a class="navbar-item" href="https://hatmarch.github.io/container-workshop">Build a Container Workshop</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
         <span></span>
         <span></span>
       </button>
     </div>
-        <div id="topbar-nav" class="navbar-menu">
+    <div id="topbar-nav" class="navbar-menu">
       <div class="navbar-end">
-        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
-        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
-        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <a class="navbar-item" href="#">Books</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">CheatSheets</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">CheatSheet A</a>
+            <a class="navbar-item" href="#">CheatSheet B</a>
+            <a class="navbar-item" href="#">CheatSheet C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Upcoming Events</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Event A</a>
+            <a class="navbar-item" href="#">Event B</a>
+            <a class="navbar-item" href="#">Event C</a>
+          </div>
+        </div>
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link" href="#">More Tutorials</a>
           <div class="navbar-dropdown">
-            <a class="navbar-item" href="https://redhat-scholars.github.io/outer-loop-guides/" target="_blank">Outer Loop</a>
-            <a class="navbar-item" href="https://redhat-scholars.github.io/openshift-starter-guides/" target="_blank">OpenShift Starter</a>
-            <a class="navbar-item" href="https://redhat-scholars.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
-            <a class="navbar-item" href="https://redhat-scholars.github.io/istio-tutorial/" target="_blank">Istio</a>
-            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
-            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
-            <a class="navbar-item" href="https://redhat-scholars.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+            <a class="navbar-item" href="#">Tutorial A</a>
+            <a class="navbar-item" href="#">Tutorial B</a>
+            <a class="navbar-item" href="#">Tutorial C</a>
           </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
         </div>
       </div>
     </div>
   </nav>
-</header><div class="body">
+</header>
+<div class="body">
 <div class="nav-container" data-component="intro-container-workshop" data-version="1.0">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="index.html" class=" query-params-link">Build a Container Workshop</a></h3>
+    <h3 class="title"><a href="index.html">Build a Container Workshop</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
@@ -59,7 +75,7 @@
     <a class="nav-link" href="introduction.html">1. Introduction</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="rhel-and-vm.html">2. Get your RHEL Virtual Machine</a>
+    <a class="nav-link" href="podman-intro.html">2. Running containers with podman</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="container-concepts.html">3. Container Concepts and Security</a>
@@ -107,33 +123,101 @@
     <li><a href="introduction.html">1. Introduction</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="file:///workspaces/container-workshop/documentation/modules/ROOT/pages/introduction.adoc">Edit this Page</a></div>
-</div>
+  <div class="edit-this-page"><a href="https://github.com/hatmarch/container-workshop/edit/master/documentation/modules/ROOT/pages/introduction.adoc">Edit this Page</a></div>
+  </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Introduction</h1>
+<h1 class="page">Introduction to Code Server</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p><em>2 MINUTE EXERCISE</em></p>
+<p>You have been given access to a RHEL8 virtual machine and your access to the machine will be mediated by <a href="https://github.com/cdr/code-server">code-server</a>: a browser based community version of Visual Studio Code.</p>
 </div>
 <div class="paragraph">
-<p>In this workshop you will learn how to create secure containers using the following tools on RHEL:</p>
+<p>Let&#8217;s take a moment to familiarize yourself with the environment</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>buildah</strong>: build the container</p>
-</li>
-<li>
-<p><strong>podman</strong>: run the container</p>
-</li>
-<li>
-<p><strong>skopeo</strong>: distribute the container</p>
-</li>
-</ul>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_open_code_server"><a class="anchor" href="#_open_code_server"></a>Open code server</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Once you have entered your password, you will be greeted with the code-server UI with your RHEL user&#8217;s (<code>%USER%</code>) home directory.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/code-server-overview.png" alt="code server overview">
+</div>
+<div class="title">Figure 1. Code-server UI</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_open_terminal"><a class="anchor" href="#_open_terminal"></a>Open Terminal</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Among other things, your code-server gives you command line access to your RHEL instance.  You can open the terminal by using <span class="keyseq"><kbd>CTRL</kbd>+<kbd>J</kbd></span> (or <span class="keyseq"><kbd>CMD</kbd>+<kbd>J</kbd></span> on a Mac)</p>
+</div>
+<div class="paragraph">
+<p>The first time you open it, you will find your terminal at the bottom (right) of the screen, as shown below</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/code-server-terminal.png" alt="code server terminal">
+</div>
+<div class="title">Figure 2. Initial Terminal</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_issuing_terminal_commands"><a class="anchor" href="#_issuing_terminal_commands"></a>Issuing Terminal Commands</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Just to see that you are logged into the server, issue the following command</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">whoami</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">%USER%</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Next check the distribution of Linux that is being run:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat /etc/os-release</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME="Red Hat Enterprise Linux"
+VERSION="8.3 (Ootpa)"
+ID="rhel"
+ID_LIKE="fedora"
+VERSION_ID="8.3"
+PLATFORM_ID="platform:el8"
+PRETTY_NAME="Red Hat Enterprise Linux 8.3 (Ootpa)"
+ANSI_COLOR="0;31"
+CPE_NAME="cpe:/o:redhat:enterprise_linux:8.3:GA"
+HOME_URL="https://www.redhat.com/"
+BUG_REPORT_URL="https://bugzilla.redhat.com/"
+
+REDHAT_BUGZILLA_PRODUCT="Red Hat Enterprise Linux 8"
+REDHAT_BUGZILLA_PRODUCT_VERSION=8.3
+REDHAT_SUPPORT_PRODUCT="Red Hat Enterprise Linux"
+REDHAT_SUPPORT_PRODUCT_VERSION="8.3"</code></pre>
+</div>
+</div>
+</div>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="index.html" class="query-params-link">Build a Container Workshop</a></span>
-  <span class="next"><a href="rhel-and-vm.html" class="query-params-link">2. Get your RHEL Virtual Machine</a></span>
+  <span class="next"><a href="podman-intro.html" class="query-params-link">2. Running containers with podman</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
