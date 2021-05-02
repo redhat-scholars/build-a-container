@@ -10,10 +10,8 @@ In this exercise we're going to use podman to download and run a container that 
 
 Let's first prove that there is no Apache server currently running on your instance.  To do this, we will use a built-in code-server browser.
 
-. Open the `command pallete` by using kbd:[ctrl+shift+p] (or kbd:[CMD+shift+p] on a Mac)
-. Start typing `browser` in the dialog box and then select the `Browser Preview: Open in Browser Preview`
+. Open the code-server `Browser Preview` by clicking the browser preview button on the panel on the left
 +
-.Browser Preview Command
 image::browser-preview.png[]
 +
 . This will open a nested browser on the right side of the screen.  Type in `www.redhat.com` (or your favorite website) in the browser bar to see that it's just a typical browser
@@ -83,3 +81,32 @@ CONTAINER ID  IMAGE                                            COMMAND          
 .Test Page
 image::apache-test-page.png[]
 
+== Stopping the Container (and Apache server)
+
+Before we continue, let's stop the container that is running in the background (thanks to the `-d` flag)
+
+. You can stop the container by setting `CONTAINER_ID` to the first few characters of the `CONTAINER ID` listed above in the output of the `podman ps` command:
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+CONTAINER_ID=<paste in your container id>
+podman stop pass:[${CONTAINER_ID}]
+----
++
+. Alternatively, you can use this command to find and kill any container that reports as `UP`
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman stop $(podman ps -a | grep Up | cut -d" " -f1)
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+4e9c38ac10eb38e9b8364e56aa52eb77ae09062160e61b3f20b60a5af829ba2c#<.>
+----
+#<.> This will match the `CONTAINER ID` of any running container that was stopped
++
+. Confirm that the container is stopped by hitting refresh in the Browser Preview.  You should again see a blank page as there is not longer anything listening on port 8081
