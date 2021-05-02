@@ -1,11 +1,68 @@
-= Introduction
-:navtitle: Introduction
+include::_attributes.adoc[]
 
-_2 MINUTE EXERCISE_
+= Introduction to Code Server
 
-In this workshop you will learn how to create secure containers using the following tools on RHEL:
+You have been given access to a RHEL8 virtual machine and your access to the machine will be mediated by link:https://github.com/cdr/code-server[code-server]: a browser based community version of Visual Studio Code.
 
-* **buildah**: build the container
-* **podman**: run the container
-* **skopeo**: distribute the container
+Let's take a moment to familiarize yourself with the environment
 
+== Open code server
+
+Once you have entered your password, you will be greeted with the code-server UI with your RHEL user's (`{USER}`) home directory.  
+
+.Code-server UI
+image::code-server-overview.png[]
+
+== Open Terminal
+
+Among other things, your code-server gives you command line access to your RHEL instance.  You can open the terminal by using kbd:[CTRL+ J] (or kbd:[CMD+J] on a Mac)
+
+The first time you open it, you will find your terminal at the bottom (right) of the screen, as shown below
+
+.Initial Terminal
+image::code-server-terminal.png[]
+
+== Issuing Terminal Commands
+
+Just to see that you are logged into the server, issue the following command
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+whoami
+----
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+{USER}
+----
+
+Next check the distribution of Linux that is being run:
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cat /etc/os-release 
+----
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+NAME="Red Hat Enterprise Linux"
+VERSION="8.3 (Ootpa)"
+ID="rhel"
+ID_LIKE="fedora"
+VERSION_ID="8.3"
+PLATFORM_ID="platform:el8"
+PRETTY_NAME="Red Hat Enterprise Linux 8.3 (Ootpa)"
+ANSI_COLOR="0;31"
+CPE_NAME="cpe:/o:redhat:enterprise_linux:8.3:GA"
+HOME_URL="https://www.redhat.com/"
+BUG_REPORT_URL="https://bugzilla.redhat.com/"
+
+REDHAT_BUGZILLA_PRODUCT="Red Hat Enterprise Linux 8"
+REDHAT_BUGZILLA_PRODUCT_VERSION=8.3
+REDHAT_SUPPORT_PRODUCT="Red Hat Enterprise Linux"
+REDHAT_SUPPORT_PRODUCT_VERSION="8.3"
+----

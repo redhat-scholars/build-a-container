@@ -1,54 +1,85 @@
-:markup-in-source: verbatim,attributes,quotes
-:CHE_URL: http://codeready-workspaces.%APPS_HOSTNAME_SUFFIX%
-:USER_ID: %USER_ID%
-:OPENSHIFT_PASSWORD: %OPENSHIFT_PASSWORD%
-:OPENSHIFT_CONSOLE_URL: https://console-openshift-console.%APPS_HOSTNAME_SUFFIX%/topology/ns/my-project{USER_ID}/graph
+include::_attributes.adoc[]
 
-= Get your RHEL Virtual Machine
-:navtitle: Get your RHEL Virtual Machine
+= Running your First Container with Podman
 
 _10 MINUTE EXERCISE_
 
-In this lab you log into your Red Hat Enterprise Linux virutal machine.  This is the place where you'll be doing the exercises for the bulk of the exercises in this lab.
+In this exercise we're going to use podman to download and run a container that will run a local Apache webserver on your instance
 
-PLACEHOLDE
-[#what_is_rhel]
-== What is RedHat Enterpise Linux?
+== Local Browser
 
+Let's first prove that there is no Apache server currently running on your instance.  To do this, we will use a built-in code-server browser.
 
-[#get_your_vm]
-== Getting your VM
-
-PLACHOLDER
-
-[NOTE]
-.Example Note
-====
-Example Note
-====
-
-`
-[sidebar]
-.Example Sidebar
---
-Example sidebar
---
-
-[tabs, subs="attributes+,+macros"]
-====
-
-Example Tab 1::
+. Open the `command pallete` by using kbd:[ctrl+shift+p] (or kbd:[CMD+shift+p] on a Mac)
+. Start typing `browser` in the dialog box and then select the `Browser Preview: Open in Browser Preview`
 +
--- 
-Example Tab 1
---
-
-Example Tab 2::
+.Browser Preview Command
+image::browser-preview.png[]
 +
---
-Placeholder tab 2
---
-====
+. This will open a nested browser on the right side of the screen.  Type in `www.redhat.com` (or your favorite website) in the browser bar to see that it's just a typical browser
++
+.Just your average web browser
+image::browser-preview-window.png[]
++
+. Navigate to `localhost:8081`, which instructs the browser to connect to port 8081 of your local instance
+. You should find that there is nothing there but a blank screen
++
+image::empty-browser-preview.png[]
 
+== Add a website by running a container
 
-Now you are ready to get started with the labs!
+Now we're going to use podman to quickly create a running website on this instance!
+
+. From inside the terminal, run the following command (see the footnotes for the breakdown of the different elements of the command):
++
+[.console-input]
+[source,bash,subs="+macros,attributes+"]
+----
+podman run \#<.>
+    -dt \#<.>
+    -p 8081:80/tcp \#<.> 
+    quay.io/mhildenb/container-workshop-httpd:0.0.1 #<.>
+----
+<.> The `podman` command has a number of subcommands.  `run` indicates that we want to run a given container image
+<.> Run the container in "daemon" mode (in the background) and assign a "pseudo-tty" to it
+<.> This indicates that we want local port 8081 forwarded to port 80 in the container
+<.> This is the name of the image (including the image registry where the container is normally located) that we want to run
++
+. After the image is "pulled" you should see something like the following in the terminal which represents the id of the running container
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+Trying to pull quay.io/mhildenb/container-workshop-httpd:0.0.1...
+Getting image source signatures
+Copying blob b5f2e1583bc1 done  
+Copying config 68f54f9c95 done  
+Writing manifest to image destination
+Storing signatures
+4e9c38ac10eb38e9b8364e56aa52eb77ae09062160e61b3f20b60a5af829ba2c #<.>
+----
+<.> This is the id of the running container.  
++
+. Compare the id there to the output of the following `podman` command:
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman ps
+----
++
+. You should see in the output something like the following that shows you that the container is running
++
+.NOTE: notice that the beginning of the CONTAINER ID matches the id the was output from the `podman run` command
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+CONTAINER ID  IMAGE                                            COMMAND               CREATED      STATUS          PORTS                 NAMES
+4e9c38ac10eb  quay.io/mhildenb/container-workshop-httpd:0.0.1  /usr/sbin/httpd -...  3 hours ago  Up 3 hours ago  0.0.0.0:8081->80/tcp  quirky_hertz
+----
++
+. Finally, return to the Browser Preview panel and hit the reload button.  You should see the following web page indicating that an Apache webserver is running:
++
+.Test Page
+image::apache-test-page.png[]
+
