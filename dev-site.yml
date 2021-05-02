@@ -15,12 +15,14 @@ asciidoc:
   attributes:
     release-version: master
     page-pagination: true
+    # Experimental allows things like keyboard binding macros
+    experimental: true
   extensions:
     - ./lib/remote-include-processor.js
     - ./lib/tab-block.js
 ui:
   bundle:
-    url: https://github.com/redhat-scholars/course-ui/releases/download/v0.1.9/ui-bundle.zip
+    url: https://github.com/redhat-scholars/course-ui/releases/download/v0.1.8/ui-bundle.zip
     snapshot: true
   supplemental_files: ./supplemental-ui
 output:
