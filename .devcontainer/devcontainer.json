@@ -15,7 +15,7 @@
 		"-v", "${env:HOME}/.gitconfig:/opt/app-root/src/.gitconfig",
 
 		// Used for AWS based clusters
-		"-e", "AWS_PROFILE=redhat",
+		"-e", "AWS_PROFILE=rhpds",
 		"-e", "REGION=ap-southeast-2"
 		//"AWS_PROFILE=${env:AWS_PROFILE}"
 	],
