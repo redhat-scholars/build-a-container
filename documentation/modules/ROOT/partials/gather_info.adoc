@@ -1,0 +1,14 @@
+cat > {temp-filepath} <<EOF
+User Info:
+---------
+I am $(whoami)
+$(id)
+
+OS Version:
+----------
+$(cat /etc/os-release)
+
+Processes:
+---------
+$(ps -euf)
+EOF
