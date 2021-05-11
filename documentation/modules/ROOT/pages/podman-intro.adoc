@@ -2,10 +2,9 @@ include::_attributes.adoc[]
 
 = Running your First Container with Podman
 
-_10 MINUTE EXERCISE_
-
 In this exercise we're going to use podman to download and run a container that will run a local Apache webserver on your instance
 
+[#local_browser]
 == Local Browser
 
 Let's first prove that there is no Apache server currently running on your instance.  To do this, we will use a built-in code-server browser.
@@ -24,31 +23,53 @@ image::browser-preview-window.png[]
 +
 image::empty-browser-preview.png[]
 
+[#run_container]
 == Add a website by running a container
 
 Now we're going to use podman to quickly create a running website on this instance!
 
+. First, login as `root` on your instance by running the following command:
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+sudo -i
+----
++
+. You should now see the terminal prompt change to `#` indicating that you are now `root`
++
+[.console-output]
+[source,bash,subs=""]
+----
+[root@ansible-1 ~]#
+----
++
+[WARNING]
+====
+Some of you with a security background are probably fairly unconfortable with this.  Don't worry: there's a method to our madness!  It's worth pointing out that any socket-based container runtimes (such as `docker`) require some sort of root access to operate
+====
++
 . From inside the terminal, run the following command (see the footnotes for the breakdown of the different elements of the command):
 +
 [.console-input]
-[source,bash,subs="+macros,attributes+"]
+[source,bash,subs="+macros,+attributes"]
 ----
 podman run \#<.>
-    -dt \#<.>
+    -d \#<.>
     -p 8081:80/tcp \#<.> 
-    quay.io/mhildenb/container-workshop-httpd:0.0.1 #<.>
+    {apache-server-image-insecure} #<.>
 ----
 <.> The `podman` command has a number of subcommands.  `run` indicates that we want to run a given container image
-<.> Run the container in "daemon" mode (in the background) and assign a "pseudo-tty" to it
+<.> Run the container in "daemon" mode (in the background) 
 <.> This indicates that we want local port 8081 forwarded to port 80 in the container
-<.> This is the name of the image (including the image registry where the container is normally located) that we want to run
+<.> This is the name of the image (including the image registry where the container is normally located, in this case link:quay.io[quay.io]) that we want to run
 +
 . After the image is "pulled" you should see something like the following in the terminal which represents the id of the running container
 +
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
 ----
-Trying to pull quay.io/mhildenb/container-workshop-httpd:0.0.1...
+Trying to pull {apache-server-image-insecure}...
 Getting image source signatures
 Copying blob b5f2e1583bc1 done  
 Copying config 68f54f9c95 done  
@@ -73,7 +94,7 @@ podman ps
 [source,bash,subs="+macros,+attributes"]
 ----
 CONTAINER ID  IMAGE                                            COMMAND               CREATED      STATUS          PORTS                 NAMES
-4e9c38ac10eb  quay.io/mhildenb/container-workshop-httpd:0.0.1  /usr/sbin/httpd -...  3 hours ago  Up 3 hours ago  0.0.0.0:8081->80/tcp  quirky_hertz
+4e9c38ac10eb  {apache-server-image-insecure}  /usr/sbin/httpd -...  3 hours ago  Up 3 hours ago  0.0.0.0:8081->80/tcp  quirky_hertz
 ----
 +
 . Finally, return to the Browser Preview panel and hit the reload button.  You should see the following web page indicating that an Apache webserver is running:
@@ -81,16 +102,20 @@ CONTAINER ID  IMAGE                                            COMMAND          
 .Test Page
 image::apache-test-page.png[]
 
+[#stop_container]
 == Stopping the Container (and Apache server)
 
 Before we continue, let's stop the container that is running in the background (thanks to the `-d` flag)
 
 . You can stop the container by setting `CONTAINER_ID` to the first few characters of the `CONTAINER ID` listed above in the output of the `podman ps` command:
 +
+----
+CONTAINER_ID=<paste in your container id>
+----
++
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-CONTAINER_ID=<paste in your container id>
 podman stop pass:[${CONTAINER_ID}]
 ----
 +
@@ -107,6 +132,70 @@ podman stop $(podman ps -a | grep Up | cut -d" " -f1)
 ----
 4e9c38ac10eb38e9b8364e56aa52eb77ae09062160e61b3f20b60a5af829ba2c#<.>
 ----
-#<.> This will match the `CONTAINER ID` of any running container that was stopped
+<.> This will match the `CONTAINER ID` of any running container that was stopped
 +
 . Confirm that the container is stopped by hitting refresh in the Browser Preview.  You should again see a blank page as there is not longer anything listening on port 8081
+. We can also see that the container is no longer listed when we run `podman ps`
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman ps
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES
+----
+
+[#remove_containers]
+== Removing the Containers
+
+Even though our container is stopped, it's still around!
+
+You might wonder why we would want to keep a container around.  Even though containers cannot be restarted you can "commit" their current state (with `podman commit`) to an image that CAN be run later.  For more info, see the link:http://docs.podman.io/en/latest/markdown/podman-commit.1.html[podman documentation]
+
+. To find our container, issue this command: 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman ps -a #<.>
+----
+<.> The `-a` stands for "all" which means "show containers regardless of state"
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+4e9c38ac10eb  {apache-server-image-insecure}  /usr/sbin/httpd -...  10 minutes ago  Exited (0) 2 minutes ago  0.0.0.0:8081->80/tcp  quirky_hertz
+----
++
+. To really tidy things up we need to tell `podman` to _remove_ the container.  Issue this command: 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman rm pass:[${CONTAINER_ID}]
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+4e9c38ac10eb38e9b8364e56aa52eb77ae09062160e61b3f20b60a5af829ba2c#<.>
+----
+<.> As with `podman stop`, this will match the `CONTAINER ID` of any running container that was removed as a result of the command
++
+. And now finally we can prove that the image is gone:
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman ps -a
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES
+----
