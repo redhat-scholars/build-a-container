@@ -1,4 +1,7 @@
 * xref:introduction.adoc[1. Introduction]
+** xref:introduction.adoc#open_code_server[Open code server]
+** xref:introduction.adoc#open_code_server_terminal[Open terminal]
+** xref:introduction.adoc#open_code_server_terminal_commands[Issuing Terminal Commands]
 * xref:podman-intro.adoc[2. Running containers with podman]
 * xref:container-concepts.adoc[3. Container Concepts and Security]
 * xref:advanced-container-concepts.adoc[4. Advanced Container Concepts]
