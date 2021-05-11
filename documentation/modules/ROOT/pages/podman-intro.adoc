@@ -1,5 +1,9 @@
 include::_attributes.adoc[]
 
+:temp-file: hostinfo.txt
+:temp-filepath: /tmp/{temp-file}
+:container-info-filepath: /tmp/containerinfo.txt
+
 = Running your First Container with Podman
 
 In this exercise we're going to use podman to download and run a container that will run a local Apache webserver on your instance
@@ -102,6 +106,128 @@ CONTAINER ID  IMAGE                                            COMMAND          
 .Test Page
 image::apache-test-page.png[]
 
+[#enter_container]
+== Look inside a running container
+
+Whilst the container is running, we are able to "look inside" the container.  The experience is much the same to `telnet` ing or `ssh` ing into a remote instance or virtual machine.
+
+. First, let's record what's going on with the container host.  Run the following command in the terminal to gather some information about the virtual machine Code Server is running on
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+include::partial$gather_info.adoc[]
+----
++
+. Next, let's use the VS Code editor to see what our command found out.  Use kbd:[CTRL+o] (or kbd:[CMD+o] on a Mac) to show the "Open File" dialog.  Type the name of the file we wrote out to in the dialog (that is `{temp-filepath}`)
++
+.Open File Or Folder dialog
+image::file-or-folder-dialog.png[]
++
+. This should open the file in the left editor pane.  The output should look something like the following
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+include::example$gather_info_example_output.txt[]
+----
++
+. Now let's get into the container so that we can run the same command.  We can "enter" the container by way of the `podman exec` command: 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman exec \
+   -it \#<.>
+   pass:[${CONTAINER_ID}] \#<.>
+   /bin/bash #<.>
+----
+<.> `t` opens a "pseudo tty" to the container that allows us to see `STDOUT` (output) and `i` indicates that we want to keep the `STDIN` pipe open (basically allow us to continue to enter input)
+<.> ${CONTAINER_ID} should be holding the id of the running container that we saw with `podman ps`
+<.> `podman exec` interprets any argument(s) that come after the `CONTAINER ID` (or `CONTAINER NAME`) to be the command and arguments we want to run within in the container.  In this case we are running the `/bin/bash` command which is just a shell.  When coupled with `-it` this allows us to effectively mimic `ssh` ing into a VM
++
+. If the command is successful, you should see the following in the terminal
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+bash-4.3# 
+----
++
+. Now let's run our command from before but this time within the container
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+include::partial$gather_info.adoc[]
+----
++
+. Notice that the editor window didn't change even though we wrote the info to the same location.  The difference is that the location is *local to the container*.  That's because the container has a filesystem that appears separate to the host
+. Within the container, run the following command to show that the output is different
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cat {temp-filepath}
+----
++
+. To make it easier to read, since we appear to be `root` inside the container, let's copy the hostinfo to the `/var/www/html` directory so that we can view it through the container's webserver
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cp {temp-filepath} /var/www/html/{temp-file}
+----
++
+. Now navigate the browser to the file we just copied and you should see something like the image below
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+http://localhost:8081/{temp-file}
+----
++
+.Container's browser displays our {temp-file}
+image::browser-display.png[]
+
+[#copy_data]
+== Copying data out of a container
+
+Let's see just how different the two files are by doing a `diff` on them.  And for this we'd like to use the builtin Visual Studio Code support for this.  To do this we can draw on another methapor with real hosts or virtual instances, the notion of `ftp` ing or `scp` ing files.
+
+. First let's "log out" of the containerfootnote:[We're not really logging out as much as we're causing the process that we `podman exec` ed to stop thus ending the `podman exec` command and returning us to the host's terminal]
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+exit
+----
++
+. Next, run this command to copy the file out of the container and into the tmp drive of the host instance (Those that have used `scp` will probably find the format familiar)
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman cp \
+  pass:[${CONTAINER_ID}]:/tmp/hostinfo.txt \#<.>
+  {container-info-filepath} #<.>
+----
+<.> The `pass:[${CONTAINER_ID}]:<path>` indicates that the `path` is inside the container (i.e. container filesystem)
+<.> This path, undecorated by a container name or id, indicates that we are referencing a path on the host (i.e. local filesystem)
++
+. Now click on the left editor where the `{temp-file}` should still be open.  Hit kbd:[SHIFT+CTRL+p] (or kbd:[CMD+CTRL+p] on a Mac) to open the *Command Palette* and start typing `compare` so that you can select the command `File: Compare Active File With...`
++
+image::compare-command.png[]
++
+. Then select the {container-info-filepath} in the next dialog that pops up
++
+image::container-info-select.png[]
++
+. You should then see a screen like the following.  Expand the size of the editor as necessary to get a good sense of the differences
++
+.Host vs. Container output of above commands
+image::info-diff.png[]
+
 [#stop_container]
 == Stopping the Container (and Apache server)
 
@@ -199,3 +325,43 @@ podman ps -a
 ----
 CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES
 ----
+
+[#rerunning_container]
+== "Re-running" Containers
+
+Let's say we want to take a look at that {temp-file} on the container again.  Let's start up our container to try to do that again
+
+. Execute the following command (which should be familar from earlier in this section)
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+    -d \
+    -p 8081:80/tcp \  
+    {apache-server-image-insecure} 
+----
++
+. Now open the browser and navigate to the following location
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+http://localhost:8081/{temp-file}
+----
++
+. But alas our file is not found and we are met with a blank page...
++
+image::not-found.png[]
++
+. Let's stop and remove the container in digust and confusion
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman stop -a #<.>
+podman rm -a
+----
+<.> In both cases the `-a` indicates that we want to `stop` and `rm` (respectively) all containers
+
+But what happened to our file or, put another way, the changes we made to our container?  Let's look to the next section to find out.
