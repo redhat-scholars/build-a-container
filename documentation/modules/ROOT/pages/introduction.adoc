@@ -6,6 +6,7 @@ You have been given access to a RHEL8 virtual machine and your access to the mac
 
 Let's take a moment to familiarize yourself with the environment
 
+[#open_code_server]
 == Open code server
 
 Once you have entered your password, you will be greeted with the code-server UI with your RHEL user's (`{USER}`) home directory.  
@@ -13,6 +14,7 @@ Once you have entered your password, you will be greeted with the code-server UI
 .Code-server UI
 image::code-server-overview.png[]
 
+[#open_code_server_terminal]
 == Open Terminal
 
 Among other things, your code-server gives you command line access to your RHEL instance.  You can open the terminal by using kbd:[CTRL+ J] (or kbd:[CMD+J] on a Mac)
@@ -22,9 +24,21 @@ The first time you open it, you will find your terminal at the bottom (right) of
 .Initial Terminal
 image::code-server-terminal.png[]
 
+[#open_code_server_terminal_commands]
 == Issuing Terminal Commands
 
 Just to see that you are logged into the server, issue the following command
+
+[NOTE]
+====
+The first time you try to copy and paste the commands below your browser may prompt you with a window like this:
+
+.Chrome alert pop-up
+image::copy-paste-popup.png[Popup, 300]
+
+Please click on `Allow` so that you can copy and paste within your code-server instance
+
+====
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -66,3 +80,19 @@ REDHAT_BUGZILLA_PRODUCT_VERSION=8.3
 REDHAT_SUPPORT_PRODUCT="Red Hat Enterprise Linux"
 REDHAT_SUPPORT_PRODUCT_VERSION="8.3"
 ----
+
+[#local_browser]
+== Local Browser
+
+Your code-server instance also has a chromium based browser installed (as a VSCode extension).  This will allow us to view html files and connect to VM local services that are not otherwise exposed to the internet at large.
+
+. To open the _Browser Preview_, click the _browser preview_ button on the panel on the left
++
+image::browser-preview.png[]
++
+. This will open a nested browser on the right side of the screen.  
++
+.Just your average web browser
+image::browser-preview-window.png[]
++
+. Feel free to type in the address of your favorite website to show that it's just a typical (chrome-based) web browser

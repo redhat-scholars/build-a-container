@@ -1,54 +1,69 @@
 include::_attributes.adoc[]
 
+:temp-file: hostinfo.txt
+:temp-filepath: /tmp/{temp-file}
+:container-info-filepath: /tmp/containerinfo.txt
+
 = Running your First Container with Podman
 
-_10 MINUTE EXERCISE_
+In this exercise we're going to use podman to download and run a container that will run a local Apache webserver on your VM.
 
-In this exercise we're going to use podman to download and run a container that will run a local Apache webserver on your instance
+[#run_container]
+== Add a website by running a container
 
-== Local Browser
-
-Let's first prove that there is no Apache server currently running on your instance.  To do this, we will use a built-in code-server browser.
-
-. Open the code-server `Browser Preview` by clicking the browser preview button on the panel on the left
+. First let's prove that apache is not currently running on your local VM by opening the code-server _Browser Preview_ (if it isn't open already)
 +
-image::browser-preview.png[]
-+
-. This will open a nested browser on the right side of the screen.  Type in `www.redhat.com` (or your favorite website) in the browser bar to see that it's just a typical browser
-+
-.Just your average web browser
-image::browser-preview-window.png[]
+NOTE: In case you missed it, instructions for how to open your _Browser Preview_ window are xref:introduction.adoc#local_browser[here]
 +
 . Navigate to `localhost:8081`, which instructs the browser to connect to port 8081 of your local instance
 . You should find that there is nothing there but a blank screen
 +
 image::empty-browser-preview.png[]
 
-== Add a website by running a container
-
 Now we're going to use podman to quickly create a running website on this instance!
 
+. First, login as `root` on your instance by running the following command:
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+sudo -i
+----
++
+. You should now see the terminal prompt change to `#` indicating that you are now `root`
++
+[.console-output]
+[source,bash,subs=""]
+----
+[root@ansible-1 ~]#
+----
++
+[WARNING]
+====
+Some of you with a security background are probably fairly unconfortable with this.  Don't worry: there's a method to our madness!  It's worth pointing out that any socket-based container runtimes (such as `docker`) require some sort of root access to operate
+====
++
 . From inside the terminal, run the following command (see the footnotes for the breakdown of the different elements of the command):
 +
 [.console-input]
-[source,bash,subs="+macros,attributes+"]
+[source,bash,subs="+macros,+attributes"]
 ----
 podman run \#<.>
-    -dt \#<.>
+    -d \#<.>
     -p 8081:80/tcp \#<.> 
-    quay.io/mhildenb/container-workshop-httpd:0.0.1 #<.>
+    {apache-server-image-insecure} #<.>
 ----
 <.> The `podman` command has a number of subcommands.  `run` indicates that we want to run a given container image
-<.> Run the container in "daemon" mode (in the background) and assign a "pseudo-tty" to it
+<.> Run the container in "daemon" mode (in the background) 
 <.> This indicates that we want local port 8081 forwarded to port 80 in the container
-<.> This is the name of the image (including the image registry where the container is normally located) that we want to run
+<.> This is the name of the image (including the image registry where the container is normally located, in this case link:quay.io[quay.io]) that we want to run
 +
 . After the image is "pulled" you should see something like the following in the terminal which represents the id of the running container
 +
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
 ----
-Trying to pull quay.io/mhildenb/container-workshop-httpd:0.0.1...
+Trying to pull {apache-server-image-insecure}...
 Getting image source signatures
 Copying blob b5f2e1583bc1 done  
 Copying config 68f54f9c95 done  
@@ -72,8 +87,7 @@ podman ps
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
 ----
-CONTAINER ID  IMAGE                                            COMMAND               CREATED      STATUS          PORTS                 NAMES
-4e9c38ac10eb  quay.io/mhildenb/container-workshop-httpd:0.0.1  /usr/sbin/httpd -...  3 hours ago  Up 3 hours ago  0.0.0.0:8081->80/tcp  quirky_hertz
+include::partial$podman_ps.adoc[]
 ----
 +
 . Finally, return to the Browser Preview panel and hit the reload button.  You should see the following web page indicating that an Apache webserver is running:
@@ -81,25 +95,229 @@ CONTAINER ID  IMAGE                                            COMMAND          
 .Test Page
 image::apache-test-page.png[]
 
+[#enter_container]
+== Look inside a running container
+
+Whilst the container is running, we are able to "look inside" the container.  The experience is much the same to `telnet` ing or `ssh` ing into a remote instance or virtual machine.
+
+. First though, let's record what's going on with the container's host, namely the virtual machine that is running your code-server instance.  We'll use this to compare to what we find inside the container.  Run the following command in the terminal to gather some intel about the host (and save it to a place where code-server can display it!)
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+include::partial$gather_info.adoc[]
+----
++
+. Next, let's use the VS Code editor to see what our command found out.  Use kbd:[CTRL+o] (or kbd:[CMD+o] on a Mac) to show the "Open File" dialog.  Type the name of the file we wrote out to in the dialog (that is `{temp-filepath}`)
++
+.Open File Or Folder dialog
+image::file-or-folder-dialog.png[]
++
+. This should open the file in the left editor pane.  The output should look something like the following
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+include::example$gather_info_example_output.txt[]
+----
++
+. Now let's get into the container so that we can run the same command.  But first `podman` needs to know which container we mean.  Once again, let's use the `podman ps` command to get that info and save it into the variable `CONTAINER_ID`
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman ps
+----
++
+.Assign Container ID to CONTAINER_ID
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+include::partial$podman_ps.adoc[]
+----
++
+[TIP]
+====
+Since we have only one container running, we can get its id quickly by running the following command to store the id in the `CONTAINER_ID` variable: 
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+CONTAINER_ID=$(podman ps -q) #<.>
+----
+<.> The `-q` flag indicates that podman should not output any headers or any other information about running containers other than their ID
+====
++
+. Knowing our `CONTAINER_ID`, we can now "enter" the container by way of the `podman exec` command: 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman exec \
+   -it \#<.>
+   pass:[${CONTAINER_ID}]
+   /bin/bash #<.>
+----
+<.> `t` opens a "pseudo tty" to the container that allows us to see `STDOUT` (output) and `i` indicates that we want to keep the `STDIN` pipe open (basically allow us to continue to enter input)
+<.> `podman exec` interprets any argument(s) that come after the `CONTAINER ID` (or `CONTAINER NAME`) to be the command and arguments we want to run within in the container.  In this case we are running the `/bin/bash` command which is just a shell.  When coupled with `-it` this allows us to effectively mimic `ssh` ing into a VM
++
+. If the command is successful, you should see the following in the terminal
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+[root@4e9c38ac10eb /]# #<.>
+----
+<.> Notice that the `CONTAINER_ID` appears after the `@` in the bash shell that we have started inside the container
++
+. Now let's run our command from before _but this time we're running it from "within" the container_
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+include::partial$gather_info.adoc[]
+----
++
+. Notice that the editor window didn't change even though we wrote the info to the same location.  The difference is that the location is *local to the container*.  That's because the container has a filesystem that appears separate to the host
+. To make sure the file was created, run the following command to show output of the file that we just created in the container:
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cat {temp-filepath}
+----
++
+. To make it easier to read, let's copy the hostinfo to the `/var/www/html` directoryfootnote:[The `/var/www/html` directory is the web root of the apache server that is running inside this container] so that we can view it through the container's webserver
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cp {temp-filepath} /var/www/html/{temp-file}
+----
++
+. Now navigate the browser to the file we just copied and you should see something like the image below
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+http://localhost:8081/{temp-file}
+----
++
+.Container's browser displays our {temp-file}
+image::browser-display.png[]
+
+[#copy_data]
+== Copying data out of a container
+
+Let's see just how different the two files are by doing a `diff` on them.  And for this we'd like to use the builtin Visual Studio Code support for this.  To do this we can draw on another methapor with real hosts or virtual instances, the notion of `ftp` ing or `scp` ing files.
+
+. First let's "log out" of the containerfootnote:[We're not really logging out as much as we're causing the process that we `podman exec` ed to stop thus ending the `podman exec` command and returning us to the host's terminal]
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+exit
+----
++
+. Next, run this command to copy the file out of the container and into the tmp drive of the host instance (Those that have used `scp` will probably find the format familiar)
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman cp \
+  pass:[${CONTAINER_ID}]:/tmp/hostinfo.txt \#<.>
+  {container-info-filepath} #<.>
+----
+<.> The `pass:[${CONTAINER_ID}]:<path>` indicates that the `path` is inside the container (i.e. container filesystem)
+<.> This path, undecorated by a container name or id, indicates that we are referencing a path on the host (i.e. local filesystem)
++
+. Now click anywhere within the left editor where the `{temp-file}` should still be open to give that editor focus.  Hit kbd:[SHIFT+CTRL+p] (or kbd:[CMD+CTRL+p] on a Mac) to open the *Command Palette* and start typing `compare` so that you can select the command `File: Compare Active File With...`
++
+image::compare-command.png[]
++
+. Then type `{container-info-filepath}` in the next dialog that pops up until the file is selectable.  Then click on it.
++
+image::container-info-select.png[]
++
+. You should then see a screen like the following.  Expand the size of the editor as necessary to get a good sense of the differences
++
+.Host vs. Container output of above commands
+image::info-diff.png[]
+
+[#stop_container]
 == Stopping the Container (and Apache server)
 
 Before we continue, let's stop the container that is running in the background (thanks to the `-d` flag)
 
-. You can stop the container by setting `CONTAINER_ID` to the first few characters of the `CONTAINER ID` listed above in the output of the `podman ps` command:
+. You can stop a container by its ID or by its name.  Luckily, we have already gotten the container's ID and stored it in `CONTAINER_ID` (see <<Look inside a running container,here>> if you skipped that.  Issue the following `podman` command from the terminal to stop the container:
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-CONTAINER_ID=<paste in your container id>
 podman stop pass:[${CONTAINER_ID}]
 ----
 +
-. Alternatively, you can use this command to find and kill any container that reports as `UP`
-+
+[TIP]
+====
+Alternatively, you can use this command to find and kill any container that reports as `UP`
+
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 podman stop $(podman ps -a | grep Up | cut -d" " -f1)
+----
+====
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+4e9c38ac10eb38e9b8364e56aa52eb77ae09062160e61b3f20b60a5af829ba2c#<.>
+----
+<.> This will match the `CONTAINER ID` of any running container that was stopped
++
+. Confirm that the container is stopped by hitting refresh in the Browser Preview.  You should again see a blank page as there is not longer anything listening on port 8081
+. We can also see that the container is no longer listed when we run `podman ps`
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman ps
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES
+----
+
+[#remove_containers]
+== Removing Containers
+
+Even though our container is stopped, it's still around!
+
+You might wonder why we would want to keep a container around.  Even though containers cannot be restarted you can "commit" their current state (with `podman commit`) to an image that CAN be run later.  For those from an operations background, it's a little like creating an image snapshot for a virtual machine.  For more info on committing container state, see the link:http://docs.podman.io/en/latest/markdown/podman-commit.1.html[podman documentation]
+
+. To find our container, issue this command: 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman ps -a #<.>
+----
+<.> The `-a` stands for "all" which means "show containers regardless of state"
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+4e9c38ac10eb  {apache-server-image-insecure}  /usr/sbin/httpd -...  10 minutes ago  Exited (0) 2 minutes ago  0.0.0.0:8081->80/tcp  quirky_hertz
+----
++
+. To really tidy things up we need to tell `podman` to _remove_ the container.  Issue this command: 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman rm pass:[${CONTAINER_ID}]
 ----
 +
 [.console-output]
@@ -107,6 +325,58 @@ podman stop $(podman ps -a | grep Up | cut -d" " -f1)
 ----
 4e9c38ac10eb38e9b8364e56aa52eb77ae09062160e61b3f20b60a5af829ba2c#<.>
 ----
-#<.> This will match the `CONTAINER ID` of any running container that was stopped
+<.> As with `podman stop`, this will match the `CONTAINER ID` of any running container that was removed as a result of the command
 +
-. Confirm that the container is stopped by hitting refresh in the Browser Preview.  You should again see a blank page as there is not longer anything listening on port 8081
+. And now finally we can prove that the image is gone:
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman ps -a
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES
+----
+
+[#rerunning_container]
+== "Re-running" Containers
+
+Let's say we want to take a look at that {temp-file} on the container again.  Let's start up our container to try to do that again
+
+. Execute the following command (which should be familar from earlier in this section)
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+    -d \
+    -p 8081:80/tcp \  
+    {apache-server-image-insecure} 
+----
++
+. Now open the browser and navigate to the following location
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+http://localhost:8081/{temp-file}
+----
++
+. But alas our file is not found and we are met with a blank page...
++
+image::not-found.png[]
++
+. Let's stop and remove the container in digust and confusion
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman stop -a #<.>
+podman rm -a
+----
+<.> In both cases the `-a` indicates that we want to `stop` and `rm` (respectively) all containers
+
+But what good are containers if we can never _persist_ changes we've made with them?  Let's look to the next section to see if there is something to be done.

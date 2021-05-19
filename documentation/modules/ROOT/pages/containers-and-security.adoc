@@ -1,0 +1,77 @@
+include::_attributes.adoc[]
+
+= 4. Container Security
+
+== Scanning Containers
+
+Our image clearly has issues and it's not the only container out there that may have serious vulnerability or compliance issues.  Luckily, there are a number of tools out there that allow us to check our images for issues
+
+=== Vulnerability Scanning with oscap
+
+. First download the oval document
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+wget -O- https://www.redhat.com/security/data/oval/v2/RHEL8/rhel-8.oval.xml.bz2 | bzip2 --decompress> ~student1/rhel-8.oval.xml
+----
++
+. Next, get the imageid of our container and setting it to `IMAGE_ID`
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman images
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+REPOSITORY                                 TAG     IMAGE ID      CREATED     SIZE
+quay.io/mhildenb/container-workshop-httpd  0.0.2   e1fc6588d2cc  7 days ago  664 MB
+----
++ 
+. Now run the following commandfootnote:[This must be done as root]
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+oscap-podman pass:[${IMAGE_ID}] oval eval --report ~{USER}/vuln-report.html ~{USER}/rhel-8.oval.xml
+----
+. Having exported the report, we can now open the embedded browser and look at the html file.  Paste the following URL in the browser
++
+[.console-input]
+[source,subs="+macros,+attributes"]
+----
+file:///home/{USER}}/vuln-report.html
+----
++
+. You should now see a report displayed in the browser that looks something like this
++
+.OSCAP Vulnerability Report
+image::oscap-vulnerability-report.png[Vulnerability Report]
++
+. Install compliance stuff (FIXME: move this to ansible)
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+yum -y install scap-security-guide
+----
++
+. Run the xccdf scan
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+oscap-podman e1fc6588d2cc xccdf eval --report ~{USER}/compliance-report.html --profile pci-dss /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
+----
++
+. View vuln report in browser
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+file:///home/student1/compliance-report.html
+----
++
+. Take a look at prevent login to accounts with empty passwords
