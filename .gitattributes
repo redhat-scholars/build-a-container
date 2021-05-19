@@ -1,3 +1,6 @@
+*.rpm binary
+*.bz2 binary
+*.png binary
 *.jpeg filter=lfs diff=lfs merge=lfs -text
 *.png filter=lfs diff=lfs merge=lfs -text
 *.gif filter=lfs diff=lfs merge=lfs -text
