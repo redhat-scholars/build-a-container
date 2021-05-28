@@ -21,7 +21,8 @@ COPY bash-4.2.45-2.el7.x86_64.rpm /tmp
 RUN yum downgrade -y /tmp/bash-4.2.45-2.el7.x86_64.rpm && rm /tmp/bash-4.2.45-2.el7.x86_64.rpm
 
 COPY httpd.conf /etc/httpd/conf
-COPY hello.sh /var/www/cgi-bin
+COPY log-visitor.sh /var/www/cgi-bin
+COPY hello.html /var/www/html
 
 ## overwrite the two parts of the httpd install that make running as root possible
 COPY --from=builder --chown=0:0 /tmp/httpd-2.4.46/httpd /usr/sbin/httpd
