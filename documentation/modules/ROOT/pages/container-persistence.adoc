@@ -11,6 +11,7 @@ Containers are meant to be run as "immutable" instances that exactly match the s
 
 Luckily, containers have facilities to support all these things.  We'll explore some of these features in this section
 
+[#mounting_volumes]
 == Mounting Volumes
 
 Whilst containers have their own immutable filesystem, it is possible for containers to "mount" volumes that are outside the container's filesystem.  This opens up opportunities for persisting state on those mounted filesystems or sharing that state with processes outside the container.
@@ -20,9 +21,84 @@ Whilst containers have their own immutable filesystem, it is possible for contai
 This can also open a number of security concerns for our containers as we'll see later on!
 ====
 
-Going back to our website, let's see how we can run our webserver in such a way that we can persist our visitors info
+Going back to our website, let's see how we can run our webserver in such a way that we can persist our {guestbook-record-file}.  Our strategy will be to have the container write to a file that is **local to our VM filesystem** instead of into the container's filesystem.
 
-=== Start Database Container
+. First, let's remove (and stop) any container that we might have running (such as the container based on `{apache-committed-container-image}`): 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman rm -a \
+    --force #<.>
+----
+<.> This is a bit of a violent way to stop and remove a running container.  It's a little bit like using `kill -9` to stop a linux process.
++
+. Since we're going to use the VM's filesystem for persistence, we don't need to use our committed image (`{apache-committed-container-image}`) anymore, especially now that we've copied off of it the `{guestbook-record-file}` we'd like to use.  Let's remove that image from our machinefootnote:[You can keep images around if you'd like, but like VM snapshots they take of space on the host filesystem.  Generally it's good practice to remove images from your system that you are no longer using]
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman rmi \#<.>
+   localhost/{apache-committed-container-image} #<.>
+----
+<.> `rmi` stands for _remove image_.  Don't confuse this with `rm` which has to do with removing containers that are stopped
+<.> We're removing based on the image name.  We could also remove by `IMAGE ID`
++
+. If the command worked, you should see output like the following: 
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+Untagged: localhost/{apache-committed-container-image}:latest
+Deleted: {commit-container-image-id-long}
+----
++
+. Next, we'll run our initial `{apache-server-image-insecure}` image, but this time with an additional `-v` option
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+    -d \
+    -p 8081:80/tcp \
+    --name {apache-server-container-name} \
+    -v {container-workshop-exercise-path}:/var/log/www:Z \#<.>
+    {apache-server-image-insecure}
+----
+<.> The format of the volume mount option is <host_path>:<container_path>:<options>.  In our case, we're mounting `{container-workshop-exercise-path}` at `/var/log/www` in the container.  The `Z` option is for SELinux and gives the container permission to write to the folder
+
+[#test_mount]
+== Testing the Volume Mount
+
+Now that the container is running mounted to the `{container-workshop-exercise-path}` on the host, we should be able to test out its effects
+
+. Make sure you have the `{guestbook-record-file}` open in VSCode in an editor pane adject to the *Browser Preview* pane as shown
++
+image::mounted-visitor-info-setup.png[]
++
+. Next, navigate to the guestbook URL by navigating pasting this in the *Browser Preview*
++
+[.console-input]
+[source,subs="+macros,+attributes"]
+----
+localhost:8081/hello.html
+----
++
+. Once there, enter a name (such as _Danny_) into the name field and press Submit
+. You should now see _Danny_ (or whatever name you entered) added to the `{guestbook-record-file}` on the host in real time
++
+.See visitors on the host
+image::mounted-visitor-info.png[]
+
+[#containerized_databases]
+== Containerized Databases
+
+[WARNING]
+====
+This section is not yet completed
+====
+
+Given that containers have the ability to mount other (persistent) filesystems, database servers also become candidates for running in containers.  (Non ephemeral) containerized databases use volume mounts for their `data` directory where they write and persist the contents of the database to the filesystem.
 
 . Start your database by running the following command:
 +
