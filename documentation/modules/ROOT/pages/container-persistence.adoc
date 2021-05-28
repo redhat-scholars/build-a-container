@@ -53,7 +53,7 @@ Untagged: localhost/{apache-committed-container-image}:latest
 Deleted: {commit-container-image-id-long}
 ----
 +
-. Next, we'll run our initial `{apache-server-image-insecure}` image, but this time with an additional `-v` option
+. Next, we'll [#podman_run_httpd]#run# our initial `{apache-server-image-insecure}` image, but this time with an additional `-v` option
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]

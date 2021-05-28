@@ -40,7 +40,7 @@ sudo -i
 +
 [WARNING]
 ====
-Some of you with a security background are probably fairly unconfortable with this.  Don't worry: there's a method to our madness!  It's worth pointing out that any socket-based container runtimes (such as `docker`) require some sort of root access to operate
+Some of you with a security background are [#security_vuln]#probably fairly unconfortable with this#.  Don't worry: there's a method to our madness!  It's worth pointing out that any socket-based container runtimes (such as `docker`) require some sort of root access to operate
 ====
 +
 . From inside the terminal, run the following command (see the footnotes for the breakdown of the different elements of the command):
@@ -49,11 +49,13 @@ Some of you with a security background are probably fairly unconfortable with th
 [source,bash,subs="+macros,+attributes"]
 ----
 podman run \#<.>
+    --privileged \#<.>
     -d \#<.>
     -p 8081:80/tcp \#<.> 
     --name {apache-server-container-name} \#<.>
     {apache-server-image-insecure} #<.>
 ----
+<.> This flag, as we'll come to see, could be problematic.  It allows the container to run with an extended set of capabilities that might otherwise be reserved for the host (such as accessing ports < 1024).  However, when running some processes in a container, this is sometimes required
 <.> The `podman` command has a number of subcommands.  `run` indicates that we want to run a given container image
 <.> Run the container in "daemon" mode (in the background) 
 <.> This indicates that we want local port 8081 forwarded to port 80 in the container
@@ -484,6 +486,7 @@ Let's say we want to take a look at that {temp-file} on the container again.  Le
 [source,bash,subs="+macros,+attributes"]
 ----
 podman run \
+    --privileged \
     -d \
     -p 8081:80/tcp \  
     --name {apache-server-container-name} \
@@ -528,6 +531,7 @@ podman rm -a
 [source,bash,subs="+macros,+attributes"]
 ----
 podman run \
+   --privileged \
    -d \
    -p 8081:80/tcp \
    --name {apache-server-container-name} \

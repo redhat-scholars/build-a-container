@@ -1,0 +1,44 @@
+ ** Welcome to Metasploit Framework Initial Setup **
+    Please answer a few questions to get started.
+
+
+Would you like to use and setup a new database (recommended)? no
+
+ ** Metasploit Framework Initial Setup Complete **
+
+[!] The following modules could not be loaded!../
+[!]     /opt/metasploit-framework/embedded/framework/modules/auxiliary/gather/office365userenum.py
+[!] Please see /home/student1/.msf4/logs/framework.log for details.
+                                                  
+
+                                   .,,.                  .
+                                .\$$$$$L..,,==aaccaacc%#s$b.       d8,    d8P
+                     d8P        #$$$$$$$$$$$$$$$$$$$$$$$$$$$b.    `BP  d888888p
+                  d888888P      '7$$$$\""""''^^`` .7$$$|D*"'```         ?88'
+  d8bd8b.d8p d8888b ?88' d888b8b            _.os#$|8*"`   d8P       ?8b  88P
+  88P`?P'?P d8b_,dP 88P d8P' ?88       .oaS###S*"`       d8P d8888b $whi?88b 88b
+ d88  d8 ?8 88b     88b 88b  ,88b .osS$$$$*" ?88,.d88b, d88 d8P' ?88 88P `?8b
+d88' d88b 8b`?8888P'`?8b`?88P'.aS$$$$Q*"`    `?88'  ?88 ?88 88b  d88 d88
+                          .a#$$$$$$"`          88b  d8P  88b`?8888P'
+                       ,s$$$$$$$"`             888888P'   88n      _.,,,ass;:
+                    .a$$$$$$$P`               d88P'    .,.ass%#S$$$$$$$$$$$$$$'
+                 .a$###$$$P`           _.,,-aqsc#SS$$$$$$$$$$$$$$$$$$$$$$$$$$'
+              ,a$$###$$P`  _.,-ass#S$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$####SSSS'
+           .a$$$$$$$$$$SSS$$$$$$$$$$$$$$$$$$$$$$$$$$$$SS##==--""''^^/$$$$$$'
+_______________________________________________________________   ,&$$$$$$'_____
+                                                                 ll&&$$$$'
+                                                              .;;lll&&&&'
+                                                            ...;;lllll&'
+                                                          ......;;;llll;;;....
+                                                           ` ......;;;;... .  .
+
+
+       =[ metasploit v6.0.46-dev-                         ]
++ -- --=[ 2135 exploits - 1138 auxiliary - 364 post       ]
++ -- --=[ 592 payloads - 45 encoders - 10 nops            ]
++ -- --=[ 8 evasion                                       ]
+
+Metasploit tip: Display the Framework log using the 
+log command, learn more with help log
+
+msf6 > 
