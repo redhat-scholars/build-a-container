@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo $QUERY_STRING | sed -rn 's/visitor=([^&]+)&?.*/\1/p' >> /var/log/web/visitor_info.txt
+
 cat <<EOF 
 Content-type: text/html
 
@@ -8,7 +10,8 @@ Content-type: text/html
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
-<h1>"Hello!  I am $(whoami)"</h1>
+<h1>Thank you!</h1>
+I have collected your info as $(whoami)"</h1>
 </body>
 </html>
 EOF
