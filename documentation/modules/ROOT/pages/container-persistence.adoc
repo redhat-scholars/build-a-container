@@ -11,6 +11,17 @@ Containers are meant to be run as "immutable" instances that exactly match the s
 
 Luckily, containers have facilities to support all these things.  We'll explore some of these features in this section
 
+== Mounting Volumes
+
+Whilst containers have their own immutable filesystem, it is possible for containers to "mount" volumes that are outside the container's filesystem.  This opens up opportunities for persisting state on those mounted filesystems or sharing that state with processes outside the container.
+
+[TIP]
+====
+This can also open a number of security concerns for our containers as we'll see later on!
+====
+
+Going back to our website, let's see how we can run our webserver in such a way that we can persist our visitors info
+
 === Start Database Container
 
 . Start your database by running the following command:
