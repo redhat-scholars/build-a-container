@@ -96,6 +96,26 @@ include::partial$podman_ps.adoc[]
 +
 .Test Page
 image::apache-test-page.png[]
++
+. Our website has more than a test page, it also has a visitor form (like straight out of the 90s!).  Let's take a look by navigating to this address: 
++
+[.console-input]
+[source,subs="+macros,+attributes"]
+----
+http://localhost:8081/hello.html
+----
++
+. You should see something like this: 
++
+image::apache-guestbook-page.png[]
++
+. Now enter a name into the `Name:` field to be logged to the guestbook and press the `Log to Guestbook` button.  You should now be presented a screen like this: 
++
+image::apache-guestbook-submit.png[]
++
+. Click the `here` link highlighted above to go back and enter another name
+
+Next let's take a look inside our container
 
 [#enter_container]
 == Look inside a running container
@@ -251,10 +271,10 @@ exit
 [source,bash,subs="+macros,+attributes"]
 ----
 podman cp \
-  pass:[${CONTAINER_ID}]:/tmp/hostinfo.txt \#<.>
+  {apache-server-container-name}:/tmp/hostinfo.txt \#<.>
   {container-info-filepath} #<.>
 ----
-<.> The `pass:[${CONTAINER_ID}]:<path>` indicates that the `path` is inside the container (i.e. container filesystem)
+<.> The `{apache-server-container-name}:<path>` indicates that the `path` is inside the container (i.e. container filesystem) that we named with the `--name` option at the time we issued the `podman run` command
 <.> This path, undecorated by a container name or id, indicates that we are referencing a path on the host (i.e. local filesystem)
 +
 . Now click anywhere within the left editor where the `{temp-file}` should still be open to give that editor focus.  Hit kbd:[SHIFT+CTRL+p] (or kbd:[CMD+CTRL+p] on a Mac) to open the *Command Palette* and start typing `compare` so that you can select the command `File: Compare Active File With...`
@@ -269,6 +289,14 @@ image::container-info-select.png[]
 +
 .Host vs. Container output of above commands
 image::info-diff.png[]
++
+. Finally, let's look at our guestbook visitor log in VSCode by copying the visitor guestbook to our local VM
++
+include::partial$copy_visitor_info.adoc[]
++
+. You should now see the file appear in your *Explorer*.  Click on it to view the contents.  It should match the visitors that you entered previously
++
+image::visitor-info.png[Visitor Info]
 
 [#stop_container]
 == Stopping the Container (and Apache server)
@@ -359,7 +387,7 @@ podman ps -a #<.>
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
 ----
-4e9c38ac10eb  {apache-server-image-insecure}  /usr/sbin/httpd -...  10 minutes ago  Exited (0) 2 minutes ago  0.0.0.0:8081->80/tcp  quirky_hertz
+4e9c38ac10eb  {apache-server-image-insecure}  /usr/sbin/httpd -...  10 minutes ago  Exited (0) 2 minutes ago  0.0.0.0:8081->80/tcp  {apache-server-container-name}
 ----
 +
 . To really tidy things up we need to tell `podman` to _remove_ the container.  Issue this command: 
@@ -367,7 +395,7 @@ podman ps -a #<.>
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-podman rm pass:[${CONTAINER_ID}]
+podman rm {apache-server-container-name}
 ----
 +
 [.console-output]
@@ -377,7 +405,19 @@ podman rm pass:[${CONTAINER_ID}]
 ----
 <.> As with `podman stop`, this will match the `CONTAINER ID` of any running container that was removed as a result of the command
 +
-. And now finally we can prove that the image is gone:
+[TIP]
+====
+As with the other `podman` commands, it's possible to remove containers by **CONTAINER ID**.  In that case you'd just issue this command (assuming you followed directions above to store the container id in `pass:[${CONTAINER_ID}]`)
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman rm pass:[${CONTAINER_ID}]
+----
+
+====
++
+. And now finally we can prove that the container is gone:
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -396,7 +436,7 @@ CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES
 
 Let's say we want to take a look at that {temp-file} on the container again.  Let's start up our container to try to do that again
 
-. Execute the following command (which should be familar from earlier in this section)
+. Execute the following command (which should be familar from earlier in this section) 
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -404,6 +444,7 @@ Let's say we want to take a look at that {temp-file} on the container again.  Le
 podman run \
     -d \
     -p 8081:80/tcp \  
+    --name {apache-server-container-name} \
     {apache-server-image-insecure} 
 ----
 +
@@ -415,10 +456,15 @@ podman run \
 http://localhost:8081/{temp-file}
 ----
 +
-. But alas our file is not found and we are met with a blank page...
+. But alas our file is not found and we are met with a 404 Not Found page...
 +
 image::not-found.png[]
 +
+. How about our `visitor_info.txt` file?  Let's copy that out of the container again
++
+include::partial$copy_visitor_info.adoc[]
++
+. But if you open the `visitor_info.txt` after copying it out, you'll notice that all the visitor names are gone!
 . Let's stop and remove the container in digust and confusion
 +
 [.console-input]
