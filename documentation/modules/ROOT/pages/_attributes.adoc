@@ -2,3 +2,4 @@
 :source-highlighter: highlightjs
 :USER: %USER%
 :apache-server-image-insecure: quay.io/mhildenb/container-workshop-httpd:0.0.4
+:apache-server-container-name: my-web-server
