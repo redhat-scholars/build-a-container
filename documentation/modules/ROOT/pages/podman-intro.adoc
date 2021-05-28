@@ -71,7 +71,7 @@ Copying blob b5f2e1583bc1 done
 Copying config 68f54f9c95 done  
 Writing manifest to image destination
 Storing signatures
-4e9c38ac10eb38e9b8364e56aa52eb77ae09062160e61b3f20b60a5af829ba2c #<.>
+{container-id-long} #<.>
 ----
 <.> This is the id of the running container.  
 +
@@ -143,7 +143,7 @@ image::file-or-folder-dialog.png[]
 include::example$gather_info_example_output.txt[]
 ----
 +
-. Now let's get into the container so that we can run the same command.  But first `podman` needs to know which container we mean.  There are two different ways to reference the running container, by **CONTAINER ID** or by **NAME**.  Pick the tab of your choice to show how we can enter the container using either approach:
+. Now let's get into the container so that we can run the same command.  But first `podman` needs to know which container we mean.  There are two different ways to reference the running container, [#find_container_id]#by **CONTAINER ID**# or by **NAME**.  Pick the tab of your choice to show how we can enter the container using either approach:
 +
 [tabs]
 ====
@@ -323,7 +323,7 @@ podman stop {apache-server-container-name} #<.>
 CONTAINER ID::
 +
 --
-. Luckily, we have already gotten the container's ID and stored it in `CONTAINER_ID` (see <<Look inside a running container,here>> if you skipped that part).  
+. Luckily, we have already gotten the container's ID and stored it in `CONTAINER_ID` (see <<find_container_id,here>> if you skipped that part).  
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -349,7 +349,7 @@ podman stop $(podman ps -a | grep Up | cut -d" " -f1)
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
 ----
-4e9c38ac10eb38e9b8364e56aa52eb77ae09062160e61b3f20b60a5af829ba2c#<.>
+{container-id-long}#<.>
 ----
 <.> This will match the `CONTAINER ID` of any running container that was stopped
 +
@@ -368,14 +368,21 @@ podman ps
 CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES
 ----
 
-[#remove_containers]
-== Removing Containers
+[#committing_containers]
+== Committing Containers to Images
 
 Even though our container is stopped, it's still around!
 
-You might wonder why we would want to keep a container around.  Even though containers cannot be restarted you can "commit" their current state (with `podman commit`) to an image that CAN be run later.  For those from an operations background, it's a little like creating an image snapshot for a virtual machine.  For more info on committing container state, see the link:http://docs.podman.io/en/latest/markdown/podman-commit.1.html[podman documentation]
+You might wonder why we would want to keep a container around even after we have stopped it.  Turns out it has to do with the fact that we might want to create a new image from the container we've just run.  
 
-. To find our container, issue this command: 
+Containers are by their nature immutable.  While they are running, however, changes are being made to their file systems.  When containers are stopped, we might want to **commit** those changes that were made to the filesystem whilst running.  
+
+For those from an operations background, it's a little like creating an image snapshot from a Virtual Machine when its stopped.  That image can then be used to boot up a machine in a desired state.
+
+With `podman` the command is `commit` footnote:[For more info on committing container state, see the link:http://docs.podman.io/en/latest/markdown/podman-commit.1.html[podman documentation]
+].  Let's issue the command now and we'll see some of the value in it <<rerunning_container,a little later on in the lab>>.
+
+. First let's find the stopped container using this variant of the `podman ps` command: 
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -390,6 +397,41 @@ podman ps -a #<.>
 4e9c38ac10eb  {apache-server-image-insecure}  /usr/sbin/httpd -...  10 minutes ago  Exited (0) 2 minutes ago  0.0.0.0:8081->80/tcp  {apache-server-container-name}
 ----
 +
+. As we can see from the output, the container has been exited and is just waiting there in the state it was in when it was stopped (2 minutes ago according to the output above)
+. Now let's create an image from that container by _committing_ it:
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman commit \
+   {apache-server-container-name} \#<.>
+   {apache-committed-container-image} #<.>
+----
+<.> This is the name of the container that we have stopped.  This could also be done by `CONTAINER ID`
+<.> This is the name that we want to give the container **image**.  We can then treat this like any other container image
++
+. This should yield output similar to the following:
++
+include::partial$podman_commit_output.adoc[]
++
+. And now let's see what images are available by issuing the following command to show all the images we podman knows about locally:
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman images
+----
++
+. The command should yield output that looks something like the following
++
+include::partial$podman_images_output.adoc[]
+
+
+[#remove_containers]
+== Removing Containers
+
+Having looked at the images on our system, let's turn our attention back to the containers that are running (or more accurately in our case, stopped)
+
 . To really tidy things up we need to tell `podman` to _remove_ the container.  Issue this command: 
 +
 [.console-input]
@@ -401,7 +443,7 @@ podman rm {apache-server-container-name}
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
 ----
-4e9c38ac10eb38e9b8364e56aa52eb77ae09062160e61b3f20b60a5af829ba2c#<.>
+{container-id-long}#<.>
 ----
 <.> As with `podman stop`, this will match the `CONTAINER ID` of any running container that was removed as a result of the command
 +
@@ -465,7 +507,12 @@ image::not-found.png[]
 include::partial$copy_visitor_info.adoc[]
 +
 . But if you open the `visitor_info.txt` after copying it out, you'll notice that all the visitor names are gone!
-. Let's stop and remove the container in digust and confusion
+
+=== "Re-running" a stopped container by image
+
+Before we through our hands up in disgust, remember that we had the foresight of _committing_ our previously running web server container to a new image called `{apache-committed-container-image}`.  This image should container all the changes we made on top of the `{apache-server-container-name}` that we just ran and allow us access to the info that does not exist in the `{apache-server-image-insecure}`.
+
+. First let's stop and remove the current `{apache-server-image-insecure}` image based web server
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -474,5 +521,40 @@ podman stop -a #<.>
 podman rm -a
 ----
 <.> In both cases the `-a` indicates that we want to `stop` and `rm` (respectively) all containers
++
+. Next, let's re-run our webserver, but this time from <<Committing Containers to Images,the image we created when we committed it>> from our first instance of `{apache-server-container-name}`:
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+   -d \
+   -p 8081:80/tcp \
+   --name {apache-server-container-name} \
+   localhost/{apache-committed-container-image} #<.>
+----
+<.> We append `localhost` onto any image name that we didn't explicitly provide a registry (e.g. link:quay.io[`quay.io`]) for
++
+. With our committed container running, now attempt to open the browser and navigate to tempfile again
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+http://localhost:8081/{temp-file}
+----
++
+. This time you should see the file, just as it looked before
++
+.Container's browser once again displays our {temp-file}
+image::browser-display.png[]
++
+. And let's restore our `{guestbook-record-file}` by pulling it out of the container running based on the committed image by issuing the same command as before
++
+include::partial$copy_visitor_info.adoc[]
++
+. Now our visitor info should be restored to the way it was when we last stopped the container (as verified by opening it in VSCode)
++
+.`{guestbook-record-file}` restored
+image::visitor-info.png[]
 
-But what good are containers if we can never _persist_ changes we've made with them?  Let's look to the next section to see if there is something to be done. 
+But what good are containers if we can never _persist_ changes we've made with them without all this stopping and committing them?  Let's look to the next section to see if there is something else that can be done. 
