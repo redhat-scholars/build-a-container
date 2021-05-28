@@ -13,6 +13,7 @@
     replace: '8'
   loop:
     # - /etc/yum.repos.d/epel-modular.repo
+# FIXME: Clone the container workshop repo
     - /etc/yum.repos.d/epel.repo
   when:
     - ansible_distribution_major_version|int == 8
@@ -37,8 +38,39 @@
       - podman
       - buildah
       - chromium
+      - openscap-utils
+      - cockpit
+      - cockpit-dashboard
+      - cockpit-podman
     state: present
   register: dnf_check
   until: dnf_check is not failed
   retries: 4
   delay: 5
+
+- name: "Check for OpenShift client"
+  shell: |
+    if [[ -f {{ oc_dir }}/oc ]]; then echo "true"; fi
+  register: oc_exists
+
+- name: "Install OpenShift client"
+  shell: |
+    set -euo pipefail
+
+    curl -L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz | \
+    tar -xvzf - -C {{ oc_dir }}/ oc && chmod 755 {{ oc_dir }}/oc && ln -s {{ oc_dir }}/oc {{ oc_dir }}/kubectl
+  when: oc_exists.stdout | bool == False
+
+- name: "Check for Metasploit Console"
+  shell: |
+    if [[ -f {{ msfconsole_dir }}/msfconsole ]]; then echo "true"; fi
+  register: msf_exists
+
+- name: "Install Metasploit Console"
+  shell: |
+    set -euo pipefail
+
+    curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && \
+    chmod 755 msfinstall && \
+    ./msfinstall
+  when: msf_exists.stdout | bool == False
