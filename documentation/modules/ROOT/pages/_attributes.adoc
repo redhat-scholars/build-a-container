@@ -1,5 +1,6 @@
 :experimental:
 :source-highlighter: highlightjs
 :USER: %USER%
-:apache-server-image-insecure: quay.io/mhildenb/container-workshop-httpd:0.0.4
+:apache-server-image-insecure: quay.io/mhildenb/container-workshop-httpd:0.0.5
 :apache-server-container-name: my-web-server
+:container-workshop-exercise-path: /home/{USER}/container-workshop

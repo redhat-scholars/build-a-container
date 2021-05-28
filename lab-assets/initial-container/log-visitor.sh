@@ -1,8 +1,9 @@
 #!/bin/bash
 
-echo $QUERY_STRING | sed -rn 's/visitor=([^&]+)&?.*/\1/p' >> /var/log/web/visitor_info.txt
+VISITOR=$(echo $QUERY_STRING | sed -rn 's/visitor=([^&]+)&?.*/\1/p')
+echo $VISITOR >> /var/log/www/visitor_info.txt
 
-cat <<EOF 
+cat <<EOF
 Content-type: text/html
 
 <html>
@@ -10,8 +11,11 @@ Content-type: text/html
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
-<h1>Thank you!</h1>
-I have collected your info as $(whoami)"</h1>
+<title>Thank You</title>
+<h1>Thank you ${VISITOR}!</h1>
+I have collected your info as $(whoami) <br> <br>
+
+Click <a href=/hello.html>here</a> to register another visitor.
 </body>
 </html>
 EOF
