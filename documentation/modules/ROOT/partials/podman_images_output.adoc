@@ -1,0 +1,8 @@
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+REPOSITORY                                 TAG     IMAGE ID      CREATED        SIZE
+localhost/container-workshop-commit        latest  {commit-container-image-id-short}  3 minutes ago  265 MB #<.>
+{apache-server-image-insecure-image}  {apache-server-image-insecure-tag}   ec71626c6cd3  3 hours ago    265 MB
+----
+<.> Notice that the image that we committed automatically gets a `localhost` appended to it since we didn't nominate a registry.  Also notice that the `IMAGE ID` is the abbreviated form of the id that was reported as a result of the `commit` command

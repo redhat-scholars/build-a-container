@@ -1,0 +1,22 @@
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+Getting image source signatures
+Copying blob 123257361dae skipped: already exists  
+Copying blob c9e02f9d3afe skipped: already exists  
+Copying blob add30eb35c17 skipped: already exists  
+Copying blob 9fdb6895bb7a skipped: already exists  
+Copying blob 6ad7f3f9e262 skipped: already exists  
+Copying blob 8dd6e0f9b8eb skipped: already exists  
+Copying blob fef0b05fc9cf skipped: already exists  
+Copying blob dfe69afd0646 skipped: already exists  
+Copying blob d0081b948274 skipped: already exists  
+Copying blob c1c363c15e6e skipped: already exists  
+Copying blob 6731153d32fc skipped: already exists  
+Copying blob a22151f998a3 done  
+Copying config f154f395c5 done  
+Writing manifest to image destination
+Storing signatures
+{commit-container-image-id-long} #<.>
+----
+<.> This is the id of the _image_ that has just been created as a result of the `commit` command

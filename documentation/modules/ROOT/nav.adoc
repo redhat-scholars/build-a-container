@@ -7,6 +7,7 @@
 ** xref:podman-intro.adoc#run_container[Add a website by running a container]
 ** xref:podman-intro.adoc#enter_container[Look inside a running container]
 ** xref:podman-intro.adoc#copy_data[Copying data out of a container]
+** xref:podman-intro.adoc#committing_containers[Committing Containers to Images]
 ** xref:podman-intro.adoc#stop_container[Stopping Containers]
 ** xref:podman-intro.adoc#remove_containers[Removing Containers]
 ** xref:podman-intro.adoc#rerunning_container["Re-running" Containers]
