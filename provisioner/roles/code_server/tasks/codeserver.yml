@@ -124,7 +124,12 @@
     name: nginx
     state: started
     enabled: true
-    
+
+- name: enable cockpit at startup
+  service:
+    name: cockpit.socket
+    enabled: true
+
 - name: modify nginx to support code-server
   template:
     src: nginx.conf.j2

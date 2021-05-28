@@ -1,5 +1,8 @@
 ---
 - name: Install packages
+  vars:
+    oc_dir: "/usr/local/bin"
+    msfconsole_dir: "/usr/bin"
   include_tasks: package_dependencies.yml
 
 - name: Install ansible.cfg and vimrc in home directory
@@ -68,7 +71,6 @@
     path: /tmp/workshops
     state: absent
 
-# FIXME: Clone the container workshop repo
 - name: Clone workshops repo
   git:
     accept_hostkey: true
