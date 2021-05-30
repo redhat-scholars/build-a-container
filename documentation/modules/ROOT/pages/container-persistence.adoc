@@ -59,6 +59,7 @@ Deleted: {commit-container-image-id-long}
 [source,bash,subs="+macros,+attributes"]
 ----
 podman run \
+    --privileged \
     -d \
     -p 8081:80/tcp \
     --name {apache-server-container-name} \

