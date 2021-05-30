@@ -14,7 +14,8 @@ RUN cd httpd-2.4.46 && \
 
 FROM registry.access.redhat.com/ubi7 as final
 USER root
-RUN yum install -y httpd && yum update -y && yum clean all
+# install apache (and tree to be able to demonstrate issues easier)
+RUN yum install -y httpd && yum update -y && rpm -i https://rpmfind.net/linux/centos/7.9.2009/os/x86_64/Packages/tree-1.6.0-10.el7.x86_64.rpm && yum clean all
 
 # shellshock vulnerability
 COPY bash-4.2.45-2.el7.x86_64.rpm /tmp
