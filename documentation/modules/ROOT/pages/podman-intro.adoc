@@ -6,23 +6,23 @@ include::_attributes.adoc[]
 
 = Running your First Container with Podman
 
-In this exercise we're going to use podman to download and run a container that will run a local Apache webserver on your VM.
+In this exercise we're going to use Podman to download and run a container that will run a local Apache webserver on your VM.
+
+image::podman.svg[Podman!,width=320,height=86]
 
 [#run_container]
-== Add a website by running a container
+== 1. Add a website by running a container
 
-. First let's prove that apache is not currently running on your local VM by opening the code-server _Browser Preview_ (if it isn't open already)
-+
-NOTE: In case you missed it, instructions for how to open your _Browser Preview_ window are xref:introduction.adoc#local_browser[here]
-+
-. Navigate to `localhost:8081`, which instructs the browser to connect to port 8081 of your local instance
+. First let's prove that Apache is not currently running on your local VM.
+
+. In your xref:introduction.adoc#local_browser[Local Browser,window=_blank], navigate to `localhost:8081`, which instructs the browser to connect to port 8081 of your local instance
 . You should find that there is nothing there but a blank screen
 +
 image::empty-browser-preview.png[]
 
 Now we're going to use podman to quickly create a running website on this instance!
 
-. First, login as `root` on your instance by running the following command:
+. Login as `root` on your instance by running the following command:
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -40,7 +40,7 @@ sudo -i
 +
 [WARNING]
 ====
-Some of you with a security background are [#security_vuln]#probably fairly unconfortable with this#.  Don't worry: there's a method to our madness!  It's worth pointing out that any socket-based container runtimes (such as `docker`) require some sort of root access to operate
+Some of you with a security background are [#security_vuln]#probably fairly unconfortable with this#.  Don't worry: there's a method to our madness!  It's worthLook inside a running container pointing out that any socket-based container runtimes (such as `docker`) require some sort of root access to operate
 ====
 +
 . From inside the terminal, run the following command (see the footnotes for the breakdown of the different elements of the command):
@@ -120,7 +120,7 @@ image::apache-guestbook-submit.png[]
 Next let's take a look inside our container
 
 [#enter_container]
-== Look inside a running container
+== 2. Look inside a running container
 
 Whilst the container is running, we are able to "look inside" the container.  The experience is much the same to `telnet` ing or `ssh` ing into a remote instance or virtual machine.
 
@@ -255,7 +255,7 @@ http://localhost:8081/{temp-file}
 image::browser-display.png[]
 
 [#copy_data]
-== Copying data out of a container
+== 3. Copying data out of a container
 
 Let's see just how different the two files are by doing a `diff` on them.  And for this we'd like to use the builtin Visual Studio Code support for this.  To do this we can draw on another methapor with real hosts or virtual instances, the notion of `ftp` ing or `scp` ing files.
 
@@ -301,7 +301,7 @@ include::partial$copy_visitor_info.adoc[]
 image::visitor-info.png[Visitor Info]
 
 [#stop_container]
-== Stopping the Container (and Apache server)
+== 4. Stopping the Container (and Apache server)
 
 Before we continue, let's stop the container that is running in the background (thanks to the `-d` flag)
 
@@ -371,7 +371,7 @@ CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES
 ----
 
 [#committing_containers]
-== Committing Containers to Images
+== 5. Committing Containers to Images
 
 Even though our container is stopped, it's still around!
 
@@ -430,7 +430,7 @@ include::partial$podman_images_output.adoc[]
 
 
 [#remove_containers]
-== Removing Containers
+== 6. Removing Containers
 
 Having looked at the images on our system, let's turn our attention back to the containers that are running (or more accurately in our case, stopped)
 
@@ -476,7 +476,7 @@ CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES
 ----
 
 [#rerunning_container]
-== "Re-running" Containers
+== 7. "Re-running" Containers
 
 Let's say we want to take a look at that {temp-file} on the container again.  Let's start up our container to try to do that again
 
@@ -511,7 +511,7 @@ include::partial$copy_visitor_info.adoc[]
 +
 . But if you open the `visitor_info.txt` after copying it out, you'll notice that all the visitor names are gone!
 
-=== "Re-running" a stopped container by image
+=== 8. "Re-running" a stopped container by image
 
 Before we through our hands up in disgust, remember that we had the foresight of _committing_ our previously running web server container to a new image called `{apache-committed-container-image}`.  This image should container all the changes we made on top of the `{apache-server-container-name}` that we just ran and allow us access to the info that does not exist in the `{apache-server-image-insecure}`.
 
