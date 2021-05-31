@@ -1,13 +1,16 @@
 include::_attributes.adoc[]
 
-= Introduction to Code Server
+= Setup
+
+[#intro_code_server]
+== 1. Introduction to Code Server
 
 You have been given access to a RHEL8 virtual machine and your access to the machine will be mediated by link:https://github.com/cdr/code-server[code-server]: a browser based community version of Visual Studio Code.
 
 Let's take a moment to familiarize yourself with the environment
 
 [#open_code_server]
-== Open code server
+== 2. Open code server
 
 Once you have entered your password, you will be greeted with the code-server UI with your RHEL user's (`{USER}`) home directory.  
 
@@ -15,7 +18,7 @@ Once you have entered your password, you will be greeted with the code-server UI
 image::code-server-overview.png[]
 
 [#open_code_server_terminal]
-== Open Terminal
+== 3. Open Terminal
 
 Among other things, your code-server gives you command line access to your RHEL instance.  You can open the terminal by using kbd:[CTRL+ J] (or kbd:[CMD+J] on a Mac)
 
@@ -25,7 +28,7 @@ The first time you open it, you will find your terminal at the bottom (right) of
 image::code-server-terminal.png[]
 
 [#open_code_server_terminal_commands]
-== Issuing Terminal Commands
+== 4. Issuing Terminal Commands
 
 Just to see that you are logged into the server, issue the following command
 
@@ -82,7 +85,7 @@ REDHAT_SUPPORT_PRODUCT_VERSION="8.3"
 ----
 
 [#local_browser]
-== Local Browser
+== 5. Local Browser
 
 Your code-server instance also has a chromium based browser installed (as a VSCode extension).  This will allow us to view html files and connect to VM local services that are not otherwise exposed to the internet at large.
 
