@@ -6,23 +6,23 @@ include::_attributes.adoc[]
 
 = Running your First Container with Podman
 
-In this exercise we're going to use podman to download and run a container that will run a local Apache webserver on your VM.
+In this exercise we're going to use Podman to download and run a container that will run a local Apache webserver on your VM.
+
+image::podman.svg[Podman!,width=320,height=86]
 
 [#run_container]
 == Add a website by running a container
 
-. First let's prove that apache is not currently running on your local VM by opening the code-server _Browser Preview_ (if it isn't open already)
-+
-NOTE: In case you missed it, instructions for how to open your _Browser Preview_ window are xref:introduction.adoc#local_browser[here]
-+
-. Navigate to `localhost:8081`, which instructs the browser to connect to port 8081 of your local instance
+. First let's prove that Apache is not currently running on your local VM.
+
+. In your xref:introduction.adoc#local_browser[Local Browser,window=_blank], navigate to `localhost:8081`, which instructs the browser to connect to port 8081 of your local instance
 . You should find that there is nothing there but a blank screen
 +
 image::empty-browser-preview.png[]
 
 Now we're going to use podman to quickly create a running website on this instance!
 
-. First, login as `root` on your instance by running the following command:
+. Login as `root` on your instance by running the following command:
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
