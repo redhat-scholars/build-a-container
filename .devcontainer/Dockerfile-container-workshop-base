@@ -61,6 +61,8 @@ RUN chown -R default:0 /opt/app-root/src
 
 USER default
 
+ENV HOME /opt/app-root/src
+
 COPY .zshrc.example $HOME/.zshrc
 
 # Default DEMO_HOME directory
