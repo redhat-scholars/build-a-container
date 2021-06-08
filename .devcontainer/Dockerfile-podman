@@ -7,4 +7,6 @@ RUN pip3 install --upgrade boto3 boto
 # make python 3 the default python (that ansible uses)
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
-# USER jboss
+# need to make sure home is the home of the default user (as the rest of the Dockerfile base was setup with that in mind)
+ENV HOME /opt/app-root/src
+# USER default
