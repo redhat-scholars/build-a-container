@@ -1,12 +1,234 @@
 :markup-in-source: verbatim,attributes,quotes
 :USER_ID: %USER_ID%
-:OPENSHIFT_CONSOLE_URL: https://console-openshift-console.%APPS_HOSTNAME_SUFFIX%/topology/ns/my-project{USER_ID}/graph
 :WORKSHOP_GIT_REPO: %WORKSHOP_GIT_REPO%
 :WORKSHOP_GIT_REF: %WORKSHOP_GIT_REF%
 
-= Deploy your Container
-:navtitle: Deploy your Container
+= Using Podman with Multiple Containers
+:navtitle: Using Podman with Multiple Containers
 
 _10 MINUTE EXERCISE_
 
-In this lab we'll show you how your container can now be deployed on an Enterprise Kubernetes solution like OpenShift
+As soon as you start using one container, you start to recognise the need for multiple containers and get to the problem of scaling and orchestrating.
+
+Podman exists to offer a daemonless container engine for managing OCI-compliant containers on your Linux system. Users love it for its ease of adoption as an alternative to Docker. However, many users and the broader container community have been telling us that one missing feature - compatibility with Docker Compose.
+
+In this section, we are going to demonstrate the steps you need to orchestrate multiple containers on RHEL 8. Specifically how Podman can take you a step towards packaging containers for Kubernetes with the following:
+
+. Using docker-compose with Podman
+. Using Podman to auto-generate yaml for Kubernetes and play it for containers.
+
+[NOTE]
+====
+There is an open source project Podman Compose (https://github.com/containers/podman-compose) but its not (at this stage) supported by Red Hat and is not covered in this lab.
+====
+
+== Why Docker Compose?
+Many people use Docker Compose for one simple reason: I can define my applications in a portable and easy-to-write YAML file, which gives me the ability to group each site with its dependencies.
+For instance, this site requires a web server running PHP and a database to store its data. Those are two containers, and managing them separately seems silly.
+Instead, I grouped them in a Docker Compose file. This solution allows me to work with the whole stack when I want to do things like stop services, or pull in updates for the container images I chose to use.
+
+Examples of Docker compose files can be found here: https://github.com/docker/awesome-compose.git, which we will use in this lab.
+----
+version: '3.7'
+services:
+  gitea:
+    image: gitea/gitea:latest
+    environment:
+      - DB_TYPE=postgres
+      - DB_HOST=db:5432
+      - DB_NAME=gitea
+      - DB_USER=gitea
+      - DB_PASSWD=gitea
+    restart: always
+    volumes:
+      - git_data:/data
+    ports:
+      - 3000:3000
+  db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=gitea
+      - POSTGRES_PASSWORD=gitea
+      - POSTGRES_DB=gitea
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    expose:
+      - 5432
+volumes:
+  db_data:
+  git_data:
+----
+
+== Podman support with Docker Compose
+Up to now, support for Docker Compose, the command-line utility that orchestrates multiple Docker containers for local development, was missing. With Podman 3, we have begun to support Compose.
+
+Docker Compose is a python based application which is used to co-ordinate multiple containers. It communicates with docker behind the scenes via an API layer. With RHEL 8 and the removal of docker as a package,
+this restful API backend has now been implemented to use daemonless Podman.
+
+The api requires the podman-docker package to be installed and the podman api to be enabled which we have seen with RHEL Cockpit.
+$ sudo yum install podman-docker
+
+Docker compose requires root access, and this experience is now available in Podman Here's how it works as a rootful/privileged user.
+
+
+== Setup Docker Compose with Podman
+
+The first step is to ensure that all the required packages are installed and set up the Podman (3.0 or greater) system service using systemd and api is enabled. The docker-compose executable is downloaded directly but this can also be installed with pip on some systems if a build is unavailable.
+
+----
+$ sudo yum install podman-docker
+$ curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o docker-compose
+----
+
+Once the binary is downloaded, we move it into /usr/local/bin and we make it executable:
+----
+$ sudo mv docker-compose /usr/local/bin && sudo chmod +x /usr/local/bin/docker-compose
+----
+
+After installing the packages, start the Podman systemd socket-activated service using the following command:
+----
+$ sudo systemctl start podman.socket
+----
+
+Verify the system service is running by hitting the ping endpoint and see if we get a response. This step needs to be successful before we can proceed further.
+----
+$ sudo curl -H "Content-Type: application/json" --unix-socket /var/run/docker.sock http://localhost/_ping
+OK
+----
+We can now confidently run Compose knowing the RESTful API is working.
+
+== Using Docker Compose with Podman
+
+The following exercise demonstrates how to use Compose by using two examples that Docker has curated and maintained
+in the awesome-compose (https://github.com/docker/awesome-compose) Git repository. If git is not installed, then the
+----
+$ sudo yum install git
+$ git clone https://github.com/docker/awesome-compose.git
+----
+
+There are many examples in this repository, but we will use a base setup for the project Gitea, which describes itself as a community-managed lightweight code hosting solution written in Golang.
+----
+$ cd awesome-compose/
+$ cd gitea-postgres/
+----
+
+The docker-compose up command looks for the docker-compose.yaml within the directory. Run the following in
+----
+$ sudo docker-compose up
+----
+
+The README for this docker-compose setup says to visit localhost:3000 in your browser to verify it is working.
+By the Compose output, you should see that docker-compose has created a network, two volumes, and two containers. We can observe the two containers in another terminal with the podman ps command.
+In a new terminal run the following podman command
+----
+$ podman ps
+----
+
+The network can be seen with podman network ls.
+----
+$ sudo podman network ls
+----
+
+Lastly, the volumes can be displayed with podman volume ls.
+----
+$ sudo podman volume ls
+----
+
+To bring down the Docker Compose containers, we just need to interrupt docker-compose with a Ctrl+C.
+----
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping gitea-postgres_gitea_1 ... done
+Stopping gitea-postgres_db_1    ... done
+$
+----
+
+
+== Using Podman to bridge to Kubernetes
+
+In this exercise we will look out how Podman can provide a bridge to Kubernetes by generating or using kubernetes based yaml files rather than Docker compose yaml files.
+
+Docker and how we have worked with Podman so far deals with containers. However Kubernetes lowest schedulable unit are pods which can contain one or more containers.
+
+Podman pods are similiar to kubernetes pods in the sense that they can contain one or more containers at a time. With podman play command, you can import kubernetes pod definitions in yaml format.
+
+Every podman pod includes an infra container by default. Its purpose is to hold the namespaces associated with the pod and allow podman to connect other containers to the pod. This also lets pods live, if the pod is not running any application containers.
+
+With our previous docker compose file run docker-compose and find the container names which are running
+----
+$ sudo docker-compose up
+$ podman ps
+----
+
+Now we have two containers running. Lets export the kuubernetes yaml associated, replace gitea-postgres_db_1 and gitea-postgres_gitea_1 with names
+An example yaml file for Kubernetes looks like so.
+----
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+----
+----
+$ sudo podman generate kube gitea-postgres_db_1 > gitea-postgres_db.yml
+$ sudo podman generate kube gitea-postgres_gitea_1 > gitea-postgres_gitea.yml
+----
+
+Now stop the gitea process by stopping the docker compose or using podman stop on both containers.
+
+So lets now run the gitea process as 2 pods rather than the docker compose file. First we will try it with Podman and then we can push this to an OpenShift cluster.
+
+podman play kube will read in a structured file of Kubernetes YAML. It will then recreate the containers, pods or volumes described in the YAML.
+----
+$ sudo podman play kube gitea-postgres_db.yml
+$ sudo podman play kube gitea-postgres_gitea.yml
+----
+
+We can list the pods using podman pod ls or podman pod list command:
+----
+$ sudo podman pod list
+POD ID        NAME                      STATUS   CREATED         INFRA ID      # OF CONTAINERS
+7e326ad010eb  gitea-postgresgitea1_pod  Running  18 seconds ago  50a1cdd0d632  2
+b495ee55557d  gitea-postgresdb1_pod     Running  50 seconds ago  da3da3833410  2
+----
+
+Verify the service is running by looking at your local browser at localhost:3000.
+
+There are many more options associated with these commands.
+
+== Running in OpenShift
+
+
+== Wrap up
+The Red Hat engineers have taken a step towards suupport of Docker compose with Podman. It has been a Minumum Viable Product (MVP) approach which brings the same experience (running as root). This is an area that will continue to develop given some of the Podman fundamentals such as not running as priveleged is not yet 100%. However it should enable the ability for organisations to move their Docker compose setups to Podman and embrace Kubernetes standards.
+
+One known caveat is that Podman has not and will not implement the Swarm function. Therefore, if your Docker Compose instance uses Swarm, it will not work with Podman.
+With the 3.0 release, Podman can now work nicely with Docker Compose to orchestrate containers, which is a huge step toward daemonless container management on Linux.
+
+[TIP]
+====
+If you try something that works with Docker and doesnt work with non-root Podman, first try root with Podman.
+====
+
+[NOTE]
+====
+For an in depth discussion, this video provides a good discussion to understand the hows and whys of supporting docker-compose with Podman. The Level Up Hour (E29): Docker Compose with Podman v3  - https://www.youtube.com/watch?v=hyOXwzvLXOM
+
+For reference in our exercise here today, this blog ihttps://www.redhat.com/sysadmin/podman-play-kube?extIdCarryOver=true&intcmp=7013a0000026NKWAA2&sc_cid=7013a000002w5dgAAA
+====
