@@ -10,3 +10,6 @@
 _10 MINUTE EXERCISE_
 
 In this lab we'll show you how your container can now be deployed on an Enterprise Kubernetes solution like OpenShift
+
+OpenShift
+https://red.ht/dev-sandbox
