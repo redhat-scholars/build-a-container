@@ -19,4 +19,5 @@
 ** xref:containers-and-security.adoc[Container Security]
 ** xref:build-your-own-container.adoc[Build your own Secure Container]
 * Scaling
-** xref:deploy-container.adoc[Deploying your Container]
+** xref:compose-container.adoc[Multi containers with Podman]
+** xref:deploy-container.adoc[OpenShift Sandbox]
