@@ -52,7 +52,7 @@ msfconsole
 ----
 +
 . When prompted, decline to load the metasploit DB
-. When it's done initializing, you should see output like this
+. When it's done initializing, you should see output something like this (ASCII art will vary)
 +
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
@@ -211,9 +211,13 @@ So far we've just impacted the running container.  To fix it we could just start
 ====
 +
 image::broken-guestbook.png[]
-+
-. One key consideration when running containers as a given user is that this generally maps directly to a user on the host operating system.  As we'll see, this is particularly dangerous for a user such as `root` which exists on every system and has elevated privileges.  One of the places of "interaction" between the container and the host operating system where we can exploit this is via the volume mounts we were using
-. Next let's poke around the directory where visitors were getting logged
+
+[#wreaking_havoc_host]
+=== Wreaking havoc on the Host
+
+One key consideration when running containers as a given user is that this generally maps directly to a user on the host operating system.  As we'll see, this is particularly dangerous for a user such as `root` which exists on every system and has elevated privileges.  One of the places of "interaction" between the container and the host operating system where we can exploit this is via the *volume mounts* we were using
+
+. From within the same metasploit shell, let's poke around the directory where visitors were getting logged
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -360,10 +364,10 @@ ls -l /
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
 ----
-include::example$hacked_root.txt
+include::example$hacked_root.txt[]
 ----
 +
-. And finally, this means that any secrets on the host are exposed or manipulatable by the intruder
+. And finally, this means that any secrets on the host are exposed or manipulatable by the intruder.  For example:
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -373,10 +377,155 @@ cat /mnt/hack/home/{USER}/.ssh/config
 
 == Running containers responsibly
 
-Following the principle of least privilege, there is a lot we could have done to limit the damage of any attacker such as
+Following the principle of least privilege, there is a lot we could have done to limit the damage of any attacker such as:
+
 * don't run privileged containers
+* use SELinux to fine tune container access to volume mounts
 * don't run containers as root
 * ensure that your containers do not include known vulnerabilities or CVEs
+
+=== Effect of priviledged containers
+
+Let's take a look at the difference that is made by not running containers in privileged mode.  
+
+. Stop and remove the currently running web server
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman rm -f my-web-server
+----
++
+[NOTE]
+====
+When you kill the container, you'll notice that the metasploit connection will be broken and you'll see a message like this: 
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+[*] 127.0.0.1 - Meterpreter session 2 closed.  Reason: Died
+----
+
+Press enter in that terminal to return to the metasploit console
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+msf6 exploit(multi/http/apache_mod_cgi_bash_env_exec) > 
+----
+
+====
++
+. Now let's start up the webserver again in the same manner as before but this time without the `--privileged` flag
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+    -d \
+    -p 8081:80/tcp \ 
+    --name {apache-server-container-name} \
+    -v {container-workshop-exercise-path}:/var/log/www:Z \
+    {apache-server-image-insecure}
+----
++
+. Let's reopen the exploit in the other terminal by entering following the instructions link:#exploit_shellshock[above^] to create a bash terminal on the container 
+. Many of the exploits that we did previously are still an issue, but the arguably most egregious one, mounting the host's root filesystem is gone.  From the metasploit bash script run
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+fdisk -l
+----
++
+. Unlike before you will see that no disks are returned.  
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+
+----
++
+. This is because such privileges were not assigned to the container
+
+=== Better use of SELinux
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+shell
+/usr/bin/script -qc /bin/bash /dev/null
+
+----
+
+[#non_root_containers]
+=== Non-root containers
+
+Most containerization runtimes, such as Docker, effectively require all containers to run as root by way of the Docker daemon on the system. 
+
+Podman is different in that regard.  Because it does not rely on a root-level service to be active to be able to run a container, containers can instead be run as normal users on the system.  How it does this is a bit beyond the scope of this workshop, but in short it does this through user namespace mapping.  Any container that runs as root (like our container) will present as the user who started the container on the host system.  This can further limit exposure of the host system.  
+
+. For most of the lab we have been running as the `root` user.  Let's get to a terminal that is running as {USER}.  Choose one of the ways below:
++
+[tabs]
+====
+Exit `sudo`::
++
+--
+From the terminal that you have been running all your podman commands, simply type the following to exit back to your original user
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+exit
+----
+
+Upon running the command, you should still have an open and active terminal, returning you to the default user
+
+--
+Open new Tab::
++
+--
+Click the `+` button as shown in the image below to create a new terminal.  
+
+image::new-terminal.png[]
+
+TIP: You can also open a new terminal with the kbd:[CTRL+SHIFT+'] keystroke
+
+This will add a new terminal to your "stack" and log you as as {USER}.  You can always go back to your other terminals by using the terminal dropdown as shown
+
+image::terminal-dropdown.png[]
+--
+====
++
+. Check to ensure you are no longer the root user in the terminal by running the following command
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+whoami
+----
++
+. Ensure that the output of the command is the following:
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+{USER}
+----
++
+TIP: If it's not, ensure you followed the instructions <<non_root_containers,here>> correctly or ask for assistance.
++
+. Now we'll run our webserver much like we did before
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+
+----
++
+. You'll notice that the container will need to be downloaded again.  Didn't we do this already?  We did, but as `root`.
+NOTE: You will notice that the container needs to be downloaded again.  This is because 
 
 == Scanning Containers
 

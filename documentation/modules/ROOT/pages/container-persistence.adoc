@@ -66,7 +66,7 @@ podman run \
     -v {container-workshop-exercise-path}:/var/log/www:Z \#<.>
     {apache-server-image-insecure}
 ----
-<.> The format of the volume mount option is <host_path>:<container_path>:<options>.  In our case, we're mounting `{container-workshop-exercise-path}` at `/var/log/www` in the container.  The `Z` option is for SELinux and gives the container permission to write to the folder
+<.> The format of the volume mount option is <host_path>:<container_path>:<options>.  In our case, we're mounting `{container-workshop-exercise-path}` at `/var/log/www` in the container.  The `Z` option is for SELinux it tells podman to relabel the volume's content to match the label inside the container
 
 [#test_mount]
 == Testing the Volume Mount
