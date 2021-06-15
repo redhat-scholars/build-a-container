@@ -36,7 +36,10 @@ whoami
 +
 . Next, as a non-root user we need to do some setup that will allow buildah to interact with the container in this native command mode.  Run the following in the terminal  
 +
-NOTE: The main reason for running this command is that we'll be mounting filesystems inside the container and non-root users normally do not have privileges to do this.  Running `buildah unshare` is a way of preparing to work with containers "rootlessly" (if you will).  For a discussion of what this is, see link:https://www.redhat.com/sysadmin/buildah-unshare-command[here^].  Think of it as a way that buildah can work with container "rootlessly" just as podman did in the xref::containers-and-security.adoc#non_root_containers[last section, window=_blank]
+[NOTE]
+====
+The main reason for running this command is that we'll be mounting filesystems inside the container and non-root users normally do not have privileges to do this.  Running `buildah unshare` is a way of preparing to work with containers "rootlessly" (if you will).  For a discussion of what this is, see link:https://www.redhat.com/sysadmin/buildah-unshare-command[here^].  Think of it as a way that buildah can work with container "rootlessly" just as podman did in the xref::containers-and-security.adoc#non_root_containers[last section, window=_blank]
+====
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -61,7 +64,10 @@ CONTAINER=$(buildah from {apache-server-image-insecure-image}) #<.>
 ----
 <.> We're effectively assigning a the shell variable `CONTAINER` to the id of the buildah container that starts with the state of the image we want to update
 +
-NOTE: If you haven't yet downloaded the image, the image might be downloaded first from the repo before you can enter the next command
+[NOTE]
+====
+If you haven't yet downloaded the image, the image might be downloaded first from the repo before you can enter the next command
+====
 +
 . To confirm that our working container is up, we can run the following command (which is a little like `podman ps` but for "working containers")
 +
@@ -91,7 +97,7 @@ pass:[&&] echo "Container pass:[${CONTAINER}]'s filesystem mounted on host at pa
 [.console-output]
 [source,bash,subs="+macros,+attributes,+quotes"]
 ----
-Container container-workshop-httpd-working-container's filesystem mounted on host at /home/{USER}/.local/share/containers/storage/overlay/#500abaa5921678c20f37f689ae72e37734445934e8c223775a2b71cce091e3f6#/merged #<.>
+Container container-workshop-httpd-working-container\'s filesystem mounted on host at /home/{USER}/.local/share/containers/storage/overlay/#500abaa5921678c20f37f689ae72e37734445934e8c223775a2b71cce091e3f6#/merged #<.>
 ----
 <.> The highlighted section will be different on your instance.  This is just making clear where the container mount point is
 +
@@ -143,46 +149,7 @@ dnf install -y \#<.>
 +
 . You may see a few errors upon running this command.  They are non-critical.  In the output the key message you should see is
 +
-[.console-output]
-[source,bash,subs="+macros,+attributes,+quotes"]
-----
-Package bash-4.2.45-2.el7.x86_64 is already installed.
-Dependencies resolved.
-===================================================================================================
- Package             Architecture          Version                      Repository            Size
-===================================================================================================
-Upgrading:
- bash                x86_64                4.2.46-34.el7                ubi-7                1.0 M
-
-Transaction Summary
-===================================================================================================
-Upgrade  1 Package
-
-Total download size: 1.0 M
-Downloading Packages:
-bash-4.2.46-34.el7.x86_64.rpm                                      415 kB/s | 1.0 MB     00:02    
----------------------------------------------------------------------------------------------------
-Total                                                              414 kB/s | 1.0 MB     00:02     
-Running transaction check
-Transaction check succeeded.
-Running transaction test
-Transaction test succeeded.
-Running transaction
-  Preparing        :                                                                           1/1 
-  Upgrading        : bash-4.2.46-34.el7.x86_64                                                 1/2 
-  Running scriptlet: bash-4.2.46-34.el7.x86_64                                                 1/2 
-  Cleanup          : bash-4.2.45-2.el7.x86_64                                                  2/2 
-  Running scriptlet: bash-4.2.45-2.el7.x86_64                                                  2/2 
-  Verifying        : bash-4.2.46-34.el7.x86_64                                                 1/2 
-  Verifying        : bash-4.2.45-2.el7.x86_64                                                  2/2 
-Installed products updated.
-
-Upgraded:
-  #bash-4.2.46-34.el7.x86_64#  #<.>                                                                     
-
-Complete!
-----
-<.> Notice that this package is more recent than the minimum release needed to address the vulnerability
+include::partial$dnf_output.adoc[]
 +
 . Now we will commit these changes to a new image locally on the host that we'll test.  We commit the changes with
 +
@@ -190,12 +157,12 @@ Complete!
 [source,bash,subs="+macros,+attributes"]
 ----
 buildah commit \#<.>
-    $CONTAINER \#<.>
-    localhost/mytest #<.>
+    pass:[${CONTAINER}] \#<.>
+    {apache-server-image-secure-image} #<.>
 ----
-<.> FIXME
-<.> FIXME 
-<.> FIXME
+<.> `commit` means to take the working container and save it as a container image
+<.> This is the ID of the working container that we want saved as an image 
+<.> The name the image should be saved as.  This saves the image to the user's local container store on the host instance
 +
 . This should yield output like the following
 +
@@ -230,3 +197,48 @@ exit
 ----
 
 === Testing commited container
+
+Now that we committed a new image, we can test this committed image
+
+. Run the new container "rootlessly" in the terminal by running the following command: 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+    -d \
+    -p 8081:80/tcp \ 
+    --name {apache-server-container-name} \
+    -v {container-workshop-exercise-path}:/var/log/www:Z \
+    {apache-server-image-secure-image}
+----
++
+. Since our new container image is virtually identical to the original one (except for the new bash package) and we're forwarding the same ports we can now attempt to exploit the container again with the configuration from before
+. If you don't still have the metasploit console open, then split the terminal and follow the instructions xref::containers-and-security.adoc#using_metasploit[here, window=_blank] to the point where the metasploit console is configured to target the container
+. Next run the following command in the *metasploit* terminal
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+check
+----
++
+. And this should result in the following output
++
+[.console-output]
+[source,bash,subs="+macros,+attributes,+quotes"]
+----
+[*] 127.0.0.1:8081 - The target is #not# exploitable.
+----
++
+
+Congratulations!  You'd fixed the shellshock exploit
+
+== Buildah and Containerfiles
+
+Though we've fixed the issue with {apache-server-image-insecure} by using the `buildah` native command line tools to fix it, there are still other aspects of the container that could be addressed to make it more secure and less likely to need special privileges from the underlying operating system such as
+
+* Not running as the root user (and thus the apache server not running as `root`)
+* Not requiring a port < 1024.  Currently the apache server in the container images listens on port 80
+
+What's more, we have no record of the step-by-step changes we've made to the container that we might store in revision control.  One (valid) option would be to store all the buildah cli commands we issued in a shell script.  However, container tools like `docker` have popularized the `Dockerfile` (or, more generically, `Containerfile`) way of defining new containers.  Let's investigate the {apache-server-image-insecure}'s `Containerfile` to see if we can address the points above
