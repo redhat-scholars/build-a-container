@@ -5,6 +5,9 @@
 :apache-server-image-insecure-image: quay.io/mhildenb/container-workshop-httpd
 :apache-server-image-insecure-tag: 0.0.5
 :apache-server-image-insecure: {apache-server-image-insecure-image}:{apache-server-image-insecure-tag}
+:apache-server-image-secure-image: localhost/container-workshop-httpd-secure
+:apache-server-image-secure-tag: latest
+:apache-server-image-secure: {apache-server-image-secure-image}:{apache-server-image-secure-tag}
 :apache-server-container-name: my-web-server
 :apache-committed-container-image: container-workshop-commit
 :commit-container-image-id-long: f154f395c55ed7192f180502495b96cb3c223d9ce50273cda41bb63e272be7d8
