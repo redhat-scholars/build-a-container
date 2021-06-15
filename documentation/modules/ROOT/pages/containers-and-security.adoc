@@ -624,53 +624,132 @@ This is again due to the fact that the container is not actually running as root
 
 == Scanning Containers
 
-Our image clearly has issues and it's not the only container out there that may have serious vulnerability or compliance issues.  Luckily, there are a number of tools out there that allow us to check our images for issues
+In the previous section we saw some techniques podman (Red Hat Enterprise Linux) give us to limit the impact of any *unknown* security vulnerabilities, but is there a way we can actively look for vulnerabilities and ensure they are not part of our containers in the first place?
 
-=== Vulnerability Scanning with oscap
+In this section we'll look at one form of container security scanning based on OSCAP.  We'll use our container (which clearly has security vulnerabilities) as a target of our OSCAP scan and let's see what turns up
 
-. First download the oval document
+=== Vulnerability Scanning with `oscap-podman`
+
+The link:https://static.open-scap.org/openscap-1.2/oscap_user_manual.html[Open Security Content Automation Protocol^] (or OSCAP) refers to an open standard for quantifying vulnerabilities (or security policy infringements) that may be present in an operating system.  The aggregated wisdom of all the Common Vulnerabilities and Exploits (CVEs) are codified in publicly available xml documents in the link:https://oval.mitre.org/[OVAL^] (Open Vulnerability and Assessment Language) xml format which oscap tooling can consumefootnote:[For policy checking, there is a separate type of format that OSCAP tooling can consume called EXensible Configuration Checklist Description Format (or XCCDF) files.  XCCDF files are used to can images/operating systems for compliance with a number of prescritive standards such as CIS and PCI-DSS]
+
+One of podman tools is an oscap compatible scanner, called `oscap-podman` which adapts oscap for use with containers instead of just operating systems.
+
+. To save time, we have provided you with a suitable oval document already.  Let's take a quick look at it by using kbd:[CTRL+p] (or kbd:[CMD+p] on MacOS) to quickly open `rhel-7-oval.xml` (which can be found in the `container-workshop\oval` directory on your instance)
++
+.OVAL document
+image::oval-document.png[OVAL document]
++
+[NOTE]
+====
+If you want to look at an oval document direct from the internet you can run the following command: 
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+wget -O- https://www.redhat.com/security/data/oval/v2/RHEL8/rhel-8.oval.xml.bz2 | bzip2 --decompress> ~{USER}/container-workshop/rhel-8.oval.xml
+----
+
+====
++
+. With our oval document in hand, we simply run the scan on our image
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-wget -O- https://www.redhat.com/security/data/oval/v2/RHEL8/rhel-8.oval.xml.bz2 | bzip2 --decompress> ~student1/rhel-8.oval.xml
+sudo oscap-podman {apache-server-image-insecure} \#<.>
+    oval eval \#<.>
+    --report /home/{USER}/container-workshop/oval/vuln-report.html \#<.>
+     /home/{USER}/container-workshop/oval/rhel-7.oval.xml #<.>
 ----
+<.> The oscap-podman command must run as `root` due to the container evaluation itself needing elevated privileges.  Hence we use the `sudo` prefix
+<.> This indicates that we are wanting to evaluate the document using the `oval` format (as opposed to XCCDF)
+<.> This is the location of the oval document we just viewed in VS Code
+<.> Indicates that we want the output as an (HTML) report in the specified directory
 +
-. Next, get the imageid of our container and setting it to `IMAGE_ID`
-+
+[IMPORTANT]
+====
+In order for `oscap-podman` to be able to scan an image, it must already be present locally on the machine (for the `root` account) or you will get errors like
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+Target of the scan not found: '{apache-server-image-insecure}'.
+----
+
+If you get this error, first run this command before running the `oscap-podman` command above
+
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-podman images
+sudo podman pull {apache-server-image-insecure}
 ----
+====
++
+. The command might appear to do nothing for 30 seconds or so, but then you should see a flood of output somthing like this (showing only the last few lines): 
 +
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
 ----
-REPOSITORY                                 TAG     IMAGE ID      CREATED     SIZE
-quay.io/mhildenb/container-workshop-httpd  0.0.2   e1fc6588d2cc  7 days ago  664 MB
+...
+Definition oval:com.redhat.rhba:def:20152194: false
+Definition oval:com.redhat.rhba:def:20152161: false
+Definition oval:com.redhat.rhba:def:20152142: false
+Definition oval:com.redhat.rhba:def:20152116: false
+Definition oval:com.redhat.rhba:def:20152092: false
+Definition oval:com.redhat.rhba:def:20151554: false
+Definition oval:com.redhat.rhba:def:20150965: false
+Definition oval:com.redhat.rhba:def:20150584: false
+Definition oval:com.redhat.rhba:def:20150441: false
+Definition oval:com.redhat.rhba:def:20150386: false
+Definition oval:com.redhat.rhba:def:20150364: false
+Evaluation done.
 ----
 + 
-. Now run the following commandfootnote:[This must be done as root]
+. The report `vuln-report.html` should have appeared in your `container-workshop` directory of your explorer.  To look at it from within the browser preview, right click on the file and select `Open in Browser Preview`
 +
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-oscap-podman pass:[${IMAGE_ID}] oval eval --report ~{USER}/vuln-report.html ~{USER}/rhel-8.oval.xml
-----
-. Having exported the report, we can now open the embedded browser and look at the html file.  Paste the following URL in the browser
+.Open report in preview
+image::open-report-in-preview.png[Open in preview]
 +
-[.console-input]
-[source,subs="+macros,+attributes"]
-----
-file:///home/{USER}}/vuln-report.html
-----
+. On the right side of the screen, you should now see the generated report (as also seen in the image below).  Feel free to scroll around to get familiar with the output.  This report shows how our container fared against the different vulnerability checks and in our case indicates one big security issue.
 +
-. You should now see a report displayed in the browser that looks something like this
+[TIP]
+====
+You can double-click on the browser preview tab to expand that pane.  Double-click again to bring it back to the original size
+====
++
+. Let's go a little deeper into the vulnerability that this oval scan uncovered.  Included in the scan output is helpful information about what the vulnerability is, how it's exploited, and how it can be resolved.  Click on link shown in the image below to learn more
 +
 .OSCAP Vulnerability Report
 image::oscap-vulnerability-report.png[Vulnerability Report]
 +
+. Your `Browser Preview` should navigate to Red Hat's CVE information on the exploit which, in this case, is the famous Shellshock vulnerability that we have been expoiting on our container for most of this lab.
++
+[TIP]
+====
+When clicking on the link, a new Browser Preview will open in a new tab.  This may clutter up your workspace.  If you'd like, you can close the Browser Preview with the vulnerability report and/or double-click on the Browser Preview tab with the Red Hat CVE info.
+====
++
+. Feel free to read through the advisory.  To determine how to fix the issue we're going to follow the "Vulnerability Response" link highlighted below
++
+.Red Hat advisory on Shellshock CVE
+image::cve-advisory.png[]
++
+. Once on the security bulletin, select the "Resolve" tab as shown below.  From this we can see that the recommended remediation is to update the version of bash that is running in our container to `bash-4.2.45-.el7_0.4`
++
+.Security Bulletin with Shellshock remediation
+image::security-bulletin.png[]
+
+Now that we know what we need to do to our container, we're left with the question of HOW we're meant to update the container given that containers are supposed to be immutable.  When dealing with containers, we don't need to change the running container, but rather the _image_ that the container runs as.  In our case we're going to want to update our `{apache-server-image-insecure}` image.
+
+This is where `buildah` comes in, which we'll explore next.
+
+=== Compliance Scanning with `oscap-podman`
+
+[WARNING]
+====
+This section is unfinished and likely to be cut from the final workshop
+====
+
 . Install compliance stuff (FIXME: move this to ansible)
 +
 [.console-input]
