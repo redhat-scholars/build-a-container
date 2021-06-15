@@ -1,0 +1,40 @@
+[.console-output]
+[source,bash,subs="+macros,+attributes,+quotes"]
+----
+Package bash-4.2.45-2.el7.x86_64 is already installed.
+Dependencies resolved.
+===================================================================================================
+ Package             Architecture          Version                      Repository            Size
+===================================================================================================
+Upgrading:
+ bash                x86_64                4.2.46-34.el7                ubi-7                1.0 M
+
+Transaction Summary
+===================================================================================================
+Upgrade  1 Package
+
+Total download size: 1.0 M
+Downloading Packages:
+bash-4.2.46-34.el7.x86_64.rpm                                      415 kB/s | 1.0 MB     00:02    
+---------------------------------------------------------------------------------------------------
+Total                                                              414 kB/s | 1.0 MB     00:02     
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                           1/1 
+  Upgrading        : bash-4.2.46-34.el7.x86_64                                                 1/2 
+  Running scriptlet: bash-4.2.46-34.el7.x86_64                                                 1/2 
+  Cleanup          : bash-4.2.45-2.el7.x86_64                                                  2/2 
+  Running scriptlet: bash-4.2.45-2.el7.x86_64                                                  2/2 
+  Verifying        : bash-4.2.46-34.el7.x86_64                                                 1/2 
+  Verifying        : bash-4.2.45-2.el7.x86_64                                                  2/2 
+Installed products updated.
+
+Upgraded:
+  #bash-4.2.46-34.el7.x86_64#  #<.>                                                                     
+
+Complete!
+----
+<.> Notice that this package is more recent than the minimum release needed to address the vulnerability
