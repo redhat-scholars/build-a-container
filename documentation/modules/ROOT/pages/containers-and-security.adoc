@@ -566,9 +566,9 @@ ls -l /var/log/www/hello_from_rootless_podman.txt
 . It should appear that the files are created by root
 +
 [.console-output]
-[source,bash,subs="+macros,+attributes"]
+[source,bash,subs="+macros,+attributes,+quotes"]
 ----
--rw-r--r--. 1 root root 0 Jun 14 13:25 /var/log/www/hello_from_rootless_podman.txt
+-rw-r--r--. 1 #root# #root# 0 Jun 14 13:25 /var/log/www/hello_from_rootless_podman.txt
 ----
 +
 . This makes sense as you are still running in the container as root.  Prove this by running
@@ -593,9 +593,9 @@ ls -l {container-workshop-exercise-path}/hello_from_rootless_podman.txt
 ----
 +
 [.console-output]
-[source,bash,subs="+macros,+attributes"]
+[source,bash,subs="+macros,+attributes,+quotes"]
 ----
--rw-r--r--. 1 student1 student1 0 Jun 14 13:25 /home/student1/container-workshop/hello_from_rootless_podman.txt
+-rw-r--r--. 1 #student1# #student1# 0 Jun 14 13:25 /home/student1/container-workshop/hello_from_rootless_podman.txt
 ----
 +
 . The key here is that unlike before, the files on the host were created as `{USER}`, that is, the user that ran the `podman` command and not `root` as it appeared from inside the container
