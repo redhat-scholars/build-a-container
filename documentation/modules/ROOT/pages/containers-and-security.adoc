@@ -30,6 +30,7 @@ podman ps
 include::partial$podman_ps.adoc[]
 ----
 
+[#using_metasploit]
 === Using Metasploit
 
 We're going to use a tool called link:[metasploit] (which has already been installed on your VM instance) to exploit the vulnerability (with frightening ease).  
@@ -759,6 +760,7 @@ yum -y install scap-security-guide
 ----
 +
 . Run the xccdf scan
++
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
