@@ -134,7 +134,7 @@ drwxr-xr-x. 13 root root 19 Apr 20 03:58 usr
 drwxr-xr-x. 19 root root 17 May 30 08:29 var
 ----
 +
-. Now that we have a mount point we can copy files from the host directly into the container.  In our case however, we want to use the host's package management tooling to install the updated bash package on the container pass:[{$CONTAINER}]. Run this command: 
+. Now that we have a mount point we can copy files from the host directly into the container.  In our case however, we want to use the host's package management tooling to install the updated bash package on the container pass:[{$CONTAINER}]. [#upgrade_bash]#Run# this command: 
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -242,3 +242,148 @@ Though we've fixed the issue with {apache-server-image-insecure} by using the `b
 * Not requiring a port < 1024.  Currently the apache server in the container images listens on port 80
 
 What's more, we have no record of the step-by-step changes we've made to the container that we might store in revision control.  One (valid) option would be to store all the buildah cli commands we issued in a shell script.  However, container tools like `docker` have popularized the `Dockerfile` (or, more generically, `Containerfile`) way of defining new containers.  Let's investigate the {apache-server-image-insecure}'s `Containerfile` to see if we can address the points above
+
+[#basic_containerfile]
+=== Basic Containerfile
+
+. To start, let's create a folder where we'll do the work of building our container.  Right click on the `container-workshop` folder in the explorer, select `New Folder`.  Name the new folder `secure-container`
++
+image:new-folder.png[width=500]
+image:create-container-folder.png[width=300]
++
+. In a normal user terminal, change into this newly created directory
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cd /home/{USER}/container-workshop/secure-container
+----
++
+. Next we're going to create a new Containerfile.  Right-click on the `secure-container` folder and select `New File`.
++
+.New Containerfile
+image:new-containerfile.png[]
++
+. The Containerfile you just created should appear in the editor window.  We'll be slowly adding to this Containfile bit by bit
++
+. Add the following lines to the containerfile
++
+[.console-input]
+[source,Containerfile,subs="+macros,+attributes"]
+----
+FROM registry.access.redhat.com/ubi7 #<.>
+USER root #<.>
+----
+<.> `FROM` is the base container that this container will start from.  `ubi7` stands for "Universal Base Image".  It will serve as a secure basis for the rest of our container.  See information on ubi below
+<.> `USER` indicates that we want to operate as the `root` user for all the commands that follow, until another `USER` directive is found
++
+. To get a sense of what we've done, let's build a container from this Containerfile useing `buildah`.  Run the following command
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+buildah bud \#<.>
+  -f Containerfile \#<.>
+  -t {apache-server-containerfile-image} \#<.>
+  /home/{USER}/container-workshop/secure-container #<.>
+----
+<.> `bud` indicates that buildah should operate from a `Containerfile` (or `Dockerfile`)
+<.> `-f` indicates a the name of the Containerfile that should be used (in this instance, the one that just created)
+<.> `-t` names the tag that should be given to the resultant image
+<.> The final parameter is the directory in which the command should be run
++
+. You should see output something like this:
++
+[.console-output]
+[source,subs="+macros,+attributes"]
+----
+STEP 1: FROM registry.access.redhat.com/ubi7
+Getting image source signatures
+Checking if image destination supports signatures
+Copying blob 93156a512b98 done  
+Copying blob f8c518873786 done  
+Copying config 67d3aabcdb done  
+Writing manifest to image destination
+Storing signatures
+STEP 2: USER root 
+STEP 3: COMMIT {apache-server-containerfile-image} #<.>
+Getting image source signatures
+Copying blob 01d2fb866535 skipped: already exists  
+Copying blob 9e12a51e507a skipped: already exists  
+Copying blob 5f70bf18a086 done  
+Copying config 3d4cd1585c done  
+Writing manifest to image destination
+Storing signatures
+--> 3d4cd1585cd
+3d4cd1585cd258b57399e3cd74516bca85ea745a1066e6ff26e1ee170122d232
+----
+<.> Notice that the `COMMIT` command is implicit and reminiscent of the buildah native command that we issued
++
+. Let's take a look inside the container we've just created and check to see if we need to address the bash vulnerability
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+  -it \
+  {apache-server-containerfile-image} \
+  bash
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+[root@0c388bc22ff6 /]#
+----
++
+. Let's take a look at the version of `bash` that's running
++
+include::partial$yum_info_bash.adoc[]
++
+. Notice that the version (highlighted), is the same version that we installed using the buildah command line <<upgrade_bash,here>>
++
+[TIP]
+.Why didn't we have to patch bash
+====
+While Shellshock is by now an old CVE, this demonstrates more broadly the value of starting your container with one of Red Hat's Universal Base Images.  These images are updated every quarter, their internal packages patched by Red Hat to fix all known CVEs.  For more in depth information on the UBI program see link:https://developers.redhat.com/books/red-hat-universal-base-images-ubi?sc_cid=7013a0000026GuZAAU[here]
+====
+
+[#containerfile_run]
+=== Running Commands in a Containerfile
+
+Our image is a good start, but it doesn't yet have a webserver on it; this is something we're going to have to install.  As we've seen, the ubi base has `yum` installed in it.  So instead of using `buildah` native commands we can instead add directives to the Containerfile to `RUN` commands within the Container as it's being built.   
+
+. If you are still in the container, exit it to get back to the {USER} terminal on the host instance
+. From the IDE, add the highlighted lines to the Containerfile
++
+[.console-input]
+[source,Containerfile,subs="+macros,+attributes,+quotes"]
+----
+FROM registry.access.redhat.com/ubi7 
+USER root 
+
+#RUN yum install -y httpd && yum update -y && yum clean all# #<.>
+----
+<.> The `RUN` directive allows us to run a command as the user currently selected by the `USER` directive.  In this instance we chain a bunch of yum commands together to install our httpd server, ensure that all our packages are up to date (there may have been CVE patches since the last publishing of the ubi base image), and cleanup any temporary files (as we don't want these bloating the size of our final image)
++
+. Now from the terminal run the following command to build our container 
++
+include::partial$buildah_bud_no_annotations.adoc[]
++
+. This should yield output similarfootnote:[Packages that are upgraded by yum will vary based on which packages have been updated by Red Hat since the last published ubi image] to the following:
++
+include::partial$buildah_bud_output_run.adoc[]
+
+_NEXT RUN HTTPD TO TEST OUT WEBSERVER BUT NO VISITOR INFO_
+
+[#containerfile_copy]
+=== Copying files into the container
+
+[#no_privilege]
+=== Removing privileged operations
+
+[#Running_anonymous]
+=== Running containers with anonymous users
+
+[#finish_container]
+=== Setting the Command
