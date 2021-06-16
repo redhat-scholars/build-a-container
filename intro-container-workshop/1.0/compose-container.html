@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Using Podman with Multiple Containers :: Build a Container Workshop</title>
+    <link rel="canonical" href="https://hatmarch.github.io/container-workshop/intro-container-workshop/1.0/compose-container.html">
+    <link rel="prev" href="build-your-own-container.html">
+    <link rel="next" href="deploy-container.html">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" href="https://hatmarch.github.io/container-workshop">Build a Container Workshop</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Books</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">CheatSheets</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">CheatSheet A</a>
+            <a class="navbar-item" href="#">CheatSheet B</a>
+            <a class="navbar-item" href="#">CheatSheet C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Upcoming Events</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Event A</a>
+            <a class="navbar-item" href="#">Event B</a>
+            <a class="navbar-item" href="#">Event C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Tutorial A</a>
+            <a class="navbar-item" href="#">Tutorial B</a>
+            <a class="navbar-item" href="#">Tutorial C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="intro-container-workshop" data-version="1.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Build a Container Workshop</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="introduction.html">Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server">Code Server</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server_terminal">Open terminal</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server_terminal_commands">Issuing Terminal Commands</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#local_browser">Local Browser</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="podman-intro.html">Running Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#run_container">Add a website</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#enter_container">Look inside a container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#copy_data">Copying data out</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#committing_containers">Committing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#stop_container">Stopping Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#remove_containers">Removing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#rerunning_container">"Re-running" Containers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="container-persistence.html">Persistence and Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#mounting_volumes">Mounting Volumes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#test_mount">Testing the Volume Mount</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#tcontainerized_databases">Containerized Databases</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Building Securely</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="containers-and-security.html">Container Security</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="build-your-own-container.html">Build your own Secure Container</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Scaling</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="compose-container.html">Multi containers with Podman</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="deploy-container.html">OpenShift Sandbox</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Build a Container Workshop</span>
+    <span class="version">1.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Build a Container Workshop</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">1.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Build a Container Workshop</a></li>
+    <li>Scaling</li>
+    <li><a href="compose-container.html">Multi containers with Podman</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/hatmarch/container-workshop/edit/master/documentation/modules/ROOT/pages/compose-container.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Using Podman with Multiple Containers</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>10 MINUTE EXERCISE</em></p>
+</div>
+<div class="paragraph">
+<p>As soon as you start using one container, you start to recognise the need for multiple containers and get to the problem of scaling and orchestrating.</p>
+</div>
+<div class="paragraph">
+<p>Podman exists to offer a daemonless container engine for managing OCI-compliant containers on your Linux system. Users love it for its ease of adoption as an alternative to Docker. However, many users and the broader container community have been telling us that one missing feature - compatibility with Docker Compose.</p>
+</div>
+<div class="paragraph">
+<p>In this section, we are going to demonstrate the steps you need to orchestrate multiple containers on RHEL 8. Specifically how Podman can take you a step towards packaging containers for Kubernetes with the following:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Using docker-compose with Podman</p>
+</li>
+<li>
+<p>Using Podman to auto-generate yaml for Kubernetes and play it for containers.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>There is an open source project Podman Compose (<a href="https://github.com/containers/podman-compose" class="bare">https://github.com/containers/podman-compose</a>) but its not (at this stage) supported by Red Hat and is not covered in this lab.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_why_docker_compose"><a class="anchor" href="#_why_docker_compose"></a>Why Docker Compose?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Many people use Docker Compose for one simple reason: I can define my applications in a portable and easy-to-write YAML file, which gives me the ability to group each site with its dependencies.
+For instance, this site requires a web server running PHP and a database to store its data. Those are two containers, and managing them separately seems silly.
+Instead, I grouped them in a Docker Compose file. This solution allows me to work with the whole stack when I want to do things like stop services, or pull in updates for the container images I chose to use.</p>
+</div>
+<div class="paragraph">
+<p>Examples of Docker compose files can be found here: <a href="https://github.com/docker/awesome-compose.git" class="bare">https://github.com/docker/awesome-compose.git</a>, which we will use in this lab.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>version: '3.7'
+services:
+  gitea:
+    image: gitea/gitea:latest
+    environment:
+      - DB_TYPE=postgres
+      - DB_HOST=db:5432
+      - DB_NAME=gitea
+      - DB_USER=gitea
+      - DB_PASSWD=gitea
+    restart: always
+    volumes:
+      - git_data:/data
+    ports:
+      - 3000:3000
+  db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=gitea
+      - POSTGRES_PASSWORD=gitea
+      - POSTGRES_DB=gitea
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    expose:
+      - 5432
+volumes:
+  db_data:
+  git_data:</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_podman_support_with_docker_compose"><a class="anchor" href="#_podman_support_with_docker_compose"></a>Podman support with Docker Compose</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Up to now, support for Docker Compose, the command-line utility that orchestrates multiple Docker containers for local development, was missing. With Podman 3, we have begun to support Compose.</p>
+</div>
+<div class="paragraph">
+<p>Docker Compose is a python based application which is used to co-ordinate multiple containers. It communicates with docker behind the scenes via an API layer. With RHEL 8 and the removal of docker as a package,
+this restful API backend has now been implemented to use daemonless Podman.</p>
+</div>
+<div class="paragraph">
+<p>The api requires the podman-docker package to be installed and the podman api to be enabled which we have seen with RHEL Cockpit.
+$ sudo yum install podman-docker</p>
+</div>
+<div class="paragraph">
+<p>Docker compose requires root access, and this experience is now available in Podman Here&#8217;s how it works as a rootful/privileged user.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_setup_docker_compose_with_podman"><a class="anchor" href="#_setup_docker_compose_with_podman"></a>Setup Docker Compose with Podman</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The first step is to ensure that all the required packages are installed and set up the Podman (3.0 or greater) system service using systemd and api is enabled. The docker-compose executable is downloaded directly but this can also be installed with pip on some systems if a build is unavailable.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ sudo yum install podman-docker
+$ curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o docker-compose</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once the binary is downloaded, we move it into /usr/local/bin and we make it executable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ sudo mv docker-compose /usr/local/bin &amp;&amp; sudo chmod +x /usr/local/bin/docker-compose</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After installing the packages, start the Podman systemd socket-activated service using the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ sudo systemctl start podman.socket</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Verify the system service is running by hitting the ping endpoint and see if we get a response. This step needs to be successful before we can proceed further.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ sudo curl -H "Content-Type: application/json" --unix-socket /var/run/docker.sock http://localhost/_ping
+OK</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can now confidently run Compose knowing the RESTful API is working.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_docker_compose_with_podman"><a class="anchor" href="#_using_docker_compose_with_podman"></a>Using Docker Compose with Podman</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following exercise demonstrates how to use Compose by using two examples that Docker has curated and maintained
+in the awesome-compose (<a href="https://github.com/docker/awesome-compose" class="bare">https://github.com/docker/awesome-compose</a>) Git repository. If git is not installed, then the</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ sudo yum install git
+$ git clone https://github.com/docker/awesome-compose.git</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are many examples in this repository, but we will use a base setup for the project Gitea, which describes itself as a community-managed lightweight code hosting solution written in Golang.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ cd awesome-compose/
+$ cd gitea-postgres/</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The docker-compose up command looks for the docker-compose.yaml within the directory. Run the following in</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ sudo docker-compose up</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The README for this docker-compose setup says to visit localhost:3000 in your browser to verify it is working.
+By the Compose output, you should see that docker-compose has created a network, two volumes, and two containers. We can observe the two containers in another terminal with the podman ps command.
+In a new terminal run the following podman command</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ podman ps</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The network can be seen with podman network ls.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ sudo podman network ls</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Lastly, the volumes can be displayed with podman volume ls.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ sudo podman volume ls</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To bring down the Docker Compose containers, we just need to interrupt docker-compose with a Ctrl+C.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>^CGracefully stopping... (press Ctrl+C again to force)
+Stopping gitea-postgres_gitea_1 ... done
+Stopping gitea-postgres_db_1    ... done
+$</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_podman_to_bridge_to_kubernetes"><a class="anchor" href="#_using_podman_to_bridge_to_kubernetes"></a>Using Podman to bridge to Kubernetes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this exercise we will look out how Podman can provide a bridge to Kubernetes by generating or using kubernetes based yaml files rather than Docker compose yaml files.</p>
+</div>
+<div class="paragraph">
+<p>Docker and how we have worked with Podman so far deals with containers. However Kubernetes lowest schedulable unit are pods which can contain one or more containers.</p>
+</div>
+<div class="paragraph">
+<p>Podman pods are similiar to kubernetes pods in the sense that they can contain one or more containers at a time. With podman play command, you can import kubernetes pod definitions in yaml format.</p>
+</div>
+<div class="paragraph">
+<p>Every podman pod includes an infra container by default. Its purpose is to hold the namespaces associated with the pod and allow podman to connect other containers to the pod. This also lets pods live, if the pod is not running any application containers.</p>
+</div>
+<div class="paragraph">
+<p>With our previous docker compose file run docker-compose and find the container names which are running</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ sudo docker-compose up
+$ podman ps</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now we have two containers running. Lets export the kuubernetes yaml associated, replace gitea-postgres_db_1 and gitea-postgres_gitea_1 with names
+An example yaml file for Kubernetes looks like so.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ sudo podman generate kube gitea-postgres_db_1 &gt; gitea-postgres_db.yml
+$ sudo podman generate kube gitea-postgres_gitea_1 &gt; gitea-postgres_gitea.yml</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now stop the gitea process by stopping the docker compose or using podman stop on both containers.</p>
+</div>
+<div class="paragraph">
+<p>So lets now run the gitea process as 2 pods rather than the docker compose file. First we will try it with Podman and then we can push this to an OpenShift cluster.</p>
+</div>
+<div class="paragraph">
+<p>podman play kube will read in a structured file of Kubernetes YAML. It will then recreate the containers, pods or volumes described in the YAML.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ sudo podman play kube gitea-postgres_db.yml
+$ sudo podman play kube gitea-postgres_gitea.yml</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can list the pods using podman pod ls or podman pod list command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ sudo podman pod list
+POD ID        NAME                      STATUS   CREATED         INFRA ID      # OF CONTAINERS
+7e326ad010eb  gitea-postgresgitea1_pod  Running  18 seconds ago  50a1cdd0d632  2
+b495ee55557d  gitea-postgresdb1_pod     Running  50 seconds ago  da3da3833410  2</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Verify the service is running by looking at your local browser at localhost:3000.</p>
+</div>
+<div class="paragraph">
+<p>There are many more options associated with these commands.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_running_in_openshift"><a class="anchor" href="#_running_in_openshift"></a>Running in OpenShift</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_wrap_up"><a class="anchor" href="#_wrap_up"></a>Wrap up</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Red Hat engineers have taken a step towards suupport of Docker compose with Podman. It has been a Minumum Viable Product (MVP) approach which brings the same experience (running as root). This is an area that will continue to develop given some of the Podman fundamentals such as not running as priveleged is not yet 100%. However it should enable the ability for organisations to move their Docker compose setups to Podman and embrace Kubernetes standards.</p>
+</div>
+<div class="paragraph">
+<p>One known caveat is that Podman has not and will not implement the Swarm function. Therefore, if your Docker Compose instance uses Swarm, it will not work with Podman.
+With the 3.0 release, Podman can now work nicely with Docker Compose to orchestrate containers, which is a huge step toward daemonless container management on Linux.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you try something that works with Docker and doesnt work with non-root Podman, first try root with Podman.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>For an in depth discussion, this video provides a good discussion to understand the hows and whys of supporting docker-compose with Podman. The Level Up Hour (E29): Docker Compose with Podman v3  - <a href="https://www.youtube.com/watch?v=hyOXwzvLXOM" class="bare">https://www.youtube.com/watch?v=hyOXwzvLXOM</a></p>
+</div>
+<div class="paragraph">
+<p>For reference in our exercise here today, this blog ihttps://www.redhat.com/sysadmin/podman-play-kube?extIdCarryOver=true&amp;intcmp=7013a0000026NKWAA2&amp;sc_cid=7013a000002w5dgAAA</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="build-your-own-container.html" class="query-params-link">Build your own Secure Container</a></span>
+  <span class="next"><a href="deploy-container.html" class="query-params-link">OpenShift Sandbox</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

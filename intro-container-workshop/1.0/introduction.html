@@ -72,22 +72,88 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item is-current-page" data-depth="1">
-    <a class="nav-link" href="introduction.html">1. Introduction</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="introduction.html">Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#open_code_server">Code Server</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#open_code_server_terminal">Open terminal</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#open_code_server_terminal_commands">Issuing Terminal Commands</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#local_browser">Local Browser</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="podman-intro.html">2. Running containers with podman</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="podman-intro.html">Running Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#run_container">Add a website</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#enter_container">Look inside a container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#copy_data">Copying data out</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#committing_containers">Committing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#stop_container">Stopping Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#remove_containers">Removing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#rerunning_container">"Re-running" Containers</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="container-concepts.html">3. Container Concepts and Security</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="container-persistence.html">Persistence and Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#mounting_volumes">Mounting Volumes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#test_mount">Testing the Volume Mount</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#tcontainerized_databases">Containerized Databases</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="advanced-container-concepts.html">4. Advanced Container Concepts</a>
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Building Securely</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="containers-and-security.html">Container Security</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="build-your-own-container.html">Build your own Secure Container</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="build-your-own-container.html">5. Build your own Secure Container</a>
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Scaling</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="compose-container.html">Multi containers with Podman</a>
   </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="deploy-container.html">6. Deploying your Container</a>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="deploy-container.html">OpenShift Sandbox</a>
+  </li>
+</ul>
   </li>
 </ul>
   </li>
@@ -120,7 +186,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Build a Container Workshop</a></li>
-    <li><a href="introduction.html">1. Introduction</a></li>
+    <li><a href="introduction.html">Setup</a></li>
   </ul>
 </nav>
   <div class="edit-this-page"><a href="https://github.com/hatmarch/container-workshop/edit/master/documentation/modules/ROOT/pages/introduction.adoc">Edit this Page</a></div>
@@ -139,7 +205,7 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="_open_code_server"><a class="anchor" href="#_open_code_server"></a>Open code server</h2>
+<h2 id="open_code_server"><a class="anchor" href="#open_code_server"></a>Open code server</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Once you have entered your password, you will be greeted with the code-server UI with your RHEL user&#8217;s (<code>%USER%</code>) home directory.</p>
@@ -153,7 +219,7 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="_open_terminal"><a class="anchor" href="#_open_terminal"></a>Open Terminal</h2>
+<h2 id="open_code_server_terminal"><a class="anchor" href="#open_code_server_terminal"></a>Open Terminal</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Among other things, your code-server gives you command line access to your RHEL instance.  You can open the terminal by using <span class="keyseq"><kbd>CTRL</kbd>+<kbd>J</kbd></span> (or <span class="keyseq"><kbd>CMD</kbd>+<kbd>J</kbd></span> on a Mac)</p>
@@ -170,10 +236,33 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="_issuing_terminal_commands"><a class="anchor" href="#_issuing_terminal_commands"></a>Issuing Terminal Commands</h2>
+<h2 id="open_code_server_terminal_commands"><a class="anchor" href="#open_code_server_terminal_commands"></a>Issuing Terminal Commands</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Just to see that you are logged into the server, issue the following command</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The first time you try to copy and paste the commands below your browser may prompt you with a window like this:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/copy-paste-popup.png" alt="Popup" width="300">
+</div>
+<div class="title">Figure 3. Chrome alert pop-up</div>
+</div>
+<div class="paragraph">
+<p>Please click on <code>Allow</code> so that you can copy and paste within your code-server instance</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -215,9 +304,41 @@ REDHAT_SUPPORT_PRODUCT_VERSION="8.3"</code></pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="local_browser"><a class="anchor" href="#local_browser"></a>Local Browser</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Your code-server instance also has a chromium based browser installed (as a VSCode extension).  This will allow us to view html files and connect to VM local services that are not otherwise exposed to the internet at large.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>To open the <em>Browser Preview</em>, click the <em>browser preview</em> button on the panel on the left</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/browser-preview.png" alt="browser preview">
+</div>
+</div>
+</li>
+<li>
+<p>This will open a nested browser on the right side of the screen.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/browser-preview-window.png" alt="browser preview window">
+</div>
+<div class="title">Figure 4. Just your average web browser</div>
+</div>
+</li>
+<li>
+<p>Feel free to type in the address of your favorite website to show that it&#8217;s just a typical (chrome-based) web browser</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
 <nav class="pagination">
   <span class="prev"><a href="index.html" class="query-params-link">Build a Container Workshop</a></span>
-  <span class="next"><a href="podman-intro.html" class="query-params-link">2. Running containers with podman</a></span>
+  <span class="next"><a href="podman-intro.html" class="query-params-link">Running Containers</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

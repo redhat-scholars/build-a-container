@@ -6,7 +6,7 @@
     <title>Running your First Container with Podman :: Build a Container Workshop</title>
     <link rel="canonical" href="https://hatmarch.github.io/container-workshop/intro-container-workshop/1.0/podman-intro.html">
     <link rel="prev" href="introduction.html">
-    <link rel="next" href="container-concepts.html">
+    <link rel="next" href="container-persistence.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../../_/css/site.css">
 <link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
@@ -72,22 +72,88 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="introduction.html">1. Introduction</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="introduction.html">Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server">Code Server</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server_terminal">Open terminal</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server_terminal_commands">Issuing Terminal Commands</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#local_browser">Local Browser</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
-    <a class="nav-link" href="podman-intro.html">2. Running containers with podman</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="podman-intro.html">Running Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#run_container">Add a website</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#enter_container">Look inside a container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#copy_data">Copying data out</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#committing_containers">Committing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#stop_container">Stopping Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#remove_containers">Removing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#rerunning_container">"Re-running" Containers</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="container-concepts.html">3. Container Concepts and Security</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="container-persistence.html">Persistence and Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#mounting_volumes">Mounting Volumes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#test_mount">Testing the Volume Mount</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#tcontainerized_databases">Containerized Databases</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="advanced-container-concepts.html">4. Advanced Container Concepts</a>
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Building Securely</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="containers-and-security.html">Container Security</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="build-your-own-container.html">Build your own Secure Container</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="build-your-own-container.html">5. Build your own Secure Container</a>
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Scaling</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="compose-container.html">Multi containers with Podman</a>
   </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="deploy-container.html">6. Deploying your Container</a>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="deploy-container.html">OpenShift Sandbox</a>
+  </li>
+</ul>
   </li>
 </ul>
   </li>
@@ -120,7 +186,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Build a Container Workshop</a></li>
-    <li><a href="podman-intro.html">2. Running containers with podman</a></li>
+    <li><a href="podman-intro.html">Running Containers</a></li>
   </ul>
 </nav>
   <div class="edit-this-page"><a href="https://github.com/hatmarch/container-workshop/edit/master/documentation/modules/ROOT/pages/podman-intro.adoc">Edit this Page</a></div>
@@ -131,40 +197,25 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p><em>10 MINUTE EXERCISE</em></p>
+<p>In this exercise we&#8217;re going to use Podman to download and run a container that will run a local Apache webserver on your VM.</p>
 </div>
-<div class="paragraph">
-<p>In this exercise we&#8217;re going to use podman to download and run a container that will run a local Apache webserver on your instance</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/podman.svg" alt="Podman!" width="320" height="86">
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_local_browser"><a class="anchor" href="#_local_browser"></a>Local Browser</h2>
+<h2 id="run_container"><a class="anchor" href="#run_container"></a>Add a website by running a container</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Let&#8217;s first prove that there is no Apache server currently running on your instance.  To do this, we will use a built-in code-server browser.</p>
-</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Open the code-server <code>Browser Preview</code> by clicking the browser preview button on the panel on the left</p>
-<div class="imageblock">
-<div class="content">
-<img src="_images/browser-preview.png" alt="browser preview">
-</div>
-</div>
+<p>First let&#8217;s prove that Apache is not currently running on your local VM.</p>
 </li>
 <li>
-<p>This will open a nested browser on the right side of the screen.  Type in <code>www.redhat.com</code> (or your favorite website) in the browser bar to see that it&#8217;s just a typical browser</p>
-<div class="imageblock">
-<div class="content">
-<img src="_images/browser-preview-window.png" alt="browser preview window">
-</div>
-<div class="title">Figure 1. Just your average web browser</div>
-</div>
-</li>
-<li>
-<p>Navigate to <code>localhost:8081</code>, which instructs the browser to connect to port 8081 of your local instance</p>
+<p>In your <a href="introduction.html#local_browser" class="page" target="_blank" rel="noopener">Local Browser</a>, navigate to <code>localhost:8081</code>, which instructs the browser to connect to port 8081 of your local instance</p>
 </li>
 <li>
 <p>You should find that there is nothing there but a blank screen</p>
@@ -176,43 +227,78 @@
 </li>
 </ol>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_add_a_website_by_running_a_container"><a class="anchor" href="#_add_a_website_by_running_a_container"></a>Add a website by running a container</h2>
-<div class="sectionbody">
 <div class="paragraph">
 <p>Now we&#8217;re going to use podman to quickly create a running website on this instance!</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
+<p>Login as <code>root</code> on your instance by running the following command:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo -i</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>You should now see the terminal prompt change to <code>#</code> indicating that you are now <code>root</code></p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[root@ansible-1 ~]#</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Some of you with a security background are <span id="security_vuln">probably fairly unconfortable with this</span>.  Don&#8217;t worry: there&#8217;s a method to our madness!  It&#8217;s worth pointing out that any socket-based container runtimes (such as <code>docker</code>) require some sort of root access to operate</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
 <p>From inside the terminal, run the following command (see the footnotes for the breakdown of the different elements of the command):</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \<i class="conum" data-value="1"></i><b>(1)</b>
-    -dt \<i class="conum" data-value="2"></i><b>(2)</b>
-    -p 8081:80/tcp \<i class="conum" data-value="3"></i><b>(3)</b>
-    quay.io/mhildenb/container-workshop-httpd:0.0.1 <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+    --privileged \<i class="conum" data-value="2"></i><b>(2)</b>
+    -d \<i class="conum" data-value="3"></i><b>(3)</b>
+    -p 8081:80/tcp \<i class="conum" data-value="4"></i><b>(4)</b>
+    --name my-web-server \<i class="conum" data-value="5"></i><b>(5)</b>
+    quay.io/mhildenb/container-workshop-httpd:0.0.5 <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The <code>podman</code> command has a number of subcommands.  <code>run</code> indicates that we want to run a given container image</td>
+<td>This flag, as we&#8217;ll come to see, could be problematic.  It allows the container to run with an extended set of capabilities that might otherwise be reserved for the host (such as accessing ports &lt; 1024).  However, when running some processes in a container, this is sometimes required</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Run the container in "daemon" mode (in the background) and assign a "pseudo-tty" to it</td>
+<td>The <code>podman</code> command has a number of subcommands.  <code>run</code> indicates that we want to run a given container image</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>This indicates that we want local port 8081 forwarded to port 80 in the container</td>
+<td>Run the container in "daemon" mode (in the background)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>This is the name of the image (including the image registry where the container is normally located) that we want to run</td>
+<td>This indicates that we want local port 8081 forwarded to port 80 in the container</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Whilst we can always refer to started containers by their system assigned Id, the <code>--name</code> option gives us the ability to refer to the container by a human-friendly name instead</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>This is the name of the image (including the image registry where the container is normally located, in this case <a href="quay.io">quay.io</a>) that we want to run</td>
 </tr>
 </table>
 </div>
@@ -221,7 +307,7 @@
 <p>After the image is "pulled" you should see something like the following in the terminal which represents the id of the running container</p>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Trying to pull quay.io/mhildenb/container-workshop-httpd:0.0.1...
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Trying to pull quay.io/mhildenb/container-workshop-httpd:0.0.5...
 Getting image source signatures
 Copying blob b5f2e1583bc1 done
 Copying config 68f54f9c95 done
@@ -253,7 +339,7 @@ Storing signatures
 <div class="title">NOTE: notice that the beginning of the CONTAINER ID matches the id the was output from the <code>podman run</code> command</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER ID  IMAGE                                            COMMAND               CREATED      STATUS          PORTS                 NAMES
-4e9c38ac10eb  quay.io/mhildenb/container-workshop-httpd:0.0.1  /usr/sbin/httpd -...  3 hours ago  Up 3 hours ago  0.0.0.0:8081-&gt;80/tcp  quirky_hertz</code></pre>
+4e9c38ac10eb  quay.io/mhildenb/container-workshop-httpd:0.0.5  /usr/sbin/httpd -...  3 hours ago  Up 3 hours ago  0.0.0.0:8081-&gt;80/tcp  my-web-server</code></pre>
 </div>
 </div>
 </li>
@@ -263,7 +349,300 @@ Storing signatures
 <div class="content">
 <img src="_images/apache-test-page.png" alt="apache test page">
 </div>
-<div class="title">Figure 2. Test Page</div>
+<div class="title">Figure 1. Test Page</div>
+</div>
+</li>
+<li>
+<p>Our website has more than a test page, it also has a visitor form (like straight out of the 90s!).  Let&#8217;s take a look by navigating to this address:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code><a href="http://localhost:8081/hello.html" class="bare">http://localhost:8081/hello.html</a></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>You should see something like this:</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/apache-guestbook-page.png" alt="apache guestbook page">
+</div>
+</div>
+</li>
+<li>
+<p>Now enter a name into the <code>Name:</code> field to be logged to the guestbook and press the <code>Log to Guestbook</code> button.  You should now be presented a screen like this:</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/apache-guestbook-submit.png" alt="apache guestbook submit">
+</div>
+</div>
+</li>
+<li>
+<p>Click the <code>here</code> link highlighted above to go back and enter another name</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Next let&#8217;s take a look inside our container</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="enter_container"><a class="anchor" href="#enter_container"></a>Look inside a running container</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Whilst the container is running, we are able to "look inside" the container.  The experience is much the same to <code>telnet</code> ing or <code>ssh</code> ing into a remote instance or virtual machine.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>First though, let&#8217;s record what&#8217;s going on with the container&#8217;s host, namely the virtual machine that is running your code-server instance.  We&#8217;ll use this to compare to what we find inside the container.  Run the following command in the terminal to gather some intel about the host (and save it to a place where code-server can display it!)</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &gt; /tmp/hostinfo.txt &lt;&lt;EOF
+User Info:
+---------
+I am $(whoami)
+$(id)
+
+OS Version:
+----------
+$(cat /etc/os-release)
+
+Processes:
+---------
+$(ps -euf)
+EOF</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Next, let&#8217;s use the VS Code editor to see what our command found out.  Use <span class="keyseq"><kbd>CTRL</kbd>+<kbd>o</kbd></span> (or <span class="keyseq"><kbd>CMD</kbd>+<kbd>o</kbd></span> on a Mac) to show the "Open File" dialog.  Type the name of the file we wrote out to in the dialog (that is <code>/tmp/hostinfo.txt</code>)</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/file-or-folder-dialog.png" alt="file or folder dialog">
+</div>
+<div class="title">Figure 2. Open File Or Folder dialog</div>
+</div>
+</li>
+<li>
+<p>This should open the file in the left editor pane.  The output should look something like the following</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">User Info:
+---------
+I am root
+uid=0(root) gid=0(root) groups=0(root) context=system_u:system_r:unconfined_service_t:s0
+
+OS Version:
+----------
+NAME="Red Hat Enterprise Linux"
+VERSION="8.3 (Ootpa)"
+ID="rhel"
+ID_LIKE="fedora"
+VERSION_ID="8.3"
+PLATFORM_ID="platform:el8"
+PRETTY_NAME="Red Hat Enterprise Linux 8.3 (Ootpa)"
+ANSI_COLOR="0;31"
+CPE_NAME="cpe:/o:redhat:enterprise_linux:8.3:GA"
+HOME_URL="https://www.redhat.com/"
+BUG_REPORT_URL="https://bugzilla.redhat.com/"
+
+REDHAT_BUGZILLA_PRODUCT="Red Hat Enterprise Linux 8"
+REDHAT_BUGZILLA_PRODUCT_VERSION=8.3
+REDHAT_SUPPORT_PRODUCT="Red Hat Enterprise Linux"
+REDHAT_SUPPORT_PRODUCT_VERSION="8.3"
+
+Processes:
+---------
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root       73993  0.0  0.2 143252  8036 pts/2    S    09:03   0:00 sudo -i LS_COLORS=rs=0:di=38;5;33:ln=38;5;51:mh=00:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=01;05;37;41:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;40:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.zst=38;5;9:*.tzst=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.wim=38;5;9:*.swm=38;5;9:*.dwm=38;5;9:*.esd=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.mjpg=38;5;13:*.mjpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.m4a=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.oga=38;5;45:*.opus=38;5;45:*.spx=38;5;45:*.xspf=38;5;45: LANG=en_US.UTF-8 NODE_OPTIONS=--max-old-space-size=2048  INVOCATION_ID=93bf1877c5a84b61a2b2b3bcbf73a707 COLORTERM=truecolor USER=student1 PWD=/home/student1 HOME=/home/student1 JOURNAL_STREAM=9:69260 VSCODE_GIT_ASKPASS_NODE=/usr/lib/code-server/lib/node TERM_PROGRAM=vscode TERM_PROGRAM_VERSION=1.54.2 VSCODE_GIT_ASKPASS_MAIN=/usr/lib/code-server/lib/vscode/extensions/git/dist/askpass-main.js TERM=xterm-256color SHELL=/bin/bash SHLVL=1 VSCODE_GIT_IPC_HANDLE=/tmp/vscode-git-6a2de23e98.sock LOGNAME=student1 GIT_ASKPASS=/usr/lib/code-server/lib/vscode/extensions/git/dist/askpass.sh PATH=/home/student1/.local/bin:/home/student1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin LESSOPEN=||/usr/bin/lesspipe.sh %s _=/usr/bin/sudo
+root       73995  0.0  0.1  26216  4016 pts/2    S    09:03   0:00  \_ -bash LS_COLORS=rs=0:di=38;5;33:ln=38;5;51:mh=00:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=01;05;37;41:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;40:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.zst=38;5;9:*.tzst=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.wim=38;5;9:*.swm=38;5;9:*.dwm=38;5;9:*.esd=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.mjpg=38;5;13:*.mjpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.m4a=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.oga=38;5;45:*.opus=38;5;45:*.spx=38;5;45:*.xspf=38;5;45: LANG=en_US.UTF-8 COLORTERM=truecolor TERM=xterm-256color SHELL=/bin/bash LOGNAME=root USER=root MAIL=/var/mail/root PATH=/sbin:/bin:/usr/sbin:/usr/bin HOME=/root SHELL=/bin/bash SUDO_COMMAND=/bin/bash SUDO_USER=student1 SUDO_UID=1001 SUDO_GID=1001 XDG_SESSION_ID=c8 XDG_RUNTIME_DIR=/run/user/0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/0/bus
+root       77307  0.0  0.0  26216  2376 pts/2    S+   13:16   0:00      \_ -bash LS_COLORS=rs=0:di=38;5;33:ln=38;5;51:mh=00:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=01;05;37;41:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;40:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.zst=38;5;9:*.tzst=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.wim=38;5;9:*.swm=38;5;9:*.dwm=38;5;9:*.esd=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.mjpg=38;5;13:*.mjpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.m4a=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.oga=38;5;45:*.opus=38;5;45:*.spx=38;5;45:*.xspf=38;5;45: LANG=en_US.UTF-8 COLORTERM=truecolor TERM=xterm-256color SHELL=/bin/bash LOGNAME=root USER=root MAIL=/var/mail/root PATH=/sbin:/bin:/usr/sbin:/usr/bin HOME=/root SHELL=/bin/bash SUDO_COMMAND=/bin/bash SUDO_USER=student1 SUDO_UID=1001 SUDO_GID=1001 XDG_SESSION_ID=c8 XDG_RUNTIME_DIR=/run/user/0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/0/bus
+root       77311  0.0  0.1  61732  5112 pts/2    R    13:16   0:00          \_ ps -euf LS_COLORS=rs=0:di=38;5;33:ln=38;5;51:mh=00:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=01;05;37;41:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;40:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.zst=38;5;9:*.tzst=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.wim=38;5;9:*.swm=38;5;9:*.dwm=38;5;9:*.esd=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.mjpg=38;5;13:*.mjpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.m4a=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.oga=38;5;45:*.opus=38;5;45:*.spx=38;5;45:*.xspf=38;5;45: LANG=en_US.UTF-8 HISTCONTROL=ignoredups SUDO_GID=1001 HOSTNAME=ansible-1.example.com COLORTERM=truecolor SUDO_COMMAND=/bin/bash XDG_SESSION_ID=c8 USER=root PWD=/root HOME=/root SUDO_USER=student1 SUDO_UID=1001 MAIL=/var/spool/mail/root SHELL=/bin/bash TERM=xterm-256color SHLVL=1 LOGNAME=root DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/0/bus XDG_RUNTIME_DIR=/run/user/0 PATH=/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin HISTSIZE=1000 LESSOPEN=||/usr/bin/lesspipe.sh %s _=/bin/ps
+root        1096  0.0  0.0  16200  2120 ttyS0    Ss+  May07   0:00 /sbin/agetty -o -p -- \u --keep-baud 115200,38400,9600 ttyS0 vt220 LANG=en_US.UTF-8 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin INVOCATION_ID=a5a6851855f042deb0be38d6f784407d TERM=vt220 JOURNAL_STREAM=9:31142
+root        1095  0.0  0.0  13632  1760 tty1     Ss+  May07   0:00 /sbin/agetty -o -p -- \u --noclear tty1 linux PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin INVOCATION_ID=6d76fa0644494f1db0752e0dd836906a TERM=linux JOURNAL_STREAM=9:31141</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Now let&#8217;s get into the container so that we can run the same command.  But first <code>podman</code> needs to know which container we mean.  There are two different ways to reference the running container, <span id="find_container_id">by <strong>CONTAINER ID</strong></span> or by <strong>NAME</strong>.  Pick the tab of your choice to show how we can enter the container using either approach:</p>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_name"></a>NAME</p>
+</li>
+<li>
+<p><a id="tabset1_container-id"></a>CONTAINER ID</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_name">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Remember how we used the <code>--name</code> option when we ran our container?  Now we can use this to indicate to podman which container we want to <code>exec</code> into:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman exec \
+   -it \<i class="conum" data-value="1"></i><b>(1)</b>
+   my-web-server \
+   /bin/bash <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>t</code> opens a "pseudo tty" to the container that allows us to see <code>STDOUT</code> (output) and <code>i</code> indicates that we want to keep the <code>STDIN</code> pipe open (basically allow us to continue to enter input)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>podman exec</code> interprets any argument(s) that come after the <code>CONTAINER ID</code> (or <code>CONTAINER NAME</code>) to be the command and arguments we want to run within in the container.  In this case we are running the <code>/bin/bash</code> command which is just a shell.  When coupled with <code>-it</code> this allows us to effectively mimic <code>ssh</code> ing into a VM</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_container-id">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Once again, let&#8217;s use the <code>podman ps</code> command to get that info and save it into the variable <code>CONTAINER_ID</code></p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman ps</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="title">Assign Container ID to CONTAINER_ID</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER ID  IMAGE                                            COMMAND               CREATED      STATUS          PORTS                 NAMES
+4e9c38ac10eb  quay.io/mhildenb/container-workshop-httpd:0.0.5  /usr/sbin/httpd -...  3 hours ago  Up 3 hours ago  0.0.0.0:8081-&gt;80/tcp  my-web-server</code></pre>
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Tip</div>
+<div class="paragraph">
+<p>Since we have only one container running, we can get its id quickly by running the following command to store the id in the <code>CONTAINER_ID</code> variable:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER_ID=$(podman ps -q) <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>-q</code> flag indicates that podman should not output any headers or any other information about running containers other than their ID</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>Knowing our <code>CONTAINER_ID</code>, we can now "enter" the container by way of the <code>podman exec</code> command:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman exec \
+   -it \<i class="conum" data-value="1"></i><b>(1)</b>
+   ${CONTAINER_ID}
+   /bin/bash <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>t</code> opens a "pseudo tty" to the container that allows us to see <code>STDOUT</code> (output) and <code>i</code> indicates that we want to keep the <code>STDIN</code> pipe open (basically allow us to continue to enter input)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>podman exec</code> interprets any argument(s) that come after the <code>CONTAINER ID</code> (or <code>CONTAINER NAME</code>) to be the command and arguments we want to run within in the container.  In this case we are running the <code>/bin/bash</code> command which is just a shell.  When coupled with <code>-it</code> this allows us to effectively mimic <code>ssh</code> ing into a VM</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>If you have been able to <code>exec</code> into the container successfully, you should see the following in the terminal</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[root@4e9c38ac10eb /]# <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Notice that the <code>CONTAINER_ID</code> appears after the <code>@</code> in the bash shell that we have started inside the container</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Now let&#8217;s run our command from before <em>but this time we&#8217;re running it from "within" the container</em></p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &gt; /tmp/hostinfo.txt &lt;&lt;EOF
+User Info:
+---------
+I am $(whoami)
+$(id)
+
+OS Version:
+----------
+$(cat /etc/os-release)
+
+Processes:
+---------
+$(ps -euf)
+EOF</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Notice that the editor window didn&#8217;t change even though we wrote the info to the same location.  The difference is that the location is <strong>local to the container</strong>.  That&#8217;s because the container has a filesystem that appears separate to the host</p>
+</li>
+<li>
+<p>To make sure the file was created, run the following command to show output of the file that we just created in the container:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat /tmp/hostinfo.txt</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>To make it easier to read, let&#8217;s copy the hostinfo to the <code>/var/www/html</code> directory<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> so that we can view it through the container&#8217;s webserver</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp /tmp/hostinfo.txt /var/www/html/hostinfo.txt</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Now navigate the browser to the file we just copied and you should see something like the image below</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"><a href="http://localhost:8081/hostinfo.txt" class="bare">http://localhost:8081/hostinfo.txt</a></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/browser-display.png" alt="browser display">
+</div>
+<div class="title">Figure 3. Container&#8217;s browser displays our hostinfo.txt</div>
 </div>
 </li>
 </ol>
@@ -271,7 +650,100 @@ Storing signatures
 </div>
 </div>
 <div class="sect1">
-<h2 id="_stopping_the_container_and_apache_server"><a class="anchor" href="#_stopping_the_container_and_apache_server"></a>Stopping the Container (and Apache server)</h2>
+<h2 id="copy_data"><a class="anchor" href="#copy_data"></a>Copying data out of a container</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Let&#8217;s see just how different the two files are by doing a <code>diff</code> on them.  And for this we&#8217;d like to use the builtin Visual Studio Code support for this.  To do this we can draw on another methapor with real hosts or virtual instances, the notion of <code>ftp</code> ing or <code>scp</code> ing files.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>First let&#8217;s "log out" of the container<sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup></p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">exit</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Next, run this command to copy the file out of the container and into the tmp drive of the host instance (Those that have used <code>scp</code> will probably find the format familiar)</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman cp \
+  my-web-server:/tmp/hostinfo.txt \<i class="conum" data-value="1"></i><b>(1)</b>
+  /tmp/containerinfo.txt <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>my-web-server:&lt;path&gt;</code> indicates that the <code>path</code> is inside the container (i.e. container filesystem) that we named with the <code>--name</code> option at the time we issued the <code>podman run</code> command</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This path, undecorated by a container name or id, indicates that we are referencing a path on the host (i.e. local filesystem)</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Now click anywhere within the left editor where the <code>hostinfo.txt</code> should still be open to give that editor focus.  Hit <span class="keyseq"><kbd>SHIFT</kbd>+<kbd>CTRL</kbd>+<kbd>p</kbd></span> (or <span class="keyseq"><kbd>CMD</kbd>+<kbd>CTRL</kbd>+<kbd>p</kbd></span> on a Mac) to open the <strong>Command Palette</strong> and start typing <code>compare</code> so that you can select the command <code>File: Compare Active File With&#8230;&#8203;</code></p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/compare-command.png" alt="compare command">
+</div>
+</div>
+</li>
+<li>
+<p>Then type <code>/tmp/containerinfo.txt</code> in the next dialog that pops up until the file is selectable.  Then click on it.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/container-info-select.png" alt="container info select">
+</div>
+</div>
+</li>
+<li>
+<p>You should then see a screen like the following.  Expand the size of the editor as necessary to get a good sense of the differences</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/info-diff.png" alt="info diff">
+</div>
+<div class="title">Figure 4. Host vs. Container output of above commands</div>
+</div>
+</li>
+<li>
+<p>Finally, let&#8217;s look at our guestbook visitor log in VSCode by copying the visitor guestbook to our local VM</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman cp \
+  my-web-server:/var/log/www/visitor_info.txt \
+  /home/%USER%/container-workshop <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This is a path on your local VM to the container-workshop directory you see in the <strong>Explorer</strong></td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>You should now see the file appear in your <strong>Explorer</strong>.  Click on it to view the contents.  It should match the visitors that you entered previously</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/visitor-info.png" alt="Visitor Info">
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="stop_container"><a class="anchor" href="#stop_container"></a>Stopping the Container (and Apache server)</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Before we continue, let&#8217;s stop the container that is running in the background (thanks to the <code>-d</code> flag)</p>
@@ -279,19 +751,248 @@ Storing signatures
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>You can stop the container by setting <code>CONTAINER_ID</code> to the first few characters of the <code>CONTAINER ID</code> listed above in the output of the <code>podman ps</code> command:</p>
+<p>You can stop a container by its <strong>CONTAINER ID</strong> or by its <strong>NAME</strong>.  Choose whichever tab you want to access and stop the container</p>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset2_name"></a>NAME</p>
+</li>
+<li>
+<p><a id="tabset2_container-id"></a>CONTAINER ID</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset2_name">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Since we used the <code>--name</code> option to name the container when we ran it, it&#8217;s easy to stop the right container</p>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER_ID=&lt;paste in your container id&gt;
-podman stop ${CONTAINER_ID}</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman stop my-web-server <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>my-web-server</code> is the name we gave the container (with the <code>--name</code> option) when we started it</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_container-id">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Luckily, we have already gotten the container&#8217;s ID and stored it in <code>CONTAINER_ID</code> (see <a href="#find_container_id">here</a> if you skipped that part).</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman stop ${CONTAINER_ID}</code></pre>
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">TIP</div>
+<div class="paragraph">
+<p>Alternatively, you can use this command to find and kill any container that reports as <code>UP</code></p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman stop $(podman ps -a | grep Up | cut -d" " -f1)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
 </div>
 </div>
 </li>
 <li>
-<p>Alternatively, you can use this command to find and kill any container that reports as <code>UP</code></p>
+<p>If you were successful in stopping the container, you should see the following output:</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">4e9c38ac10eb38e9b8364e56aa52eb77ae09062160e61b3f20b60a5af829ba2c<i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This will match the <code>CONTAINER ID</code> of any running container that was stopped</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Confirm that the container is stopped by hitting refresh in the Browser Preview.  You should again see a blank page as there is not longer anything listening on port 8081</p>
+</li>
+<li>
+<p>We can also see that the container is no longer listed when we run <code>podman ps</code></p>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman stop $(podman ps -a | grep Up | cut -d" " -f1)</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman ps</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="committing_containers"><a class="anchor" href="#committing_containers"></a>Committing Containers to Images</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Even though our container is stopped, it&#8217;s still around!</p>
+</div>
+<div class="paragraph">
+<p>You might wonder why we would want to keep a container around even after we have stopped it.  Turns out it has to do with the fact that we might want to create a new image from the container we&#8217;ve just run.</p>
+</div>
+<div class="paragraph">
+<p>Containers are by their nature immutable.  While they are running, however, changes are being made to their file systems.  When containers are stopped, we might want to <strong>commit</strong> those changes that were made to the filesystem whilst running.</p>
+</div>
+<div class="paragraph">
+<p>For those from an operations background, it&#8217;s a little like creating an image snapshot from a Virtual Machine when its stopped.  That image can then be used to boot up a machine in a desired state.</p>
+</div>
+<div class="paragraph">
+<p>With <code>podman</code> the command is <code>commit</code> <sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup>.  Let&#8217;s issue the command now and we&#8217;ll see some of the value in it <a href="#rerunning_container">a little later on in the lab</a>.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>First let&#8217;s find the stopped container using this variant of the <code>podman ps</code> command:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman ps -a <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>-a</code> stands for "all" which means "show containers regardless of state"</td>
+</tr>
+</table>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">4e9c38ac10eb  quay.io/mhildenb/container-workshop-httpd:0.0.5  /usr/sbin/httpd -...  10 minutes ago  Exited (0) 2 minutes ago  0.0.0.0:8081-&gt;80/tcp  my-web-server</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>As we can see from the output, the container has been exited and is just waiting there in the state it was in when it was stopped (2 minutes ago according to the output above)</p>
+</li>
+<li>
+<p>Now let&#8217;s create an image from that container by <em>committing</em> it:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman commit \
+   my-web-server \<i class="conum" data-value="1"></i><b>(1)</b>
+   container-workshop-commit <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This is the name of the container that we have stopped.  This could also be done by <code>CONTAINER ID</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This is the name that we want to give the container <strong>image</strong>.  We can then treat this like any other container image</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>This should yield output similar to the following:</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Getting image source signatures
+Copying blob 123257361dae skipped: already exists
+Copying blob c9e02f9d3afe skipped: already exists
+Copying blob add30eb35c17 skipped: already exists
+Copying blob 9fdb6895bb7a skipped: already exists
+Copying blob 6ad7f3f9e262 skipped: already exists
+Copying blob 8dd6e0f9b8eb skipped: already exists
+Copying blob fef0b05fc9cf skipped: already exists
+Copying blob dfe69afd0646 skipped: already exists
+Copying blob d0081b948274 skipped: already exists
+Copying blob c1c363c15e6e skipped: already exists
+Copying blob 6731153d32fc skipped: already exists
+Copying blob a22151f998a3 done
+Copying config f154f395c5 done
+Writing manifest to image destination
+Storing signatures
+f154f395c55ed7192f180502495b96cb3c223d9ce50273cda41bb63e272be7d8 <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This is the id of the <em>image</em> that has just been created as a result of the <code>commit</code> command</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>And now let&#8217;s see what images are available by issuing the following command to show all the images we podman knows about locally:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman images</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>The command should yield output that looks something like the following</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">REPOSITORY                                 TAG     IMAGE ID      CREATED        SIZE
+localhost/container-workshop-commit        latest  f154f395c55e  3 minutes ago  265 MB <i class="conum" data-value="1"></i><b>(1)</b>
+quay.io/mhildenb/container-workshop-httpd  0.0.5   ec71626c6cd3  3 hours ago    265 MB</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Notice that the image that we committed automatically gets a <code>localhost</code> appended to it since we didn&#8217;t nominate a registry.  Also notice that the <code>IMAGE ID</code> is the abbreviated form of the id that was reported as a result of the <code>commit</code> command</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="remove_containers"><a class="anchor" href="#remove_containers"></a>Removing Containers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Having looked at the images on our system, let&#8217;s turn our attention back to the containers that are running (or more accurately in our case, stopped)</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>To really tidy things up we need to tell <code>podman</code> to <em>remove</em> the container.  Issue this command:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman rm my-web-server</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -299,20 +1000,223 @@ podman stop ${CONTAINER_ID}</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">4e9c38ac10eb38e9b8364e56aa52eb77ae09062160e61b3f20b60a5af829ba2c<i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>As with <code>podman stop</code>, this will match the <code>CONTAINER ID</code> of any running container that was removed as a result of the command</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>#&lt;.&gt; This will match the <code>CONTAINER ID</code> of any running container that was stopped</p>
+<p>As with the other <code>podman</code> commands, it&#8217;s possible to remove containers by <strong>CONTAINER ID</strong>.  In that case you&#8217;d just issue this command (assuming you followed directions above to store the container id in <code>${CONTAINER_ID}</code>)</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman rm ${CONTAINER_ID}</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </li>
 <li>
-<p>Confirm that the container is stopped by hitting refresh in the Browser Preview.  You should again see a blank page as there is not longer anything listening on port 8081</p>
+<p>And now finally we can prove that the container is gone:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman ps -a</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES</code></pre>
+</div>
+</div>
 </li>
 </ol>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="rerunning_container"><a class="anchor" href="#rerunning_container"></a>"Re-running" Containers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Let&#8217;s say we want to take a look at that hostinfo.txt on the container again.  Let&#8217;s start up our container to try to do that again</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Execute the following command (which should be familar from earlier in this section)</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
+    --privileged \
+    -d \
+    -p 8081:80/tcp \
+    --name my-web-server \
+    quay.io/mhildenb/container-workshop-httpd:0.0.5</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Now open the browser and navigate to the following location</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"><a href="http://localhost:8081/hostinfo.txt" class="bare">http://localhost:8081/hostinfo.txt</a></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>But alas our file is not found and we are met with a 404 Not Found page&#8230;&#8203;</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/not-found.png" alt="not found">
+</div>
+</div>
+</li>
+<li>
+<p>How about our <code>visitor_info.txt</code> file?  Let&#8217;s copy that out of the container again</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman cp \
+  my-web-server:/var/log/www/visitor_info.txt \
+  /home/%USER%/container-workshop <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This is a path on your local VM to the container-workshop directory you see in the <strong>Explorer</strong></td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>But if you open the <code>visitor_info.txt</code> after copying it out, you&#8217;ll notice that all the visitor names are gone!</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_re_running_a_stopped_container_by_image"><a class="anchor" href="#_re_running_a_stopped_container_by_image"></a>"Re-running" a stopped container by image</h3>
+<div class="paragraph">
+<p>Before we through our hands up in disgust, remember that we had the foresight of <em>committing</em> our previously running web server container to a new image called <code>container-workshop-commit</code>.  This image should container all the changes we made on top of the <code>my-web-server</code> that we just ran and allow us access to the info that does not exist in the <code>quay.io/mhildenb/container-workshop-httpd:0.0.5</code>.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>First let&#8217;s stop and remove the current <code>quay.io/mhildenb/container-workshop-httpd:0.0.5</code> image based web server</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman stop -a <i class="conum" data-value="1"></i><b>(1)</b>
+podman rm -a</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>In both cases the <code>-a</code> indicates that we want to <code>stop</code> and <code>rm</code> (respectively) all containers</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Next, let&#8217;s re-run our webserver, but this time from <a href="#committing_containers">the image we created when we committed it</a> from our first instance of <code>my-web-server</code>:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
+   --privileged \
+   -d \
+   -p 8081:80/tcp \
+   --name my-web-server \
+   localhost/container-workshop-commit <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We append <code>localhost</code> onto any image name that we didn&#8217;t explicitly provide a registry (e.g. <a href="quay.io"><code>quay.io</code></a>) for</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>With our committed container running, now attempt to open the browser and navigate to tempfile again</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"><a href="http://localhost:8081/hostinfo.txt" class="bare">http://localhost:8081/hostinfo.txt</a></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>This time you should see the file, just as it looked before</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/browser-display.png" alt="browser display">
+</div>
+<div class="title">Figure 5. Container&#8217;s browser once again displays our hostinfo.txt</div>
+</div>
+</li>
+<li>
+<p>And let&#8217;s restore our <code>visitor_info.txt</code> by pulling it out of the container running based on the committed image by issuing the same command as before</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman cp \
+  my-web-server:/var/log/www/visitor_info.txt \
+  /home/%USER%/container-workshop <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This is a path on your local VM to the container-workshop directory you see in the <strong>Explorer</strong></td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Now our visitor info should be restored to the way it was when we last stopped the container (as verified by opening it in VSCode)</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/visitor-info.png" alt="visitor info">
+</div>
+<div class="title">Figure 6. <code>visitor_info.txt</code> restored</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>But what good are containers if we can never <em>persist</em> changes we&#8217;ve made with them without all this stopping and committing them?  Let&#8217;s look to the next section to see if there is something else that can be done.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. The <code>/var/www/html</code> directory is the web root of the apache server that is running inside this container
+</div>
+<div class="footnote" id="_footnotedef_2">
+<a href="#_footnoteref_2">2</a>. We&#8217;re not really logging out as much as we&#8217;re causing the process that we <code>podman exec</code> ed to stop thus ending the <code>podman exec</code> command and returning us to the host&#8217;s terminal
+</div>
+<div class="footnote" id="_footnotedef_3">
+<a href="#_footnoteref_3">3</a>. For more info on committing container state, see the <a href="http://docs.podman.io/en/latest/markdown/podman-commit.1.html">podman documentation</a>
+</div>
+</div>
 <nav class="pagination">
-  <span class="prev"><a href="introduction.html" class="query-params-link">1. Introduction</a></span>
-  <span class="next"><a href="container-concepts.html" class="query-params-link">3. Container Concepts and Security</a></span>
+  <span class="prev"><a href="introduction.html" class="query-params-link">Setup</a></span>
+  <span class="next"><a href="container-persistence.html" class="query-params-link">Persistence and Containers</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

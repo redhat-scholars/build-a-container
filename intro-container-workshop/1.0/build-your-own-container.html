@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Build your own Secure Container :: Build a Container Workshop</title>
     <link rel="canonical" href="https://hatmarch.github.io/container-workshop/intro-container-workshop/1.0/build-your-own-container.html">
-    <link rel="prev" href="advanced-container-concepts.html">
-    <link rel="next" href="deploy-container.html">
+    <link rel="prev" href="containers-and-security.html">
+    <link rel="next" href="compose-container.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../../_/css/site.css">
 <link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
@@ -72,22 +72,88 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="introduction.html">1. Introduction</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="introduction.html">Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server">Code Server</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server_terminal">Open terminal</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server_terminal_commands">Issuing Terminal Commands</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#local_browser">Local Browser</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="podman-intro.html">2. Running containers with podman</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="podman-intro.html">Running Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#run_container">Add a website</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#enter_container">Look inside a container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#copy_data">Copying data out</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#committing_containers">Committing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#stop_container">Stopping Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#remove_containers">Removing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#rerunning_container">"Re-running" Containers</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="container-concepts.html">3. Container Concepts and Security</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="container-persistence.html">Persistence and Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#mounting_volumes">Mounting Volumes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#test_mount">Testing the Volume Mount</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#tcontainerized_databases">Containerized Databases</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="advanced-container-concepts.html">4. Advanced Container Concepts</a>
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Building Securely</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="containers-and-security.html">Container Security</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
-    <a class="nav-link" href="build-your-own-container.html">5. Build your own Secure Container</a>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="build-your-own-container.html">Build your own Secure Container</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="deploy-container.html">6. Deploying your Container</a>
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Scaling</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="compose-container.html">Multi containers with Podman</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="deploy-container.html">OpenShift Sandbox</a>
+  </li>
+</ul>
   </li>
 </ul>
   </li>
@@ -120,7 +186,8 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Build a Container Workshop</a></li>
-    <li><a href="build-your-own-container.html">5. Build your own Secure Container</a></li>
+    <li>Building Securely</li>
+    <li><a href="build-your-own-container.html">Build your own Secure Container</a></li>
   </ul>
 </nav>
   <div class="edit-this-page"><a href="https://github.com/hatmarch/container-workshop/edit/master/documentation/modules/ROOT/pages/build-your-own-container.adoc">Edit this Page</a></div>
@@ -128,15 +195,400 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">Build your own Secure Container</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p><em>50 MINUTE EXERCISE</em></p>
+<p>In this chapter we&#8217;ll try to make the container image we&#8217;ve been using a bit more secure using a related tool to <code>podman</code>, namely <code>buildah</code>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/buildah.png" alt="Buildah!" width="320" height="78">
+</div>
 </div>
 <div class="paragraph">
-<p>In this lab you will convert a website running on your VM into a containerized application</p>
+<p><code>buildah</code> is used to create OCI-compliant container images, such as the <code>quay.io/mhildenb/container-workshop-httpd</code> that we&#8217;ve been using.  We&#8217;ll start by fixing a the security vulnerability we found in the <a href="containers-and-security.html" class="page">previous section</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_buildah_native_commands"><a class="anchor" href="#_buildah_native_commands"></a>Buildah native commands</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>One of the things that makes <code>buildah</code> unique is the ability to interact with container images from the host&#8217;s command line.  (As we&#8217;ll see in the next section, it also allows the creation of images from a <code>Dockerfile</code> or, more generically a <code>Containerfile</code>).  This will make it easy for us to remediate the vulnerability we found in the last section.</p>
+</div>
+<div class="paragraph">
+<p>Where we left off with our container image is that we needed to patch the bash package installed on the container</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/security-bulletin.png" alt="security bulletin">
+</div>
+<div class="title">Figure 1. Need to upgrade bash</div>
+</div>
+<div class="paragraph">
+<p>This can be problematic if our image does not already have installed on it all the tools (such as package management tools like <code>dnf</code> or <code>yum</code>) necessary to remediate the problem.  But with buildah&#8217;s <strong>native command functionality</strong> this is no longer a problem.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If you don&#8217;t have one open already, open a terminal as a non-root user and confirm your user by running the following command:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">whoami</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">%USER%</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Next, as a non-root user we need to do some setup that will allow buildah to interact with the container in this native command mode.  Run the following in the terminal</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The main reason for running this command is that we&#8217;ll be mounting filesystems inside the container and non-root users normally do not have privileges to do this.  Running <code>buildah unshare</code> is a way of preparing to work with containers "rootlessly" (if you will).  For a discussion of what this is, see <a href="https://www.redhat.com/sysadmin/buildah-unshare-command" target="_blank" rel="noopener">here</a>.  Think of it as a way that buildah can work with container "rootlessly" just as podman did in the <a href="containers-and-security.html#non_root_containers" class="page" target="_blank" rel="noopener">last section</a></p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">buildah unshare</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>You should notice that upon running the command your terminal turns to look like a root terminal.  You are not actually root, but rather working within a "namespace" that makes you appear as root when it comes to interacting with buildah&#8217;s containers</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[root@ansible-1 ~]#</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Next we tell buildah to implicitly create a "working container" from our currently vulnerable image:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER=$(buildah from quay.io/mhildenb/container-workshop-httpd) <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We&#8217;re effectively assigning a the shell variable <code>CONTAINER</code> to the id of the buildah container that starts with the state of the image we want to update</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you haven&#8217;t yet downloaded the image, the image might be downloaded first from the repo before you can enter the next command</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>To confirm that our working container is up, we can run the following command (which is a little like <code>podman ps</code> but for "working containers")</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">buildah containers</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER ID  BUILDER  IMAGE ID     IMAGE NAME                       CONTAINER NAME
+ef575a8a3408     *     60dde8abf76e quay.io/mhildenb/container-wo... container-workshop-httpd-working-container</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>We can then use buildah to effectively mount the root of the container&#8217;s filesystem</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER_MOUNT_POINT=$(buildah mount ${CONTAINER}) \<i class="conum" data-value="1"></i><b>(1)</b>
+&& echo "Container ${CONTAINER}'s filesystem mounted on host at ${CONTAINER_MOUNT_POINT}"</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>CONTAINER_MOUNT_POINT is getting set with the path to the mount in the host filesystem.  We store it in a shell variable because this tends to be a long path</td>
+</tr>
+</table>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Container container-workshop-httpd-working-container\'s filesystem mounted on host at /home/%USER%/.local/share/containers/storage/overlay/<mark>500abaa5921678c20f37f689ae72e37734445934e8c223775a2b71cce091e3f6</mark>/merged <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The highlighted section will be different on your instance.  This is just making clear where the container mount point is</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>We can even peek inside the container image through the mount point</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ls -l ${CONTAINER_MOUNT_POINT}</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">total 0
+lrwxrwxrwx.  1 root root  7 Apr 20 03:58 bin -&gt; usr/bin
+dr-xr-xr-x.  2 root root  6 Dec 14  2017 boot
+drwxr-xr-x.  2 root root  6 Apr 20 03:58 dev
+drwxr-xr-x. 51 root root 19 May 30 08:29 etc
+drwxr-xr-x.  2 root root  6 Apr 20 04:00 home
+lrwxrwxrwx.  1 root root  7 Apr 20 03:58 lib -&gt; usr/lib
+lrwxrwxrwx.  1 root root  9 Apr 20 03:58 lib64 -&gt; usr/lib64
+drwxr-xr-x.  2 root root  6 Dec 14  2017 media
+drwxr-xr-x.  2 root root  6 Dec 14  2017 mnt
+drwxr-xr-x.  2 root root  6 Dec 14  2017 opt
+drwxr-xr-x.  2 root root  6 Apr 20 03:58 proc
+dr-xr-x---.  4 root root 18 May 30 08:28 root
+drwxr-xr-x. 14 root root 18 May 30 08:29 run
+lrwxrwxrwx.  1 root root  8 Apr 20 03:58 sbin -&gt; usr/sbin
+drwxr-xr-x.  2 root root  6 Dec 14  2017 srv
+drwxr-xr-x.  2 root root  6 Apr 20 03:58 sys
+drwxrwxrwt.  7 root root 46 May 30 08:29 tmp
+drwxr-xr-x. 13 root root 19 Apr 20 03:58 usr
+drwxr-xr-x. 19 root root 17 May 30 08:29 var</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Now that we have a mount point we can copy files from the host directly into the container.  In our case however, we want to use the host&#8217;s package management tooling to install the updated bash package on the container {$CONTAINER}. Run this command:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">dnf install -y \<i class="conum" data-value="1"></i><b>(1)</b>
+    --installroot=$CONTAINER_MOUNT_POINT \<i class="conum" data-value="2"></i><b>(2)</b>
+    bash <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>dnf is the package management tool installed on your host instance.  The <code>-y</code> means that if dnf prompts the user, such as whether to install a given package, the answer will always be yes</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This tells dnf that the requested packages should be installed relative to this installroot (${CONTAINER_MOUNT_POINT} and thus the root of the container) instead of '/', the root of the host instance</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We are telling dnf to install the latest available compatible version of bash for our container (i.e. at <code>--installroot</code>)</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>You may see a few errors upon running this command.  They are non-critical.  In the output the key message you should see is</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Package bash-4.2.45-2.el7.x86_64 is already installed.
+Dependencies resolved.
+===================================================================================================
+ Package             Architecture          Version                      Repository            Size
+===================================================================================================
+Upgrading:
+ bash                x86_64                4.2.46-34.el7                ubi-7                1.0 M
+
+Transaction Summary
+===================================================================================================
+Upgrade  1 Package
+
+Total download size: 1.0 M
+Downloading Packages:
+bash-4.2.46-34.el7.x86_64.rpm                                      415 kB/s | 1.0 MB     00:02
+---------------------------------------------------------------------------------------------------
+Total                                                              414 kB/s | 1.0 MB     00:02
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                           1/1
+  Upgrading        : bash-4.2.46-34.el7.x86_64                                                 1/2
+  Running scriptlet: bash-4.2.46-34.el7.x86_64                                                 1/2
+  Cleanup          : bash-4.2.45-2.el7.x86_64                                                  2/2
+  Running scriptlet: bash-4.2.45-2.el7.x86_64                                                  2/2
+  Verifying        : bash-4.2.46-34.el7.x86_64                                                 1/2
+  Verifying        : bash-4.2.45-2.el7.x86_64                                                  2/2
+Installed products updated.
+
+Upgraded:
+  <mark>bash-4.2.46-34.el7.x86_64</mark>  <i class="conum" data-value="1"></i><b>(1)</b>
+
+Complete!</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Notice that this package is more recent than the minimum release needed to address the vulnerability</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Now we will commit these changes to a new image locally on the host that we&#8217;ll test.  We commit the changes with</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">buildah commit \<i class="conum" data-value="1"></i><b>(1)</b>
+    ${CONTAINER} \<i class="conum" data-value="2"></i><b>(2)</b>
+    localhost/container-workshop-httpd-secure <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>commit</code> means to take the working container and save it as a container image</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This is the ID of the working container that we want saved as an image</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The name the image should be saved as.  This saves the image to the user&#8217;s local container store on the host instance</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>This should yield output like the following</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Getting image source signatures
+Copying blob 123257361dae skipped: already exists
+Copying blob c9e02f9d3afe skipped: already exists
+Copying blob 86284899b0cc skipped: already exists
+Copying blob bcf3865bf7f7 skipped: already exists
+Copying blob 4e7c990a129f skipped: already exists
+Copying blob 210af8709b71 skipped: already exists
+Copying blob 47e96512450e skipped: already exists
+Copying blob 8f10e6ebff19 skipped: already exists
+Copying blob 486383b07939 skipped: already exists
+Copying blob 23be1053bf93 skipped: already exists
+Copying blob ee738432d587 skipped: already exists
+Copying blob bc71779d57e9 done
+Copying config 6b4a460f1e done
+Writing manifest to image destination
+Storing signatures
+6b4a460f1e4077bd64b862fcdabe93928779e441ed3e84bb161e8cead079a3e0</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Now we can leave the unshare environment to test out our container fix</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">exit</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_testing_commited_container"><a class="anchor" href="#_testing_commited_container"></a>Testing commited container</h3>
+<div class="paragraph">
+<p>Now that we committed a new image, we can test this committed image</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Run the new container "rootlessly" in the terminal by running the following command:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
+    -d \
+    -p 8081:80/tcp \
+    --name my-web-server \
+    -v /home/%USER%/container-workshop:/var/log/www:Z \
+    localhost/container-workshop-httpd-secure</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Since our new container image is virtually identical to the original one (except for the new bash package) and we&#8217;re forwarding the same ports we can now attempt to exploit the container again with the configuration from before</p>
+</li>
+<li>
+<p>If you don&#8217;t still have the metasploit console open, then split the terminal and follow the instructions <a href="containers-and-security.html#using_metasploit" class="page" target="_blank" rel="noopener">here</a> to the point where the metasploit console is configured to target the container</p>
+</li>
+<li>
+<p>Next run the following command in the <strong>metasploit</strong> terminal</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">check</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>And this should result in the following output</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[*] 127.0.0.1:8081 - The target is <mark>not</mark> exploitable.</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Congratulations!  You&#8217;d fixed the shellshock exploit</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_buildah_and_containerfiles"><a class="anchor" href="#_buildah_and_containerfiles"></a>Buildah and Containerfiles</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Though we&#8217;ve fixed the issue with quay.io/mhildenb/container-workshop-httpd:0.0.5 by using the <code>buildah</code> native command line tools to fix it, there are still other aspects of the container that could be addressed to make it more secure and less likely to need special privileges from the underlying operating system such as</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Not running as the root user (and thus the apache server not running as <code>root</code>)</p>
+</li>
+<li>
+<p>Not requiring a port &lt; 1024.  Currently the apache server in the container images listens on port 80</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>What&#8217;s more, we have no record of the step-by-step changes we&#8217;ve made to the container that we might store in revision control.  One (valid) option would be to store all the buildah cli commands we issued in a shell script.  However, container tools like <code>docker</code> have popularized the <code>Dockerfile</code> (or, more generically, <code>Containerfile</code>) way of defining new containers.  Let&#8217;s investigate the quay.io/mhildenb/container-workshop-httpd:0.0.5&#8217;s <code>Containerfile</code> to see if we can address the points above</p>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="advanced-container-concepts.html" class="query-params-link">4. Advanced Container Concepts</a></span>
-  <span class="next"><a href="deploy-container.html" class="query-params-link">6. Deploying your Container</a></span>
+  <span class="prev"><a href="containers-and-security.html" class="query-params-link">Container Security</a></span>
+  <span class="next"><a href="compose-container.html" class="query-params-link">Multi containers with Podman</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
