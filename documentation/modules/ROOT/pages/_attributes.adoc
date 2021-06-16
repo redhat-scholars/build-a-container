@@ -9,6 +9,7 @@
 :apache-server-image-secure-tag: latest
 :apache-server-image-secure: {apache-server-image-secure-image}:{apache-server-image-secure-tag}
 :apache-server-container-name: my-web-server
+:apache-server-containerfile-image: localhost/secure-container
 :apache-committed-container-image: container-workshop-commit
 :commit-container-image-id-long: f154f395c55ed7192f180502495b96cb3c223d9ce50273cda41bb63e272be7d8
 :commit-container-image-id-short: f154f395c55e

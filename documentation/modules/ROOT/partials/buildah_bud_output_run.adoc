@@ -1,0 +1,110 @@
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+STEP 1: FROM registry.access.redhat.com/ubi7
+STEP 2: USER root
+STEP 3: RUN yum install -y httpd && yum update -y && yum clean all 
+Loaded plugins: ovl, product-id, search-disabled-repos, subscription-manager
+
+This system is not receiving updates. You can use subscription-manager on the host to register and assign subscriptions.
+
+Resolving Dependencies
+--> Running transaction check
+---> Package httpd.x86_64 0:2.4.6-97.el7_9 will be installed
+--> Processing Dependency: httpd-tools = 2.4.6-97.el7_9 for package: httpd-2.4.6-97.el7_9.x86_64
+--> Processing Dependency: system-logos >= 7.92.1-1 for package: httpd-2.4.6-97.el7_9.x86_64
+--> Processing Dependency: /etc/mime.types for package: httpd-2.4.6-97.el7_9.x86_64
+--> Processing Dependency: libapr-1.so.0()(64bit) for package: httpd-2.4.6-97.el7_9.x86_64
+--> Processing Dependency: libaprutil-1.so.0()(64bit) for package: httpd-2.4.6-97.el7_9.x86_64
+--> Running transaction check
+---> Package apr.x86_64 0:1.4.8-7.el7 will be installed
+---> Package apr-util.x86_64 0:1.5.2-6.el7 will be installed
+---> Package httpd-tools.x86_64 0:2.4.6-97.el7_9 will be installed
+---> Package mailcap.noarch 0:2.1.41-2.el7 will be installed
+---> Package redhat-logos.noarch 0:70.7.0-1.el7 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+================================================================================
+ Package              Arch           Version                Repository     Size
+================================================================================
+Installing:
+ httpd                x86_64         2.4.6-97.el7_9         ubi-7         1.2 M
+Installing for dependencies:
+ apr                  x86_64         1.4.8-7.el7            ubi-7         104 k
+ apr-util             x86_64         1.5.2-6.el7            ubi-7          92 k
+ httpd-tools          x86_64         2.4.6-97.el7_9         ubi-7          93 k
+ mailcap              noarch         2.1.41-2.el7           ubi-7          31 k
+ redhat-logos         noarch         70.7.0-1.el7           ubi-7          13 M
+
+Transaction Summary
+================================================================================
+Install  1 Package (+5 Dependent packages)
+
+Total download size: 15 M
+Installed size: 18 M
+Downloading packages:
+warning: /var/cache/yum/x86_64/7Server/ubi-7/packages/apr-1.4.8-7.el7.x86_64.rpm: Header V3 RSA/SHA256 Signature, key ID fd431d51: NOKEY
+Public key for apr-1.4.8-7.el7.x86_64.rpm is not installed
+--------------------------------------------------------------------------------
+Total                                              4.2 MB/s |  15 MB  00:03     
+Retrieving key from file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+Importing GPG key 0xFD431D51:
+ Userid     : "Red Hat, Inc. (release key 2) <security@redhat.com>"
+ Fingerprint: 567e 347a d004 4ade 55ba 8a5f 199e 2f91 fd43 1d51
+ Package    : redhat-release-server-7.9-6.el7_9.x86_64 (@anaconda/7.9)
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+Importing GPG key 0x2FA658E0:
+ Userid     : "Red Hat, Inc. (auxiliary key) <security@redhat.com>"
+ Fingerprint: 43a6 e49c 4a38 f4be 9abf 2a53 4568 9c88 2fa6 58e0
+ Package    : redhat-release-server-7.9-6.el7_9.x86_64 (@anaconda/7.9)
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : apr-1.4.8-7.el7.x86_64                                       1/6 
+  Installing : apr-util-1.5.2-6.el7.x86_64                                  2/6 
+  Installing : httpd-tools-2.4.6-97.el7_9.x86_64                            3/6 
+  Installing : redhat-logos-70.7.0-1.el7.noarch                             4/6 
+  Installing : mailcap-2.1.41-2.el7.noarch                                  5/6 
+  Installing : httpd-2.4.6-97.el7_9.x86_64                                  6/6 
+  Verifying  : httpd-tools-2.4.6-97.el7_9.x86_64                            1/6 
+  Verifying  : mailcap-2.1.41-2.el7.noarch                                  2/6 
+  Verifying  : apr-1.4.8-7.el7.x86_64                                       3/6 
+  Verifying  : apr-util-1.5.2-6.el7.x86_64                                  4/6 
+  Verifying  : httpd-2.4.6-97.el7_9.x86_64                                  5/6 
+  Verifying  : redhat-logos-70.7.0-1.el7.noarch                             6/6 
+
+Installed:
+  httpd.x86_64 0:2.4.6-97.el7_9                                                 
+
+Dependency Installed:
+  apr.x86_64 0:1.4.8-7.el7                  apr-util.x86_64 0:1.5.2-6.el7      
+  httpd-tools.x86_64 0:2.4.6-97.el7_9       mailcap.noarch 0:2.1.41-2.el7      
+  redhat-logos.noarch 0:70.7.0-1.el7       
+
+Complete!
+Loaded plugins: ovl, product-id, search-disabled-repos, subscription-manager
+
+This system is not receiving updates. You can use subscription-manager on the host to register and assign subscriptions.
+
+No packages marked for update
+Loaded plugins: ovl, product-id, search-disabled-repos, subscription-manager
+
+This system is not receiving updates. You can use subscription-manager on the host to register and assign subscriptions.
+
+Cleaning repos: ubi-7 ubi-7-rhah ubi-7-server-extras-rpms
+              : ubi-7-server-optional-rpms ubi-server-rhscl-7-rpms
+STEP 4: COMMIT {apache-server-containerfile-image}
+Getting image source signatures
+Copying blob 01d2fb866535 skipped: already exists  
+Copying blob 9e12a51e507a skipped: already exists  
+Copying blob 2c4e14cad8b6 done  
+Copying config 7ca1aec798 done  
+Writing manifest to image destination
+Storing signatures
+--> 7ca1aec798c
+7ca1aec798cefd27597d423beb41087afd112c5915d1cdea34269a46665866f9
+----
