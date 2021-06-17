@@ -1,0 +1,43 @@
+[.console-output]
+[source,bash,subs="+macros,+attributes,+quotes"]
+----
+Loaded plugins: ovl, product-id, search-disabled-repos, subscription-manager
+
+This system is not receiving updates. You can use subscription-manager on the host to register and assign subscriptions.
+
+ubi-7                                                                                                                                                            | 3.8 kB  00:00:00     
+ubi-7-rhah                                                                                                                                                       | 3.7 kB  00:00:00     
+ubi-7-server-extras-rpms                                                                                                                                         | 3.7 kB  00:00:00     
+ubi-7-server-optional-rpms                                                                                                                                       | 3.8 kB  00:00:00     
+ubi-server-rhscl-7-rpms                                                                                                                                          | 3.8 kB  00:00:00     
+(1/15): ubi-7/x86_64/updateinfo                                                                                                                                  |   92 B  00:00:00     
+(2/15): ubi-7/x86_64/primary_db                                                                                                                                  | 800 kB  00:00:00     
+(3/15): ubi-7-rhah/x86_64/updateinfo                                                                                                                             |   92 B  00:00:00     
+(4/15): ubi-7-rhah/x86_64/primary_db                                                                                                                             | 2.5 kB  00:00:00     
+(5/15): ubi-7-server-extras-rpms/x86_64/updateinfo                                                                                                               |   92 B  00:00:00     
+(6/15): ubi-7-server-extras-rpms/x86_64/primary_db                                                                                                               | 6.8 kB  00:00:00     
+(7/15): ubi-7-server-optional-rpms/x86_64/updateinfo                                                                                                             |   92 B  00:00:00     
+(8/15): ubi-7-server-optional-rpms/x86_64/primary_db                                                                                                             |  14 kB  00:00:00     
+(9/15): ubi-7/x86_64/group                                                                                                                                       |  124 B  00:00:01     
+(10/15): ubi-server-rhscl-7-rpms/x86_64/updateinfo                                                                                                               |   92 B  00:00:00     
+(11/15): ubi-server-rhscl-7-rpms/x86_64/primary_db                                                                                                               | 396 kB  00:00:00     
+(12/15): ubi-7-rhah/x86_64/group                                                                                                                                 |  124 B  00:00:00     
+(13/15): ubi-7-server-extras-rpms/x86_64/group                                                                                                                   |  124 B  00:00:00     
+(14/15): ubi-server-rhscl-7-rpms/x86_64/group                                                                                                                    |  124 B  00:00:00     
+(15/15): ubi-7-server-optional-rpms/x86_64/group                                                                                                                 |  124 B  00:00:01     
+Installed Packages
+Name        : bash
+Arch        : x86_64
+#Version     : 4.2.46#
+Release     : 34.el7
+Size        : 3.5 M
+Repo        : installed
+From repo   : anaconda
+Summary     : The GNU Bourne Again shell
+URL         : http://www.gnu.org/software/bash
+License     : GPLv3+
+Description : The GNU Bourne Again shell (Bash) is a shell or command language
+            : interpreter that is compatible with the Bourne shell (sh). Bash
+            : incorporates useful features from the Korn shell (ksh) and the C shell
+            : (csh). Most sh scripts can be run by bash without modification.
+----

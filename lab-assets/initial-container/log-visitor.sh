@@ -12,7 +12,7 @@ Content-type: text/html
 </head>
 <body>
 <title>Thank You</title>
-<h1>Thank you ${VISITOR}!</h1>
+<h1>Thank you pass:[${VISITOR}]!</h1>
 I have collected your info as $(whoami) <br> <br>
 
 Click <a href=/hello.html>here</a> to register another visitor.
