@@ -95,9 +95,9 @@ pass:[&&] echo "Container pass:[${CONTAINER}]'s filesystem mounted on host at pa
 <.> CONTAINER_MOUNT_POINT is getting set with the path to the mount in the host filesystem.  We store it in a shell variable because this tends to be a long path
 +
 [.console-output]
-[source,bash,subs="+macros,+attributes,+quotes"]
+[source,subs="+macros,+attributes,+quotes"]
 ----
-Container container-workshop-httpd-working-container\'s filesystem mounted on host at /home/{USER}/.local/share/containers/storage/overlay/#500abaa5921678c20f37f689ae72e37734445934e8c223775a2b71cce091e3f6#/merged #<.>
+Container container-workshop-httpd-working-container's filesystem mounted on host at /home/{USER}/.local/share/containers/storage/overlay/#500abaa5921678c20f37f689ae72e37734445934e8c223775a2b71cce091e3f6#/merged #<.>
 ----
 <.> The highlighted section will be different on your instance.  This is just making clear where the container mount point is
 +
