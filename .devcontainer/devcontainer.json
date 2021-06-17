@@ -2,17 +2,17 @@
 	"name": "Container Workshop Development",
 	"dockerFile": "Dockerfile${env:DEVCONTAINER_SUFFIX}",
 	"runArgs": [
-		"-v", "${env:HOME}/.aws:/home/jboss/.aws:Z",
-		"-v", "${env:HOME}/.kube:/home/jboss/.kube:Z",
-		"-v", "${env:HOME}/.vs-kubernetes:/home/jboss/.vs-kubernetes:Z",
+		"-v", "${env:HOME}/.aws:/opt/app-root/src/.aws:Z",
+		"-v", "${env:HOME}/.kube:/opt/app-root/src/.kube:Z",
+		"-v", "${env:HOME}/.vs-kubernetes:/opt/app-root/src/.vs-kubernetes:Z",
 
 		// use local .oh-my-zsh configuration if it exists (overwriting one in container).
 		// comment the following line out if you want to use local installation on container instead
-		"-v", "${env:HOME}/.oh-my-zsh:/home/jboss/.oh-my-zsh:Z",
-		"-v", "${env:HOME}/.helm:/home/jboss/.helm:Z",
+		"-v", "${env:HOME}/.oh-my-zsh:/opt/app-root/src/.oh-my-zsh:Z",
+		"-v", "${env:HOME}/.helm:/opt/app-root/src/.helm:Z",
 		// mount npm cache locally
-		"-v", "${env:HOME}/.npm:/home/jboss/.npm:Z",
-		"-v", "${env:HOME}/.gitconfig:/home/jboss/.gitconfig:Z",
+		"-v", "${env:HOME}/.npm:/opt/app-root/src/.npm:Z",
+		"-v", "${env:HOME}/.gitconfig:/opt/app-root/src/.gitconfig:Z",
 
 		// Used for AWS based clusters
 		"-e", "AWS_PROFILE=rhpds",

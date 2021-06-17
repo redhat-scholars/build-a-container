@@ -1,0 +1,8 @@
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+buildah bud \
+  -f Containerfile \
+  -t {apache-server-containerfile-image} \
+  /home/{USER}/container-workshop/secure-container 
+----
