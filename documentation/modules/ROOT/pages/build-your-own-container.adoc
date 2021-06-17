@@ -274,7 +274,7 @@ image:new-containerfile.png[]
 FROM registry.access.redhat.com/ubi7 #<.>
 USER root #<.>
 ----
-<.> `FROM` is the base container that this container will start from.  `ubi7` stands for "Universal Base Image".  It will serve as a secure basis for the rest of our container.  See information on ubi below
+<.> `FROM` is the base container that this container will start from.  `ubi7` stands for link:https://www.redhat.com/en/blog/introducing-red-hat-universal-base-image["Universal Base Image"^].  It will serve as a secure basis for the rest of our container.  See more information on ubi below
 <.> `USER` indicates that we want to operate as the `root` user for all the commands that follow, until another `USER` directive is found
 +
 . To get a sense of what we've done, let's build a container from this Containerfile useing `buildah`.  Run the following command
@@ -327,8 +327,9 @@ Storing signatures
 podman run \
   -it \
   {apache-server-containerfile-image} \
-  bash
+  bash #<.>
 ----
+<.> This argument, always on the other side of the container image to run, represents the command that should be run in the container.  When this command exits, the container will exit.  Normally containers have a default command, but we haven't configured that (yet, see later in the lab).  For now we're telling the container to run `bash` as the sustaining or "root" process of the container
 +
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
@@ -373,17 +374,171 @@ include::partial$buildah_bud_no_annotations.adoc[]
 . This should yield output similarfootnote:[Packages that are upgraded by yum will vary based on which packages have been updated by Red Hat since the last published ubi image] to the following:
 +
 include::partial$buildah_bud_output_run.adoc[]
-
-_NEXT RUN HTTPD TO TEST OUT WEBSERVER BUT NO VISITOR INFO_
++
+. Let's see if this image has a webserver running now.  Run the following command in the terminal
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+    -d \
+    -p 8081:80/tcp \ 
+    --name {apache-server-container-name} \
+    {apache-server-containerfile-image} \
+    /usr/sbin/httpd -DFOREGROUND #<.>
+----
+<.> As we did above with `bash`, we are now wanting to run `httpd` as the root process of {apache-server-containerfile-image} and this time we're providing that command the `-DFOREGROUND` argument
++
+. Open you're Browser Preview window and navigate to `localhost:8081` and you should see a familiar sight (or site, if you will)
++
+image::apache-test-page.png[]
++
+. This is encouraging, but we don't yet have the non-boilerplate aspects of our site in the container.  For instance, if we navigate to our rudimentary guestbook functionality at `localhost:8081/hello.html`
++
+.Guestbook functionality does not exist in the container
+image::guestbook-not-found.png[]
++
+. We'll address this problem in the next section.  For now, let's stop and remove this container by running the following
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman rm -f {apache-server-container-name}
+----
 
 [#containerfile_copy]
 === Copying files into the container
 
-[#no_privilege]
-=== Removing privileged operations
+So we're got a container image that is able to run a generic apache site, but how do we customize this to run our specific site.  This is where another Container file directive, `COPY` comes in.  In this section we're going to get a little help from the builah native commands to retrieve our custom content.  Then we're going to show how we can use `COPY` and the Containerfile to get those assets onto our container
 
-[#Running_anonymous]
-=== Running containers with anonymous users
+. First let's leverage `buildah` to pull our custom website files onto our host.  We'll need to mount the container and since we're not a root user we're going to first need to issue
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+buildah unshare
+----
++
+[.console-output]
+[source,subs="+macros,+attributes"]
+----
+[root@ansible-1 ~]# 
+----
++
+. Next we'll run the next few commands to mount the old insecure container
++
+[NOTE]
+====
+Normally a team would already have custom content handy on the host already.  In this instance we're wanting to show off `buildah` a little more but it is a reasonably typical practice to copy files from one container image to another, particularly in build scenarios where assets are built in one container and copied to another.  This use case is out of the scope of this workshop however.
+====
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+WORKING_CONTAINER_OLD=$(buildah from {apache-server-image-insecure-image}) 
+WORKING_CONTAINER_OLD_IMAGE_MOUNT=$(buildah mount pass:[${WORKING_CONTAINER_OLD}])
+----
++
+. Now we don't want very many files from the old container, we only want the files involved with guestbook.  We can pull them out and into our `Containerfile` working directory by running the following commands
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cp pass:[${WORKING_CONTAINER_OLD_IMAGE_MOUNT}]/var/www/cgi-bin/log-visitor.sh /home/{USER}/container-workshop/secure-container
+cp pass:[${WORKING_CONTAINER_OLD_IMAGE_MOUNT}]/var/www/html/hello.html /home/{USER}/container-workshop/secure-container
+----
++
+. At this point you should see the two files appear in the `secure-container` directory.  You can also click on them and take a look at the (simple) HTML and bash code
++
+image::guestbook-files.png[]
++
+. Now that we've retrieved the files, we can exit the `buildah unshare` sesssion
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+exit
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+[{USER}@ansible-1 ~]pass:[$] 
+----
++
+. Next, open the `Containerfile` in the IDE (if it's not open already) and add the highlighted lines
++
+[.console-input]
+[source,Containerfile,subs="+macros,+attributes,+quotes"]
+----
+FROM registry.access.redhat.com/ubi7 
+USER root 
+
+RUN yum install -y httpd && yum update -y && yum clean all
+
+#COPY hello.html /var/www/html# #<.>
+#COPY log-visitor.sh /var/www/cgi-bin# 
+#RUN chmod 755 /var/www/cgi-bin/log-visitor.sh# #<.>
+----
+<.> The `COPY` directive moves files from the current working directory on the host and copies them to the specified location in the container image (in this case `/var/www/html`).  This is analogous to what we did before with the `buildah mount` commands
+<.> To ensure our cgi-bin script has execute privileges it's generally good practice to use a `RUN` directive to use the `chmod` command to ensure this. 
++
+. Rebuild the container with the `buildah bud` command again:
++
+include::partial$buildah_bud_no_annotations.adoc[]
++
+. This should yield output similar to before but appended with the following (... represents content that has been omitted)
++
+include::partial$buildah_bud_output_copy.adoc[]
++
+. Now let's see if this is enough to run our site
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+    -d \
+    -p 8081:80/tcp \ 
+    --name {apache-server-container-name} \
+    {apache-server-containerfile-image} \
+    /usr/sbin/httpd -DFOREGROUND 
+----
++
+. Once the container is running, if you navigate to `localhost:8081/hello.html` you should now see the guestbook
++
+.Guestbook restored
+image::apache-guestbook-page.png[]
++
+. Go ahead and "sign" the guestbook by entering your name (such as Alice) and hit `Submit`.  You should be greeted with a page like this
++
+image::guestbook-more-secure-container.png[]
++
+. Of note is that this time the httpd server is running as the `apache` user and not `root` (see highlight in image)
++
+[NOTE]
+.Why is the webserver running as `apache`?
+====
+Given that our `Containerfile` is running as `root` (per the last `USER` directive) you might be wondering why the webserver is running as `apache`.  This is because the httpd package that is installed from `yum` defaults to running as apache, regardless of the user that executes the `/usr/sbin/httpd` command
+====
+
+At this point our container image is looking pretty good.  Aside from the volume mount (so that our guestbook can be persisted between runs) things are looking pretty good.  However, there are still additional steps we take to make this image even more resilient to attack or exploit.  Here are two issues:
+
+* The web server is running on port 80 in the container.  This is a privileged port.  Better to have this run at port run in an privileged port above 1024 (such as 8080)
+* Running as a specific user can be problematic as that user can implicitly have privileges afforded to them via sudo (either at runtime or in the ongoing maintenance of the container).  It would be better if we could run the container as the unknown or "anonymous" user
+
+We'll address both of these concerns in the next section.  For now, as before, let's stop and remove this container by running the following
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman rm -f {apache-server-container-name}
+----
+
+[#no_privilege]
+=== Security Hardening our Container
+
 
 [#finish_container]
 === Setting the Command
+
+NOTE: Also set the EXPOSE 
