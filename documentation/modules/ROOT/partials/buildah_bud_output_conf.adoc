@@ -1,0 +1,20 @@
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+STEP 1: FROM registry.access.redhat.com/ubi7
+...
+STEP 5: COPY log-visitor.sh /var/www/cgi-bin
+STEP 6: COPY httpd.conf /etc/httpd/conf/httpd.conf
+STEP 7: RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
+...
+STEP 11: COMMIT localhost/secure-container
+Getting image source signatures
+Copying blob 01d2fb866535 skipped: already exists  
+Copying blob 9e12a51e507a skipped: already exists  
+Copying blob 0a4963ac5a8d done  
+Copying config 1216d5b4a5 done  
+Writing manifest to image destination
+Storing signatures
+--> 1216d5b4a5f
+1216d5b4a5fc815946f4d147dc10760338dad024177b83b11118b6e847108cef
+----
