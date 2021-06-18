@@ -535,10 +535,314 @@ podman rm -f {apache-server-container-name}
 ----
 
 [#no_privilege]
-=== Security Hardening our Container
+=== Running as an "Arbitrary User"
 
+To futher limit the attack surface of containers, Kubernetes products such as OpenShift by default run containers with an arbitrarily assigned user.  This effectively overrides the `USER` directive of the `Containerfile`.  Explanation and reasons for this can be found link:https://access.redhat.com/articles/4859371[here^].  
+
+When a container is run with an arbitrary user, the only thing that we are guaranteed is that the user will be part of the `root` group.  This fact will become important in a minute.  First let's take a look at what happens to the container when we run as a random user and fix the issues in the `Containerfile` as they arise
+
+. We can already run our container image with an arbitrary user using the `-u` flag with `podman run`.  Let's attempt to run our container (but this time without the `-d` flag so that we can see the output right away)
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+    --rm \
+    -u pass:[$((1000 + ${RANDOM}))] \#<.>
+    -p 8081:80/tcp \ 
+    --name {apache-server-container-name} \
+    {apache-server-containerfile-image} \
+    /usr/sbin/httpd -DFOREGROUND 
+----
+<.> `-u` allows us to override the user the container should be run as.  In this case we're using `pass:[${RANDOM}]` footnote:[Random is an internal bash function that returns a pseudorandom integer in the range 0-32767.  See also link:http://www.ing.iac.es/~docs/external/bash/abs-guide/randomvar.html#:~:text=%24RANDOM%20is%20an%20internal%20Bash,to%20generate%20an%20encryption%20key.&text=Jipe%20points%20out%20a%20set,number%20between%206%20and%2030.[here]] offset by 1000 (to prevent collisions with existing users in the container)
++
+. You'll notice that it fails with this error message
++
+[.console-output]
+[source,subs="+macros,+attributes"]
+----
+AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 10.0.2.100. Set the 'ServerName' directive globally to suppress this message
+(13)Permission denied: AH00058: Error retrieving pid file /run/httpd/httpd.pid
+AH00059: Remove it before continuing if it is corrupted.
+----
+
+The issue here is that by default an arbitrary user won't have access to most of the files that the webserver needs to run.  This is where the fact that our arbitrary user will always be part of the `root` group (gid: 0) will come in handy.  We need to make sure that the root group is assigned to the files and folders that the webserver needs and that the group has appropriate permissions.
+
+The process for doing this might be one of trial and error if you're not familiar with the software that you're attempting to run in the container.  In this case we know exactly which directories need to be adjusted.  Let's return to the `Containerfile`
+
+. Open the `Containerfile` and add the following lines (highlighted) to it
++
+[.console-input]
+[source,Containerfile,subs="+macros,+attributes,+quotes"]
+----
+FROM registry.access.redhat.com/ubi7 
+USER root 
+
+RUN yum install -y httpd && yum update -y && yum clean all
+
+COPY hello.html /var/www/html
+COPY log-visitor.sh /var/www/cgi-bin 
+RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
+
+#RUN chown -R 1001:0 /run/httpd && chmod -R g=u /run/httpd#
+#RUN chown -R 1001:0 /var/log/httpd/ && chmod -R g=u /var/log/httpd/#
+
+#USER 1001#
+----
++
+. Rebuild the container with the `buildah bud` command again:
++
+include::partial$buildah_bud_no_annotations.adoc[]
++
+. This should yield output similar to before but appended with the following (... represents content that has been omitted)
++
+include::partial$buildah_bud_output_user.adoc[]
++
+. Now let's try running the container again
++
+[NOTE]
+====
+Even through we've set a default user in the container, let's still run with an arbitrary one to test that aspect of the container
+====
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+    --rm \
+    -u pass:[$((1000 + ${RANDOM}))] \
+    -p 8081:80/tcp \ 
+    --name {apache-server-container-name} \
+    {apache-server-containerfile-image} \
+    /usr/sbin/httpd -DFOREGROUND 
+----
++
+. Which shows some progress but highlights a new issue:
++
+[.console-output]
+[source,subs="+macros,+attributes,+quotes"]
+----
+AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 10.0.2.100. Set the 'ServerName' directive globally to suppress this message
+#(13)Permission denied: AH00072: make_sock: could not bind to address [::]:80#
+#(13)Permission denied: AH00072: make_sock: could not bind to address 0.0.0.0:80#
+no listening sockets available, shutting down
+AH00015: Unable to open logs
+----
+
+So the issue here is something that we assumed we would need to change, namely, that the webserver is attempting to bind to a privileged port.  Since we're no longer running the command as root this is not possible.  This highlights another issue that you might run into trying to support arbitrary containers in your containers: you might need to change the configuration of the service that you're attempting to containerize.  
+
+For our apache webserver we're going to need to change its default configuration file.  Normally this is done by having our configuration on the host, editing it to our liking there, and using the `COPY` directive to replace the default configuration in the container.
+
+. First let's use buildah's native commands to pull the `httpd.conf` file out of our image and into our working folder.  Run the following command in the terminal:
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+buildah unshare
+WORKING_CONTAINER=$(buildah from {apache-server-containerfile-image})
+WORKING_CONTAINER_MOUNT=$(buildah mount pass:[${WORKING_CONTAINER}])
+cp pass:[${WORKING_CONTAINER_MOUNT}]/etc/httpd/conf/httpd.conf /home/{USER}/container-workshop/secure-container
+exit
+
+----
++
+. When the commands finish you should have a copy of the httpd.conf from the image in the `container-workshop` directory (you might need to refresh the explorer first).  Click on the httpd.conf to edit it in VSCode
++
+image::httpd-conf.png[]
++
+. Find the `Listen` directive near the start of the `httpd.conf` and change it to match the highlighted line so that the server listens on port 8080
++
+[.console-input]
+[source,subs="+macros,+attributes,+quotes"]
+----
+#
+ServerRoot "/etc/httpd"
+
+#
+# Listen: Allows you to bind Apache to specific IP addresses and/or
+# ports, instead of the default. See also the <VirtualHost>
+# directive.
+#
+# Change this to Listen on specific IP addresses as shown below to 
+# prevent Apache from glomming onto all bound IP addresses.
+#
+# Listen 12.34.56.78:80
+#Listen 8080#
+
+#
+# Dynamic Shared Object (DSO) Support
+#
+----
++
+. OPTIONAL: Given that our server will not be started by the root user, there is no need to define a user and group the server should run as.  Remove (or comment out) the lines that are struckthrough in your `httpd.conf`
++
+[subs="+macros,+specialchars,+quotes"]
+----
+#
+# If you wish httpd to run as a different user or group, you must run
+# httpd as root initially and it will switch.  
+#
+# User/Group: The name (or pass:[#]number) of the user/group to run httpd as.
+# It is usually good practice to create a dedicated user and group for
+# running httpd, as with most system services.
+#
+[.line-through]#User apache#
+[.line-through]#Group apache#
+
+# 'Main' server configuration
+----
++
+. Now with the configuration updated, we need to once again update our `Containerfile` with the highlighted lines
++
+[.console-input]
+[source,Containerfile,subs="+macros,+attributes,+quotes"]
+----
+FROM registry.access.redhat.com/ubi7 
+USER root 
+
+RUN yum install -y httpd && yum update -y && yum clean all
+
+COPY hello.html /var/www/html
+COPY log-visitor.sh /var/www/cgi-bin 
+#COPY httpd.conf /etc/httpd/conf/httpd.conf#
+RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
+
+RUN chown -R 1001:0 /run/httpd && chmod -R g=u /run/httpd
+RUN chown -R 1001:0 /var/log/httpd/ && chmod -R g=u /var/log/httpd/
+
+USER 1001
+----
++
+. Build the container
++
+include::partial$buildah_bud_no_annotations.adoc[]
++
+. This should yield output similar to before but appended with the following (... represents content that has been omitted)
++
+include::partial$buildah_bud_output_user.adoc[]
++
+. Run the container (in the foreground) again to test it
++
+[.console-input]
+[source,bash,containerfile,subs="+macros,+attributes,+quotes"]
+----
+podman run \
+    --rm \
+    -u pass:[$((1000 + ${RANDOM}))] \
+    -p pass:[8081:]#8080#/tcp \#<.>
+    --name {apache-server-container-name} \
+    {apache-server-containerfile-image} \
+    /usr/sbin/httpd -DFOREGROUND 
+----
+<.> Notice that we've had to change the port that we're forwarding to as our webserver should now bind to port 8080 in the container
++
+. Next navigate to `http://localhost:8081/hello.html`, enter a name (such as "Alice") into the guestbook and hit submit.  You should see the following page
++
+.Notice the random uid (yours will vary)
+image::arbitrary-user-guestbook.png[]
 
 [#finish_container]
-=== Setting the Command
+=== Additional Containerfile Commands
 
-NOTE: Also set the EXPOSE 
+Our container is in pretty good shape, but it's a little annoying that we have to specify a command every time, for instance, what's highlighted here:
+
+[source,bash,subs="+macros,+attributes,+quotes"]
+----
+podman run \
+    --rm \
+    -u pass:[$((1000 + ${RANDOM}))] \
+    -p 8081:8080/tcp \#<.>
+    --name {apache-server-container-name} \
+    {apache-server-containerfile-image} \
+    #/usr/sbin/httpd -DFOREGROUND#
+----
+
+For this we can add a directive to our `Containerfile` called `CMD` which tells the container runtime which command should be executed to start the containerfootnote:[There is another similar directive called `ENTRYPOINT`.  You can read more about `ENTRYPOINT` and its interaction with `CMD` link:https://docs.docker.com/engine/reference/builder/#entrypoint[here^]]
+
+The other thing that would be good to advertise is the port that the container listens on at runtime (now 8080).  There is a directive for this as well called `EXPOSE`.  This does not actually publish the port but rather serves as documentation between the person who builds the image and those that run it (or, as we'll see, a container orchestration platform such as Kubernetes)
+
+. Let's finish off our container by adding the following highlighted lines to our `Containerfile`:
++
+[.console-input]
+[source,Containerfile,subs="+macros,+attributes,+quotes"]
+----
+FROM registry.access.redhat.com/ubi7 
+USER root 
+
+RUN yum install -y httpd && yum update -y && yum clean all
+
+COPY hello.html /var/www/html
+COPY log-visitor.sh /var/www/cgi-bin 
+COPY httpd.conf /etc/httpd/conf/httpd.conf
+RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
+
+RUN chown -R 1001:0 /run/httpd && chmod -R g=u /run/httpd
+RUN chown -R 1001:0 /var/log/httpd/ && chmod -R g=u /var/log/httpd/
+
+#EXPOSE 8080/tcp# #<.>
+
+USER 1001
+
+#CMD /usr/sbin/httpd -DFOREGROUND# #<.>
+----
+<.> as with port forwarding in `podman run` we can specify the protocol (tcp)
+<.> This is the same command we were running manually with podman run
++
+. Build the container
++
+include::partial$buildah_bud_no_annotations.adoc[]
++
+. This should yield output similar to before but appended with the following (... represents content that has been omitted)
++
+include::partial$buildah_bud_output_cmd.adoc[]
++
+. Run the container again to test it (notice the differences in the command)
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+    --rm \
+    -d \
+    -P \#<.>
+    --name {apache-server-container-name} \
+    {apache-server-containerfile-image}
+----
+<.> the `-P` flag leverages the `EXPOSE` directives from the `Containerfile` and forwards all exposed ports to *random* ports on the host
++
+. You'll notice that we can no longer hit the webserver at port 8081 (or it's at least very unlikely that we can) and instead we need to find out the port that podman assigned on the host.  Capture that with this command: 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+HOST_PORT=$(podman ps \#<.>
+    -f name={apache-server-container-name} \#<.>
+    --format json | jq -r ".[0].Ports[0].hostPort") #<.>
+----
+<.> The output of this string of commands will give us the port on the host that is forwarded to our exposed container port
+<.> This returns only information for containers with the name `{apache-server-container-name}`
+<.> `--format` returns extended information in JSON format which we pipe to the `jq` command to quickly parse the JSON for the field we're after
++
+. Next, we're pretty-print the url of our guestbook so that we can paste it into our Browser Preview window
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+echo "http://localhost:pass:[${HOST_PORT}]/hello.html"
+----
++
+. Copy the echo'ed string into the Browser Preview window
++
+[TIP]
+====
+If you hover over the string in the terminal window with your mouse you might be prompted to kbd:[CTRL]-click (or kbd:[CMD]-click on Mac OSX) to open the link in your browser.  *This will not work* because it will open the URL in your browser instead of in the Browser Preview of your VSCode host instance.
+
+image::dont-click-link.png[]
+====
++
+. You should now see your guestbook
++
+.Guestbook, but now at an arbitrary port
+image::apache-guestbook-page-random-port.png[]
+
+Congratulations!  You've build a secure container from the ground up.  Next let's look at some different ways of orchestrating and deploying containers
