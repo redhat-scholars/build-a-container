@@ -13,7 +13,7 @@ Content-type: text/html
 <body>
 <title>Thank You</title>
 <h1>Thank you pass:[${VISITOR}]!</h1>
-I have collected your info as $(whoami) <br> <br>
+I have collected your info as user: $(whoami) <br> <br>
 
 Click <a href=/hello.html>here</a> to register another visitor.
 </body>
