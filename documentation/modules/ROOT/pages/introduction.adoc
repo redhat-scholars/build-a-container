@@ -2,10 +2,16 @@ include::_attributes.adoc[]
 
 = Setup
 
+_5 MINUTE EXERCISE_
+
+
 [#intro_code_server]
 == 1. Introduction to Code Server
+You will have received a login page like below to register for the workshop. Once registered you will receive username and password where you have been given access to a RHEL 8 virtual machine.
 
-You have been given access to a RHEL8 virtual machine and your access to the machine will be mediated by link:https://github.com/cdr/code-server[code-server]: a browser based community version of Visual Studio Code.
+image::login.gif[login!]
+
+Your access to the machine will be mediated by link:https://github.com/cdr/code-server[code-server,window=_blank]: a browser based community version of Visual Studio Code.
 
 Let's take a moment to familiarize yourself with the environment
 
@@ -14,18 +20,17 @@ Let's take a moment to familiarize yourself with the environment
 
 Once you have entered your password, you will be greeted with the code-server UI with your RHEL user's (`{USER}`) home directory.  
 
-.Code-server UI
-image::code-server-overview.png[]
+.link:_images/codeserver2.gif[Code-server UI,window=_blank]
+image::codeserver2.gif[]
+
 
 [#open_code_server_terminal]
 == 3. Open Terminal
 
 Among other things, your code-server gives you command line access to your RHEL instance.  You can open the terminal by using kbd:[CTRL+ J] (or kbd:[CMD+J] on a Mac)
 
-The first time you open it, you will find your terminal at the bottom (right) of the screen, as shown below
-
-.Initial Terminal
-image::code-server-terminal.png[]
+The first time you open it, you will find your terminal at the bottom (right) of the screen. At some points during the exercises you will need
+two screens and from the dropdown menu you can elect to have split terminals as shown above.
 
 [#open_code_server_terminal_commands]
 == 4. Issuing Terminal Commands
@@ -67,21 +72,22 @@ cat /etc/os-release
 [source,bash,subs="+macros,+attributes"]
 ----
 NAME="Red Hat Enterprise Linux"
-VERSION="8.3 (Ootpa)"
+VERSION="8.4 (Ootpa)"
 ID="rhel"
 ID_LIKE="fedora"
-VERSION_ID="8.3"
+VERSION_ID="8.4"
 PLATFORM_ID="platform:el8"
-PRETTY_NAME="Red Hat Enterprise Linux 8.3 (Ootpa)"
+PRETTY_NAME="Red Hat Enterprise Linux 8.4 (Ootpa)"
 ANSI_COLOR="0;31"
-CPE_NAME="cpe:/o:redhat:enterprise_linux:8.3:GA"
+CPE_NAME="cpe:/o:redhat:enterprise_linux:8.4:GA"
 HOME_URL="https://www.redhat.com/"
+DOCUMENTATION_URL="https://access.redhat.com/documentation/red_hat_enterprise_linux/8/"
 BUG_REPORT_URL="https://bugzilla.redhat.com/"
 
 REDHAT_BUGZILLA_PRODUCT="Red Hat Enterprise Linux 8"
-REDHAT_BUGZILLA_PRODUCT_VERSION=8.3
+REDHAT_BUGZILLA_PRODUCT_VERSION=8.4
 REDHAT_SUPPORT_PRODUCT="Red Hat Enterprise Linux"
-REDHAT_SUPPORT_PRODUCT_VERSION="8.3"
+REDHAT_SUPPORT_PRODUCT_VERSION="8.4"
 ----
 
 [#local_browser]
