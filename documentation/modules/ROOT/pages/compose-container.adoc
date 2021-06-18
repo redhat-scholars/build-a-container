@@ -536,13 +536,10 @@ With the 3.0 release, Podman can now work nicely with Docker Compose to orchestr
 
 The following links to various articles provide further reading and reference to the Move to Kube project which helps to move docker compose files as well.
 
-<.> Podman Managing pods and containers in a local container runtime: https://www.redhat.com/sysadmin/podman-play-kube
-
-<.> Articles by a Principal Engineer leading the Container Runtimes team: https://www.redhat.com/sysadmin/users/brent-baude
-
-<.> Move to Kube & Docker Compose: https://move2kube.konveyor.io/tutorials/docker-compose/
-
-<.> For an in depth discussion, this video provides a good discussion to understand the hows and whys of supporting docker-compose with Podman. The Level Up Hour (E29): Docker Compose with Podman v3  - https://www.youtube.com/watch?v=hyOXwzvLXOM
+* Podman Managing pods and containers in a local container runtime: https://www.redhat.com/sysadmin/podman-play-kube
+* Articles by a Principal Engineer leading the Container Runtimes team: https://www.redhat.com/sysadmin/users/brent-baude
+* Move to Kube & Docker Compose: https://move2kube.konveyor.io/tutorials/docker-compose/
+* For an in depth discussion, this video provides a good discussion to understand the hows and whys of supporting docker-compose with Podman. The Level Up Hour (E29): Docker Compose with Podman v3  - https://www.youtube.com/watch?v=hyOXwzvLXOM
 
 
 [TIP]
