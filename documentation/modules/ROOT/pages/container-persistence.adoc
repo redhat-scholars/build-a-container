@@ -2,6 +2,9 @@ include::_attributes.adoc[]
 
 = Containers and Persistence
 
+_10 MINUTE EXERCISE_
+
+
 Containers are meant to be run as "immutable" instances that exactly match the state of the image that they were started from (as we saw in the last section).  However, there many scenarios where adjusting this otherwise immutable state would be useful such as:
 
 * Having the containers running the same image run differently in different environments (e.g. Preproduction vs Production environments)

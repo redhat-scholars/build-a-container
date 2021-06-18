@@ -6,16 +6,22 @@ include::_attributes.adoc[]
 
 = Running your First Container with Podman
 
+_20 MINUTE EXERCISE_
+
+
 In this exercise we're going to use Podman to download and run a container that will run a local Apache webserver on your VM.
 
 image::podman.svg[Podman!,width=320,height=86]
 
 [#run_container]
-== Add a website by running a container
+== 1. Add a website by running a container
 
 . First let's prove that Apache is not currently running on your local VM.
-
++
+{zwsp} +
 . In your xref:introduction.adoc#local_browser[Local Browser,window=_blank], navigate to `localhost:8081`, which instructs the browser to connect to port 8081 of your local instance
++
+{zwsp} +
 . You should find that there is nothing there but a blank screen
 +
 image::empty-browser-preview.png[]
@@ -30,6 +36,7 @@ Now we're going to use podman to quickly create a running website on this instan
 sudo -i
 ----
 +
+{zwsp} +
 . You should now see the terminal prompt change to `#` indicating that you are now `root`
 +
 [.console-output]
@@ -40,9 +47,10 @@ sudo -i
 +
 [WARNING]
 ====
-Some of you with a security background are [#security_vuln]#probably fairly unconfortable with this#.  Don't worry: there's a method to our madness!  It's worth pointing out that any socket-based container runtimes (such as `docker`) require some sort of root access to operate
+Some of you with a security background are [#security_vuln]#probably fairly unconfortable with this#.  Don't worry: there's a method to our madness!  It's worthLook inside a running container pointing out that any socket-based container runtimes (such as `docker`) require some sort of root access to operate
 ====
 +
+{zwsp} +
 . From inside the terminal, run the following command (see the footnotes for the breakdown of the different elements of the command):
 +
 [.console-input]
@@ -62,6 +70,7 @@ podman run \#<.>
 <.> Whilst we can always refer to started containers by their system assigned Id, the `--name` option gives us the ability to refer to the container by a human-friendly name instead
 <.> This is the name of the image (including the image registry where the container is normally located, in this case link:quay.io[quay.io]) that we want to run
 +
+{zwsp} +
 . After the image is "pulled" you should see something like the following in the terminal which represents the id of the running container
 +
 [.console-output]
@@ -77,6 +86,7 @@ Storing signatures
 ----
 <.> This is the id of the running container.  
 +
+{zwsp} +
 . Compare the id there to the output of the following `podman` command:
 +
 [.console-input]
@@ -85,6 +95,7 @@ Storing signatures
 podman ps
 ----
 +
+{zwsp} +
 . You should see in the output something like the following that shows you that the container is running
 +
 .NOTE: notice that the beginning of the CONTAINER ID matches the id the was output from the `podman run` command
@@ -99,6 +110,7 @@ include::partial$podman_ps.adoc[]
 .Test Page
 image::apache-test-page.png[]
 +
+{zwsp} +
 . Our website has more than a test page, it also has a visitor form (like straight out of the 90s!).  Let's take a look by navigating to this address: 
 +
 [.console-input]
@@ -107,22 +119,27 @@ image::apache-test-page.png[]
 http://localhost:8081/hello.html
 ----
 +
+{zwsp} +
 . You should see something like this: 
 +
 image::apache-guestbook-page.png[]
 +
+{zwsp} +
 . Now enter a name into the `Name:` field to be logged to the guestbook and press the `Log to Guestbook` button.  You should now be presented a screen like this: 
 +
 image::apache-guestbook-submit.png[]
 +
+{zwsp} +
 . Click the `here` link highlighted above to go back and enter another name
 
 Next let's take a look inside our container
 
 [#enter_container]
-== Look inside a running container
+== 2. Look inside a running container
 
 Whilst the container is running, we are able to "look inside" the container.  The experience is much the same to `telnet` ing or `ssh` ing into a remote instance or virtual machine.
+
+{zwsp}
 
 . First though, let's record what's going on with the container's host, namely the virtual machine that is running your code-server instance.  We'll use this to compare to what we find inside the container.  Run the following command in the terminal to gather some intel about the host (and save it to a place where code-server can display it!)
 +
@@ -132,11 +149,13 @@ Whilst the container is running, we are able to "look inside" the container.  Th
 include::partial$gather_info.adoc[]
 ----
 +
+{zwsp} +
 . Next, let's use the VS Code editor to see what our command found out.  Use kbd:[CTRL+o] (or kbd:[CMD+o] on a Mac) to show the "Open File" dialog.  Type the name of the file we wrote out to in the dialog (that is `{temp-filepath}`)
 +
 .Open File Or Folder dialog
 image::file-or-folder-dialog.png[]
 +
+{zwsp} +
 . This should open the file in the left editor pane.  The output should look something like the following
 +
 [.console-output]
@@ -145,6 +164,9 @@ image::file-or-folder-dialog.png[]
 include::example$gather_info_example_output.txt[]
 ----
 +
+{zwsp} +
+
+
 . Now let's get into the container so that we can run the same command.  But first `podman` needs to know which container we mean.  There are two different ways to reference the running container, [#find_container_id]#by **CONTAINER ID**# or by **NAME**.  Pick the tab of your choice to show how we can enter the container using either approach:
 +
 [tabs]
@@ -209,6 +231,7 @@ include::partial$podman_exec_callouts.adoc[]
 --
 ====
 +
+{zwsp} +
 . If you have been able to `exec` into the container successfully, you should see the following in the terminal
 +
 [.console-output]
@@ -218,6 +241,7 @@ include::partial$podman_exec_callouts.adoc[]
 ----
 <.> Notice that the `CONTAINER_ID` appears after the `@` in the bash shell that we have started inside the container
 +
+{zwsp} +
 . Now let's run our command from before _but this time we're running it from "within" the container_
 +
 [.console-input]
@@ -226,7 +250,10 @@ include::partial$podman_exec_callouts.adoc[]
 include::partial$gather_info.adoc[]
 ----
 +
+{zwsp} +
 . Notice that the editor window didn't change even though we wrote the info to the same location.  The difference is that the location is *local to the container*.  That's because the container has a filesystem that appears separate to the host
++
+{zwsp} +
 . To make sure the file was created, run the following command to show output of the file that we just created in the container:
 +
 [.console-input]
@@ -235,6 +262,7 @@ include::partial$gather_info.adoc[]
 cat {temp-filepath}
 ----
 +
+{zwsp} +
 . To make it easier to read, let's copy the hostinfo to the `/var/www/html` directoryfootnote:[The `/var/www/html` directory is the web root of the apache server that is running inside this container] so that we can view it through the container's webserver
 +
 [.console-input]
@@ -243,6 +271,7 @@ cat {temp-filepath}
 cp {temp-filepath} /var/www/html/{temp-file}
 ----
 +
+{zwsp} +
 . Now navigate the browser to the file we just copied and you should see something like the image below
 +
 [.console-input]
@@ -255,7 +284,7 @@ http://localhost:8081/{temp-file}
 image::browser-display.png[]
 
 [#copy_data]
-== Copying data out of a container
+== 3. Copying data out of a container
 
 Let's see just how different the two files are by doing a `diff` on them.  And for this we'd like to use the builtin Visual Studio Code support for this.  To do this we can draw on another methapor with real hosts or virtual instances, the notion of `ftp` ing or `scp` ing files.
 
@@ -267,6 +296,7 @@ Let's see just how different the two files are by doing a `diff` on them.  And f
 exit
 ----
 +
+{zwsp} +
 . Next, run this command to copy the file out of the container and into the tmp drive of the host instance (Those that have used `scp` will probably find the format familiar)
 +
 [.console-input]
@@ -279,29 +309,34 @@ podman cp \
 <.> The `{apache-server-container-name}:<path>` indicates that the `path` is inside the container (i.e. container filesystem) that we named with the `--name` option at the time we issued the `podman run` command
 <.> This path, undecorated by a container name or id, indicates that we are referencing a path on the host (i.e. local filesystem)
 +
+{zwsp} +
 . Now click anywhere within the left editor where the `{temp-file}` should still be open to give that editor focus.  Hit kbd:[SHIFT+CTRL+p] (or kbd:[CMD+CTRL+p] on a Mac) to open the *Command Palette* and start typing `compare` so that you can select the command `File: Compare Active File With...`
 +
 image::compare-command.png[]
 +
+{zwsp} +
 . Then type `{container-info-filepath}` in the next dialog that pops up until the file is selectable.  Then click on it.
 +
 image::container-info-select.png[]
 +
+{zwsp} +
 . You should then see a screen like the following.  Expand the size of the editor as necessary to get a good sense of the differences
 +
 .Host vs. Container output of above commands
 image::info-diff.png[]
 +
+{zwsp} +
 . Finally, let's look at our guestbook visitor log in VSCode by copying the visitor guestbook to our local VM
 +
 include::partial$copy_visitor_info.adoc[]
 +
+{zwsp} +
 . You should now see the file appear in your *Explorer*.  Click on it to view the contents.  It should match the visitors that you entered previously
 +
 image::visitor-info.png[Visitor Info]
 
 [#stop_container]
-== Stopping the Container (and Apache server)
+== 4. Stopping the Container (and Apache server)
 
 Before we continue, let's stop the container that is running in the background (thanks to the `-d` flag)
 
@@ -346,6 +381,7 @@ podman stop $(podman ps -a | grep Up | cut -d" " -f1)
 --
 ====
 +
+{zwsp} +
 . If you were successful in stopping the container, you should see the following output: 
 +
 [.console-output]
@@ -355,7 +391,10 @@ podman stop $(podman ps -a | grep Up | cut -d" " -f1)
 ----
 <.> This will match the `CONTAINER ID` of any running container that was stopped
 +
+{zwsp} +
 . Confirm that the container is stopped by hitting refresh in the Browser Preview.  You should again see a blank page as there is not longer anything listening on port 8081
++
+{zwsp} +
 . We can also see that the container is no longer listed when we run `podman ps`
 +
 [.console-input]
@@ -371,7 +410,7 @@ CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES
 ----
 
 [#committing_containers]
-== Committing Containers to Images
+== 5. Committing Containers to Images
 
 Even though our container is stopped, it's still around!
 
@@ -383,6 +422,8 @@ For those from an operations background, it's a little like creating an image sn
 
 With `podman` the command is `commit` footnote:[For more info on committing container state, see the link:http://docs.podman.io/en/latest/markdown/podman-commit.1.html[podman documentation]
 ].  Let's issue the command now and we'll see some of the value in it <<rerunning_container,a little later on in the lab>>.
+
+{zwsp}
 
 . First let's find the stopped container using this variant of the `podman ps` command: 
 +
@@ -399,7 +440,10 @@ podman ps -a #<.>
 4e9c38ac10eb  {apache-server-image-insecure}  /usr/sbin/httpd -...  10 minutes ago  Exited (0) 2 minutes ago  0.0.0.0:8081->80/tcp  {apache-server-container-name}
 ----
 +
+{zwsp} +
 . As we can see from the output, the container has been exited and is just waiting there in the state it was in when it was stopped (2 minutes ago according to the output above)
++
+{zwsp} +
 . Now let's create an image from that container by _committing_ it:
 +
 [.console-input]
@@ -412,10 +456,12 @@ podman commit \
 <.> This is the name of the container that we have stopped.  This could also be done by `CONTAINER ID`
 <.> This is the name that we want to give the container **image**.  We can then treat this like any other container image
 +
+{zwsp} +
 . This should yield output similar to the following:
 +
 include::partial$podman_commit_output.adoc[]
 +
+{zwsp} +
 . And now let's see what images are available by issuing the following command to show all the images we podman knows about locally:
 +
 [.console-input]
@@ -424,15 +470,18 @@ include::partial$podman_commit_output.adoc[]
 podman images
 ----
 +
+{zwsp} +
 . The command should yield output that looks something like the following
 +
 include::partial$podman_images_output.adoc[]
 
 
 [#remove_containers]
-== Removing Containers
+== 6. Removing Containers
 
 Having looked at the images on our system, let's turn our attention back to the containers that are running (or more accurately in our case, stopped)
+
+{zwsp}
 
 . To really tidy things up we need to tell `podman` to _remove_ the container.  Issue this command: 
 +
@@ -461,6 +510,7 @@ podman rm pass:[${CONTAINER_ID}]
 
 ====
 +
+{zwsp} +
 . And now finally we can prove that the container is gone:
 +
 [.console-input]
@@ -476,9 +526,11 @@ CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES
 ----
 
 [#rerunning_container]
-== "Re-running" Containers
+== 7. "Re-running" Containers
 
 Let's say we want to take a look at that {temp-file} on the container again.  Let's start up our container to try to do that again
+
+{zwsp}
 
 . Execute the following command (which should be familar from earlier in this section) 
 +
@@ -493,6 +545,7 @@ podman run \
     {apache-server-image-insecure} 
 ----
 +
+{zwsp} +
 . Now open the browser and navigate to the following location
 +
 [.console-input]
@@ -501,19 +554,26 @@ podman run \
 http://localhost:8081/{temp-file}
 ----
 +
+{zwsp} +
 . But alas our file is not found and we are met with a 404 Not Found page...
 +
 image::not-found.png[]
 +
+{zwsp} +
 . How about our `visitor_info.txt` file?  Let's copy that out of the container again
 +
 include::partial$copy_visitor_info.adoc[]
 +
+{zwsp} +
 . But if you open the `visitor_info.txt` after copying it out, you'll notice that all the visitor names are gone!
 
-=== "Re-running" a stopped container by image
+{zwsp}
+
+=== 8. "Re-running" a stopped container by image
 
 Before we through our hands up in disgust, remember that we had the foresight of _committing_ our previously running web server container to a new image called `{apache-committed-container-image}`.  This image should container all the changes we made on top of the `{apache-server-container-name}` that we just ran and allow us access to the info that does not exist in the `{apache-server-image-insecure}`.
+
+{zwsp}
 
 . First let's stop and remove the current `{apache-server-image-insecure}` image based web server
 +
@@ -525,6 +585,7 @@ podman rm -a
 ----
 <.> In both cases the `-a` indicates that we want to `stop` and `rm` (respectively) all containers
 +
+{zwsp} +
 . Next, let's re-run our webserver, but this time from <<Committing Containers to Images,the image we created when we committed it>> from our first instance of `{apache-server-container-name}`:
 +
 [.console-input]
@@ -539,6 +600,7 @@ podman run \
 ----
 <.> We append `localhost` onto any image name that we didn't explicitly provide a registry (e.g. link:quay.io[`quay.io`]) for
 +
+{zwsp} +
 . With our committed container running, now attempt to open the browser and navigate to tempfile again
 +
 [.console-input]
@@ -547,15 +609,18 @@ podman run \
 http://localhost:8081/{temp-file}
 ----
 +
+{zwsp} +
 . This time you should see the file, just as it looked before
 +
 .Container's browser once again displays our {temp-file}
 image::browser-display.png[]
 +
+{zwsp} +
 . And let's restore our `{guestbook-record-file}` by pulling it out of the container running based on the committed image by issuing the same command as before
 +
 include::partial$copy_visitor_info.adoc[]
 +
+{zwsp} +
 . Now our visitor info should be restored to the way it was when we last stopped the container (as verified by opening it in VSCode)
 +
 .`{guestbook-record-file}` restored
