@@ -737,36 +737,3 @@ image::security-bulletin.png[]
 Now that we know what we need to do to our container, we're left with the question of HOW we're meant to update the container given that containers are supposed to be immutable.  When dealing with containers, we don't need to change the running container, but rather the _image_ that the container runs as.  In our case we're going to want to update our `{apache-server-image-insecure}` image.
 
 This is where `buildah` comes in, which we'll explore next.
-
-=== Compliance Scanning with `oscap-podman`
-
-[WARNING]
-====
-This section is unfinished and likely to be cut from the final workshop
-====
-
-. Install compliance stuff (FIXME: move this to ansible)
-+
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-yum -y install scap-security-guide
-----
-+
-. Run the xccdf scan
-+
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-oscap-podman e1fc6588d2cc xccdf eval --report ~{USER}/compliance-report.html --profile pci-dss /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
-----
-+
-. View vuln report in browser
-+
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-file:///home/student1/compliance-report.html
-----
-+
-. Take a look at prevent login to accounts with empty passwords
