@@ -36,14 +36,6 @@ include::partial$podman_ps.adoc[]
 We're going to use a tool called link:[metasploit] (which has already been installed on your VM instance) to exploit the vulnerability (with frightening ease).  
 
 . We are going to run metasploit as a non-root user in another shell.  Split your terminal to open a new, non-root, shell
-. Next we need to gather some information about the instance that we will (soon) feed to `metasploit`.  Run the following command to store the ip address of your instance
-+
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-LHOST=$(dig +short myip.opendns.com @resolver1.opendns.com)
-----
-+
 . Next, start up metasploit in your terminal by running the following command:
 +
 [.console-input]
@@ -63,6 +55,15 @@ set targeturi /cgi-bin/log-visitor.sh" #<.>
 <.> The port the container is listening on (in our case the port that is forwarded to the container via the `-p` option to `podman run`)
 <.> The public ip address of the VM instance (as reported by `dig`).  This is necessary for how metasploit works
 <.> The target URL of a cgi-bin script.  Those that are astute might recognize this as the cgi-bin endpoint of the guestbook page (`hello.html`)
++
+[NOTE]
+====
+If asked if you want to setup a new database, answer no
+
+----
+Would you like to use and setup a new database (recommended)?
+----
+====
 +
 . When it's done initializing, you should see output something like this (ASCII art, "tip", and LHOST will vary)
 +

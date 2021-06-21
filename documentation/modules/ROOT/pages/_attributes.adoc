@@ -18,3 +18,6 @@
 :guestbook-record-file: visitor_info.txt
 :ocp_secure_image_name: my-secure-web-server-image
 :ocp_secure_imagestream_name: {ocp_secure_image_name}
+:ocp_insecure_pod_name: my-web-server-insecure
+:ocp_insecure_imagestream_name: my-secure-web-server-image
+:ocp_insecure_image_name: {ocp_insecure_imagestream_name}:insecure
