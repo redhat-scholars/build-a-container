@@ -1,6 +1,7 @@
 :experimental:
 :source-highlighter: highlightjs
 :USER: %USER%
+:CLUSTER_SUBDOMAIN: %CLUSTER_SUBDOMAIN%
 :container-id-long: 4e9c38ac10eb38e9b8364e56aa52eb77ae09062160e61b3f20b60a5af829ba2c
 :apache-server-image-insecure-image: quay.io/mhildenb/container-workshop-httpd
 :apache-server-image-insecure-tag: 0.0.5
@@ -15,3 +16,5 @@
 :commit-container-image-id-short: f154f395c55e
 :container-workshop-exercise-path: /home/{USER}/container-workshop
 :guestbook-record-file: visitor_info.txt
+:ocp_secure_image_name: my-secure-web-server-image
+:ocp_secure_imagestream_name: {ocp_secure_image_name}
