@@ -9,7 +9,7 @@ _5 MINUTE EXERCISE_
 == 1. Introduction to Code Server
 You will have received a login page like below to register for the workshop. Once registered you will receive username and password where you have been given access to a RHEL 8 virtual machine.
 
-image::login.gif[login!]
+image::login.png[login!]
 
 Your access to the machine will be mediated by link:https://github.com/cdr/code-server[code-server,window=_blank]: a browser based community version of Visual Studio Code.
 
