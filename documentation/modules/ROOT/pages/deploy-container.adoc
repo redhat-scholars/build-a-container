@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 == Login to OpenShift
 
-First, let's log into OpenShift your OpenShift cluster.  Choose the tab that is most appropriate to your situation.  If you are unsure, ask your lab techs.
+First, let's log into your OpenShift cluster.  Choose the tab that is most appropriate to your situation.  If you are unsure, ask your lab techs.
 
 [tabs]
 ====
@@ -27,7 +27,24 @@ image::openshift-login-challenge.png[]
 OpenShift Developer Sandox::
 +
 --
-Coming Soon!
+
+.PREREQUISITES
+****
+This section assumes you:
+
+* Already have a Red Hat account
+* Requested and have had an OpenShift Developer Sandbox approved prior to attempting this section
+****
+
+. Navigate to the link:https://red.ht/dev-sandbox[Red Hat Developer OpenShift Developer Sandbox page^]
+. Click on "start your sandbox" and enter your Red Hat account login details
+. From the OpenShift sandbox page, log into your sandbox by clicking on the "DevSandbox" button on the login challenge page
++
+image::dev-sandbox-login-challenge.png[]
++
+. Once you login, you should see your `-dev` project in the Developer Perspective
++
+image::dev-sandbox-dev-perspective.png[]
 --
 ====
 
@@ -37,7 +54,7 @@ image::ocp-developer-perspective.png[]
 
 === Console Login
 
-For this section we're going to want to issue commands to OpenShift from the commandline.  OpenShift has a cli called `oc` footnote:[`oc` is built on top of `kubectl`, the generic Kubernetes CLI.  Any command you can issue with `kubectl` you can issue with `oc`, but `oc` builds upon `kubectl` with OpenShift specific commands, such as `oc login`] which we will leverage.
+For this section we're going to want to issue commands to OpenShift from the commandline.  OpenShift has a CLI called `oc` footnote:[`oc` is built on top of `kubectl`, the generic Kubernetes CLI.  Any command you can issue with `kubectl` you can issue with `oc`, but `oc` builds upon `kubectl` with OpenShift specific commands, such as `oc login`] which we will leverage.
 
 Here again, choose the proper tab for your setup
 
@@ -55,7 +72,7 @@ oc login https://api.{CLUSTER_SUBDOMAIN}:6443 \#<.>
     --username {USER} \
     --password 'openshift'
 ----
-<.> This is the URL of the REST api for OpenShift with which the CLI interacts
+<.> This is the URL of the REST API for OpenShift with which the CLI interacts
 +
 .Insecure connections
 ****
@@ -75,7 +92,20 @@ You can safely answer `y` (yes) at the prompt
 OpenShift Developer Sandbox::
 +
 --
-Coming soon
+. From your OpenShift Console UI, click the dropdown in the upper right (with your account name) and select `Copy login command`
++
+image::copy-login-command.png[]
++
+. Next, when presented the login challenge select `DevSandbox`
++
+image::dev-sandbox-login-challenge.png[]
++
+. Click the "Display Token" link
+. Copy the string as indicated in the image
++
+image::copy-login-token.png[]
++
+. Paste the command into a Code Server terminal
 --
 ====
 
@@ -87,7 +117,7 @@ If you have logged on successfully, running the following command:
 oc whoami
 ----
 
-Should yield the following output
+Should yield your OpenShift username (below represents username shown if using Provisioned Cluster)
 
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
@@ -130,7 +160,7 @@ oc create imagestream \#<.>
 OpenShift Console::
 +
 --
-_Coming Soon_
+_COMING SOON_
 --
 ====
 
@@ -140,7 +170,7 @@ _Coming Soon_
 [source,bash,subs="+macros,+attributes"]
 ----
 OCP_REGISTRY_URL=$(oc get imagestream {ocp_secure_imagestream_name} \
-    -n student1 \
+    -n {USER} \
     -o jsonpath='{.status.publicDockerImageRepository}') #<.>
 ----
 <.> `-o` is used to specify the output type.  In this case we specify `jsonpath` which means give the output as JSON and then act as if it were piped to `jq -r` meaning we specify the field in the JSON we are looking for
@@ -179,7 +209,7 @@ podman tag {apache-server-containerfile-image} \
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-podman push ${OCP_REGISTRY_URL}:latest
+podman push pass:[${OCP_REGISTRY_URL}]:latest
 ----
 +
 . You should see output similar to the following
@@ -222,7 +252,7 @@ CLUSTER_LOCAL_REGISTRY_URL=$(oc get imagestream \
 oc run \
     my-web-server \#<.>
     -n {OCP_PROJECT} \
-    --image ${CLUSTER_LOCAL_REGISTRY_URL}:latest
+    --image pass:[${CLUSTER_LOCAL_REGISTRY_URL}]:latest
 ----
 <.> The name that will be given to the pod
 +
@@ -237,7 +267,31 @@ pod/my-web-server created
 .Our image running in OpenShift
 image::ocp-running-secure-image.png[]
 
-_COMING SOON_: Expose port and route
+=== Accessing our website
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+oc expose \#<.>
+    pod/my-web-server #<.>
+----
+<.> `expose` is an `oc` CLI specific command
+<.> Many resources can be exposed.  Exposing a pod creates a service that points to the pod based on the svcs the pod exports
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+oc expose \
+    svc/my-web-server
+----
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+echo "http://$(oc get route my-web-server -o jsonpath='{.spec.host}')/hello.html"
+----
+
+image::sandbox-website.png[]
 
 == OpenShift security
 
@@ -288,7 +342,7 @@ Storing signatures
 oc run \
     my-web-server-insecure \#<.>
     -n {OCP_PROJECT} \
-    --image ${CLUSTER_LOCAL_REGISTRY_URL}:insecure #<.>
+    --image pass:[${CLUSTER_LOCAL_REGISTRY_URL}]:insecure #<.>
 ----
 <.> Different pod name to distinguish from previous
 <.> Same exact image registry, just different tag
@@ -302,16 +356,16 @@ oc get events -w
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
 ----
-0s          Normal    Scheduled        pod/my-web-server-insecure   Successfully assigned student1/my-web-server-insecure to ip-10-0-157-41.ap-southeast-1.compute.internal
-0s          Normal    AddedInterface   pod/my-web-server-insecure   Add eth0 [10.131.0.238/23]
-0s          Normal    Pulling          pod/my-web-server-insecure   Pulling image "image-registry.openshift-image-registry.svc:5000/student1/my-secure-web-server-image:insecure"
-0s          Normal    Pulled           pod/my-web-server-insecure   Successfully pulled image "image-registry.openshift-image-registry.svc:5000/student1/my-secure-web-server-image:insecure" in 6.549828045s
-0s          Normal    Created          pod/my-web-server-insecure   Created container my-web-server-insecure
-0s          Normal    Started          pod/my-web-server-insecure   Started container my-web-server-insecure
-0s          Normal    Pulled           pod/my-web-server-insecure   Container image "image-registry.openshift-image-registry.svc:5000/student1/my-secure-web-server-image:insecure" already present on machine
-0s          Normal    Created          pod/my-web-server-insecure   Created container my-web-server-insecure
-0s          Normal    Started          pod/my-web-server-insecure   Started container my-web-server-insecure
-0s          Warning   BackOff          pod/my-web-server-insecure   Back-off restarting failed container
-0s          Warning   BackOff          pod/my-web-server-insecure   Back-off restarting failed container
+0s          Normal    Scheduled        pod/{ocp_insecure_pod_name}   Successfully assigned {USER}/{ocp_insecure_pod_name} to ip-10-0-157-41.ap-southeast-1.compute.internal
+0s          Normal    AddedInterface   pod/{ocp_insecure_pod_name}   Add eth0 [10.131.0.238/23]
+0s          Normal    Pulling          pod/{ocp_insecure_pod_name}   Pulling image "image-registry.openshift-image-registry.svc:5000/{USER}/{ocp_insecure_image_name}"
+0s          Normal    Pulled           pod/{ocp_insecure_pod_name}   Successfully pulled image "image-registry.openshift-image-registry.svc:5000/{USER}/{ocp_insecure_image_name}" in 6.549828045s
+0s          Normal    Created          pod/{ocp_insecure_pod_name}   Created container {ocp_insecure_pod_name}
+0s          Normal    Started          pod/{ocp_insecure_pod_name}   Started container {ocp_insecure_pod_name}
+0s          Normal    Pulled           pod/{ocp_insecure_pod_name}   Container image "image-registry.openshift-image-registry.svc:5000/{USER}/{ocp_insecure_image_name}" already present on machine
+0s          Normal    Created          pod/{ocp_insecure_pod_name}   Created container {ocp_insecure_pod_name}
+0s          Normal    Started          pod/{ocp_insecure_pod_name}   Started container {ocp_insecure_pod_name}
+0s          Warning   BackOff          pod/{ocp_insecure_pod_name}   Back-off restarting failed container
+0s          Warning   BackOff          pod/{ocp_insecure_pod_name}   Back-off restarting failed container
 
 ----
