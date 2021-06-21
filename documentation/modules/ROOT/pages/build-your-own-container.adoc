@@ -796,7 +796,7 @@ include::partial$buildah_bud_no_annotations.adoc[]
 +
 include::partial$buildah_bud_output_cmd.adoc[]
 +
-. Run the container again to test it (notice the differences in the command)
+. Run [#finished_container]#the container# again to test it (notice the differences in the command)
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
