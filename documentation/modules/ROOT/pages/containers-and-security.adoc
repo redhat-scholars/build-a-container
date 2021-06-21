@@ -445,13 +445,11 @@ fdisk -l
 
 === Better use of SELinux
 
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-shell
-/usr/bin/script -qc /bin/bash /dev/null
+_UNFINISHED_
 
-----
+When our container is running on Red Hat Enterprise Linux, we can use Security Enhanced Linux (or SELinux) to further control the container's access to files on our volume
+
+
 
 [#non_root_containers]
 === Non-root containers
