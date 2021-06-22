@@ -151,7 +151,7 @@
     <a class="nav-link" href="compose-container.html">Multi containers with Podman</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="deploy-container.html">OpenShift Sandbox</a>
+    <a class="nav-link" href="deploy-container.html">Containers and OpenShift</a>
   </li>
 </ul>
   </li>
@@ -197,6 +197,9 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
+<p><em>20 MINUTE EXERCISE</em></p>
+</div>
+<div class="paragraph">
 <p>In this exercise we&#8217;re going to use Podman to download and run a container that will run a local Apache webserver on your VM.</p>
 </div>
 <div class="imageblock">
@@ -207,15 +210,21 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="run_container"><a class="anchor" href="#run_container"></a>Add a website by running a container</h2>
+<h2 id="run_container"><a class="anchor" href="#run_container"></a>1. Add a website by running a container</h2>
 <div class="sectionbody">
 <div class="olist arabic">
 <ol class="arabic">
 <li>
 <p>First let&#8217;s prove that Apache is not currently running on your local VM.</p>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>In your <a href="introduction.html#local_browser" class="page" target="_blank" rel="noopener">Local Browser</a>, navigate to <code>localhost:8081</code>, which instructs the browser to connect to port 8081 of your local instance</p>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>You should find that there is nothing there but a blank screen</p>
@@ -239,6 +248,9 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo -i</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>You should now see the terminal prompt change to <code>#</code> indicating that you are now <code>root</code></p>
@@ -255,11 +267,14 @@
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Some of you with a security background are <span id="security_vuln">probably fairly unconfortable with this</span>.  Don&#8217;t worry: there&#8217;s a method to our madness!  It&#8217;s worth pointing out that any socket-based container runtimes (such as <code>docker</code>) require some sort of root access to operate</p>
+<p>Some of you with a security background are <span id="security_vuln">probably fairly unconfortable with this</span>.  Don&#8217;t worry: there&#8217;s a method to our madness!  It&#8217;s worthLook inside a running container pointing out that any socket-based container runtimes (such as <code>docker</code>) require some sort of root access to operate</p>
 </div>
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -302,6 +317,9 @@
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>After the image is "pulled" you should see something like the following in the terminal which represents the id of the running container</p>
@@ -324,6 +342,9 @@ Storing signatures
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>Compare the id there to the output of the following <code>podman</code> command:</p>
@@ -331,6 +352,9 @@ Storing signatures
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman ps</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -351,6 +375,9 @@ Storing signatures
 </div>
 <div class="title">Figure 1. Test Page</div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>Our website has more than a test page, it also has a visitor form (like straight out of the 90s!).  Let&#8217;s take a look by navigating to this address:</p>
@@ -358,6 +385,9 @@ Storing signatures
 <div class="content">
 <pre class="highlightjs highlight"><code><a href="http://localhost:8081/hello.html" class="bare">http://localhost:8081/hello.html</a></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -367,6 +397,9 @@ Storing signatures
 <img src="_images/apache-guestbook-page.png" alt="apache guestbook page">
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>Now enter a name into the <code>Name:</code> field to be logged to the guestbook and press the <code>Log to Guestbook</code> button.  You should now be presented a screen like this:</p>
@@ -374,6 +407,9 @@ Storing signatures
 <div class="content">
 <img src="_images/apache-guestbook-submit.png" alt="apache guestbook submit">
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -387,10 +423,13 @@ Storing signatures
 </div>
 </div>
 <div class="sect1">
-<h2 id="enter_container"><a class="anchor" href="#enter_container"></a>Look inside a running container</h2>
+<h2 id="enter_container"><a class="anchor" href="#enter_container"></a>2. Look inside a running container</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Whilst the container is running, we are able to "look inside" the container.  The experience is much the same to <code>telnet</code> ing or <code>ssh</code> ing into a remote instance or virtual machine.</p>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -414,6 +453,9 @@ $(ps -euf)
 EOF</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>Next, let&#8217;s use the VS Code editor to see what our command found out.  Use <span class="keyseq"><kbd>CTRL</kbd>+<kbd>o</kbd></span> (or <span class="keyseq"><kbd>CMD</kbd>+<kbd>o</kbd></span> on a Mac) to show the "Open File" dialog.  Type the name of the file we wrote out to in the dialog (that is <code>/tmp/hostinfo.txt</code>)</p>
@@ -422,6 +464,9 @@ EOF</code></pre>
 <img src="_images/file-or-folder-dialog.png" alt="file or folder dialog">
 </div>
 <div class="title">Figure 2. Open File Or Folder dialog</div>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -462,6 +507,9 @@ root       77311  0.0  0.1  61732  5112 pts/2    R    13:16   0:00          \_ p
 root        1096  0.0  0.0  16200  2120 ttyS0    Ss+  May07   0:00 /sbin/agetty -o -p -- \u --keep-baud 115200,38400,9600 ttyS0 vt220 LANG=en_US.UTF-8 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin INVOCATION_ID=a5a6851855f042deb0be38d6f784407d TERM=vt220 JOURNAL_STREAM=9:31142
 root        1095  0.0  0.0  13632  1760 tty1     Ss+  May07   0:00 /sbin/agetty -o -p -- \u --noclear tty1 linux PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin INVOCATION_ID=6d76fa0644494f1db0752e0dd836906a TERM=linux JOURNAL_STREAM=9:31141</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -574,6 +622,9 @@ root        1095  0.0  0.0  13632  1760 tty1     Ss+  May07   0:00 /sbin/agetty 
 </div>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>If you have been able to <code>exec</code> into the container successfully, you should see the following in the terminal</p>
@@ -589,6 +640,9 @@ root        1095  0.0  0.0  13632  1760 tty1     Ss+  May07   0:00 /sbin/agetty 
 <td>Notice that the <code>CONTAINER_ID</code> appears after the <code>@</code> in the bash shell that we have started inside the container</td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -611,9 +665,15 @@ $(ps -euf)
 EOF</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>Notice that the editor window didn&#8217;t change even though we wrote the info to the same location.  The difference is that the location is <strong>local to the container</strong>.  That&#8217;s because the container has a filesystem that appears separate to the host</p>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>To make sure the file was created, run the following command to show output of the file that we just created in the container:</p>
@@ -622,6 +682,9 @@ EOF</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat /tmp/hostinfo.txt</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>To make it easier to read, let&#8217;s copy the hostinfo to the <code>/var/www/html</code> directory<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> so that we can view it through the container&#8217;s webserver</p>
@@ -629,6 +692,9 @@ EOF</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp /tmp/hostinfo.txt /var/www/html/hostinfo.txt</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -650,7 +716,7 @@ EOF</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="copy_data"><a class="anchor" href="#copy_data"></a>Copying data out of a container</h2>
+<h2 id="copy_data"><a class="anchor" href="#copy_data"></a>3. Copying data out of a container</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Let&#8217;s see just how different the two files are by doing a <code>diff</code> on them.  And for this we&#8217;d like to use the builtin Visual Studio Code support for this.  To do this we can draw on another methapor with real hosts or virtual instances, the notion of <code>ftp</code> ing or <code>scp</code> ing files.</p>
@@ -663,6 +729,9 @@ EOF</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">exit</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -686,6 +755,9 @@ EOF</code></pre>
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>Now click anywhere within the left editor where the <code>hostinfo.txt</code> should still be open to give that editor focus.  Hit <span class="keyseq"><kbd>SHIFT</kbd>+<kbd>CTRL</kbd>+<kbd>p</kbd></span> (or <span class="keyseq"><kbd>CMD</kbd>+<kbd>CTRL</kbd>+<kbd>p</kbd></span> on a Mac) to open the <strong>Command Palette</strong> and start typing <code>compare</code> so that you can select the command <code>File: Compare Active File With&#8230;&#8203;</code></p>
@@ -693,6 +765,9 @@ EOF</code></pre>
 <div class="content">
 <img src="_images/compare-command.png" alt="compare command">
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -702,6 +777,9 @@ EOF</code></pre>
 <img src="_images/container-info-select.png" alt="container info select">
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>You should then see a screen like the following.  Expand the size of the editor as necessary to get a good sense of the differences</p>
@@ -710,6 +788,9 @@ EOF</code></pre>
 <img src="_images/info-diff.png" alt="info diff">
 </div>
 <div class="title">Figure 4. Host vs. Container output of above commands</div>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -729,6 +810,9 @@ EOF</code></pre>
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>You should now see the file appear in your <strong>Explorer</strong>.  Click on it to view the contents.  It should match the visitors that you entered previously</p>
@@ -743,7 +827,7 @@ EOF</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="stop_container"><a class="anchor" href="#stop_container"></a>Stopping the Container (and Apache server)</h2>
+<h2 id="stop_container"><a class="anchor" href="#stop_container"></a>4. Stopping the Container (and Apache server)</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Before we continue, let&#8217;s stop the container that is running in the background (thanks to the <code>-d</code> flag)</p>
@@ -815,6 +899,9 @@ EOF</code></pre>
 </div>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>If you were successful in stopping the container, you should see the following output:</p>
@@ -831,9 +918,15 @@ EOF</code></pre>
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>Confirm that the container is stopped by hitting refresh in the Browser Preview.  You should again see a blank page as there is not longer anything listening on port 8081</p>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>We can also see that the container is no longer listed when we run <code>podman ps</code></p>
@@ -853,7 +946,7 @@ EOF</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="committing_containers"><a class="anchor" href="#committing_containers"></a>Committing Containers to Images</h2>
+<h2 id="committing_containers"><a class="anchor" href="#committing_containers"></a>5. Committing Containers to Images</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Even though our container is stopped, it&#8217;s still around!</p>
@@ -869,6 +962,9 @@ EOF</code></pre>
 </div>
 <div class="paragraph">
 <p>With <code>podman</code> the command is <code>commit</code> <sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup>.  Let&#8217;s issue the command now and we&#8217;ll see some of the value in it <a href="#rerunning_container">a little later on in the lab</a>.</p>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -892,9 +988,15 @@ EOF</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">4e9c38ac10eb  quay.io/mhildenb/container-workshop-httpd:0.0.5  /usr/sbin/httpd -...  10 minutes ago  Exited (0) 2 minutes ago  0.0.0.0:8081-&gt;80/tcp  my-web-server</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>As we can see from the output, the container has been exited and is just waiting there in the state it was in when it was stopped (2 minutes ago according to the output above)</p>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>Now let&#8217;s create an image from that container by <em>committing</em> it:</p>
@@ -916,6 +1018,9 @@ EOF</code></pre>
 <td>This is the name that we want to give the container <strong>image</strong>.  We can then treat this like any other container image</td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -949,6 +1054,9 @@ f154f395c55ed7192f180502495b96cb3c223d9ce50273cda41bb63e272be7d8 <i class="conum
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>And now let&#8217;s see what images are available by issuing the following command to show all the images we podman knows about locally:</p>
@@ -956,6 +1064,9 @@ f154f395c55ed7192f180502495b96cb3c223d9ce50273cda41bb63e272be7d8 <i class="conum
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman images</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -981,10 +1092,13 @@ quay.io/mhildenb/container-workshop-httpd  0.0.5   ec71626c6cd3  3 hours ago    
 </div>
 </div>
 <div class="sect1">
-<h2 id="remove_containers"><a class="anchor" href="#remove_containers"></a>Removing Containers</h2>
+<h2 id="remove_containers"><a class="anchor" href="#remove_containers"></a>6. Removing Containers</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Having looked at the images on our system, let&#8217;s turn our attention back to the containers that are running (or more accurately in our case, stopped)</p>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1027,6 +1141,9 @@ quay.io/mhildenb/container-workshop-httpd  0.0.5   ec71626c6cd3  3 hours ago    
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>And now finally we can prove that the container is gone:</p>
@@ -1046,10 +1163,13 @@ quay.io/mhildenb/container-workshop-httpd  0.0.5   ec71626c6cd3  3 hours ago    
 </div>
 </div>
 <div class="sect1">
-<h2 id="rerunning_container"><a class="anchor" href="#rerunning_container"></a>"Re-running" Containers</h2>
+<h2 id="rerunning_container"><a class="anchor" href="#rerunning_container"></a>7. "Re-running" Containers</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Let&#8217;s say we want to take a look at that hostinfo.txt on the container again.  Let&#8217;s start up our container to try to do that again</p>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1065,6 +1185,9 @@ quay.io/mhildenb/container-workshop-httpd  0.0.5   ec71626c6cd3  3 hours ago    
     quay.io/mhildenb/container-workshop-httpd:0.0.5</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>Now open the browser and navigate to the following location</p>
@@ -1073,6 +1196,9 @@ quay.io/mhildenb/container-workshop-httpd  0.0.5   ec71626c6cd3  3 hours ago    
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"><a href="http://localhost:8081/hostinfo.txt" class="bare">http://localhost:8081/hostinfo.txt</a></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>But alas our file is not found and we are met with a 404 Not Found page&#8230;&#8203;</p>
@@ -1080,6 +1206,9 @@ quay.io/mhildenb/container-workshop-httpd  0.0.5   ec71626c6cd3  3 hours ago    
 <div class="content">
 <img src="_images/not-found.png" alt="not found">
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -1099,16 +1228,25 @@ quay.io/mhildenb/container-workshop-httpd  0.0.5   ec71626c6cd3  3 hours ago    
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>But if you open the <code>visitor_info.txt</code> after copying it out, you&#8217;ll notice that all the visitor names are gone!</p>
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 <div class="sect2">
-<h3 id="_re_running_a_stopped_container_by_image"><a class="anchor" href="#_re_running_a_stopped_container_by_image"></a>"Re-running" a stopped container by image</h3>
+<h3 id="_8_re_running_a_stopped_container_by_image"><a class="anchor" href="#_8_re_running_a_stopped_container_by_image"></a>8. "Re-running" a stopped container by image</h3>
 <div class="paragraph">
 <p>Before we through our hands up in disgust, remember that we had the foresight of <em>committing</em> our previously running web server container to a new image called <code>container-workshop-commit</code>.  This image should container all the changes we made on top of the <code>my-web-server</code> that we just ran and allow us access to the info that does not exist in the <code>quay.io/mhildenb/container-workshop-httpd:0.0.5</code>.</p>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1128,9 +1266,12 @@ podman rm -a</code></pre>
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
-<p>Next, let&#8217;s re-run our webserver, but this time from <a href="#committing_containers">the image we created when we committed it</a> from our first instance of <code>my-web-server</code>:</p>
+<p>Next, let&#8217;s re-run our webserver, but this time from <a href="#Committing Containers to Images">the image we created when we committed it</a> from our first instance of <code>my-web-server</code>:</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
@@ -1149,6 +1290,9 @@ podman rm -a</code></pre>
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>With our committed container running, now attempt to open the browser and navigate to tempfile again</p>
@@ -1156,6 +1300,9 @@ podman rm -a</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"><a href="http://localhost:8081/hostinfo.txt" class="bare">http://localhost:8081/hostinfo.txt</a></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -1165,6 +1312,9 @@ podman rm -a</code></pre>
 <img src="_images/browser-display.png" alt="browser display">
 </div>
 <div class="title">Figure 5. Container&#8217;s browser once again displays our hostinfo.txt</div>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -1183,6 +1333,9 @@ podman rm -a</code></pre>
 <td>This is a path on your local VM to the container-workshop directory you see in the <strong>Explorer</strong></td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>&#8203;<br></p>
 </div>
 </li>
 <li>

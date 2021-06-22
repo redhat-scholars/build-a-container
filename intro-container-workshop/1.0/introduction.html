@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Introduction to Code Server :: Build a Container Workshop</title>
+    <title>Setup :: Build a Container Workshop</title>
     <link rel="canonical" href="https://hatmarch.github.io/container-workshop/intro-container-workshop/1.0/introduction.html">
     <link rel="prev" href="index.html">
     <link rel="next" href="podman-intro.html">
@@ -151,7 +151,7 @@
     <a class="nav-link" href="compose-container.html">Multi containers with Podman</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="deploy-container.html">OpenShift Sandbox</a>
+    <a class="nav-link" href="deploy-container.html">Containers and OpenShift</a>
   </li>
 </ul>
   </li>
@@ -193,11 +193,27 @@
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Introduction to Code Server</h1>
+<h1 class="page">Setup</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>You have been given access to a RHEL8 virtual machine and your access to the machine will be mediated by <a href="https://github.com/cdr/code-server">code-server</a>: a browser based community version of Visual Studio Code.</p>
+<p><em>5 MINUTE EXERCISE</em></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="intro_code_server"><a class="anchor" href="#intro_code_server"></a>1. Introduction to Code Server</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You will have received a login page like below to register for the workshop. Once registered you will receive username and password where you have been given access to a RHEL 8 virtual machine.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/login.png" alt="login!">
+</div>
+</div>
+<div class="paragraph">
+<p>Your access to the machine will be mediated by <a href="https://github.com/cdr/code-server" target="_blank" rel="noopener">code-server</a>: a browser based community version of Visual Studio Code.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s take a moment to familiarize yourself with the environment</p>
@@ -205,38 +221,33 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="open_code_server"><a class="anchor" href="#open_code_server"></a>Open code server</h2>
+<h2 id="open_code_server"><a class="anchor" href="#open_code_server"></a>2. Open code server</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Once you have entered your password, you will be greeted with the code-server UI with your RHEL user&#8217;s (<code>%USER%</code>) home directory.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/code-server-overview.png" alt="code server overview">
+<img src="_images/codeserver2.gif" alt="codeserver2">
 </div>
-<div class="title">Figure 1. Code-server UI</div>
+<div class="title">Figure 1. <a href="_images/codeserver2.gif" target="_blank" rel="noopener">Code-server UI</a></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="open_code_server_terminal"><a class="anchor" href="#open_code_server_terminal"></a>Open Terminal</h2>
+<h2 id="open_code_server_terminal"><a class="anchor" href="#open_code_server_terminal"></a>3. Open Terminal</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Among other things, your code-server gives you command line access to your RHEL instance.  You can open the terminal by using <span class="keyseq"><kbd>CTRL</kbd>+<kbd>J</kbd></span> (or <span class="keyseq"><kbd>CMD</kbd>+<kbd>J</kbd></span> on a Mac)</p>
 </div>
 <div class="paragraph">
-<p>The first time you open it, you will find your terminal at the bottom (right) of the screen, as shown below</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/code-server-terminal.png" alt="code server terminal">
-</div>
-<div class="title">Figure 2. Initial Terminal</div>
+<p>The first time you open it, you will find your terminal at the bottom (right) of the screen. At some points during the exercises you will need
+two screens and from the dropdown menu you can elect to have split terminals as shown above.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="open_code_server_terminal_commands"><a class="anchor" href="#open_code_server_terminal_commands"></a>Issuing Terminal Commands</h2>
+<h2 id="open_code_server_terminal_commands"><a class="anchor" href="#open_code_server_terminal_commands"></a>4. Issuing Terminal Commands</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Just to see that you are logged into the server, issue the following command</p>
@@ -255,7 +266,7 @@
 <div class="content">
 <img src="_images/copy-paste-popup.png" alt="Popup" width="300">
 </div>
-<div class="title">Figure 3. Chrome alert pop-up</div>
+<div class="title">Figure 2. Chrome alert pop-up</div>
 </div>
 <div class="paragraph">
 <p>Please click on <code>Allow</code> so that you can copy and paste within your code-server instance</p>
@@ -285,27 +296,28 @@
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME="Red Hat Enterprise Linux"
-VERSION="8.3 (Ootpa)"
+VERSION="8.4 (Ootpa)"
 ID="rhel"
 ID_LIKE="fedora"
-VERSION_ID="8.3"
+VERSION_ID="8.4"
 PLATFORM_ID="platform:el8"
-PRETTY_NAME="Red Hat Enterprise Linux 8.3 (Ootpa)"
+PRETTY_NAME="Red Hat Enterprise Linux 8.4 (Ootpa)"
 ANSI_COLOR="0;31"
-CPE_NAME="cpe:/o:redhat:enterprise_linux:8.3:GA"
+CPE_NAME="cpe:/o:redhat:enterprise_linux:8.4:GA"
 HOME_URL="https://www.redhat.com/"
+DOCUMENTATION_URL="https://access.redhat.com/documentation/red_hat_enterprise_linux/8/"
 BUG_REPORT_URL="https://bugzilla.redhat.com/"
 
 REDHAT_BUGZILLA_PRODUCT="Red Hat Enterprise Linux 8"
-REDHAT_BUGZILLA_PRODUCT_VERSION=8.3
+REDHAT_BUGZILLA_PRODUCT_VERSION=8.4
 REDHAT_SUPPORT_PRODUCT="Red Hat Enterprise Linux"
-REDHAT_SUPPORT_PRODUCT_VERSION="8.3"</code></pre>
+REDHAT_SUPPORT_PRODUCT_VERSION="8.4"</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="local_browser"><a class="anchor" href="#local_browser"></a>Local Browser</h2>
+<h2 id="local_browser"><a class="anchor" href="#local_browser"></a>5. Local Browser</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Your code-server instance also has a chromium based browser installed (as a VSCode extension).  This will allow us to view html files and connect to VM local services that are not otherwise exposed to the internet at large.</p>
@@ -326,7 +338,7 @@ REDHAT_SUPPORT_PRODUCT_VERSION="8.3"</code></pre>
 <div class="content">
 <img src="_images/browser-preview-window.png" alt="browser preview window">
 </div>
-<div class="title">Figure 4. Just your average web browser</div>
+<div class="title">Figure 3. Just your average web browser</div>
 </div>
 </li>
 <li>
