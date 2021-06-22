@@ -3,7 +3,7 @@
 set -euo pipefail
 
 declare SITE=${1:-site.yml}
-declare REPO=${2:-https://github.com/bfarr-rh/container-workshop}
+declare REPO=${2:-$(git remote get-url origin)}
 declare BRANCH="gh-pages"
 
 echo "Removing old publish directory"
