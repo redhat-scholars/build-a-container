@@ -33,7 +33,7 @@ include::partial$podman_ps.adoc[]
 [#using_metasploit]
 === Using Metasploit
 
-We're going to use a tool called link:[metasploit] (which has already been installed on your VM instance) to exploit the vulnerability (with frightening ease).  
+We're going to use a tool called link:https://www.metasploit.com/[metasploit] (which has already been installed on your VM instance) to exploit the vulnerability (with frightening ease).  
 
 . We are going to run metasploit as a non-root user in another shell.  Split your terminal to open a new, non-root, shell
 +
@@ -533,7 +533,7 @@ If it's not, ensure you followed the instructions <<non_root_containers,here>> c
 [source,bash,subs="+macros,+attributes"]
 ----
 podman run \
-    --privileged \ #<.>
+    --privileged \#<.>
     -d \
     -p 8081:80/tcp \ 
     --name {apache-server-container-name} \
