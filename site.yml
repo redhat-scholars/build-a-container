@@ -22,16 +22,11 @@ asciidoc:
   extensions:
     - ./lib/tab-block.js
     - ./lib/remote-include-processor.js
-
 ui:
   bundle:
     url: https://github.com/redhat-scholars/course-ui/releases/download/v0.1.8/ui-bundle.zip
     snapshot: true
-  supplemental_files:
-    - path: ./supplemental-ui
-    - path: .nojekyll
-    - path: ui.yml
-      contents: "static_files: [ .nojekyll ]"
+  supplemental_files: ./supplemental-ui
 
 output:
   dir: ./gh-pages
