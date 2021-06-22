@@ -22,7 +22,7 @@ Our `{apache-server-image-insecure}` has a huge vulnerability in it that is furt
 podman ps
 ----
 +
-. You should see output something like below.  If you don't, then run the container as per xref:container-persistence.adoc#podman_run_httpd[here]
+. You should see output something like below.  If you don't, then run the container as per link:container-persistence.html?USER={USER}&CLUSTER_SUBDOMAIN={CLUSTER_SUBDOMAIN}#podman_run_httpd[here^]
 +
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
@@ -36,6 +36,10 @@ include::partial$podman_ps.adoc[]
 We're going to use a tool called link:[metasploit] (which has already been installed on your VM instance) to exploit the vulnerability (with frightening ease).  
 
 . We are going to run metasploit as a non-root user in another shell.  Split your terminal to open a new, non-root, shell
++
+.Terminal Split button
+image::terminal-split.png[]
++
 . Next, start up metasploit in your terminal by running the following command:
 +
 [.console-input]
@@ -241,7 +245,7 @@ chown root README.md && chmod 700 README.md
 echo "You've been hax0red" >> visitor_info.txt && chmod a+w visitor_info.txt
 ----
 +
-. Now try to open README.md from your Explorer window and you'll see the following error in the bottom right corner of the VSCode Server window
+. Now try to open README.md from your Explorer window and you'll see the following error in the *bottom right corner* of the VSCode Server window
 +
 image::readme-error.png[]
 +
@@ -363,7 +367,7 @@ ls -l /
 include::example$hacked_root.txt[]
 ----
 +
-. And finally, this means that any secrets on the host are exposed or manipulatable by the intruder.  For example:
+. And finally, this means that any secrets on the host are exposed or manipulatable by the intruder.  For example, run the following from the *metasploit* terminal:
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -373,7 +377,7 @@ cat /mnt/hack/home/{USER}/.ssh/config
 
 == Running containers responsibly
 
-Following the principle of least privilege, there is a lot we could have done to limit the damage of any attacker such as:
+Following the link:https://en.wikipedia.org/wiki/Principle_of_least_privilege[principle of least privilege^], there is a lot we could have done to limit the damage of any attacker such as:
 
 * don't run privileged containers
 * use SELinux to fine tune container access to volume mounts
@@ -389,7 +393,7 @@ Let's take a look at the difference that is made by not running containers in pr
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-podman rm -f my-web-server
+podman rm -f {apache-server-container-name}
 ----
 +
 [NOTE]
@@ -412,7 +416,7 @@ msf6 exploit(multi/http/apache_mod_cgi_bash_env_exec) >
 
 ====
 +
-. Now let's start up the webserver again in the same manner as before but this time without the `--privileged` flag
+. Now let's start up the webserver again in the same manner as before but this time _without the `--privileged` flag_
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -446,25 +450,27 @@ fdisk -l
 
 === Better use of SELinux
 
-_UNFINISHED_
+[WARNING]
+====
+This section is _UNFINISHED_, please move on to the <<Non-root containers,next one>>
+====
+
 
 When our container is running on Red Hat Enterprise Linux, we can use Security Enhanced Linux (or SELinux) to further control the container's access to files on our volume
-
-
 
 [#non_root_containers]
 === Non-root containers
 
 Most containerization runtimes, such as Docker, effectively require all containers to run as root by way of the Docker daemon on the system. 
 
-Podman is different in that regard.  Because it does not rely on a root-level service to be active to be able to run a container, containers can instead be run as normal users on the system.  How it does this is a bit beyond the scope of this workshop, but in short it does this through user namespace mapping.  Any container that runs as root (like our container) will present as the user who started the container on the host system.  This can further limit exposure of the host system.  
+Podman is different in that regard.  Because it does not rely on a root-level service to be active to be able to run a container, containers can instead be run as normal users on the system.  How it does this is a bit beyond the scope of this workshop, but in short it does this through linux user namespace mapping.  When running as a non-root user on the host system, any container that is setup to run as root (like our apache container) will present instead as the user who started the container to the host system.  This can further limit exposure of the host system.  Let's try this out.
 
 . First, before we do anything else, be sure to shutdown the currently running container
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-podman rm -f my-web-server
+podman rm -f {apache-server-container-name}
 ----
 +
 . For most of the lab we have been running as the `root` user.  Let's get to a terminal that is running as {USER}.  Choose one of the ways below:
@@ -516,7 +522,10 @@ whoami
 {USER}
 ----
 +
-TIP: If it's not, ensure you followed the instructions <<non_root_containers,here>> correctly or ask for assistance.
+[TIP]
+====
+If it's not, ensure you followed the instructions <<non_root_containers,here>> correctly or ask for assistance.
+====
 +
 . Now we'll run our webserver much like we did before but this time as a non-root user
 +
@@ -538,8 +547,8 @@ podman run \
 You will notice that the container needs to be downloaded again.  Didn't we do this already?  We did, but as `root`.  Each user keeps their own local container storage separate from all other users.
 ====
 +
-. Let's once again reopen the exploit in the other terminal by entering following the instructions link:#exploit_shellshock[above^] to create a bash terminal on the container 
-. From metasploit shell, run the following command
+. Let's once again reopen the exploit in the other terminal by entering following the instructions link:containers-and-security.html?USER={USER}&CLUSTER_SUBDOMAIN={CLUSTER_SUBDOMAIN}#exploit_shellshock[above^] to create a bash terminal on the container 
+. Then from metasploit shell, run the following command
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -547,7 +556,10 @@ You will notice that the container needs to be downloaded again.  Didn't we do t
 touch /var/log/www/hello_from_rootless_podman.txt
 ----
 +
-NOTE: When you create the file, you should see a file appear in the `container_workshop` in the explorer
+[NOTE]
+====
+When you create the file, you should see a file appear in the `container_workshop` in the explorer
+====
 +
 . The the metasploit shell, run the following command to look at the permissions of the file
 +
@@ -616,6 +628,7 @@ But this time it will appear as if we had not run with the `--privileged` flag a
 
 This is again due to the fact that the container is not actually running as root on the host system, it is running as {USER} and {USER} does not have permissions to run `fdisk` normally.  Hence rootless containers afford additional layers of security on top of the ones we indicated already
 
+[#scanning_containers]
 == Scanning Containers
 
 In the previous section we saw some techniques podman (Red Hat Enterprise Linux) give us to limit the impact of any *unknown* security vulnerabilities, but is there a way we can actively look for vulnerabilities and ensure they are not part of our containers in the first place?
