@@ -139,13 +139,16 @@
     <a class="nav-link" href="containers-and-security.html">Container Security</a>
   </li>
   <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#scanning_containers">Scanning Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="build-your-own-container.html">Build your own Secure Container</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Scaling</span>
+    <span class="nav-text">Scaling and Deploying Containers</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="compose-container.html">Multi containers with Podman</a>
@@ -226,7 +229,7 @@ Our <code>quay.io/mhildenb/container-workshop-httpd:0.0.5</code> has a huge vuln
 </div>
 </li>
 <li>
-<p>You should see output something like below.  If you don&#8217;t, then run the container as per <a href="container-persistence.html#podman_run_httpd" class="page">here</a></p>
+<p>You should see output something like below.  If you don&#8217;t, then run the container as per <a href="container-persistence.html?USER=%USER%&amp;CLUSTER_SUBDOMAIN=%CLUSTER_SUBDOMAIN%#podman_run_httpd" target="_blank" rel="noopener">here</a></p>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER ID  IMAGE                                            COMMAND               CREATED      STATUS          PORTS                 NAMES
@@ -245,6 +248,12 @@ Our <code>quay.io/mhildenb/container-workshop-httpd:0.0.5</code> has a huge vuln
 <ol class="arabic">
 <li>
 <p>We are going to run metasploit as a non-root user in another shell.  Split your terminal to open a new, non-root, shell</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/terminal-split.png" alt="terminal split">
+</div>
+<div class="title">Figure 1. Terminal Split button</div>
+</div>
 </li>
 <li>
 <p>Next, start up metasploit in your terminal by running the following command:</p>
@@ -558,7 +567,7 @@ echo "You've been hax0red" &gt;&gt; visitor_info.txt &amp;&amp; chmod a+w visito
 </div>
 </li>
 <li>
-<p>Now try to open README.md from your Explorer window and you&#8217;ll see the following error in the bottom right corner of the VSCode Server window</p>
+<p>Now try to open README.md from your Explorer window and you&#8217;ll see the following error in the <strong>bottom right corner</strong> of the VSCode Server window</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/readme-error.png" alt="readme error">
@@ -715,7 +724,7 @@ drwxr-xr-x.  20 root root  278 May 28 08:44 var</code></pre>
 </div>
 </li>
 <li>
-<p>And finally, this means that any secrets on the host are exposed or manipulatable by the intruder.  For example:</p>
+<p>And finally, this means that any secrets on the host are exposed or manipulatable by the intruder.  For example, run the following from the <strong>metasploit</strong> terminal:</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat /mnt/hack/home/%USER%/.ssh/config</code></pre>
@@ -731,7 +740,7 @@ drwxr-xr-x.  20 root root  278 May 28 08:44 var</code></pre>
 <h2 id="_running_containers_responsibly"><a class="anchor" href="#_running_containers_responsibly"></a>Running containers responsibly</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Following the principle of least privilege, there is a lot we could have done to limit the damage of any attacker such as:</p>
+<p>Following the <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege" target="_blank" rel="noopener">principle of least privilege</a>, there is a lot we could have done to limit the damage of any attacker such as:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -792,7 +801,7 @@ drwxr-xr-x.  20 root root  278 May 28 08:44 var</code></pre>
 </div>
 </li>
 <li>
-<p>Now let&#8217;s start up the webserver again in the same manner as before but this time without the <code>--privileged</code> flag</p>
+<p>Now let&#8217;s start up the webserver again in the same manner as before but this time <em>without the <code>--privileged</code> flag</em></p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
@@ -831,8 +840,19 @@ drwxr-xr-x.  20 root root  278 May 28 08:44 var</code></pre>
 </div>
 <div class="sect2">
 <h3 id="_better_use_of_selinux"><a class="anchor" href="#_better_use_of_selinux"></a>Better use of SELinux</h3>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p><em>UNFINISHED</em></p>
+<p>This section is <em>UNFINISHED</em>, please move on to the <a href="#non_root_containers">next one</a></p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>When our container is running on Red Hat Enterprise Linux, we can use Security Enhanced Linux (or SELinux) to further control the container&#8217;s access to files on our volume</p>
@@ -844,7 +864,7 @@ drwxr-xr-x.  20 root root  278 May 28 08:44 var</code></pre>
 <p>Most containerization runtimes, such as Docker, effectively require all containers to run as root by way of the Docker daemon on the system.</p>
 </div>
 <div class="paragraph">
-<p>Podman is different in that regard.  Because it does not rely on a root-level service to be active to be able to run a container, containers can instead be run as normal users on the system.  How it does this is a bit beyond the scope of this workshop, but in short it does this through user namespace mapping.  Any container that runs as root (like our container) will present as the user who started the container on the host system.  This can further limit exposure of the host system.</p>
+<p>Podman is different in that regard.  Because it does not rely on a root-level service to be active to be able to run a container, containers can instead be run as normal users on the system.  How it does this is a bit beyond the scope of this workshop, but in short it does this through linux user namespace mapping.  When running as a non-root user on the host system, any container that is setup to run as root (like our apache container) will present instead as the user who started the container to the host system.  This can further limit exposure of the host system.  Let&#8217;s try this out.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -938,7 +958,9 @@ You can also open a new terminal with the <span class="keyseq"><kbd>CTRL</kbd>+<
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-If it&#8217;s not, ensure you followed the instructions <a href="#non_root_containers">here</a> correctly or ask for assistance.
+<div class="paragraph">
+<p>If it&#8217;s not, ensure you followed the instructions <a href="#non_root_containers">here</a> correctly or ask for assistance.</p>
+</div>
 </td>
 </tr>
 </table>
@@ -981,10 +1003,10 @@ If it&#8217;s not, ensure you followed the instructions <a href="#non_root_conta
 </div>
 </li>
 <li>
-<p>Let&#8217;s once again reopen the exploit in the other terminal by entering following the instructions <a href="#exploit_shellshock" target="_blank" rel="noopener">above</a> to create a bash terminal on the container</p>
+<p>Let&#8217;s once again reopen the exploit in the other terminal by entering following the instructions <a href="containers-and-security.html?USER=%USER%&amp;CLUSTER_SUBDOMAIN=%CLUSTER_SUBDOMAIN%#exploit_shellshock" target="_blank" rel="noopener">above</a> to create a bash terminal on the container</p>
 </li>
 <li>
-<p>From metasploit shell, run the following command</p>
+<p>Then from metasploit shell, run the following command</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">touch /var/log/www/hello_from_rootless_podman.txt</code></pre>
@@ -997,7 +1019,9 @@ If it&#8217;s not, ensure you followed the instructions <a href="#non_root_conta
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-When you create the file, you should see a file appear in the <code>container_workshop</code> in the explorer
+<div class="paragraph">
+<p>When you create the file, you should see a file appear in the <code>container_workshop</code> in the explorer</p>
+</div>
 </td>
 </tr>
 </table>
@@ -1079,7 +1103,7 @@ When you create the file, you should see a file appear in the <code>container_wo
 </div>
 </div>
 <div class="sect1">
-<h2 id="_scanning_containers"><a class="anchor" href="#_scanning_containers"></a>Scanning Containers</h2>
+<h2 id="scanning_containers"><a class="anchor" href="#scanning_containers"></a>Scanning Containers</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>In the previous section we saw some techniques podman (Red Hat Enterprise Linux) give us to limit the impact of any <strong>unknown</strong> security vulnerabilities, but is there a way we can actively look for vulnerabilities and ensure they are not part of our containers in the first place?</p>
@@ -1103,7 +1127,7 @@ When you create the file, you should see a file appear in the <code>container_wo
 <div class="content">
 <img src="_images/oval-document.png" alt="OVAL document">
 </div>
-<div class="title">Figure 1. OVAL document</div>
+<div class="title">Figure 2. OVAL document</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1209,7 +1233,7 @@ Evaluation done.</code></pre>
 <div class="content">
 <img src="_images/open-report-in-preview.png" alt="Open in preview">
 </div>
-<div class="title">Figure 2. Open report in preview</div>
+<div class="title">Figure 3. Open report in preview</div>
 </div>
 </li>
 <li>
@@ -1235,7 +1259,7 @@ Evaluation done.</code></pre>
 <div class="content">
 <img src="_images/oscap-vulnerability-report.png" alt="Vulnerability Report">
 </div>
-<div class="title">Figure 3. OSCAP Vulnerability Report</div>
+<div class="title">Figure 4. OSCAP Vulnerability Report</div>
 </div>
 </li>
 <li>
@@ -1261,7 +1285,7 @@ Evaluation done.</code></pre>
 <div class="content">
 <img src="_images/cve-advisory.png" alt="cve advisory">
 </div>
-<div class="title">Figure 4. Red Hat advisory on Shellshock CVE</div>
+<div class="title">Figure 5. Red Hat advisory on Shellshock CVE</div>
 </div>
 </li>
 <li>
@@ -1270,7 +1294,7 @@ Evaluation done.</code></pre>
 <div class="content">
 <img src="_images/security-bulletin.png" alt="security bulletin">
 </div>
-<div class="title">Figure 5. Security Bulletin with Shellshock remediation</div>
+<div class="title">Figure 6. Security Bulletin with Shellshock remediation</div>
 </div>
 </li>
 </ol>

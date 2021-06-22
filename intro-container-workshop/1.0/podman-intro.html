@@ -139,13 +139,16 @@
     <a class="nav-link" href="containers-and-security.html">Container Security</a>
   </li>
   <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="containers-and-security.html#scanning_containers">Scanning Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="build-your-own-container.html">Build your own Secure Container</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Scaling</span>
+    <span class="nav-text">Scaling and Deploying Containers</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="compose-container.html">Multi containers with Podman</a>
@@ -216,15 +219,9 @@
 <ol class="arabic">
 <li>
 <p>First let&#8217;s prove that Apache is not currently running on your local VM.</p>
-<div class="paragraph">
-<p>&#8203;<br></p>
-</div>
 </li>
 <li>
 <p>In your <a href="introduction.html#local_browser" class="page" target="_blank" rel="noopener">Local Browser</a>, navigate to <code>localhost:8081</code>, which instructs the browser to connect to port 8081 of your local instance</p>
-<div class="paragraph">
-<p>&#8203;<br></p>
-</div>
 </li>
 <li>
 <p>You should find that there is nothing there but a blank screen</p>
@@ -248,9 +245,6 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo -i</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>&#8203;<br></p>
-</div>
 </li>
 <li>
 <p>You should now see the terminal prompt change to <code>#</code> indicating that you are now <code>root</code></p>
@@ -267,14 +261,11 @@
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Some of you with a security background are <span id="security_vuln">probably fairly unconfortable with this</span>.  Don&#8217;t worry: there&#8217;s a method to our madness!  It&#8217;s worthLook inside a running container pointing out that any socket-based container runtimes (such as <code>docker</code>) require some sort of root access to operate</p>
+<p>Some of you with a security background are <span id="security_vuln">probably fairly unconfortable with this</span>.  Don&#8217;t worry: there&#8217;s a method to our madness!  While you might feel an aversion to running commands as the <code>root</code> user on the instance, it&#8217;s worth pointing out that any socket-based container runtimes (such as <code>Docker</code>) require some sort of root access to operate</p>
 </div>
 </td>
 </tr>
 </table>
-</div>
-<div class="paragraph">
-<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -293,19 +284,19 @@
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>This flag, as we&#8217;ll come to see, could be problematic.  It allows the container to run with an extended set of capabilities that might otherwise be reserved for the host (such as accessing ports &lt; 1024).  However, when running some processes in a container, this is sometimes required</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
 <td>The <code>podman</code> command has a number of subcommands.  <code>run</code> indicates that we want to run a given container image</td>
 </tr>
 <tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>--privileged</code> flag, as we&#8217;ll come to see, could be problematic.  It allows the container to run with an extended set of capabilities that might otherwise be reserved for the host (such as accessing ports &lt; 1024).  However, when running some processes in a container, this is sometimes required</td>
+</tr>
+<tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Run the container in "daemon" mode (in the background)</td>
+<td>Run the container in "daemon" mode (i.e. in the background)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>This indicates that we want local port 8081 forwarded to port 80 in the container</td>
+<td>This indicates that we want local (i.e. the host) port 8081 forwarded to port 80 in the container</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
@@ -316,9 +307,6 @@
 <td>This is the name of the image (including the image registry where the container is normally located, in this case <a href="quay.io">quay.io</a>) that we want to run</td>
 </tr>
 </table>
-</div>
-<div class="paragraph">
-<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -342,9 +330,6 @@ Storing signatures
 </tr>
 </table>
 </div>
-<div class="paragraph">
-<p>&#8203;<br></p>
-</div>
 </li>
 <li>
 <p>Compare the id there to the output of the following <code>podman</code> command:</p>
@@ -352,9 +337,6 @@ Storing signatures
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman ps</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -366,6 +348,9 @@ Storing signatures
 4e9c38ac10eb  quay.io/mhildenb/container-workshop-httpd:0.0.5  /usr/sbin/httpd -...  3 hours ago  Up 3 hours ago  0.0.0.0:8081-&gt;80/tcp  my-web-server</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>Finally, return to the Browser Preview panel and hit the reload button.  You should see the following web page indicating that an Apache webserver is running:</p>
@@ -374,9 +359,6 @@ Storing signatures
 <img src="_images/apache-test-page.png" alt="apache test page">
 </div>
 <div class="title">Figure 1. Test Page</div>
-</div>
-<div class="paragraph">
-<p>&#8203;<br></p>
 </div>
 </li>
 <li>
@@ -397,9 +379,6 @@ Storing signatures
 <img src="_images/apache-guestbook-page.png" alt="apache guestbook page">
 </div>
 </div>
-<div class="paragraph">
-<p>&#8203;<br></p>
-</div>
 </li>
 <li>
 <p>Now enter a name into the <code>Name:</code> field to be logged to the guestbook and press the <code>Log to Guestbook</code> button.  You should now be presented a screen like this:</p>
@@ -408,17 +387,15 @@ Storing signatures
 <img src="_images/apache-guestbook-submit.png" alt="apache guestbook submit">
 </div>
 </div>
-<div class="paragraph">
-<p>&#8203;<br></p>
-</div>
 </li>
 <li>
-<p>Click the <code>here</code> link highlighted above to go back and enter another name</p>
+<p>Click the <code>here</code> link highlighted above to go back and enter another name
+&#8203;+</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>Next let&#8217;s take a look inside our container</p>
+<p>Now that we have a container up and running, let&#8217;s poke around inside the container to get some idea of what&#8217;s going on and how containers relate to the host instance.</p>
 </div>
 </div>
 </div>
@@ -427,9 +404,6 @@ Storing signatures
 <div class="sectionbody">
 <div class="paragraph">
 <p>Whilst the container is running, we are able to "look inside" the container.  The experience is much the same to <code>telnet</code> ing or <code>ssh</code> ing into a remote instance or virtual machine.</p>
-</div>
-<div class="paragraph">
-<p>&#8203;</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -481,31 +455,32 @@ uid=0(root) gid=0(root) groups=0(root) context=system_u:system_r:unconfined_serv
 OS Version:
 ----------
 NAME="Red Hat Enterprise Linux"
-VERSION="8.3 (Ootpa)"
+VERSION="8.4 (Ootpa)"
 ID="rhel"
 ID_LIKE="fedora"
-VERSION_ID="8.3"
+VERSION_ID="8.4"
 PLATFORM_ID="platform:el8"
-PRETTY_NAME="Red Hat Enterprise Linux 8.3 (Ootpa)"
+PRETTY_NAME="Red Hat Enterprise Linux 8.4 (Ootpa)"
 ANSI_COLOR="0;31"
-CPE_NAME="cpe:/o:redhat:enterprise_linux:8.3:GA"
+CPE_NAME="cpe:/o:redhat:enterprise_linux:8.4:GA"
 HOME_URL="https://www.redhat.com/"
+DOCUMENTATION_URL="https://access.redhat.com/documentation/red_hat_enterprise_linux/8/"
 BUG_REPORT_URL="https://bugzilla.redhat.com/"
 
 REDHAT_BUGZILLA_PRODUCT="Red Hat Enterprise Linux 8"
-REDHAT_BUGZILLA_PRODUCT_VERSION=8.3
+REDHAT_BUGZILLA_PRODUCT_VERSION=8.4
 REDHAT_SUPPORT_PRODUCT="Red Hat Enterprise Linux"
-REDHAT_SUPPORT_PRODUCT_VERSION="8.3"
+REDHAT_SUPPORT_PRODUCT_VERSION="8.4"
 
 Processes:
 ---------
 USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-root       73993  0.0  0.2 143252  8036 pts/2    S    09:03   0:00 sudo -i LS_COLORS=rs=0:di=38;5;33:ln=38;5;51:mh=00:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=01;05;37;41:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;40:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.zst=38;5;9:*.tzst=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.wim=38;5;9:*.swm=38;5;9:*.dwm=38;5;9:*.esd=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.mjpg=38;5;13:*.mjpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.m4a=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.oga=38;5;45:*.opus=38;5;45:*.spx=38;5;45:*.xspf=38;5;45: LANG=en_US.UTF-8 NODE_OPTIONS=--max-old-space-size=2048  INVOCATION_ID=93bf1877c5a84b61a2b2b3bcbf73a707 COLORTERM=truecolor USER=student1 PWD=/home/student1 HOME=/home/student1 JOURNAL_STREAM=9:69260 VSCODE_GIT_ASKPASS_NODE=/usr/lib/code-server/lib/node TERM_PROGRAM=vscode TERM_PROGRAM_VERSION=1.54.2 VSCODE_GIT_ASKPASS_MAIN=/usr/lib/code-server/lib/vscode/extensions/git/dist/askpass-main.js TERM=xterm-256color SHELL=/bin/bash SHLVL=1 VSCODE_GIT_IPC_HANDLE=/tmp/vscode-git-6a2de23e98.sock LOGNAME=student1 GIT_ASKPASS=/usr/lib/code-server/lib/vscode/extensions/git/dist/askpass.sh PATH=/home/student1/.local/bin:/home/student1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin LESSOPEN=||/usr/bin/lesspipe.sh %s _=/usr/bin/sudo
-root       73995  0.0  0.1  26216  4016 pts/2    S    09:03   0:00  \_ -bash LS_COLORS=rs=0:di=38;5;33:ln=38;5;51:mh=00:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=01;05;37;41:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;40:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.zst=38;5;9:*.tzst=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.wim=38;5;9:*.swm=38;5;9:*.dwm=38;5;9:*.esd=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.mjpg=38;5;13:*.mjpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.m4a=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.oga=38;5;45:*.opus=38;5;45:*.spx=38;5;45:*.xspf=38;5;45: LANG=en_US.UTF-8 COLORTERM=truecolor TERM=xterm-256color SHELL=/bin/bash LOGNAME=root USER=root MAIL=/var/mail/root PATH=/sbin:/bin:/usr/sbin:/usr/bin HOME=/root SHELL=/bin/bash SUDO_COMMAND=/bin/bash SUDO_USER=student1 SUDO_UID=1001 SUDO_GID=1001 XDG_SESSION_ID=c8 XDG_RUNTIME_DIR=/run/user/0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/0/bus
-root       77307  0.0  0.0  26216  2376 pts/2    S+   13:16   0:00      \_ -bash LS_COLORS=rs=0:di=38;5;33:ln=38;5;51:mh=00:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=01;05;37;41:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;40:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.zst=38;5;9:*.tzst=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.wim=38;5;9:*.swm=38;5;9:*.dwm=38;5;9:*.esd=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.mjpg=38;5;13:*.mjpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.m4a=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.oga=38;5;45:*.opus=38;5;45:*.spx=38;5;45:*.xspf=38;5;45: LANG=en_US.UTF-8 COLORTERM=truecolor TERM=xterm-256color SHELL=/bin/bash LOGNAME=root USER=root MAIL=/var/mail/root PATH=/sbin:/bin:/usr/sbin:/usr/bin HOME=/root SHELL=/bin/bash SUDO_COMMAND=/bin/bash SUDO_USER=student1 SUDO_UID=1001 SUDO_GID=1001 XDG_SESSION_ID=c8 XDG_RUNTIME_DIR=/run/user/0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/0/bus
-root       77311  0.0  0.1  61732  5112 pts/2    R    13:16   0:00          \_ ps -euf LS_COLORS=rs=0:di=38;5;33:ln=38;5;51:mh=00:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=01;05;37;41:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;40:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.zst=38;5;9:*.tzst=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.wim=38;5;9:*.swm=38;5;9:*.dwm=38;5;9:*.esd=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.mjpg=38;5;13:*.mjpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.m4a=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.oga=38;5;45:*.opus=38;5;45:*.spx=38;5;45:*.xspf=38;5;45: LANG=en_US.UTF-8 HISTCONTROL=ignoredups SUDO_GID=1001 HOSTNAME=ansible-1.example.com COLORTERM=truecolor SUDO_COMMAND=/bin/bash XDG_SESSION_ID=c8 USER=root PWD=/root HOME=/root SUDO_USER=student1 SUDO_UID=1001 MAIL=/var/spool/mail/root SHELL=/bin/bash TERM=xterm-256color SHLVL=1 LOGNAME=root DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/0/bus XDG_RUNTIME_DIR=/run/user/0 PATH=/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin HISTSIZE=1000 LESSOPEN=||/usr/bin/lesspipe.sh %s _=/bin/ps
-root        1096  0.0  0.0  16200  2120 ttyS0    Ss+  May07   0:00 /sbin/agetty -o -p -- \u --keep-baud 115200,38400,9600 ttyS0 vt220 LANG=en_US.UTF-8 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin INVOCATION_ID=a5a6851855f042deb0be38d6f784407d TERM=vt220 JOURNAL_STREAM=9:31142
-root        1095  0.0  0.0  13632  1760 tty1     Ss+  May07   0:00 /sbin/agetty -o -p -- \u --noclear tty1 linux PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin INVOCATION_ID=6d76fa0644494f1db0752e0dd836906a TERM=linux JOURNAL_STREAM=9:31141</code></pre>
+root       37407  0.0  0.2 143304  8000 pts/0    S    00:55   0:00 sudo -i LS_COLORS=rs=0:di=38;5;33:ln=38;5;51:mh=00:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=01;05;37;41:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;40:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.zst=38;5;9:*.tzst=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.wim=38;5;9:*.swm=38;5;9:*.dwm=38;5;9:*.esd=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.mjpg=38;5;13:*.mjpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.m4a=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.oga=38;5;45:*.opus=38;5;45:*.spx=38;5;45:*.xspf=38;5;45: LANG=en_US.UTF-8 NODE_OPTIONS=--max-old-space-size=2048  INVOCATION_ID=5e539e558ee34aa19a361edcab7b0223 COLORTERM=truecolor USER=student1 PWD=/home/student1 HOME=/home/student1 JOURNAL_STREAM=9:71042 VSCODE_GIT_ASKPASS_NODE=/usr/lib/code-server/lib/node TERM_PROGRAM=vscode TERM_PROGRAM_VERSION=1.54.2 VSCODE_GIT_ASKPASS_MAIN=/usr/lib/code-server/lib/vscode/extensions/git/dist/askpass-main.js TERM=xterm-256color SHELL=/bin/bash SHLVL=1 VSCODE_GIT_IPC_HANDLE=/tmp/vscode-git-e2382f1f8f.sock LOGNAME=student1 GIT_ASKPASS=/usr/lib/code-server/lib/vscode/extensions/git/dist/askpass.sh PATH=/home/student1/.local/bin:/home/student1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin LESSOPEN=||/usr/bin/lesspipe.sh %s _=/usr/bin/sudo
+root       37422  0.0  0.1  26244  3872 pts/0    S    00:55   0:00  \_ -bash LS_COLORS=rs=0:di=38;5;33:ln=38;5;51:mh=00:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=01;05;37;41:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;40:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.zst=38;5;9:*.tzst=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.wim=38;5;9:*.swm=38;5;9:*.dwm=38;5;9:*.esd=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.mjpg=38;5;13:*.mjpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.m4a=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.oga=38;5;45:*.opus=38;5;45:*.spx=38;5;45:*.xspf=38;5;45: LANG=en_US.UTF-8 COLORTERM=truecolor TERM=xterm-256color SHELL=/bin/bash LOGNAME=root USER=root MAIL=/var/mail/root PATH=/sbin:/bin:/usr/sbin:/usr/bin HOME=/root SHELL=/bin/bash SUDO_COMMAND=/bin/bash SUDO_USER=student1 SUDO_UID=1001 SUDO_GID=1001 XDG_SESSION_ID=c1 XDG_RUNTIME_DIR=/run/user/0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/0/bus
+root       37934  0.0  0.0  26244  2288 pts/0    S+   01:08   0:00      \_ -bash LS_COLORS=rs=0:di=38;5;33:ln=38;5;51:mh=00:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=01;05;37;41:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;40:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.zst=38;5;9:*.tzst=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.wim=38;5;9:*.swm=38;5;9:*.dwm=38;5;9:*.esd=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.mjpg=38;5;13:*.mjpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.m4a=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.oga=38;5;45:*.opus=38;5;45:*.spx=38;5;45:*.xspf=38;5;45: LANG=en_US.UTF-8 COLORTERM=truecolor TERM=xterm-256color SHELL=/bin/bash LOGNAME=root USER=root MAIL=/var/mail/root PATH=/sbin:/bin:/usr/sbin:/usr/bin HOME=/root SHELL=/bin/bash SUDO_COMMAND=/bin/bash SUDO_USER=student1 SUDO_UID=1001 SUDO_GID=1001 XDG_SESSION_ID=c1 XDG_RUNTIME_DIR=/run/user/0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/0/bus
+root       37938  0.0  0.1  61772  5156 pts/0    R    01:08   0:00          \_ ps -euf LS_COLORS=rs=0:di=38;5;33:ln=38;5;51:mh=00:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=01;05;37;41:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;40:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.zst=38;5;9:*.tzst=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.wim=38;5;9:*.swm=38;5;9:*.dwm=38;5;9:*.esd=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.mjpg=38;5;13:*.mjpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.m4a=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.oga=38;5;45:*.opus=38;5;45:*.spx=38;5;45:*.xspf=38;5;45: LANG=en_US.UTF-8 HISTCONTROL=ignoredups SUDO_GID=1001 HOSTNAME=ansible-1.example.com COLORTERM=truecolor SUDO_COMMAND=/bin/bash XDG_SESSION_ID=c1 USER=root PWD=/root HOME=/root SUDO_USER=student1 SUDO_UID=1001 MAIL=/var/spool/mail/root SHELL=/bin/bash TERM=xterm-256color SHLVL=1 LOGNAME=root DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/0/bus XDG_RUNTIME_DIR=/run/user/0 PATH=/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin HISTSIZE=1000 LESSOPEN=||/usr/bin/lesspipe.sh %s _=/bin/ps
+root        1108  0.0  0.0  16224  2116 ttyS0    Ss+  Jun21   0:00 /sbin/agetty -o -p -- \u --keep-baud 115200,38400,9600 ttyS0 vt220 LANG=en_US.UTF-8 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin INVOCATION_ID=30cfc414db7b4e2da27be04bec690c65 TERM=vt220 JOURNAL_STREAM=9:30512
+root        1103  0.0  0.0  13656  1508 tty1     Ss+  Jun21   0:00 /sbin/agetty -o -p -- \u --noclear tty1 linux PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin INVOCATION_ID=d67740ae0d5c4ae5a74cf508cd69069d TERM=linux JOURNAL_STREAM=9:30515</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -641,9 +616,6 @@ root        1095  0.0  0.0  13632  1760 tty1     Ss+  May07   0:00 /sbin/agetty 
 </tr>
 </table>
 </div>
-<div class="paragraph">
-<p>&#8203;<br></p>
-</div>
 </li>
 <li>
 <p>Now let&#8217;s run our command from before <em>but this time we&#8217;re running it from "within" the container</em></p>
@@ -665,15 +637,9 @@ $(ps -euf)
 EOF</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>&#8203;<br></p>
-</div>
 </li>
 <li>
 <p>Notice that the editor window didn&#8217;t change even though we wrote the info to the same location.  The difference is that the location is <strong>local to the container</strong>.  That&#8217;s because the container has a filesystem that appears separate to the host</p>
-<div class="paragraph">
-<p>&#8203;<br></p>
-</div>
 </li>
 <li>
 <p>To make sure the file was created, run the following command to show output of the file that we just created in the container:</p>
@@ -760,7 +726,13 @@ EOF</code></pre>
 </div>
 </li>
 <li>
-<p>Now click anywhere within the left editor where the <code>hostinfo.txt</code> should still be open to give that editor focus.  Hit <span class="keyseq"><kbd>SHIFT</kbd>+<kbd>CTRL</kbd>+<kbd>p</kbd></span> (or <span class="keyseq"><kbd>CMD</kbd>+<kbd>CTRL</kbd>+<kbd>p</kbd></span> on a Mac) to open the <strong>Command Palette</strong> and start typing <code>compare</code> so that you can select the command <code>File: Compare Active File With&#8230;&#8203;</code></p>
+<p>Now click anywhere within the left editor where the <code>hostinfo.txt</code> should still be open to give that editor focus.</p>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
+</li>
+<li>
+<p>With the <code>hostinfo.txt</code> still in focus, hit <span class="keyseq"><kbd>SHIFT</kbd>+<kbd>CTRL</kbd>+<kbd>p</kbd></span> (or <span class="keyseq"><kbd>CMD</kbd>+<kbd>CTRL</kbd>+<kbd>p</kbd></span> on a Mac) to open the <strong>Command Palette</strong> and start typing <code>compare</code> so that you can select the command <code>File: Compare Active File With&#8230;&#8203;</code></p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/compare-command.png" alt="compare command">
@@ -782,7 +754,24 @@ EOF</code></pre>
 </div>
 </li>
 <li>
-<p>You should then see a screen like the following.  Expand the size of the editor as necessary to get a good sense of the differences</p>
+<p>You should then see a screen like the following.  Take a minute to consider the differences</p>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If the comparison document seems to cramped, you can double-click on the tab of the comparison (circled in red in the image below) to expand the size of it out to be easier to read (e.g. it will compress the Browser Preview window to the right).</p>
+</div>
+<div class="paragraph">
+<p>Double-click the tab again to restore it to its original size</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="_images/info-diff.png" alt="info diff">
@@ -792,6 +781,34 @@ EOF</code></pre>
 <div class="paragraph">
 <p>&#8203;<br></p>
 </div>
+</li>
+<li>
+<p>Some differences and similarities between the two</p>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Similarities and Differences between Host and Container</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Similarities</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Differences</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Running RHEL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Version 8.4 vs 7.9</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>root</code> user</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Running many processes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Running few processes</p></td>
+</tr>
+</tbody>
+</table>
 </li>
 <li>
 <p>Finally, let&#8217;s look at our guestbook visitor log in VSCode by copying the visitor guestbook to our local VM</p>
@@ -958,10 +975,10 @@ EOF</code></pre>
 <p>Containers are by their nature immutable.  While they are running, however, changes are being made to their file systems.  When containers are stopped, we might want to <strong>commit</strong> those changes that were made to the filesystem whilst running.</p>
 </div>
 <div class="paragraph">
-<p>For those from an operations background, it&#8217;s a little like creating an image snapshot from a Virtual Machine when its stopped.  That image can then be used to boot up a machine in a desired state.</p>
+<p>For those from an operations background, it&#8217;s a little like creating an image snapshot from a Virtual Machine when its stopped.  That image can then be used to boot up a different VM in a desired state quickly.</p>
 </div>
 <div class="paragraph">
-<p>With <code>podman</code> the command is <code>commit</code> <sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup>.  Let&#8217;s issue the command now and we&#8217;ll see some of the value in it <a href="#rerunning_container">a little later on in the lab</a>.</p>
+<p>With <code>podman</code> the command is <code>commit</code> <sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup>.  Let&#8217;s issue the command now; we&#8217;ll see some of the value in it <a href="#rerunning_container">a little later on in the lab</a>.</p>
 </div>
 <div class="paragraph">
 <p>&#8203;</p>
@@ -1212,7 +1229,10 @@ quay.io/mhildenb/container-workshop-httpd  0.0.5   ec71626c6cd3  3 hours ago    
 </div>
 </li>
 <li>
-<p>How about our <code>visitor_info.txt</code> file?  Let&#8217;s copy that out of the container again</p>
+<p>How about our <code>visitor_info.txt</code> file?  Let&#8217;s delete the current one by right-clicking on it in the Explorer and selecting <code>Delete Permanently</code></p>
+</li>
+<li>
+<p>Now attempt to copy visitor_info.txt out of the container again</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman cp \
@@ -1233,7 +1253,12 @@ quay.io/mhildenb/container-workshop-httpd  0.0.5   ec71626c6cd3  3 hours ago    
 </div>
 </li>
 <li>
-<p>But if you open the <code>visitor_info.txt</code> after copying it out, you&#8217;ll notice that all the visitor names are gone!</p>
+<p>But you&#8217;ll get an error message.  There is no visitor_info.txt in this container!</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Error: "/var/log/www/visitor_info.txt" could not be found on container my-web-server: No such file or directory</code></pre>
+</div>
+</div>
 </li>
 </ol>
 </div>
