@@ -18,10 +18,8 @@ image::podman.svg[Podman!,width=320,height=86]
 
 . First let's prove that Apache is not currently running on your local VM.
 +
-{zwsp} +
 . In your xref:introduction.adoc#local_browser[Local Browser,window=_blank], navigate to `localhost:8081`, which instructs the browser to connect to port 8081 of your local instance
 +
-{zwsp} +
 . You should find that there is nothing there but a blank screen
 +
 image::empty-browser-preview.png[]
@@ -36,7 +34,6 @@ Now we're going to use podman to quickly create a running website on this instan
 sudo -i
 ----
 +
-{zwsp} +
 . You should now see the terminal prompt change to `#` indicating that you are now `root`
 +
 [.console-output]
@@ -47,10 +44,9 @@ sudo -i
 +
 [WARNING]
 ====
-Some of you with a security background are [#security_vuln]#probably fairly unconfortable with this#.  Don't worry: there's a method to our madness!  It's worthLook inside a running container pointing out that any socket-based container runtimes (such as `docker`) require some sort of root access to operate
+Some of you with a security background are [#security_vuln]#probably fairly unconfortable with this#.  Don't worry: there's a method to our madness!  While you might feel an aversion to running commands as the `root` user on the instance, it's worth pointing out that any socket-based container runtimes (such as `Docker`) require some sort of root access to operate
 ====
 +
-{zwsp} +
 . From inside the terminal, run the following command (see the footnotes for the breakdown of the different elements of the command):
 +
 [.console-input]
@@ -63,14 +59,13 @@ podman run \#<.>
     --name {apache-server-container-name} \#<.>
     {apache-server-image-insecure} #<.>
 ----
-<.> This flag, as we'll come to see, could be problematic.  It allows the container to run with an extended set of capabilities that might otherwise be reserved for the host (such as accessing ports < 1024).  However, when running some processes in a container, this is sometimes required
 <.> The `podman` command has a number of subcommands.  `run` indicates that we want to run a given container image
-<.> Run the container in "daemon" mode (in the background) 
-<.> This indicates that we want local port 8081 forwarded to port 80 in the container
+<.> The `--privileged` flag, as we'll come to see, could be problematic.  It allows the container to run with an extended set of capabilities that might otherwise be reserved for the host (such as accessing ports < 1024).  However, when running some processes in a container, this is sometimes required
+<.> Run the container in "daemon" mode (i.e. in the background) 
+<.> This indicates that we want local (i.e. the host) port 8081 forwarded to port 80 in the container
 <.> Whilst we can always refer to started containers by their system assigned Id, the `--name` option gives us the ability to refer to the container by a human-friendly name instead
 <.> This is the name of the image (including the image registry where the container is normally located, in this case link:quay.io[quay.io]) that we want to run
 +
-{zwsp} +
 . After the image is "pulled" you should see something like the following in the terminal which represents the id of the running container
 +
 [.console-output]
@@ -86,7 +81,6 @@ Storing signatures
 ----
 <.> This is the id of the running container.  
 +
-{zwsp} +
 . Compare the id there to the output of the following `podman` command:
 +
 [.console-input]
@@ -95,7 +89,6 @@ Storing signatures
 podman ps
 ----
 +
-{zwsp} +
 . You should see in the output something like the following that shows you that the container is running
 +
 .NOTE: notice that the beginning of the CONTAINER ID matches the id the was output from the `podman run` command
@@ -104,13 +97,13 @@ podman ps
 ----
 include::partial$podman_ps.adoc[]
 ----
+{zwsp} +
 +
 . Finally, return to the Browser Preview panel and hit the reload button.  You should see the following web page indicating that an Apache webserver is running:
 +
 .Test Page
 image::apache-test-page.png[]
 +
-{zwsp} +
 . Our website has more than a test page, it also has a visitor form (like straight out of the 90s!).  Let's take a look by navigating to this address: 
 +
 [.console-input]
@@ -124,22 +117,19 @@ http://localhost:8081/hello.html
 +
 image::apache-guestbook-page.png[]
 +
-{zwsp} +
 . Now enter a name into the `Name:` field to be logged to the guestbook and press the `Log to Guestbook` button.  You should now be presented a screen like this: 
 +
 image::apache-guestbook-submit.png[]
 +
-{zwsp} +
 . Click the `here` link highlighted above to go back and enter another name
+{zwsp}+
 
-Next let's take a look inside our container
+Now that we have a container up and running, let's poke around inside the container to get some idea of what's going on and how containers relate to the host instance.
 
 [#enter_container]
 == 2. Look inside a running container
 
 Whilst the container is running, we are able to "look inside" the container.  The experience is much the same to `telnet` ing or `ssh` ing into a remote instance or virtual machine.
-
-{zwsp}
 
 . First though, let's record what's going on with the container's host, namely the virtual machine that is running your code-server instance.  We'll use this to compare to what we find inside the container.  Run the following command in the terminal to gather some intel about the host (and save it to a place where code-server can display it!)
 +
@@ -165,8 +155,6 @@ include::example$gather_info_example_output.txt[]
 ----
 +
 {zwsp} +
-
-
 . Now let's get into the container so that we can run the same command.  But first `podman` needs to know which container we mean.  There are two different ways to reference the running container, [#find_container_id]#by **CONTAINER ID**# or by **NAME**.  Pick the tab of your choice to show how we can enter the container using either approach:
 +
 [tabs]
@@ -241,7 +229,6 @@ include::partial$podman_exec_callouts.adoc[]
 ----
 <.> Notice that the `CONTAINER_ID` appears after the `@` in the bash shell that we have started inside the container
 +
-{zwsp} +
 . Now let's run our command from before _but this time we're running it from "within" the container_
 +
 [.console-input]
@@ -250,10 +237,8 @@ include::partial$podman_exec_callouts.adoc[]
 include::partial$gather_info.adoc[]
 ----
 +
-{zwsp} +
 . Notice that the editor window didn't change even though we wrote the info to the same location.  The difference is that the location is *local to the container*.  That's because the container has a filesystem that appears separate to the host
 +
-{zwsp} +
 . To make sure the file was created, run the following command to show output of the file that we just created in the container:
 +
 [.console-input]
@@ -310,7 +295,10 @@ podman cp \
 <.> This path, undecorated by a container name or id, indicates that we are referencing a path on the host (i.e. local filesystem)
 +
 {zwsp} +
-. Now click anywhere within the left editor where the `{temp-file}` should still be open to give that editor focus.  Hit kbd:[SHIFT+CTRL+p] (or kbd:[CMD+CTRL+p] on a Mac) to open the *Command Palette* and start typing `compare` so that you can select the command `File: Compare Active File With...`
+. Now click anywhere within the left editor where the `{temp-file}` should still be open to give that editor focus.  
++
+{zwsp} +
+. With the `{temp-file}` still in focus, hit kbd:[SHIFT+CTRL+p] (or kbd:[CMD+CTRL+p] on a Mac) to open the *Command Palette* and start typing `compare` so that you can select the command `File: Compare Active File With...`
 +
 image::compare-command.png[]
 +
@@ -320,12 +308,37 @@ image::compare-command.png[]
 image::container-info-select.png[]
 +
 {zwsp} +
-. You should then see a screen like the following.  Expand the size of the editor as necessary to get a good sense of the differences
+. You should then see a screen like the following.  Take a minute to consider the differences
++
+[TIP]
+====
+If the comparison document seems to cramped, you can double-click on the tab of the comparison (circled in red in the image below) to expand the size of it out to be easier to read (e.g. it will compress the Browser Preview window to the right).
+
+Double-click the tab again to restore it to its original size
+====
 +
 .Host vs. Container output of above commands
 image::info-diff.png[]
-+
 {zwsp} +
++
+. Some differences and similarities between the two
++
+[cols="1,1"]
+.Similarities and Differences between Host and Container
+|===
+|*Similarities*
+|*Differences*
+
+|Running RHEL
+|Version 8.4 vs 7.9
+
+|`root` user
+|
+
+|Running many processes
+|Running few processes
+|===
++
 . Finally, let's look at our guestbook visitor log in VSCode by copying the visitor guestbook to our local VM
 +
 include::partial$copy_visitor_info.adoc[]
@@ -418,10 +431,10 @@ You might wonder why we would want to keep a container around even after we have
 
 Containers are by their nature immutable.  While they are running, however, changes are being made to their file systems.  When containers are stopped, we might want to **commit** those changes that were made to the filesystem whilst running.  
 
-For those from an operations background, it's a little like creating an image snapshot from a Virtual Machine when its stopped.  That image can then be used to boot up a machine in a desired state.
+For those from an operations background, it's a little like creating an image snapshot from a Virtual Machine when its stopped.  That image can then be used to boot up a different VM in a desired state quickly.
 
 With `podman` the command is `commit` footnote:[For more info on committing container state, see the link:http://docs.podman.io/en/latest/markdown/podman-commit.1.html[podman documentation]
-].  Let's issue the command now and we'll see some of the value in it <<rerunning_container,a little later on in the lab>>.
+].  Let's issue the command now; we'll see some of the value in it <<rerunning_container,a little later on in the lab>>.
 
 {zwsp}
 
@@ -560,12 +573,19 @@ http://localhost:8081/{temp-file}
 image::not-found.png[]
 +
 {zwsp} +
-. How about our `visitor_info.txt` file?  Let's copy that out of the container again
+. How about our `visitor_info.txt` file?  Let's delete the current one by right-clicking on it in the Explorer and selecting `Delete Permanently`
+. Now attempt to copy visitor_info.txt out of the container again
 +
 include::partial$copy_visitor_info.adoc[]
 +
 {zwsp} +
-. But if you open the `visitor_info.txt` after copying it out, you'll notice that all the visitor names are gone!
+. But you'll get an error message.  There is no visitor_info.txt in this container!
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+Error: "/var/log/www/visitor_info.txt" could not be found on container {apache-server-container-name}: No such file or directory
+----
 
 {zwsp}
 
