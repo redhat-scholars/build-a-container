@@ -1,4 +1,4 @@
-= Welcome %USER% to Build a Container Workshop
+= Welcome to the Build a Container Workshop
 :page-layout: home
 :!sectids:
 
