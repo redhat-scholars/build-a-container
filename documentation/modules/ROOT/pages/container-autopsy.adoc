@@ -1,0 +1,274 @@
+include::_attributes.adoc[]
+
+= A Container Autopsy
+
+_10 MINUTE READ_
+
+
+If you are new to containers, this section will help your understanding in what actually makes up a container,
+introduce the Open Container Initiative (OCI) specifications and demystify some of what is actually happening under the covers.
+
+image::autopsy.png[Autopsy!]
+
+[#what_makes_up_a_container]
+== 1. What makes up a Container?
+A Container can be defined as a process with its own file system. The process is governed by the OCI runtime specification (link:https://github.com/opencontainers/runtime-spec[github.com/opencontainers/runtime-spec,window=_blank])
+whilst the file system and configuration is governed by the OCI container image format (link:https://github.com/opencontainers/image-spec[github.com/opencontainers/image-spec,window=_blank]).
+
+These specifications are open industry standards by the Open Container Initiative (OCI) which is an open governance structure for the express purpose of creating standards around container formats and runtimes.
+
+image::OCI-logo.svg[OCI Logo!,width=320,height=80]
+
+{zwsp}
+
+[#container_image_format]
+== 2. Container Image Format
+Container images are made up of layers, most which are immutable with the exception of a writeable upper layer. A union file system provides a logical view when the container is running. (OverlayFS is a union mount filesystem implementation for Linux). The union file system works on top of the other file-systems. It gives a single coherent and unified view to files and directories of separate file-system. In other words, it mounts multiple directories to a single root. It is more of a mounting mechanism than a file system.
+
+Today you are the container builder, so the important aspects to understand are:
+
+. Each row in a Dockerfile corresponds to a new layer.
+. Choose to have less layers as it takes less time to build the logical view union file system at runtime.
+. Smaller container images are preferable as they will take less time to download and use less disk space.
+. Upper layers may potentially overwrite bottom layers. So a file may not be present because it was deleted by an upper layer.
+. Logically deleting the file in the upper layer will still add to overall image size.
+
+image::imagelayering.png[Image Layers!]
+
+Within the container image, layers are formatted as archives (tar files) and are indexed in Image index and Manifest (json format) files.
+Furthermore config files provide the means of storing command line options, environment variables, and properties such as time created.
+The figure below shows the extract of a container image and how the internals of layering, indexing are organised.
+
+image::tar-extract.png[Extract!]
+
+[NOTE]
+====
+To export a container image to a tar file and extract try the following commands
+
+image::export-image.png[How to export!]
+
+====
+
+{zwsp}
+[#container_file]
+== 3. Containerfile
+
+A Containerfile is a text based file which provides instructions to assemble an image. The available commands that are usable inside a Containerfile and a Dockerfile are equivalent.
+
+The Containerfile below is a of a mysql image from the Red Hat Container Catalog. As the image is built the commands are executed in order from top down until the image is built.
+
+image::dissectingimage.png[Dissecting an Image!]
+
+The below table provides an overview of the are typical commands seen in a Containerfile.
+
+[cols="1,3"]
+|===
+|FROM
+|To specify the parent image.
+
+|WORKDIR
+|To set the working directory for any commands that follow in the Dockerfile.
+
+|RUN
+|To install any applications and packages required for your container.
+
+|COPY
+|To copy over files or directories from a specific location.
+
+|ADD
+|As COPY, but also able to handle remote URLs and unpack compressed files.
+
+|ENTRYPOINT
+|Command that will always be executed when the container starts. If not specified, the default is /bin/sh -c
+
+|CMD
+|Arguments passed to the entrypoint. If ENTRYPOINT is not set (defaults to /bin/sh -c), the CMD will be the commands the container executes.
+
+|EXPOSE
+|To define which port through which to access your container application.
+
+|LABEL
+|To add metadata to the image.
+
+|===
+
+You may also see Containerfiles with multi stage builds where multiple FROM commands may be present. Multistage builds provide a means to help refine the runtime image as opposed to having an image which also contains all the necessary software to build. For instance you typically don't need maven to run a java based jar but do need it to build.
+
+{zwsp}
+[#container_identification]
+== 4. Container Identification
+
+Once you build a container you need to give it a tag to be able to identify it. An image tag is a label applied to a container image in a repository that distinguishes a specific image from other images. Typically, the tag represents a version number of some sort.
+
+image::container-identification.png[Container Identification!]
+
+
+
+{zwsp}
+
+[#container_runtime]
+== 5. Container Runtime
+
+Like the container image specification, there is a link:https://github.com/opencontainers/runtime-spec[runtime specification,window=blank] which defines a lifecycle for a container. This defines hooks to be invoked prior to starting, creating or shutting down.
+
+
+The state of a container includes the following properties
+
+. Oci version
+. Id - This MUST be unique across all containers on this host.
+. Status - created, creating, running, stopped
+. Pid - when container is creating or running
+. bundle (string, REQUIRED) is the absolute path to the container's bundle directory.
+. annotations (map, OPTIONAL) contains the list of annotations associated
+
+image::runtimespec.png[Extract!]
+
+We will be able to understand the runtime aspects a little more when looking at container statuses in the following sections.
+
+{zwsp}
+
+[#container_tools]
+== 6. Container Tools
+
+As mentioned, the open source community have created new container tools to removed the way Docker requires the use of root access and a daemon process.
+These new tools are buildah, skopeo and podman which each provide different functionality. You can think of podman as a developers replacement for all Docker commands, skopeo as a simpler way to inspect and copy images and buildah provides specialist ways of building images whether from a Containerfile or interactively.
+
+image::container_tools.png[Extract!]
+
+{zwsp}
+
+=== But how would you use these tools?
+{zwsp}
+
+=== Buildah
+
+Buildah can an act as a drop-in replacement for the Docker daemon’s docker build command (i.e., building images with a traditional Dockerfile) but is flexible enough to allow you to build images with whatever tools you prefer to use. ( bud = build-using-dockerfile )
+----
+buildah bud -t hello .
+----
+
+
+Unlike Docker build, Buildah doesn’t commit changes to a layer automatically for every instruction in the Dockerfile—it builds everything from top to bottom, every time.
+link:https://www.redhat.com/sysadmin/getting-started-buildah[Getting started with Buildah,window=_blank]
+
+Like the below sequence of commands - Buildah can interact with the temporary container created during the build process.
+----
+# Create a container
+container=$(buildah from fedora:28)
+
+# Labels are part of the "buildah config" command
+buildah config --label maintainer="Chris Collins <collins.christopher@gmail.com>" $container
+
+# Grab the source code outside of the container
+curl -sSL http://ftpmirror.gnu.org/hello/hello-2.10.tar.gz -o hello-2.10.tar.gz
+
+buildah copy $container hello-2.10.tar.gz /tmp/hello-2.10.tar.gz
+
+buildah run $container dnf install -y tar gzip gcc make
+...
+# Workingdir is also a "buildah config" command
+buildah config --workingdir /opt/hello-2.10 $container
+...
+
+# Entrypoint, too, is a “buildah config” command
+buildah config --entrypoint /usr/local/bin/hello $container
+
+# Finally saves the running container to an image
+buildah commit --format docker $container hello:latest
+----
+{zwsp}
+
+=== Podman
+
+Podman command format will be very familiar to Docker users but doesnt require a daemon.
+----
+podman pull registry.fedoraproject.org/f29/httpd
+podman images
+podman run -dt -p 8080:8080/tcp registry.fedoraproject.org/f29/httpd
+----
+
+=== Skopeo
+
+With the skopeo command, you can work with container images from registries without using the docker daemon or the docker command.
+----
+skopeo inspect docker://docker.io/fedora
+
+----
+
+In a single line the Skopeo copy command replaces the mulitple docker commands below
+----
+skopeo copy --dest-creds prod_user:prod_pass docker://internal.registry/myimage:latest docker://production.registry/myimage:v1.0
+----
+
+----
+docker login ...
+docker pull internal.registry/myimage:latest
+docker tag internal.registry/myimage:latest production.registry/myimage:v1.0
+docker push production.registry/myimage:v1.0
+----
+
+{zwsp}
+
+
+[#container_registries]
+== 7. Container Registries
+When working with container images, you need somewhere to save and access them as they are created and that’s where a container registry comes in.
+The registry essentially acts as a place to store container images and share them out via a process of uploading to (pushing) and downloading from (pulling).
+
+There are two types of container registry: public and private.
+
+=== Public registries are:
+
+<.> great for individuals or small teams
+<.> get up and running quickly as possible. Basic in their abilities.
+<.> easy to use
+
+=== Private registries have:
+<.> Security and privacy
+<.> Enterprise container image storage
+<.> Host remotely or on-premises
+
+=== Enterprises need to look for:
+
+<.> Multiple authentication systems
+<.> Role-based access control management
+<.> Vulnerability scanning capabilities
+<.> Auditable logs
+<.> Optimized for automation
+
+Red Hat Quay is a private container image registry that enables you to build, distribute, and deploy containers with the storage you need to scale quickly.
+It analyzes your images for security vulnerabilities using Clair, identifying potential issues and addressing them before they become security risks.
+The Red Hat Container catalog runs on Quay and provides a view of the vulnerabilities found by Clair.
+link:https://catalog.redhat.com/software/containers/explore[https://catalog.redhat.com/software/containers/explore, window=blank]
+
+[#container_exercise]
+== Exercise
+
+Search the Red Hat Container Catalog to find the answers.
+
+1. What is the size of the UBI 8 micro container?
+2. What is the podman or docker command to pull the ubi 8 micro image?
+3. What is the health rating of ubi8/python-27 label 2.7-125?
+
+Submit these answers to the instructors via the form provided.
+
+{zwsp}
+
+[#more_information]
+== More information
+
+But what else do you need to know about containers? Well you might want to understand
+
+. File system mounting
+. User permissions
+. Port mapping
+. Network
+. Resource limiting
+. Secrets, configuration, environment variables
+. Host system
+
+Many of these will be covered as we step through the exercises but for more information take a look at
+
+link:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/building_running_and_managing_containers/index#understanding-standard-red-hat-base-images_building-running-and-managing-containers["Building Running and Managing Containers in RHEL 8",window=_blank]
+
+link:https://www.redhat.com/en/topics/cloud-native-apps/what-is-a-container-registry[What is a container registry?, window=blank]
