@@ -1,0 +1,12 @@
+---
+- name: cleanup Openshift cluster
+  include_tasks: teardown.yml
+  when: teardown|bool
+
+- name: Setup OpenShift Cluster
+  block:
+    - name: Setup OpenShift Cluster for use with lab
+      include_tasks: "setup.yml"
+  when:
+    - not teardown|bool
+

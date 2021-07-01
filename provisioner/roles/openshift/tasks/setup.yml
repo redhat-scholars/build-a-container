@@ -1,0 +1,44 @@
+
+- name: Check login status  
+  block:
+  - shell: oc whoami 2>/dev/null
+    register: oc_output
+  - fail:
+      msg: "Not logged into openshift"
+    when:
+      oc_output.rc != 0 
+  
+- name: Get Cluster Subdomain
+  shell: oc whoami --show-server 2>/dev/null | sed -r 's/^https:\/\/api.([^:]+):6443$/\1/g'
+  register: oc_subdomain
+
+- name: Set Cluster Subdomain
+  set_fact:
+    ocp_cluster_subdomain: "{{ oc_subdomain.stdout }}"
+
+- name: Get Local Secret File
+  shell: oc get secret htpasswd-secret -n openshift-config -o jsonpath={'.data.htpasswd'} | base64 -d > /tmp/passwd
+
+- name: Add or Update users and passwords
+  shell: htpasswd -b /tmp/passwd student{{item}} {{user_password}}
+  loop: "{{ range(1, num_users + 1)|list }}"
+
+- name: Patch secret
+  shell: |
+    oc patch secret htpasswd-secret -n openshift-config --type='json' -p='[{"op" : "replace", "path" : "/data/htpasswd", "value" : "'"$(base64 -w 0 /tmp/passwd)"'"}]'
+    
+- name: Set up user projects
+  k8s:
+    state: present
+    definition: "{{ lookup('template', './templates/user-project.yaml.j2') | from_yaml }}"
+  loop: "{{ range(1, num_users + 1)|list }}"
+
+- name: Set up user permissions to user projects
+  k8s:
+    state: present
+    definition: "{{ lookup('template', './templates/rolebinding.yaml.j2') | from_yaml }}"
+  vars:
+    user_project: "student{{ item }}"
+    user_role: edit
+    user_name: "student{{ item }}"
+  loop: "{{ range(1, num_users + 1)|list }}"
