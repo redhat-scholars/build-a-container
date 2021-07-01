@@ -1,4 +1,4 @@
-= Welcome to the Build a Container Workshop
+= Welcome to the Build a (Secure) Container Workshop
 :page-layout: home
 :!sectids:
 
