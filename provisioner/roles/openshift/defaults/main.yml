@@ -1,0 +1,4 @@
+---
+# defaults file for openshift
+user_password: openshift
+num_users: 0

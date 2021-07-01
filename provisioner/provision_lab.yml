@@ -13,6 +13,25 @@
       include_role:
         name: aws_check_setup
 
+- name: Setup OpenShift Cluster
+  hosts: localhost
+  tasks:
+    - include_role: 
+        name: openshift
+      vars:
+        num_users: "{{student_total}}"
+        user_password: "{{ocp_student_password}}"
+      when:
+        - (openshift_install is defined) and (openshift_install | bool) 
+
+- name: Debug Cluster Subdomain
+  hosts: localhost
+  tasks:
+    - debug:
+        msg: "Cluster subdomain is {{ocp_cluster_subdomain}}"
+      when:
+        - (openshift_install is defined) and (openshift_install | bool) 
+
 - name: Create lab instances in AWS
   hosts: localhost
   connection: local
@@ -43,6 +62,9 @@
             name: workshop_attendance_nginx
         - include_role:
             name: workshop_attendance
+          vars:
+            openshift_cluster_subdomain: "{{hostvars['localhost'].ocp_cluster_subdomain}}"
+            guide_url: "{{ lab_guide_url }}"
       when: attendance|bool
 
 - name: wait for all security nodes to have SSH reachability

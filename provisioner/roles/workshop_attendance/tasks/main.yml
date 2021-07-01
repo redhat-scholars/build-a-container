@@ -7,6 +7,10 @@
   import_tasks: dns.yml
   when: not teardown
 
+- name: Debug cluster subdomain
+  debug:
+    msg: "OpenShift Cluster subdomain is {{ openshift_cluster_subdomain }}"
+
 - name: Configure attendance host
   import_tasks: attendance.yml
   when: not teardown

@@ -1,0 +1,8 @@
+apiVersion: project.openshift.io/v1
+kind: Project
+metadata:
+  name: "student{{ item }}"
+  annotations:
+    openshift.io/description: ""
+    openshift.io/display-name: "student{{ item }}"
+    openshift.io/requester: ""

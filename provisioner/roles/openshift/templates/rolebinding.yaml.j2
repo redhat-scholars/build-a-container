@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: "{{ user_name }}-{{ user_role }}"
+  namespace: "{{ user_project }}"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: "{{ user_role }}"
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: "{{ user_name }}"
