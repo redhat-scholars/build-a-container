@@ -11,7 +11,6 @@
 ** xref:container-autopsy.adoc#container_runtime[Container Runtime]
 ** xref:container-autopsy.adoc#container_tools[Container Tools]
 ** xref:container-autopsy.adoc#container_registries[Container Registries]
-** xref:container-autopsy.adoc#container_exercise[Exercise]
 ** xref:container-autopsy.adoc#more_information[More information]
 * xref:podman-intro.adoc[Running Containers]
 ** xref:podman-intro.adoc#run_container[Add a website]

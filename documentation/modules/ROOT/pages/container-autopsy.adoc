@@ -241,19 +241,6 @@ It analyzes your images for security vulnerabilities using Clair, identifying po
 The Red Hat Container catalog runs on Quay and provides a view of the vulnerabilities found by Clair.
 link:https://catalog.redhat.com/software/containers/explore[https://catalog.redhat.com/software/containers/explore, window=blank]
 
-[#container_exercise]
-== Exercise
-
-Search the Red Hat Container Catalog to find the answers.
-
-1. What is the size of the UBI 8 micro container?
-2. What is the podman or docker command to pull the ubi 8 micro image?
-3. What is the health rating of ubi8/python-27 label 2.7-125?
-
-Submit these answers to the instructors via the form provided.
-
-{zwsp}
-
 [#more_information]
 == More information
 
