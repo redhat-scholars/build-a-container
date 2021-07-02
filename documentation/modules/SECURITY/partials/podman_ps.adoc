@@ -1,0 +1,2 @@
+CONTAINER ID  IMAGE                                            COMMAND               CREATED      STATUS          PORTS                 NAMES
+4e9c38ac10eb  {apache-server-image-insecure}  /usr/sbin/httpd -...  3 hours ago  Up 3 hours ago  0.0.0.0:8081->80/tcp  {apache-server-container-name}

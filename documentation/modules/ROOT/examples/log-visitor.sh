@@ -1,1 +1,0 @@
-../../../../lab-assets/initial-container/log-visitor.sh

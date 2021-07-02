@@ -1,6 +1,6 @@
 name: intro-container-workshop
 title: Build a Container Workshop
-version: "1.0"
+version: "BASE"
 nav:
   - modules/ROOT/nav.adoc
 # - modules/SECURITY/nav.adoc
