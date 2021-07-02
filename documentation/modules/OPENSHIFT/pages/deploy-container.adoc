@@ -1,0 +1,371 @@
+include::ROOT:page$_attributes.adoc[]
+
+:OCP_PROJECT: {USER}
+
+= Containers and OpenShift
+:navtitle: Containers and OpenShift
+
+== Login to OpenShift
+
+First, let's log into your OpenShift cluster.  Choose the tab that is most appropriate to your situation.  If you are unsure, ask your lab techs.
+
+[tabs]
+====
+Provisioned::
++
+--
+. You should be able to reach the OpenShift cluster provisioned for this lab link:https://console-openshift-console.apps.{CLUSTER_SUBDOMAIN}/[here^]
+. You should be met with a login challenge screen
++
+image::openshift-login-challenge.png[]
++
+. Enter the following details
+** *Username*: {USER}
+** *Password*: openshift
+ 
+--
+OpenShift Developer Sandox::
++
+--
+
+.PREREQUISITES
+****
+This section assumes you:
+
+* Already have a Red Hat account
+* Requested and have had an OpenShift Developer Sandbox approved prior to attempting this section
+****
+
+. Navigate to the link:https://red.ht/dev-sandbox[Red Hat Developer OpenShift Developer Sandbox page^]
+. Click on "start your sandbox" and enter your Red Hat account login details
+. From the OpenShift sandbox page, log into your sandbox by clicking on the "DevSandbox" button on the login challenge page
++
+image::dev-sandbox-login-challenge.png[]
++
+. Once you login, you should see your `-dev` project in the Developer Perspective
++
+image::dev-sandbox-dev-perspective.png[]
+--
+====
+
+If you've logged in successfully, you should find yourself on the (empty) start page for the Developer Perspective one the `{OCP_PROJECT}` projectfootnote:[_project_ is an OpenShift specific term.  For the purposes of this lab you can think of is as synonymous with the Kubernetes concept of a _namespace]
+
+image::ocp-developer-perspective.png[]
+
+=== Console Login
+
+For this section we're going to want to issue commands to OpenShift from the commandline.  OpenShift has a CLI called `oc` footnote:[`oc` is built on top of `kubectl`, the generic Kubernetes CLI.  Any command you can issue with `kubectl` you can issue with `oc`, but `oc` builds upon `kubectl` with OpenShift specific commands, such as `oc login`] which we will leverage.
+
+Here again, choose the proper tab for your setup
+
+[tabs]
+====
+Provisioned::
++
+--
+. From the (CodeServer) terminal, enter the following command to log into OpenShift
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+oc login https://api.{CLUSTER_SUBDOMAIN}:6443 \#<.>
+    --username {USER} \
+    --password 'openshift'
+----
+<.> This is the URL of the REST API for OpenShift with which the CLI interacts
++
+.Insecure connections
+****
+If you are met the with following question in the console
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+The server uses a certificate signed by an unknown authority.
+You can bypass the certificate check, but any data you send to the server could be intercepted by others.
+Use insecure connections? (y/n): 
+----
+
+You can safely answer `y` (yes) at the prompt
+****
+--
+OpenShift Developer Sandbox::
++
+--
+. From your OpenShift Console UI, click the dropdown in the upper right (with your account name) and select `Copy login command`
++
+image::copy-login-command.png[]
++
+. Next, when presented the login challenge select `DevSandbox`
++
+image::dev-sandbox-login-challenge.png[]
++
+. Click the "Display Token" link
+. Copy the string as indicated in the image
++
+image::copy-login-token.png[]
++
+. Paste the command into a Code Server terminal
+--
+====
+
+If you have logged on successfully, running the following command: 
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+oc whoami
+----
+
+Should yield your OpenShift username (below represents username shown if using Provisioned Cluster)
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+{USER}
+----
+
+== Simple Container Deployment
+
+Let's go back to the container that we finished xref::build-your-own-container.adoc#finished_container[here,window=_blank] and look at what a simple deployment to the `{OCP_PROJECT}` project.
+
+=== Container Registry
+
+In order to be able to run an image in OpenShift or Kubernetes we need to put our image somewhere we're OpenShift can find it.  This usually involves uplaoding the image to either a public or private container registry.  Public registries include Red Hat's link:quay.io[quay.io^] and Docker's link:https://hub.docker.com/[Docker Hub^]
+
+One of the features that OpenShift adds to Kubernetes is an inbuilt container registry called an ImageStream.  We're going to create an ImageStream to upload our container to where OpenShift can find it.
+
+We can create the image stream either from the OpenShift Console (UI) or from the terminal (command line).  Choose one of the following tabs
+
+[tabs]
+====
+Terminal::
++
+--
+
+. Enter the following command
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+oc create imagestream \#<.>
+    -n {OCP_PROJECT} \#<.>
+    {ocp_secure_image_name} #<.>
+----
+<.> `ImageStream` is an OpenShift specific Kubernetes resource that represents a project specific container registry
+<.> This is the namespace the ImageStream should be bound to
+<.> This is the name of the image registry we want to create
+
+--
+OpenShift Console::
++
+--
+_COMING SOON_
+--
+====
+
+. With our ImageStream created, we can find our registry endpoint with this command
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+OCP_REGISTRY_URL=$(oc get imagestream {ocp_secure_imagestream_name} \
+    -n {USER} \
+    -o jsonpath='{.status.publicDockerImageRepository}') #<.>
+----
+<.> `-o` is used to specify the output type.  In this case we specify `jsonpath` which means give the output as JSON and then act as if it were piped to `jq -r` meaning we specify the field in the JSON we are looking for
++
+. Once we have the `publicDockerImageRepository` we can use podman to login into it with our OpenShift credentials
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman login \
+    pass:[${OCP_REGISTRY_URL}] \
+    --username {USER} \
+    --password "$(oc whoami -t)" #<.>
+----
+<.> You must log into imagestream registries using a token and not your user's password.  `oc whoami -t` returns the currently active token for a given OpenShift session
++
+. This should yield the following output, which indicates that you've authenticated with the ImageStream internal registry
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+Login Succeeded!
+----
++
+. Now we're going to use a new `podman` command called `tag` to associate our local image with an image that could exist in our ImageStream registry
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman tag {apache-server-containerfile-image} \
+    pass:[${OCP_REGISTRY_URL}]:latest 
+----
++ 
+. Once tagged, we should now be able to push this image into the ImageStream using the `podman push` command 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman push pass:[${OCP_REGISTRY_URL}]:latest
+----
++
+. You should see output similar to the following
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+Getting image source signatures
+Copying blob 1d505cb9245a done  
+Copying blob 9e12a51e507a done  
+Copying blob 01d2fb866535 done  
+Copying config f8b584bce6 done  
+Writing manifest to image destination
+Storing signatures
+----
+
+Now we have our image in a place where we can refer to it
+
+=== Run an image
+
+The simplest way to get a container image up and running in OpenShift is with the `oc run` command.  This will create what's called a `pod` to house our container that runs based on the image definition we just uploaded to the ImageStream
+
+. One of benefits of using ImageStreams is that the cluster internal addresss of the ImageStream repo does not require authentication.  Let's use that for the image location for running our pod
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+CLUSTER_LOCAL_REGISTRY_URL=$(oc get imagestream \
+    {ocp_secure_imagestream_name} \#<.>
+    -o jsonpath='{.status.dockerImageRepository}') #<.>
+----
+<.> Notice that this is the same ImageStream name we've been using
+<.> This time we're looking not for the `publicDockerImageRepository` from the ImageStream definition, but the `dockerImageRepository` which is the same as the cluster local address of the repo
++
+. Run the following command from the Code Server terminal
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+oc run \
+    my-web-server \#<.>
+    -n {OCP_PROJECT} \
+    --image pass:[${CLUSTER_LOCAL_REGISTRY_URL}]:latest
+----
+<.> The name that will be given to the pod
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+pod/my-web-server created
+----
++
+. Switch to the OpenShift Console (UI) and look at the link:https://console-openshift-console.apps.{CLUSTER_SUBDOMAIN}/topology/ns/{OCP_PROJECT}?view=graph[developer perpective for your project^].  You should see the pod running
++
+.Our image running in OpenShift
+image::ocp-running-secure-image.png[]
+
+=== Accessing our website
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+oc expose \#<.>
+    pod/my-web-server #<.>
+----
+<.> `expose` is an `oc` CLI specific command
+<.> Many resources can be exposed.  Exposing a pod creates a service that points to the pod based on the svcs the pod exports
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+oc expose \
+    svc/my-web-server
+----
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+echo "http://$(oc get route my-web-server -o jsonpath='{.spec.host}')/hello.html"
+----
+
+image::sandbox-website.png[]
+
+== OpenShift security
+
+This the xref::build-your-own-container.adoc#basic_containerfile[building secure container section,window=_blank] we spent a lot of time making our image suitable for running on OpenShift.  
+
+Let's take a quick look at how OpenShift adds a layer of protection around our running of images
+
+_COMING SOON_: Upload to image stream under new tag and try running the insecure container. This should fail
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman tag \
+    {apache-server-image-insecure} \
+    pass:[${OCP_REGISTRY_URL}]:insecure
+----
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman push \
+    pass:[${OCP_REGISTRY_URL}]:insecure
+----
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+Getting image source signatures
+Copying blob bcf3865bf7f7 done  
+Copying blob 86284899b0cc done  
+Copying blob c9e02f9d3afe done  
+Copying blob 4e7c990a129f done  
+Copying blob 210af8709b71 done  
+Copying blob 123257361dae done  
+Copying blob 47e96512450e done  
+Copying blob 8f10e6ebff19 done  
+Copying blob 486383b07939 done  
+Copying blob 23be1053bf93 done  
+Copying blob ee738432d587 done  
+Copying config 60dde8abf7 done  
+Writing manifest to image destination
+Storing signatures
+----
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+oc run \
+    my-web-server-insecure \#<.>
+    -n {OCP_PROJECT} \
+    --image pass:[${CLUSTER_LOCAL_REGISTRY_URL}]:insecure #<.>
+----
+<.> Different pod name to distinguish from previous
+<.> Same exact image registry, just different tag
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+oc get events -w
+----
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+0s          Normal    Scheduled        pod/{ocp_insecure_pod_name}   Successfully assigned {USER}/{ocp_insecure_pod_name} to ip-10-0-157-41.ap-southeast-1.compute.internal
+0s          Normal    AddedInterface   pod/{ocp_insecure_pod_name}   Add eth0 [10.131.0.238/23]
+0s          Normal    Pulling          pod/{ocp_insecure_pod_name}   Pulling image "image-registry.openshift-image-registry.svc:5000/{USER}/{ocp_insecure_image_name}"
+0s          Normal    Pulled           pod/{ocp_insecure_pod_name}   Successfully pulled image "image-registry.openshift-image-registry.svc:5000/{USER}/{ocp_insecure_image_name}" in 6.549828045s
+0s          Normal    Created          pod/{ocp_insecure_pod_name}   Created container {ocp_insecure_pod_name}
+0s          Normal    Started          pod/{ocp_insecure_pod_name}   Started container {ocp_insecure_pod_name}
+0s          Normal    Pulled           pod/{ocp_insecure_pod_name}   Container image "image-registry.openshift-image-registry.svc:5000/{USER}/{ocp_insecure_image_name}" already present on machine
+0s          Normal    Created          pod/{ocp_insecure_pod_name}   Created container {ocp_insecure_pod_name}
+0s          Normal    Started          pod/{ocp_insecure_pod_name}   Started container {ocp_insecure_pod_name}
+0s          Warning   BackOff          pod/{ocp_insecure_pod_name}   Back-off restarting failed container
+0s          Warning   BackOff          pod/{ocp_insecure_pod_name}   Back-off restarting failed container
+
+----

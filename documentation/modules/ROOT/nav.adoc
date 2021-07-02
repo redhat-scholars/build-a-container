@@ -23,11 +23,6 @@
 * xref:container-persistence.adoc[Persistence and Containers]
 ** xref:container-persistence.adoc#mounting_volumes[Mounting Volumes]
 ** xref:container-persistence.adoc#test_mount[Testing the Volume Mount]
-** xref:container-persistence.adoc#tcontainerized_databases[Containerized Databases]
 * Building Securely
-** xref:containers-and-security.adoc[Container Security]
-** xref:containers-and-security.adoc#scanning_containers[Scanning Containers]
 ** xref:build-your-own-container.adoc[Build your own Secure Container]
-* Scaling and Deploying Containers
-** xref:compose-container.adoc[Multi containers with Podman]
-** xref:deploy-container.adoc[Containers and OpenShift]
+
