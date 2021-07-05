@@ -1,4 +1,4 @@
-include::_attributes.adoc[]
+include::ROOT:page$_attributes.adoc[]
 
 = Container Security
 
