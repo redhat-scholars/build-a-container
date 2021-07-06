@@ -1,0 +1,155 @@
+include::ROOT:page$_attributes.adoc[]
+
+:markup-in-source: verbatim,attributes,quotes
+:USER_ID: %USER_ID%
+:WORKSHOP_GIT_REPO: %WORKSHOP_GIT_REPO%
+:WORKSHOP_GIT_REF: %WORKSHOP_GIT_REF%
+
+= Podman with a non-root user
+:navtitle: Podman with a non-root user
+
+_10 MINUTE EXERCISE_
+
+Running the container tools as a user with superuser privileges (root user) is the best way to ensure that your containers have full access to any feature available on your system.
+However, with the feature called "Rootless Containers" generally available as of RHEL 8.1, you can work with containers as a regular user.
+
+Although container engines, such as Docker, let you run Docker commands as a regular (non-root) user, the Docker daemon that carries out those requests runs as root. As a result, regular users can make requests through their containers that can harm the system. By setting up rootless container users, system administrators prevent potentially damaging container activities from regular users, while still allowing those users to safely run most container features under their own accounts.
+
+In this section, we are going to demonstrate the steps you need to setup Podman to run as a non-root user and issues you may need to overcome.
+
+== Procedure
+
+Install the podman and slirp4netns packages:
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+sudo yum install slirp4netns podman -y
+----
+
+Create a new user account using commands like below. The user is automatically configured to be able to use rootless Podman.
+The useradd command automatically sets the range of accessible user and group IDs automatically in the /etc/subuid and /etc/subgid files.
+
+[source,bash,subs="+macros,+attributes"]
+----
+useradd -c "Joe Jones" joe
+passwd joe
+----
+
+Connect to the user. Using su or su - commands do not set the correct environment variables.
+----
+ssh joe@localhost
+----
+
+Pull the registry.access.redhat.com/ubi8/ubi container image.
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman pull registry.access.redhat.com/ubi8/ubi
+----
+
+Run the container named myubi and display the OS version.
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run --name=myubi registry.access.redhat.com/ubi8/ubi cat /etc/os-release
+----
+
+== What actual user are you running with Podman?
+
+A UID (user identifier) is a number assigned by Linux to each user on the system. This number is used to identify the user to the system and to determine which system resources the user can access.
+**UID of 0 is reserved for root.**
+
+In Podman, there is a new set of user IDs (UIDs) and group IDs (GIDs) which are separate from the UIDs and  GIDs on your host. The
+ table shows the 4 main rootless/rootful operating modes of Podman and how the user appears on the host
+
+image::uidpodman.png[table!]
+
+To understand this further, where podman is running as non-root, we can see the the uid as viewed on the host by
+looking at the uid map.  To view use the following command.
+----
+$ podman unshare cat /proc/self/uid_map
+      0    3267      1
+      1    100000    65536
+----
+
+This result shows that UID 0 is mapped to my UID, 3267, while UID 1 is mapped to 100000, UID 2 is mapped to 100001, and so on. This result means that inside of the container, UID 26 runs as UID 100025.
+
+
+== Problem! - Container could not create a file
+
+With rootless mode you may a problem in that the user of the container does not have permissions on the host volume.
+
+First lets run the busybox container as user 123 and mount a directory on the host ./src which will be mapped to /dest in our container
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run -dit --volume ./src:/dest:z --user 123:123 --name busybox busybox
+----
+
+Confirm the user id thats running.
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman exec busybox id
+----
+
+Lets now list the directory via the container
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman exec busybox ls -ld /dest
+----
+
+Now lets simulate the container creating a file in our mounted directory. For instance in a real use case this could be a database container running as a postrgres user that is creating index files.
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman exec busybox touch /dest/file
+----
+
+Did it work? The issue is that the directory created was owned by your UID. This UID looks like root inside of the container and we are not running busybox with the root user. Therefore, the container is unable to write to the directory.
+
+So lets allow the user (UID 123 in the containers) to own and write to the directory.
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman unshare chown 123:123 ./src
+----
+
+Now when we try the command again it works.
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman exec busybox touch /dest/file
+----
+
+Now lets view the directory as it would be in a container with this unshare command.
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman unshare ls -al ./src
+----
+
+What do you see?
+
+== Special considerations for rootless containers
+
+There are several considerations when running containers as a non-root user:
+
+. The path to the host container storage is different for root users (/var/lib/containers/storage) and non-root users ($HOME/.local/share/containers/storage).
+. Users running rootless containers are given special permission to run as a range of user and group IDs on the host system. However, they have no root privileges to the operating system on the host.
+. A rootless container cannot access a port numbered less than 1024. (ie wouldn't be able to expose the port to the host system unless run with root)
+.
+
+== More information
+
+For more information take a look at these links:
+
+link:https://www.redhat.com/sysadmin/rootless-podman-makes-sense[Running rootless Podman as a non-root user,window=blank]
+
+link:https://blog.christophersmart.com/2021/01/31/volumes-and-rootless-podman/[Volumes and rootless Podman,window=blank]
+
+link:https://www.youtube.com/watch?v=ZgXpWKgQclc[Overview of rootless Podman,window=blank]
