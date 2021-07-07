@@ -248,13 +248,15 @@ cat {temp-filepath}
 ----
 +
 {zwsp} +
-. To make it easier to read, let's copy the hostinfo to the `/var/www/html` directoryfootnote:[The `/var/www/html` directory is the web root of the apache server that is running inside this container] so that we can view it through the container's webserver
+. To make it easier to read, let's copy the hostinfo to the `/var/www/html` directory
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 cp {temp-filepath} /var/www/html/{temp-file}
 ----
++
+_NOTE: The `/var/www/html` directory is the web root of the apache server that is running inside this container] so that we can view it through the container's webserver._
 +
 {zwsp} +
 . Now navigate the browser to the file we just copied and you should see something like the image below
@@ -273,7 +275,7 @@ image::browser-display.png[]
 
 Let's see just how different the two files are by doing a `diff` on them.  And for this we'd like to use the builtin Visual Studio Code support for this.  To do this we can draw on another methapor with real hosts or virtual instances, the notion of `ftp` ing or `scp` ing files.
 
-. First let's "log out" of the containerfootnote:[We're not really logging out as much as we're causing the process that we `podman exec` ed to stop thus ending the `podman exec` command and returning us to the host's terminal]
+. First let's "log out" of the container
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -281,7 +283,9 @@ Let's see just how different the two files are by doing a `diff` on them.  And f
 exit
 ----
 +
-{zwsp} +
+_NOTE: We're not really logging out as much as we're causing the process that we `podman exec` ed to stop thus ending the `podman exec` command and returning us to the host's terminal_
++
+{zwsp}
 . Next, run this command to copy the file out of the container and into the tmp drive of the host instance (Those that have used `scp` will probably find the format familiar)
 +
 [.console-input]
@@ -295,7 +299,7 @@ podman cp \
 <.> This path, undecorated by a container name or id, indicates that we are referencing a path on the host (i.e. local filesystem)
 +
 {zwsp} +
-. Now click anywhere within the left editor where the `{temp-file}` should still be open to give that editor focus.  
+Now click anywhere within the left editor where the `{temp-file}` should still be open to give that editor focus.
 +
 {zwsp} +
 . With the `{temp-file}` still in focus, hit kbd:[SHIFT+CTRL+p] (or kbd:[CMD+CTRL+p] on a Mac) to open the *Command Palette* and start typing `compare` so that you can select the command `File: Compare Active File With...`
@@ -432,9 +436,11 @@ You might wonder why we would want to keep a container around even after we have
 Containers are by their nature immutable.  While they are running, however, changes are being made to their file systems.  When containers are stopped, we might want to **commit** those changes that were made to the filesystem whilst running.  
 
 For those from an operations background, it's a little like creating an image snapshot from a Virtual Machine when its stopped.  That image can then be used to boot up a different VM in a desired state quickly.
+With `podman` the command is `commit`
 
-With `podman` the command is `commit` footnote:[For more info on committing container state, see the link:http://docs.podman.io/en/latest/markdown/podman-commit.1.html[podman documentation]
-].  Let's issue the command now; we'll see some of the value in it <<rerunning_container,a little later on in the lab>>.
+_NOTE:For more info on committing container state, see the link:http://docs.podman.io/en/latest/markdown/podman-commit.1.html[podman documentation,window=blank]_
+
+Let's issue the command now; we'll see some of the value in it <<rerunning_container,a little later on in the lab>>.
 
 {zwsp}
 
@@ -646,4 +652,30 @@ include::partial$copy_visitor_info.adoc[]
 .`{guestbook-record-file}` restored
 image::visitor-info.png[]
 
-But what good are containers if we can never _persist_ changes we've made with them without all this stopping and committing them?  Let's look to the next section to see if there is something else that can be done. 
+But what good are containers if we can never _persist_ changes we've made with them without all this stopping and committing them?  Let's look to the next section to see if there is something else that can be done.
+
+[#automatic_container]
+== 9. Start Containers automatically
+
+Podman also has a really cool feature to help you manage your container apps with Systemd (the system and service manager for Linux)?
+When you add your containers as units into Systemd, you can treat them just like any other service.
+This means that you can control containers using systemctl start and stop commands. And this also means that you can ensure that the containers are started whenever your server reboots.
+
+This is handy for containers which you want to run, and ensure that they keep running.
+
+
+Check out the output from the following command
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman generate systemd --new --name {apache-server-container-name}
+----
+
+We won't set this up in this lab, but the following steps would generate and install the service, enable and start the service so that everytime you reboot
+the container would start.
+----
+podman generate systemd --new --name {container-name}  > /etc/systemd/system/{container-name}.service
+systemctl list-unit-files | grep {container-name}
+systemctl enable {container-name}
+systemctl start {container-name}
+----
