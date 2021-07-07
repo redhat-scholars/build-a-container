@@ -102,7 +102,7 @@ include::partial$podman_ps.adoc[]
 . Finally, return to the Browser Preview panel and hit the reload button.  You should see the following web page indicating that an Apache webserver is running:
 +
 .Test Page
-image::apache-test-page.png[]
+image::apache-test-page-trimmed.png[]
 +
 . Our website has more than a test page, it also has a visitor form (like straight out of the 90s!).  Let's take a look by navigating to this address: 
 +
@@ -429,20 +429,21 @@ CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES
 [#committing_containers]
 == 5. Committing Containers to Images
 
-Even though our container is stopped, it's still around!
+Even though our **container is stopped, it's still around**! You might wonder why we would want to keep a container around even after we have stopped it.  Turns out it has to do with the fact that we might want to **create a new image from the container we've just run**.
 
-You might wonder why we would want to keep a container around even after we have stopped it.  Turns out it has to do with the fact that we might want to create a new image from the container we've just run.  
-
-Containers are by their nature immutable.  While they are running, however, changes are being made to their file systems.  When containers are stopped, we might want to **commit** those changes that were made to the filesystem whilst running.  
-
-For those from an operations background, it's a little like creating an image snapshot from a Virtual Machine when its stopped.  That image can then be used to boot up a different VM in a desired state quickly.
-With `podman` the command is `commit`
-
-_NOTE:For more info on committing container state, see the link:http://docs.podman.io/en/latest/markdown/podman-commit.1.html[podman documentation,window=blank]_
-
-Let's issue the command now; we'll see some of the value in it <<rerunning_container,a little later on in the lab>>.
-
+Containers are by their nature immutable.  While they are running, however, changes are being made to their file systems.  When containers are stopped, we might want to **commit** those changes that were made to the filesystem whilst running.
 {zwsp}
+{zwsp}
+
+[NOTE]
+====
+For those from an operations background, it's a little like creating an image snapshot from a Virtual Machine when its stopped.  That image can then be used to boot up a different VM in a desired state quickly.
+
+====
+{zwsp}
+
+With `podman` the command is `commit`. Let's issue the command now; we'll see some of the value in it <<rerunning_container,a little later on in the lab>>.
+
 
 . First let's find the stopped container using this variant of the `podman ps` command: 
 +
@@ -474,6 +475,11 @@ podman commit \
 ----
 <.> This is the name of the container that we have stopped.  This could also be done by `CONTAINER ID`
 <.> This is the name that we want to give the container **image**.  We can then treat this like any other container image
++
+[NOTE]
+====
+For more info on committing container state, see the link:http://docs.podman.io/en/latest/markdown/podman-commit.1.html[podman documentation,window=blank]
+====
 +
 {zwsp} +
 . This should yield output similar to the following:
@@ -576,10 +582,12 @@ http://localhost:8081/{temp-file}
 {zwsp} +
 . But alas our file is not found and we are met with a 404 Not Found page...
 +
-image::not-found.png[]
+image::not-found-trimmed.png[]
 +
 {zwsp} +
 . How about our `visitor_info.txt` file?  Let's delete the current one by right-clicking on it in the Explorer and selecting `Delete Permanently`
++
+{zwsp} +
 . Now attempt to copy visitor_info.txt out of the container again
 +
 include::partial$copy_visitor_info.adoc[]
@@ -595,7 +603,7 @@ Error: "/var/log/www/visitor_info.txt" could not be found on container {apache-s
 
 {zwsp}
 
-=== 8. "Re-running" a stopped container by image
+== 8. "Re-running" a stopped container by image
 
 Before we through our hands up in disgust, remember that we had the foresight of _committing_ our previously running web server container to a new image called `{apache-committed-container-image}`.  This image should container all the changes we made on top of the `{apache-server-container-name}` that we just ran and allow us access to the info that does not exist in the `{apache-server-image-insecure}`.
 
