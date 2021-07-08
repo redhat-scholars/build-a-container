@@ -105,3 +105,22 @@ image::browser-preview.png[]
 image::browser-preview-window.png[]
 +
 . Feel free to type in the address of your favorite website to show that it's just a typical (chrome-based) web browser
+
+[#cockpit]
+== 6. RHEL Web Console (Cockpit)
+
+The RHEL web console is a Red Hat Enterprise Linux 8 web-based interface designed for managing and monitoring your local system, as well as Linux servers located in your network environment. In today's lab you may also like to examine containers with the console. In RHEL 8, cockpit comes included but you can install it with the following command.
+----
+yum install -y cockpit
+----
+
+To enable cockpit you simply enable it as a service and ensure the firewall rules are in place.
+----
+sudo systemctl enable --now cockpit.socket
+firewall-cmd --add-service=cockpit --permanent
+firewall-cmd --reload
+----
+
+Open the local browser to localhost:9090, and log in as your (non-root) user by providing the username and password. The video below gives you an introduction as to how you can work with containers through the console.
+
+video::_Jnh1w_T_ZE[youtube, width=800, height=600]
