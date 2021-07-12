@@ -7,4 +7,5 @@ nav:
 # - modules/DATABASES/nav.adoc
 # - modules/OPENSHIFT/nav.adoc
 # - modules/PODMAN_COMPOSE/nav.adoc
+# - modules/PODMAN_ROOTLESS/nav.adoc
 start_page: ROOT:index.adoc

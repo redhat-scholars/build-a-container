@@ -27,11 +27,10 @@ Container images are made up of layers, most which are immutable with the except
 
 Today you are the container builder, so the important aspects to understand are:
 
-. Each row in a Dockerfile corresponds to a new layer.
-. Choose to have less layers as it takes less time to build the logical view union file system at runtime.
-. Smaller container images are preferable as they will take less time to download and use less disk space.
-. Upper layers may potentially overwrite bottom layers. So a file may not be present because it was deleted by an upper layer.
-. Logically deleting the file in the upper layer will still add to overall image size.
+. Choose to have **fewer layers** as it takes less time to build the logical view union file system at runtime.
+. **Smaller container images are preferable** as they will take less time to download and use less disk space.
+. **Upper layers** may potentially **overwrite** bottom layers. So a file may not be present because it was deleted by an upper layer.
+. **Logically deleting** the file in the upper layer will **still add to overall image size**.
 
 image::imagelayering.png[Image Layers!]
 
@@ -43,17 +42,17 @@ image::tar-extract.png[Extract!]
 
 [NOTE]
 ====
-To export a container image to a tar file and extract try the following commands
-
-image::export-image.png[How to export!]
-
+The above container image was exported to a tar file with the following command.
+----
+podman save -o mysql-container.tar registry.redhat.io/rhel8/mysql-80:latest
+----
 ====
 
 {zwsp}
 [#container_file]
 == 3. Containerfile
 
-A Containerfile is a text based file which provides instructions to assemble an image. The available commands that are usable inside a Containerfile and a Dockerfile are equivalent.
+A Containerfile is a text based file which provides instructions to assemble an image. Each row in a Containerfile corresponds to a new layer. The available commands that are usable inside a Containerfile and a Dockerfile are equivalent.
 
 The Containerfile below is a of a mysql image from the Red Hat Container Catalog. As the image is built the commands are executed in order from top down until the image is built.
 
@@ -92,7 +91,7 @@ The below table provides an overview of the are typical commands seen in a Conta
 
 |===
 
-You may also see Containerfiles with multi stage builds where multiple FROM commands may be present. Multistage builds provide a means to help refine the runtime image as opposed to having an image which also contains all the necessary software to build. For instance you typically don't need maven to run a java based jar but do need it to build.
+You may also see Containerfiles with multistage builds where multiple FROM commands may be present. **Multistage builds** provide a means to help refine the runtime image as opposed to having an image which also contains all the necessary software to build. For instance you typically don't need maven to run a java based jar but do need it to build.
 
 {zwsp}
 [#container_identification]
@@ -236,10 +235,16 @@ There are two types of container registry: public and private.
 <.> Auditable logs
 <.> Optimized for automation
 
+=== Red Hat's Enterprise Container Registry
 Red Hat Quay is a private container image registry that enables you to build, distribute, and deploy containers with the storage you need to scale quickly.
 It analyzes your images for security vulnerabilities using Clair, identifying potential issues and addressing them before they become security risks.
-The Red Hat Container catalog runs on Quay and provides a view of the vulnerabilities found by Clair.
-link:https://catalog.redhat.com/software/containers/explore[https://catalog.redhat.com/software/containers/explore, window=blank]
+{zwsp}
+
+image::rh_quay_black.svg[Red Hat Quay!]
+
+You can try Quay through a free account with link:https://quay.io/[Quay.io, window=blank] which is a managed service OR browse the results of scanning through the link:https://catalog.redhat.com/software/containers/explore[Red Hat Container catalog, window=blank] like in the figure below.
+
+image::rh-container-catlog.png[Red Hat Quay!]
 
 [#more_information]
 == More information
