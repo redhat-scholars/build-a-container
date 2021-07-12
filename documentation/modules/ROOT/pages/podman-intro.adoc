@@ -662,16 +662,11 @@ image::visitor-info.png[]
 
 But what good are containers if we can never _persist_ changes we've made with them without all this stopping and committing them?  Let's look to the next section to see if there is something else that can be done.
 
-[#automatic_container]
-== 9. Start Containers automatically
-
+{zwsp}
+[NOTE]
+====
 Podman also has a really cool feature to help you manage your container apps with Systemd (the system and service manager for Linux)?
 When you add your containers as units into Systemd, you can treat them just like any other service.
-This means that you can control containers using systemctl start and stop commands. And this also means that you can ensure that the containers are started whenever your server reboots.
-
-This is handy for containers which you want to run, and ensure that they keep running.
-
-
 Check out the output from the following command
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -679,11 +674,12 @@ Check out the output from the following command
 podman generate systemd --new --name {apache-server-container-name}
 ----
 
-We won't set this up in this lab, but the following steps would generate and install the service, enable and start the service so that everytime you reboot
-the container would start.
+The following steps would generate and install, enable and start the service, so that everytime you reboot the container would start.
 ----
 podman generate systemd --new --name {container-name}  > /etc/systemd/system/{container-name}.service
 systemctl list-unit-files | grep {container-name}
 systemctl enable {container-name}
 systemctl start {container-name}
 ----
+
+====
