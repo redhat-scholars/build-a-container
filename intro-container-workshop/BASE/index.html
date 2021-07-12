@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Welcome to the Build a (Secure) Container Workshop :: Build a Container Workshop (Dev Mode)</title>
+    <link rel="canonical" href="http://localhost:3000/rhs-build-course/index.html/intro-container-workshop/BASE/index.html">
+    <link rel="next" href="introduction.html">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <style>
+    /* override master stylesheet properties for this partial here */
+
+    .navbar-item {
+      flex: unset;
+    }
+
+    .doc {
+      max-width: unset;
+    }
+
+
+  </style>
+
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="http://localhost:3000/rhs-build-course/index.html">Build a Container Workshop (Dev Mode)</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+        <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-scholars.github.io/outer-loop-guides/" target="_blank">Outer Loop</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/openshift-starter-guides/" target="_blank">OpenShift Starter</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header><div class="body">
+<div class="nav-container" data-component="intro-container-workshop" data-version="BASE">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html" class=" query-params-link">Build a Container Workshop</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="introduction.html">Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server">Code Server</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server_terminal">Open terminal</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server_terminal_commands">Issuing Terminal Commands</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#local_browser">Local Browser</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="container-autopsy.html">Container Autopsy</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#what_makes_up_a_container">What makes up a Container?</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#container_image_format">Container Image Format</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#container_file">Containerfile</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#container_identification">Container Identification</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#container_runtime">Container Runtime</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#container_tools">Container Tools</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#container_registries">Container Registries</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#more_information">More information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="podman-intro.html">Running Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#run_container">Add a website</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#enter_container">Look inside a container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#copy_data">Copying data out</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#committing_containers">Committing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#stop_container">Stopping Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#remove_containers">Removing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#rerunning_container">"Re-running" Containers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="container-persistence.html">Persistence and Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#mounting_volumes">Mounting Volumes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#test_mount">Testing the Volume Mount</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Building Securely</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="build-your-own-container.html">Build your own Secure Container</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Build a Container Workshop</span>
+    <span class="version">BASE</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Build a Container Workshop</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">BASE</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link is-current"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Build a Container Workshop</a></li>
+    <li><a href="index.html">Welcome to the Build a (Secure) Container Workshop</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="file:///workspaces/container-workshop/documentation/modules/ROOT/pages/index.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Welcome to the Build a (Secure) Container Workshop</h1>
+<div class="sect1 text-center strong">
+<h2>Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This immersive workshop will introduce you to the world of Containers and Containerization.
+The goals of this hands-on workshop is to give you a crash course introduction to containers, their many use cases and steps you can take to securely containerise your in-house applications.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/splash-containers.jpeg" alt="Containers!" width="320" height="213">
+</div>
+</div>
+<div class="paragraph">
+<p>Throughout this workshop, you will use <strong>Red Hat Enterprise Linux 8</strong> (RHEL 8) Container tools including <strong>Podman</strong> and <strong>Buildah</strong> which provide secure means of building and running containers.</p>
+</div>
+<div class="imageblock left">
+<div class="content">
+<img src="_images/podman.svg" alt="Podman!" width="320" height="86">
+</div>
+</div>
+<div class="imageblock right">
+<div class="content">
+<img src="_images/buildah.png" alt="Buildah!" width="320" height="78">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/Logo-Red_Hat-Enterprise_Linux_8-A-Standard-RGB.png" alt="RHEL 8!" width="320" height="73">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2>Red Hat Container History</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Red Hat’s contributions to containers go back to the creation of those core container primitives of Linux namespaces and cGroups in the early 2000s.
+Containers have been a core feature of Red Hat Enterprise Linux over multiple major releases and was the foundation of Red Hat OpenShift since its initial release in 2011.</p>
+</div>
+<div class="paragraph">
+<p>Interest in containers technology continues to grow, as more organizations realize the benefits they can provide for how they manage applications and infrastructure.
+But it’s easy to get lost in all the hype and forget what containers are really about. Ultimately, <strong>containers are a feature of Linux</strong>.
+Containers have been a part of the Linux operating system for more than a decade, and go back even further in UNIX.
+That’s why, despite the very recent introduction of Windows containers, the majority of containers we see are in fact Linux containers. That also means that if you’re deploying containers, your Linux choices matter a lot.</p>
+</div>
+<div class="paragraph">
+<p>In Red Hat we say "<strong>Containers are Linux</strong>". If you think about it?</p>
+</div>
+<div class="paragraph">
+<p><em>Container security is Linux security</em></p>
+</div>
+<div class="paragraph">
+<p><em>Container performance is Linux performance</em></p>
+</div>
+<div class="paragraph">
+<p><em>Container reliability is Linux reliability</em></p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="next"><a href="introduction.html" class="query-params-link">Setup</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>  </body>
+</html>

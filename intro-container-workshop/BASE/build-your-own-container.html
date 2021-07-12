@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Build your own Secure Container :: Build a Container Workshop (Dev Mode)</title>
+    <link rel="canonical" href="http://localhost:3000/rhs-build-course/index.html/intro-container-workshop/BASE/build-your-own-container.html">
+    <link rel="prev" href="container-persistence.html">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <style>
+    /* override master stylesheet properties for this partial here */
+
+    .navbar-item {
+      flex: unset;
+    }
+
+    .doc {
+      max-width: unset;
+    }
+
+
+  </style>
+
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="http://localhost:3000/rhs-build-course/index.html">Build a Container Workshop (Dev Mode)</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+        <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-scholars.github.io/outer-loop-guides/" target="_blank">Outer Loop</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/openshift-starter-guides/" target="_blank">OpenShift Starter</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header><div class="body">
+<div class="nav-container" data-component="intro-container-workshop" data-version="BASE">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html" class=" query-params-link">Build a Container Workshop</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="introduction.html">Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server">Code Server</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server_terminal">Open terminal</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server_terminal_commands">Issuing Terminal Commands</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#local_browser">Local Browser</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="container-autopsy.html">Container Autopsy</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#what_makes_up_a_container">What makes up a Container?</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#container_image_format">Container Image Format</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#container_file">Containerfile</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#container_identification">Container Identification</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#container_runtime">Container Runtime</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#container_tools">Container Tools</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#container_registries">Container Registries</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#more_information">More information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="podman-intro.html">Running Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#run_container">Add a website</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#enter_container">Look inside a container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#copy_data">Copying data out</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#committing_containers">Committing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#stop_container">Stopping Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#remove_containers">Removing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#rerunning_container">"Re-running" Containers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="container-persistence.html">Persistence and Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#mounting_volumes">Mounting Volumes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#test_mount">Testing the Volume Mount</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Building Securely</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="build-your-own-container.html">Build your own Secure Container</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Build a Container Workshop</span>
+    <span class="version">BASE</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Build a Container Workshop</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">BASE</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Build a Container Workshop</a></li>
+    <li>Building Securely</li>
+    <li><a href="build-your-own-container.html">Build your own Secure Container</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="file:///workspaces/container-workshop/documentation/modules/ROOT/pages/build-your-own-container.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Build your own Secure Container</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this chapter we&#8217;ll try to make the container image we&#8217;ve been using a bit more secure using a related tool to <code>podman</code>, namely <code>buildah</code>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/buildah.png" alt="Buildah!" width="320" height="78">
+</div>
+</div>
+<div class="paragraph">
+<p><code>buildah</code> is used to create OCI-compliant container images, such as the <code>quay.io/mhildenb/container-workshop-httpd</code> that we&#8217;ve been using.  We&#8217;ll start by fixing a the security vulnerability we found in the <a href="#:containers-and-security.adoc" class="page unresolved">previous section</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_buildah_native_commands"><a class="anchor" href="#_buildah_native_commands"></a>Buildah native commands</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>One of the things that makes <code>buildah</code> unique is the ability to interact with container images from the host&#8217;s command line.  (As we&#8217;ll see in the next section, it also allows the creation of images from a <code>Dockerfile</code> or, more generically a <code>Containerfile</code>).  This will make it easy for us to remediate the vulnerability we found in the last section.</p>
+</div>
+<div class="paragraph">
+<p>Where we left off with our container image is that we needed to patch the bash package installed on the container</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/security-bulletin.png" alt="security bulletin">
+</div>
+<div class="title">Figure 1. Need to upgrade bash</div>
+</div>
+<div class="paragraph">
+<p>This can be problematic if our image does not already have installed on it all the tools (such as package management tools like <code>dnf</code> or <code>yum</code>) necessary to remediate the problem.  But with buildah&#8217;s <strong>native command functionality</strong> this is no longer a problem.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If you don&#8217;t have one open already, open a terminal as a non-root user and confirm your user by running the following command:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">whoami</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">%USER%</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Next, as a non-root user we need to do some setup that will allow buildah to interact with the container in this native command mode.  Run the following in the terminal</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The main reason for running this command is that we&#8217;ll be mounting filesystems inside the container and non-root users normally do not have privileges to do this.  Running <code>buildah unshare</code> is a way of preparing to work with containers "rootlessly" (if you will).  For a discussion of what this is, see <a href="https://www.redhat.com/sysadmin/buildah-unshare-command" target="_blank" rel="noopener">here</a>.  Think of it as a way that buildah can work with container "rootlessly" just as podman did in the <a href="#:containers-and-security.adoc#non_root_containers" class="page unresolved" target="_blank" rel="noopener">last section</a></p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">buildah unshare</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>You should notice that upon running the command your terminal turns to look like a root terminal.  You are not actually root, but rather working within a "namespace" that makes you appear as root when it comes to interacting with buildah&#8217;s containers</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[root@ansible-1 ~]#</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Next we tell buildah to implicitly create a "working container" from our currently vulnerable image:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER=$(buildah from quay.io/mhildenb/container-workshop-httpd) <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We&#8217;re effectively assigning a the shell variable <code>CONTAINER</code> to the id of the buildah container that starts with the state of the image we want to update</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you haven&#8217;t yet downloaded the image, the image might be downloaded first from the repo before you can enter the next command</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>To confirm that our working container is up, we can run the following command (which is a little like <code>podman ps</code> but for "working containers")</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">buildah containers</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER ID  BUILDER  IMAGE ID     IMAGE NAME                       CONTAINER NAME
+ef575a8a3408     *     60dde8abf76e quay.io/mhildenb/container-wo... container-workshop-httpd-working-container</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>We can then use buildah to effectively mount the root of the container&#8217;s filesystem</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER_MOUNT_POINT=$(buildah mount ${CONTAINER}) \<i class="conum" data-value="1"></i><b>(1)</b>
+&& echo "Container ${CONTAINER}'s filesystem mounted on host at ${CONTAINER_MOUNT_POINT}"</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>CONTAINER_MOUNT_POINT is getting set with the path to the mount in the host filesystem.  We store it in a shell variable because this tends to be a long path</td>
+</tr>
+</table>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code>Container container-workshop-httpd-working-container's filesystem mounted on host at /home/%USER%/.local/share/containers/storage/overlay/<mark>500abaa5921678c20f37f689ae72e37734445934e8c223775a2b71cce091e3f6</mark>/merged <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The highlighted section will be different on your instance.  This is just making clear where the container mount point is</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>We can even peek inside the container image through the mount point</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ls -l ${CONTAINER_MOUNT_POINT}</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">total 0
+lrwxrwxrwx.  1 root root  7 Apr 20 03:58 bin -&gt; usr/bin
+dr-xr-xr-x.  2 root root  6 Dec 14  2017 boot
+drwxr-xr-x.  2 root root  6 Apr 20 03:58 dev
+drwxr-xr-x. 51 root root 19 May 30 08:29 etc
+drwxr-xr-x.  2 root root  6 Apr 20 04:00 home
+lrwxrwxrwx.  1 root root  7 Apr 20 03:58 lib -&gt; usr/lib
+lrwxrwxrwx.  1 root root  9 Apr 20 03:58 lib64 -&gt; usr/lib64
+drwxr-xr-x.  2 root root  6 Dec 14  2017 media
+drwxr-xr-x.  2 root root  6 Dec 14  2017 mnt
+drwxr-xr-x.  2 root root  6 Dec 14  2017 opt
+drwxr-xr-x.  2 root root  6 Apr 20 03:58 proc
+dr-xr-x---.  4 root root 18 May 30 08:28 root
+drwxr-xr-x. 14 root root 18 May 30 08:29 run
+lrwxrwxrwx.  1 root root  8 Apr 20 03:58 sbin -&gt; usr/sbin
+drwxr-xr-x.  2 root root  6 Dec 14  2017 srv
+drwxr-xr-x.  2 root root  6 Apr 20 03:58 sys
+drwxrwxrwt.  7 root root 46 May 30 08:29 tmp
+drwxr-xr-x. 13 root root 19 Apr 20 03:58 usr
+drwxr-xr-x. 19 root root 17 May 30 08:29 var</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Now that we have a mount point we can copy files from the host directly into the container.  In our case however, we want to use the host&#8217;s package management tooling to install the updated bash package on the container {$CONTAINER}. <span id="upgrade_bash">Run</span> this command:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">dnf install -y \<i class="conum" data-value="1"></i><b>(1)</b>
+    --installroot=$CONTAINER_MOUNT_POINT \<i class="conum" data-value="2"></i><b>(2)</b>
+    bash <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>dnf is the package management tool installed on your host instance.  The <code>-y</code> means that if dnf prompts the user, such as whether to install a given package, the answer will always be yes</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This tells dnf that the requested packages should be installed relative to this installroot (${CONTAINER_MOUNT_POINT} and thus the root of the container) instead of '/', the root of the host instance</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We are telling dnf to install the latest available compatible version of bash for our container (i.e. at <code>--installroot</code>)</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>You may see a few errors upon running this command.  They are non-critical.  In the output the key message you should see is</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Package bash-4.2.45-2.el7.x86_64 is already installed.
+Dependencies resolved.
+===================================================================================================
+ Package             Architecture          Version                      Repository            Size
+===================================================================================================
+Upgrading:
+ bash                x86_64                4.2.46-34.el7                ubi-7                1.0 M
+
+Transaction Summary
+===================================================================================================
+Upgrade  1 Package
+
+Total download size: 1.0 M
+Downloading Packages:
+bash-4.2.46-34.el7.x86_64.rpm                                      415 kB/s | 1.0 MB     00:02
+---------------------------------------------------------------------------------------------------
+Total                                                              414 kB/s | 1.0 MB     00:02
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                           1/1
+  Upgrading        : bash-4.2.46-34.el7.x86_64                                                 1/2
+  Running scriptlet: bash-4.2.46-34.el7.x86_64                                                 1/2
+  Cleanup          : bash-4.2.45-2.el7.x86_64                                                  2/2
+  Running scriptlet: bash-4.2.45-2.el7.x86_64                                                  2/2
+  Verifying        : bash-4.2.46-34.el7.x86_64                                                 1/2
+  Verifying        : bash-4.2.45-2.el7.x86_64                                                  2/2
+Installed products updated.
+
+Upgraded:
+  <mark>bash-4.2.46-34.el7.x86_64</mark>  <i class="conum" data-value="1"></i><b>(1)</b>
+
+Complete!</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Notice that this package is more recent than the minimum release needed to address the vulnerability</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Now we will commit these changes to a new image locally on the host that we&#8217;ll test.  We commit the changes with</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">buildah commit \<i class="conum" data-value="1"></i><b>(1)</b>
+    ${CONTAINER} \<i class="conum" data-value="2"></i><b>(2)</b>
+    localhost/container-workshop-httpd-secure <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>commit</code> means to take the working container and save it as a container image</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This is the ID of the working container that we want saved as an image</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The name the image should be saved as.  This saves the image to the user&#8217;s local container store on the host instance</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>This should yield output like the following</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Getting image source signatures
+Copying blob 123257361dae skipped: already exists
+Copying blob c9e02f9d3afe skipped: already exists
+Copying blob 86284899b0cc skipped: already exists
+Copying blob bcf3865bf7f7 skipped: already exists
+Copying blob 4e7c990a129f skipped: already exists
+Copying blob 210af8709b71 skipped: already exists
+Copying blob 47e96512450e skipped: already exists
+Copying blob 8f10e6ebff19 skipped: already exists
+Copying blob 486383b07939 skipped: already exists
+Copying blob 23be1053bf93 skipped: already exists
+Copying blob ee738432d587 skipped: already exists
+Copying blob bc71779d57e9 done
+Copying config 6b4a460f1e done
+Writing manifest to image destination
+Storing signatures
+6b4a460f1e4077bd64b862fcdabe93928779e441ed3e84bb161e8cead079a3e0</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Now we can leave the unshare environment to test out our container fix</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">exit</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_testing_commited_container"><a class="anchor" href="#_testing_commited_container"></a>Testing commited container</h3>
+<div class="paragraph">
+<p>Now that we committed a new image, we can test this committed image</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Run the new container "rootlessly" in the terminal by running the following command:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
+    -d \
+    -p 8081:80/tcp \
+    --name my-web-server \
+    -v /home/%USER%/container-workshop:/var/log/www:Z \
+    localhost/container-workshop-httpd-secure</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Since our new container image is virtually identical to the original one (except for the new bash package) and we&#8217;re forwarding the same ports we can now attempt to exploit the container again with the configuration from before</p>
+</li>
+<li>
+<p>If you don&#8217;t still have the metasploit console open, then split the terminal and follow the instructions <a href="#:containers-and-security.adoc#using_metasploit" class="page unresolved" target="_blank" rel="noopener">here</a> to the point where the metasploit console is configured to target the container</p>
+</li>
+<li>
+<p>Next run the following command in the <strong>metasploit</strong> terminal</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">check</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>And this should result in the following output</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[*] 127.0.0.1:8081 - The target is <mark>not</mark> exploitable.</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Congratulations!  You&#8217;d fixed the shellshock exploit</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_buildah_and_containerfiles"><a class="anchor" href="#_buildah_and_containerfiles"></a>Buildah and Containerfiles</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Though we&#8217;ve fixed the issue with quay.io/mhildenb/container-workshop-httpd:0.0.5 by using the <code>buildah</code> native command line tools to fix it, there are still other aspects of the container that could be addressed to make it more secure and less likely to need special privileges from the underlying operating system such as</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Not running as the root user (and thus the apache server not running as <code>root</code>)</p>
+</li>
+<li>
+<p>Not requiring a port &lt; 1024.  Currently the apache server in the container images listens on port 80</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>What&#8217;s more, we have no record of the step-by-step changes we&#8217;ve made to the container that we might store in revision control.  One (valid) option would be to store all the buildah cli commands we issued in a shell script.  However, container tools like <code>docker</code> have popularized the <code>Dockerfile</code> (or, more generically, <code>Containerfile</code>) way of defining new containers.  Let&#8217;s investigate the quay.io/mhildenb/container-workshop-httpd:0.0.5&#8217;s <code>Containerfile</code> to see if we can address the points above</p>
+</div>
+<div class="sect2">
+<h3 id="basic_containerfile"><a class="anchor" href="#basic_containerfile"></a>Basic Containerfile</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>To start, let&#8217;s create a folder where we&#8217;ll do the work of building our container.  Right click on the <code>container-workshop</code> folder in the explorer, select <code>New Folder</code>.  Name the new folder <code>secure-container</code></p>
+<div class="paragraph">
+<p><span class="image"><img src="_images/new-folder.png" alt="new folder" width="500"></span>
+<span class="image"><img src="_images/create-container-folder.png" alt="create container folder" width="300"></span></p>
+</div>
+</li>
+<li>
+<p>In a normal user terminal, change into this newly created directory</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd /home/%USER%/container-workshop/secure-container</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Next we&#8217;re going to create a new Containerfile.  Right-click on the <code>secure-container</code> folder and select <code>New File</code>.</p>
+<div class="paragraph">
+<div class="title">New Containerfile</div>
+<p><span class="image"><img src="_images/new-containerfile.png" alt="new containerfile"></span></p>
+</div>
+</li>
+<li>
+<p>The Containerfile you just created should appear in the editor window.  We&#8217;ll be slowly adding to this Containfile bit by bit</p>
+</li>
+<li>
+<p>Add the following lines to the containerfile</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-Containerfile hljs" data-lang="Containerfile">FROM registry.access.redhat.com/ubi7 <i class="conum" data-value="1"></i><b>(1)</b>
+USER root <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>FROM</code> is the base container that this container will start from.  <code>ubi7</code> stands for <a href="https://www.redhat.com/en/blog/introducing-red-hat-universal-base-image" target="_blank" rel="noopener">"Universal Base Image"</a>.  It will serve as a secure basis for the rest of our container.  See more information on ubi below</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>USER</code> indicates that we want to operate as the <code>root</code> user for all the commands that follow, until another <code>USER</code> directive is found</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>To get a sense of what we&#8217;ve done, let&#8217;s build a container from this Containerfile useing <code>buildah</code>.  Run the following command</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">buildah bud \<i class="conum" data-value="1"></i><b>(1)</b>
+  -f Containerfile \<i class="conum" data-value="2"></i><b>(2)</b>
+  -t localhost/secure-container \<i class="conum" data-value="3"></i><b>(3)</b>
+  /home/%USER%/container-workshop/secure-container <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>bud</code> indicates that buildah should operate from a <code>Containerfile</code> (or <code>Dockerfile</code>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>-f</code> indicates a the name of the Containerfile that should be used (in this instance, the one that just created)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>-t</code> names the tag that should be given to the resultant image</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The final parameter is the directory in which the command should be run</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>You should see output something like this:</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code>STEP 1: FROM registry.access.redhat.com/ubi7
+Getting image source signatures
+Checking if image destination supports signatures
+Copying blob 93156a512b98 done
+Copying blob f8c518873786 done
+Copying config 67d3aabcdb done
+Writing manifest to image destination
+Storing signatures
+STEP 2: USER root
+STEP 3: COMMIT localhost/secure-container <i class="conum" data-value="1"></i><b>(1)</b>
+Getting image source signatures
+Copying blob 01d2fb866535 skipped: already exists
+Copying blob 9e12a51e507a skipped: already exists
+Copying blob 5f70bf18a086 done
+Copying config 3d4cd1585c done
+Writing manifest to image destination
+Storing signatures
+--&gt; 3d4cd1585cd
+3d4cd1585cd258b57399e3cd74516bca85ea745a1066e6ff26e1ee170122d232</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Notice that the <code>COMMIT</code> command is implicit and reminiscent of the buildah native command that we issued</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Let&#8217;s take a look inside the container we&#8217;ve just created and check to see if we need to address the bash vulnerability</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
+  -it \
+  localhost/secure-container \
+  bash <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This argument, always on the other side of the container image to run, represents the command that should be run in the container.  When this command exits, the container will exit.  Normally containers have a default command, but we haven&#8217;t configured that (yet, see later in the lab).  For now we&#8217;re telling the container to run <code>bash</code> as the sustaining or "root" process of the container</td>
+</tr>
+</table>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[root@0c388bc22ff6 /]#</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Let&#8217;s take a look at the version of <code>bash</code> that&#8217;s running</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Loaded plugins: ovl, product-id, search-disabled-repos, subscription-manager
+
+This system is not receiving updates. You can use subscription-manager on the host to register and assign subscriptions.
+
+ubi-7                                                                                                                                                            | 3.8 kB  00:00:00
+ubi-7-rhah                                                                                                                                                       | 3.7 kB  00:00:00
+ubi-7-server-extras-rpms                                                                                                                                         | 3.7 kB  00:00:00
+ubi-7-server-optional-rpms                                                                                                                                       | 3.8 kB  00:00:00
+ubi-server-rhscl-7-rpms                                                                                                                                          | 3.8 kB  00:00:00
+(1/15): ubi-7/x86_64/updateinfo                                                                                                                                  |   92 B  00:00:00
+(2/15): ubi-7/x86_64/primary_db                                                                                                                                  | 800 kB  00:00:00
+(3/15): ubi-7-rhah/x86_64/updateinfo                                                                                                                             |   92 B  00:00:00
+(4/15): ubi-7-rhah/x86_64/primary_db                                                                                                                             | 2.5 kB  00:00:00
+(5/15): ubi-7-server-extras-rpms/x86_64/updateinfo                                                                                                               |   92 B  00:00:00
+(6/15): ubi-7-server-extras-rpms/x86_64/primary_db                                                                                                               | 6.8 kB  00:00:00
+(7/15): ubi-7-server-optional-rpms/x86_64/updateinfo                                                                                                             |   92 B  00:00:00
+(8/15): ubi-7-server-optional-rpms/x86_64/primary_db                                                                                                             |  14 kB  00:00:00
+(9/15): ubi-7/x86_64/group                                                                                                                                       |  124 B  00:00:01
+(10/15): ubi-server-rhscl-7-rpms/x86_64/updateinfo                                                                                                               |   92 B  00:00:00
+(11/15): ubi-server-rhscl-7-rpms/x86_64/primary_db                                                                                                               | 396 kB  00:00:00
+(12/15): ubi-7-rhah/x86_64/group                                                                                                                                 |  124 B  00:00:00
+(13/15): ubi-7-server-extras-rpms/x86_64/group                                                                                                                   |  124 B  00:00:00
+(14/15): ubi-server-rhscl-7-rpms/x86_64/group                                                                                                                    |  124 B  00:00:00
+(15/15): ubi-7-server-optional-rpms/x86_64/group                                                                                                                 |  124 B  00:00:01
+Installed Packages
+Name        : bash
+Arch        : x86_64
+<mark>Version     : 4.2.46</mark>
+Release     : 34.el7
+Size        : 3.5 M
+Repo        : installed
+From repo   : anaconda
+Summary     : The GNU Bourne Again shell
+URL         : <a href="http://www.gnu.org/software/bash" class="bare">http://www.gnu.org/software/bash</a>
+License     : GPLv3+
+Description : The GNU Bourne Again shell (Bash) is a shell or command language
+            : interpreter that is compatible with the Bourne shell (sh). Bash
+            : incorporates useful features from the Korn shell (ksh) and the C shell
+            : (csh). Most sh scripts can be run by bash without modification.</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Notice that the version (highlighted), is the same version that we installed using the buildah command line <a href="#upgrade_bash">here</a></p>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="title">Why didn&#8217;t we have to patch bash</div>
+<div class="paragraph">
+<p>While Shellshock is by now an old CVE, this demonstrates more broadly the value of starting your container with one of Red Hat&#8217;s Universal Base Images.  These images are updated every quarter, their internal packages patched by Red Hat to fix all known CVEs.  For more in depth information on the UBI program see <a href="https://developers.redhat.com/books/red-hat-universal-base-images-ubi?sc_cid=7013a0000026GuZAAU">here</a></p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="containerfile_run"><a class="anchor" href="#containerfile_run"></a>Running Commands in a Containerfile</h3>
+<div class="paragraph">
+<p>Our image is a good start, but it doesn&#8217;t yet have a webserver on it; this is something we&#8217;re going to have to install.  As we&#8217;ve seen, the ubi base has <code>yum</code> installed in it.  So instead of using <code>buildah</code> native commands we can instead add directives to the Containerfile to <code>RUN</code> commands within the Container as it&#8217;s being built.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If you are still in the container, exit it to get back to the %USER% terminal on the host instance</p>
+</li>
+<li>
+<p>From the IDE, add the highlighted lines to the Containerfile</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-Containerfile hljs" data-lang="Containerfile">FROM registry.access.redhat.com/ubi7
+USER root
+
+<mark>RUN yum install -y httpd &amp;&amp; yum update -y &amp;&amp; yum clean all</mark> <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>RUN</code> directive allows us to run a command as the user currently selected by the <code>USER</code> directive.  In this instance we chain a bunch of yum commands together to install our httpd server, ensure that all our packages are up to date (there may have been CVE patches since the last publishing of the ubi base image), and cleanup any temporary files (as we don&#8217;t want these bloating the size of our final image)</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Now from the terminal run the following command to build our container</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">buildah bud \
+  -f Containerfile \
+  -t localhost/secure-container \
+  /home/%USER%/container-workshop/secure-container</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>This should yield output similar<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup> to the following:</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">STEP 1: FROM registry.access.redhat.com/ubi7
+STEP 2: USER root
+STEP 3: RUN yum install -y httpd &amp;&amp; yum update -y &amp;&amp; yum clean all
+Loaded plugins: ovl, product-id, search-disabled-repos, subscription-manager
+
+This system is not receiving updates. You can use subscription-manager on the host to register and assign subscriptions.
+
+Resolving Dependencies
+--&gt; Running transaction check
+---&gt; Package httpd.x86_64 0:2.4.6-97.el7_9 will be installed
+--&gt; Processing Dependency: httpd-tools = 2.4.6-97.el7_9 for package: httpd-2.4.6-97.el7_9.x86_64
+--&gt; Processing Dependency: system-logos &gt;= 7.92.1-1 for package: httpd-2.4.6-97.el7_9.x86_64
+--&gt; Processing Dependency: /etc/mime.types for package: httpd-2.4.6-97.el7_9.x86_64
+--&gt; Processing Dependency: libapr-1.so.0()(64bit) for package: httpd-2.4.6-97.el7_9.x86_64
+--&gt; Processing Dependency: libaprutil-1.so.0()(64bit) for package: httpd-2.4.6-97.el7_9.x86_64
+--&gt; Running transaction check
+---&gt; Package apr.x86_64 0:1.4.8-7.el7 will be installed
+---&gt; Package apr-util.x86_64 0:1.5.2-6.el7 will be installed
+---&gt; Package httpd-tools.x86_64 0:2.4.6-97.el7_9 will be installed
+---&gt; Package mailcap.noarch 0:2.1.41-2.el7 will be installed
+---&gt; Package redhat-logos.noarch 0:70.7.0-1.el7 will be installed
+--&gt; Finished Dependency Resolution
+
+Dependencies Resolved
+
+================================================================================
+ Package              Arch           Version                Repository     Size
+================================================================================
+Installing:
+ httpd                x86_64         2.4.6-97.el7_9         ubi-7         1.2 M
+Installing for dependencies:
+ apr                  x86_64         1.4.8-7.el7            ubi-7         104 k
+ apr-util             x86_64         1.5.2-6.el7            ubi-7          92 k
+ httpd-tools          x86_64         2.4.6-97.el7_9         ubi-7          93 k
+ mailcap              noarch         2.1.41-2.el7           ubi-7          31 k
+ redhat-logos         noarch         70.7.0-1.el7           ubi-7          13 M
+
+Transaction Summary
+================================================================================
+Install  1 Package (+5 Dependent packages)
+
+Total download size: 15 M
+Installed size: 18 M
+Downloading packages:
+warning: /var/cache/yum/x86_64/7Server/ubi-7/packages/apr-1.4.8-7.el7.x86_64.rpm: Header V3 RSA/SHA256 Signature, key ID fd431d51: NOKEY
+Public key for apr-1.4.8-7.el7.x86_64.rpm is not installed
+--------------------------------------------------------------------------------
+Total                                              4.2 MB/s |  15 MB  00:03
+Retrieving key from <a href="file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release" class="bare">file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release</a>
+Importing GPG key 0xFD431D51:
+ Userid     : "Red Hat, Inc. (release key 2) &lt;<a href="mailto:security@redhat.com">security@redhat.com</a>&gt;"
+ Fingerprint: 567e 347a d004 4ade 55ba 8a5f 199e 2f91 fd43 1d51
+ Package    : redhat-release-server-7.9-6.el7_9.x86_64 (@anaconda/7.9)
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+Importing GPG key 0x2FA658E0:
+ Userid     : "Red Hat, Inc. (auxiliary key) &lt;<a href="mailto:security@redhat.com">security@redhat.com</a>&gt;"
+ Fingerprint: 43a6 e49c 4a38 f4be 9abf 2a53 4568 9c88 2fa6 58e0
+ Package    : redhat-release-server-7.9-6.el7_9.x86_64 (@anaconda/7.9)
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : apr-1.4.8-7.el7.x86_64                                       1/6
+  Installing : apr-util-1.5.2-6.el7.x86_64                                  2/6
+  Installing : httpd-tools-2.4.6-97.el7_9.x86_64                            3/6
+  Installing : redhat-logos-70.7.0-1.el7.noarch                             4/6
+  Installing : mailcap-2.1.41-2.el7.noarch                                  5/6
+  Installing : httpd-2.4.6-97.el7_9.x86_64                                  6/6
+  Verifying  : httpd-tools-2.4.6-97.el7_9.x86_64                            1/6
+  Verifying  : mailcap-2.1.41-2.el7.noarch                                  2/6
+  Verifying  : apr-1.4.8-7.el7.x86_64                                       3/6
+  Verifying  : apr-util-1.5.2-6.el7.x86_64                                  4/6
+  Verifying  : httpd-2.4.6-97.el7_9.x86_64                                  5/6
+  Verifying  : redhat-logos-70.7.0-1.el7.noarch                             6/6
+
+Installed:
+  httpd.x86_64 0:2.4.6-97.el7_9
+
+Dependency Installed:
+  apr.x86_64 0:1.4.8-7.el7                  apr-util.x86_64 0:1.5.2-6.el7
+  httpd-tools.x86_64 0:2.4.6-97.el7_9       mailcap.noarch 0:2.1.41-2.el7
+  redhat-logos.noarch 0:70.7.0-1.el7
+
+Complete!
+Loaded plugins: ovl, product-id, search-disabled-repos, subscription-manager
+
+This system is not receiving updates. You can use subscription-manager on the host to register and assign subscriptions.
+
+No packages marked for update
+Loaded plugins: ovl, product-id, search-disabled-repos, subscription-manager
+
+This system is not receiving updates. You can use subscription-manager on the host to register and assign subscriptions.
+
+Cleaning repos: ubi-7 ubi-7-rhah ubi-7-server-extras-rpms
+              : ubi-7-server-optional-rpms ubi-server-rhscl-7-rpms
+STEP 4: COMMIT localhost/secure-container
+Getting image source signatures
+Copying blob 01d2fb866535 skipped: already exists
+Copying blob 9e12a51e507a skipped: already exists
+Copying blob 2c4e14cad8b6 done
+Copying config 7ca1aec798 done
+Writing manifest to image destination
+Storing signatures
+--&gt; 7ca1aec798c
+7ca1aec798cefd27597d423beb41087afd112c5915d1cdea34269a46665866f9</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Let&#8217;s see if this image has a webserver running now.  Run the following command in the terminal</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
+    -d \
+    -p 8081:80/tcp \
+    --name my-web-server \
+    localhost/secure-container \
+    /usr/sbin/httpd -DFOREGROUND <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>As we did above with <code>bash</code>, we are now wanting to run <code>httpd</code> as the root process of localhost/secure-container and this time we&#8217;re providing that command the <code>-DFOREGROUND</code> argument</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Open you&#8217;re Browser Preview window and navigate to <code>localhost:8081</code> and you should see a familiar sight (or site, if you will)</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/apache-test-page.png" alt="apache test page">
+</div>
+</div>
+</li>
+<li>
+<p>This is encouraging, but we don&#8217;t yet have the non-boilerplate aspects of our site in the container.  For instance, if we navigate to our rudimentary guestbook functionality at <code>localhost:8081/hello.html</code></p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/guestbook-not-found.png" alt="guestbook not found">
+</div>
+<div class="title">Figure 2. Guestbook functionality does not exist in the container</div>
+</div>
+</li>
+<li>
+<p>We&#8217;ll address this problem in the next section.  For now, let&#8217;s stop and remove this container by running the following</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman rm -f my-web-server</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="containerfile_copy"><a class="anchor" href="#containerfile_copy"></a>Copying files into the container</h3>
+<div class="paragraph">
+<p>So we&#8217;re got a container image that is able to run a generic apache site, but how do we customize this to run our specific site.  This is where another Container file directive, <code>COPY</code> comes in.  In this section we&#8217;re going to get a little help from the builah native commands to retrieve our custom content.  Then we&#8217;re going to show how we can use <code>COPY</code> and the Containerfile to get those assets onto our container</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>First let&#8217;s leverage <code>buildah</code> to pull our custom website files onto our host.  We&#8217;ll need to mount the container and since we&#8217;re not a root user we&#8217;re going to first need to issue</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">buildah unshare</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code>[root@ansible-1 ~]#</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Next we&#8217;ll run the next few commands to mount the old insecure container</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Normally a team would already have custom content handy on the host already.  In this instance we&#8217;re wanting to show off <code>buildah</code> a little more but it is a reasonably typical practice to copy files from one container image to another, particularly in build scenarios where assets are built in one container and copied to another.  This use case is out of the scope of this workshop however.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">WORKING_CONTAINER_OLD=$(buildah from quay.io/mhildenb/container-workshop-httpd)
+WORKING_CONTAINER_OLD_IMAGE_MOUNT=$(buildah mount ${WORKING_CONTAINER_OLD})</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Now we don&#8217;t want very many files from the old container, we only want the files involved with guestbook.  We can pull them out and into our <code>Containerfile</code> working directory by running the following commands</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp ${WORKING_CONTAINER_OLD_IMAGE_MOUNT}/var/www/cgi-bin/log-visitor.sh /home/%USER%/container-workshop/secure-container
+cp ${WORKING_CONTAINER_OLD_IMAGE_MOUNT}/var/www/html/hello.html /home/%USER%/container-workshop/secure-container</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>At this point you should see the two files appear in the <code>secure-container</code> directory.  You can also click on them and take a look at the (simple) HTML and bash code</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/guestbook-files.png" alt="guestbook files">
+</div>
+</div>
+</li>
+<li>
+<p>Now that we&#8217;ve retrieved the files, we can exit the <code>buildah unshare</code> sesssion</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">exit</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[%USER%@ansible-1 ~]$</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Next, open the <code>Containerfile</code> in the IDE (if it&#8217;s not open already) and add the highlighted lines</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-Containerfile hljs" data-lang="Containerfile">FROM registry.access.redhat.com/ubi7
+USER root
+
+RUN yum install -y httpd &amp;&amp; yum update -y &amp;&amp; yum clean all
+
+<mark>COPY hello.html /var/www/html</mark> <i class="conum" data-value="1"></i><b>(1)</b>
+<mark>COPY log-visitor.sh /var/www/cgi-bin</mark>
+<mark>RUN chmod 755 /var/www/cgi-bin/log-visitor.sh</mark> <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>COPY</code> directive moves files from the current working directory on the host and copies them to the specified location in the container image (in this case <code>/var/www/html</code>).  This is analogous to what we did before with the <code>buildah mount</code> commands</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>To ensure our cgi-bin script has execute privileges it&#8217;s generally good practice to use a <code>RUN</code> directive to use the <code>chmod</code> command to ensure this.</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Rebuild the container with the <code>buildah bud</code> command again:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">buildah bud \
+  -f Containerfile \
+  -t localhost/secure-container \
+  /home/%USER%/container-workshop/secure-container</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>This should yield output similar to before but appended with the following (&#8230;&#8203; represents content that has been omitted)</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">STEP 1: FROM registry.access.redhat.com/ubi7
+...
+STEP 4: COPY hello.html /var/www/html
+STEP 5: COPY log-visitor.sh /var/www/cgi-bin
+STEP 6: RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
+STEP 7: COMMIT localhost/secure-container
+Getting image source signatures
+Copying blob 01d2fb866535 skipped: already exists
+Copying blob 9e12a51e507a skipped: already exists
+Copying blob e7b33fa87b36 done
+Copying config ddbfdfbd09 done
+Writing manifest to image destination
+Storing signatures
+--&gt; ddbfdfbd096
+ddbfdfbd0960f0db36cf608e4066d9c26fb4f87f62c2d3cdb7203ea379213cbd</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Now let&#8217;s see if this is enough to run our site</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
+    -d \
+    -p 8081:80/tcp \
+    --name my-web-server \
+    localhost/secure-container \
+    /usr/sbin/httpd -DFOREGROUND</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Once the container is running, if you navigate to <code>localhost:8081/hello.html</code> you should now see the guestbook</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/apache-guestbook-page.png" alt="apache guestbook page">
+</div>
+<div class="title">Figure 3. Guestbook restored</div>
+</div>
+</li>
+<li>
+<p>Go ahead and "sign" the guestbook by entering your name (such as Alice) and hit <code>Submit</code>.  You should be greeted with a page like this</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/guestbook-more-secure-container.png" alt="guestbook more secure container">
+</div>
+</div>
+</li>
+<li>
+<p>Of note is that this time the httpd server is running as the <code>apache</code> user and not <code>root</code> (see highlight in image)</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">Why is the webserver running as <code>apache</code>?</div>
+<div class="paragraph">
+<p>Given that our <code>Containerfile</code> is running as <code>root</code> (per the last <code>USER</code> directive) you might be wondering why the webserver is running as <code>apache</code>.  This is because the httpd package that is installed from <code>yum</code> defaults to running as apache, regardless of the user that executes the <code>/usr/sbin/httpd</code> command</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>At this point our container image is looking pretty good.  Aside from the volume mount (so that our guestbook can be persisted between runs) things are looking pretty good.  However, there are still additional steps we take to make this image even more resilient to attack or exploit.  Here are two issues:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The web server is running on port 80 in the container.  This is a privileged port.  Better to have this run at port run in an privileged port above 1024 (such as 8080)</p>
+</li>
+<li>
+<p>Running as a specific user can be problematic as that user can implicitly have privileges afforded to them via sudo (either at runtime or in the ongoing maintenance of the container).  It would be better if we could run the container as the unknown or "anonymous" user</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We&#8217;ll address both of these concerns in the next section.  For now, as before, let&#8217;s stop and remove this container by running the following</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman rm -f my-web-server</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="no_privilege"><a class="anchor" href="#no_privilege"></a>Running as an "Arbitrary User"</h3>
+<div class="paragraph">
+<p>To futher limit the attack surface of containers, Kubernetes products such as OpenShift by default run containers with an arbitrarily assigned user.  This effectively overrides the <code>USER</code> directive of the <code>Containerfile</code>.  Explanation and reasons for this can be found <a href="https://access.redhat.com/articles/4859371" target="_blank" rel="noopener">here</a>.</p>
+</div>
+<div class="paragraph">
+<p>When a container is run with an arbitrary user, the only thing that we are guaranteed is that the user will be part of the <code>root</code> group.  This fact will become important in a minute.  First let&#8217;s take a look at what happens to the container when we run as a random user and fix the issues in the <code>Containerfile</code> as they arise</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>We can already run our container image with an arbitrary user using the <code>-u</code> flag with <code>podman run</code>.  Let&#8217;s attempt to run our container (but this time without the <code>-d</code> flag so that we can see the output right away)</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
+    --rm \
+    -u $((1000 + ${RANDOM})) \<i class="conum" data-value="1"></i><b>(1)</b>
+    -p 8081:80/tcp \
+    --name my-web-server \
+    localhost/secure-container \
+    /usr/sbin/httpd -DFOREGROUND</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>-u</code> allows us to override the user the container should be run as.  In this case we&#8217;re using <code>${RANDOM}</code> <sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> offset by 1000 (to prevent collisions with existing users in the container)</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>You&#8217;ll notice that it fails with this error message</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code>AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 10.0.2.100. Set the 'ServerName' directive globally to suppress this message
+(13)Permission denied: AH00058: Error retrieving pid file /run/httpd/httpd.pid
+AH00059: Remove it before continuing if it is corrupted.</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The issue here is that by default an arbitrary user won&#8217;t have access to most of the files that the webserver needs to run.  This is where the fact that our arbitrary user will always be part of the <code>root</code> group (gid: 0) will come in handy.  We need to make sure that the root group is assigned to the files and folders that the webserver needs and that the group has appropriate permissions.</p>
+</div>
+<div class="paragraph">
+<p>The process for doing this might be one of trial and error if you&#8217;re not familiar with the software that you&#8217;re attempting to run in the container.  In this case we know exactly which directories need to be adjusted.  Let&#8217;s return to the <code>Containerfile</code></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open the <code>Containerfile</code> and add the following lines (highlighted) to it</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-Containerfile hljs" data-lang="Containerfile">FROM registry.access.redhat.com/ubi7
+USER root
+
+RUN yum install -y httpd &amp;&amp; yum update -y &amp;&amp; yum clean all
+
+COPY hello.html /var/www/html
+COPY log-visitor.sh /var/www/cgi-bin
+RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
+
+<mark>RUN chown -R 1001:0 /run/httpd &amp;&amp; chmod -R g=u /run/httpd</mark>
+<mark>RUN chown -R 1001:0 /var/log/httpd/ &amp;&amp; chmod -R g=u /var/log/httpd/</mark>
+
+<mark>USER 1001</mark></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Rebuild the container with the <code>buildah bud</code> command again:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">buildah bud \
+  -f Containerfile \
+  -t localhost/secure-container \
+  /home/%USER%/container-workshop/secure-container</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>This should yield output similar to before but appended with the following (&#8230;&#8203; represents content that has been omitted)</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">STEP 1: FROM registry.access.redhat.com/ubi7
+...
+STEP 6: RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
+STEP 7: RUN chown -R 1001:0 /run/httpd &amp;&amp; chmod -R g=u /run/httpd
+STEP 8: RUN chown -R 1001:0 /var/log/httpd/ &amp;&amp; chmod -R g=u /var/log/httpd/
+STEP 9: USER 1001
+STEP 10: COMMIT localhost/secure-container
+Getting image source signatures
+Copying blob 01d2fb866535 skipped: already exists
+Copying blob 9e12a51e507a skipped: already exists
+Copying blob ecd87ecc84d1 done
+Copying config 8f4119c775 done
+Writing manifest to image destination
+Storing signatures
+--&gt; 8f4119c7756
+8f4119c7756aba7d105ecf07adb5d7fc24d4d1240de0071875d5c6528fa3c636</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Now let&#8217;s try running the container again</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Even through we&#8217;ve set a default user in the container, let&#8217;s still run with an arbitrary one to test that aspect of the container</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
+    --rm \
+    -u $((1000 + ${RANDOM})) \
+    -p 8081:80/tcp \
+    --name my-web-server \
+    localhost/secure-container \
+    /usr/sbin/httpd -DFOREGROUND</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Which shows some progress but highlights a new issue:</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code>AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 10.0.2.100. Set the 'ServerName' directive globally to suppress this message
+<mark>(13)Permission denied: AH00072: make_sock: could not bind to address [::]:80</mark>
+<mark>(13)Permission denied: AH00072: make_sock: could not bind to address 0.0.0.0:80</mark>
+no listening sockets available, shutting down
+AH00015: Unable to open logs</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>So the issue here is something that we assumed we would need to change, namely, that the webserver is attempting to bind to a privileged port.  Since we&#8217;re no longer running the command as root this is not possible.  This highlights another issue that you might run into trying to support arbitrary containers in your containers: you might need to change the configuration of the service that you&#8217;re attempting to containerize.</p>
+</div>
+<div class="paragraph">
+<p>For our apache webserver we&#8217;re going to need to change its default configuration file.  Normally this is done by having our configuration on the host, editing it to our liking there, and using the <code>COPY</code> directive to replace the default configuration in the container.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>First let&#8217;s use buildah&#8217;s native commands to pull the <code>httpd.conf</code> file out of our image and into our working folder.  Run the following command in the terminal:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">buildah unshare
+WORKING_CONTAINER=$(buildah from localhost/secure-container)
+WORKING_CONTAINER_MOUNT=$(buildah mount ${WORKING_CONTAINER})
+cp ${WORKING_CONTAINER_MOUNT}/etc/httpd/conf/httpd.conf /home/%USER%/container-workshop/secure-container
+exit</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>When the commands finish you should have a copy of the httpd.conf from the image in the <code>container-workshop</code> directory (you might need to refresh the explorer first).  Click on the httpd.conf to edit it in VSCode</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/httpd-conf.png" alt="httpd conf">
+</div>
+</div>
+</li>
+<li>
+<p>Find the <code>Listen</code> directive near the start of the <code>httpd.conf</code> and change it to match the highlighted line so that the server listens on port 8080</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code>#
+ServerRoot "/etc/httpd"
+
+#
+# Listen: Allows you to bind Apache to specific IP addresses and/or
+# ports, instead of the default. See also the &lt;VirtualHost&gt;
+# directive.
+#
+# Change this to Listen on specific IP addresses as shown below to
+# prevent Apache from glomming onto all bound IP addresses.
+#
+# Listen 12.34.56.78:80
+<mark>Listen 8080</mark>
+
+#
+# Dynamic Shared Object (DSO) Support
+#</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>OPTIONAL: Given that our server will not be started by the root user, there is no need to define a user and group the server should run as.  Remove (or comment out) the lines that are struckthrough in your <code>httpd.conf</code></p>
+<div class="listingblock">
+<div class="content">
+<pre>#
+# If you wish httpd to run as a different user or group, you must run
+# httpd as root initially and it will switch.
+#
+# User/Group: The name (or #number) of the user/group to run httpd as.
+# It is usually good practice to create a dedicated user and group for
+# running httpd, as with most system services.
+#
+<span class="line-through">User apache</span>
+<span class="line-through">Group apache</span>
+
+# 'Main' server configuration</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Now with the configuration updated, we need to once again update our <code>Containerfile</code> with the highlighted lines</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-Containerfile hljs" data-lang="Containerfile">FROM registry.access.redhat.com/ubi7
+USER root
+
+RUN yum install -y httpd &amp;&amp; yum update -y &amp;&amp; yum clean all
+
+COPY hello.html /var/www/html
+COPY log-visitor.sh /var/www/cgi-bin
+<mark>COPY httpd.conf /etc/httpd/conf/httpd.conf</mark>
+RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
+
+RUN chown -R 1001:0 /run/httpd &amp;&amp; chmod -R g=u /run/httpd
+RUN chown -R 1001:0 /var/log/httpd/ &amp;&amp; chmod -R g=u /var/log/httpd/
+
+USER 1001</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Build the container</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">buildah bud \
+  -f Containerfile \
+  -t localhost/secure-container \
+  /home/%USER%/container-workshop/secure-container</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>This should yield output similar to before but appended with the following (&#8230;&#8203; represents content that has been omitted)</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">STEP 1: FROM registry.access.redhat.com/ubi7
+...
+STEP 6: RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
+STEP 7: RUN chown -R 1001:0 /run/httpd &amp;&amp; chmod -R g=u /run/httpd
+STEP 8: RUN chown -R 1001:0 /var/log/httpd/ &amp;&amp; chmod -R g=u /var/log/httpd/
+STEP 9: USER 1001
+STEP 10: COMMIT localhost/secure-container
+Getting image source signatures
+Copying blob 01d2fb866535 skipped: already exists
+Copying blob 9e12a51e507a skipped: already exists
+Copying blob ecd87ecc84d1 done
+Copying config 8f4119c775 done
+Writing manifest to image destination
+Storing signatures
+--&gt; 8f4119c7756
+8f4119c7756aba7d105ecf07adb5d7fc24d4d1240de0071875d5c6528fa3c636</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run the container (in the foreground) again to test it</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
+    --rm \
+    -u $((1000 + ${RANDOM})) \
+    -p 8081:<mark>8080</mark>/tcp \<i class="conum" data-value="1"></i><b>(1)</b>
+    --name my-web-server \
+    localhost/secure-container \
+    /usr/sbin/httpd -DFOREGROUND</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Notice that we&#8217;ve had to change the port that we&#8217;re forwarding to as our webserver should now bind to port 8080 in the container</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Next navigate to <code><a href="http://localhost:8081/hello.html" class="bare">http://localhost:8081/hello.html</a></code>, enter a name (such as "Alice") into the guestbook and hit submit.  You should see the following page</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/arbitrary-user-guestbook.png" alt="arbitrary user guestbook">
+</div>
+<div class="title">Figure 4. Notice the random uid (yours will vary)</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="finish_container"><a class="anchor" href="#finish_container"></a>Additional Containerfile Commands</h3>
+<div class="paragraph">
+<p>Our container is in pretty good shape, but it&#8217;s a little annoying that we have to specify a command every time, for instance, what&#8217;s highlighted here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
+    --rm \
+    -u $((1000 + ${RANDOM})) \
+    -p 8081:8080/tcp \<i class="conum" data-value="1"></i><b>(1)</b>
+    --name my-web-server \
+    localhost/secure-container \
+    <mark>/usr/sbin/httpd -DFOREGROUND</mark></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For this we can add a directive to our <code>Containerfile</code> called <code>CMD</code> which tells the container runtime which command should be executed to start the container<sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup></p>
+</div>
+<div class="paragraph">
+<p>The other thing that would be good to advertise is the port that the container listens on at runtime (now 8080).  There is a directive for this as well called <code>EXPOSE</code>.  This does not actually publish the port but rather serves as documentation between the person who builds the image and those that run it (or, as we&#8217;ll see, a container orchestration platform such as Kubernetes)</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Let&#8217;s finish off our container by adding the following highlighted lines to our <code>Containerfile</code>:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-Containerfile hljs" data-lang="Containerfile">FROM registry.access.redhat.com/ubi7
+USER root
+
+RUN yum install -y httpd &amp;&amp; yum update -y &amp;&amp; yum clean all
+
+COPY hello.html /var/www/html
+COPY log-visitor.sh /var/www/cgi-bin
+COPY httpd.conf /etc/httpd/conf/httpd.conf
+RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
+
+RUN chown -R 1001:0 /run/httpd &amp;&amp; chmod -R g=u /run/httpd
+RUN chown -R 1001:0 /var/log/httpd/ &amp;&amp; chmod -R g=u /var/log/httpd/
+
+<mark>EXPOSE 8080/tcp</mark> <i class="conum" data-value="1"></i><b>(1)</b>
+
+USER 1001
+
+<mark>CMD /usr/sbin/httpd -DFOREGROUND</mark> <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>as with port forwarding in <code>podman run</code> we can specify the protocol (tcp)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This is the same command we were running manually with podman run</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Build the container</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">buildah bud \
+  -f Containerfile \
+  -t localhost/secure-container \
+  /home/%USER%/container-workshop/secure-container</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>This should yield output similar to before but appended with the following (&#8230;&#8203; represents content that has been omitted)</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">STEP 1: FROM registry.access.redhat.com/ubi7
+...
+STEP 9: RUN chown -R 1001:0 /var/log/httpd/ &amp;&amp; chmod -R g=u /var/log/httpd/
+STEP 10: EXPOSE 8080/tcp
+STEP 11: USER 1001
+STEP 12: CMD /usr/sbin/httpd -DFOREGROUND
+STEP 13: COMMIT localhost/secure-container
+Getting image source signatures
+Copying blob 01d2fb866535 skipped: already exists
+Copying blob 9e12a51e507a skipped: already exists
+Copying blob 03c598179387 done
+Copying config 8d4a377b07 done
+Writing manifest to image destination
+Storing signatures
+--&gt; 8d4a377b076
+8d4a377b0765f588561fa9f842a6c19459431c4f360bf0baac2d8a623983a5f5</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run <span id="finished_container">the container</span> again to test it (notice the differences in the command)</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
+    --rm \
+    -d \
+    -P \<i class="conum" data-value="1"></i><b>(1)</b>
+    --name my-web-server \
+    localhost/secure-container</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>-P</code> flag leverages the <code>EXPOSE</code> directives from the <code>Containerfile</code> and forwards all exposed ports to <strong>random</strong> ports on the host</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>You&#8217;ll notice that we can no longer hit the webserver at port 8081 (or it&#8217;s at least very unlikely that we can) and instead we need to find out the port that podman assigned on the host.  Capture that with this command:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">HOST_PORT=$(podman ps \<i class="conum" data-value="1"></i><b>(1)</b>
+    -f name=my-web-server \<i class="conum" data-value="2"></i><b>(2)</b>
+    --format json | jq -r ".[0].Ports[0].hostPort") <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The output of this string of commands will give us the port on the host that is forwarded to our exposed container port</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This returns only information for containers with the name <code>my-web-server</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>--format</code> returns extended information in JSON format which we pipe to the <code>jq</code> command to quickly parse the JSON for the field we&#8217;re after</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Next, we&#8217;re pretty-print the url of our guestbook so that we can paste it into our Browser Preview window</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo "http://localhost:${HOST_PORT}/hello.html"</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Copy the echo&#8217;ed string into the Browser Preview window</p>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you hover over the string in the terminal window with your mouse you might be prompted to <kbd>CTRL</kbd>-click (or <kbd>CMD</kbd>-click on Mac OSX) to open the link in your browser.  <strong>This will not work</strong> because it will open the URL in your browser instead of in the Browser Preview of your VSCode host instance.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/dont-click-link.png" alt="dont click link">
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>You should now see your guestbook</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/apache-guestbook-page-random-port.png" alt="apache guestbook page random port">
+</div>
+<div class="title">Figure 5. Guestbook, but now at an arbitrary port</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Congratulations!  You&#8217;ve build a secure container from the ground up.  Next let&#8217;s look at some different ways of orchestrating and deploying containers</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. Packages that are upgraded by yum will vary based on which packages have been updated by Red Hat since the last published ubi image
+</div>
+<div class="footnote" id="_footnotedef_2">
+<a href="#_footnoteref_2">2</a>. Random is an internal bash function that returns a pseudorandom integer in the range 0-32767.  See also <a href="http://www.ing.iac.es/<sub>docs/external/bash/abs-guide/randomvar.html#:</sub>:text=%24RANDOM%20is%20an%20internal%20Bash,to%20generate%20an%20encryption%20key.&amp;text=Jipe%20points%20out%20a%20set,number%20between%206%20and%2030.">here</a>
+</div>
+<div class="footnote" id="_footnotedef_3">
+<a href="#_footnoteref_3">3</a>. There is another similar directive called <code>ENTRYPOINT</code>.  You can read more about <code>ENTRYPOINT</code> and its interaction with <code>CMD</code> <a href="https://docs.docker.com/engine/reference/builder/#entrypoint" target="_blank" rel="noopener">here</a>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="container-persistence.html" class="query-params-link">Persistence and Containers</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>  </body>
+</html>

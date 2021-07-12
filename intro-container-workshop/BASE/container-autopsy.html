@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>A Container Autopsy :: Build a Container Workshop (Dev Mode)</title>
+    <link rel="canonical" href="http://localhost:3000/rhs-build-course/index.html/intro-container-workshop/BASE/container-autopsy.html">
+    <link rel="prev" href="introduction.html">
+    <link rel="next" href="podman-intro.html">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <style>
+    /* override master stylesheet properties for this partial here */
+
+    .navbar-item {
+      flex: unset;
+    }
+
+    .doc {
+      max-width: unset;
+    }
+
+
+  </style>
+
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="http://localhost:3000/rhs-build-course/index.html">Build a Container Workshop (Dev Mode)</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+        <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-scholars.github.io/outer-loop-guides/" target="_blank">Outer Loop</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/openshift-starter-guides/" target="_blank">OpenShift Starter</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header><div class="body">
+<div class="nav-container" data-component="intro-container-workshop" data-version="BASE">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html" class=" query-params-link">Build a Container Workshop</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="introduction.html">Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server">Code Server</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server_terminal">Open terminal</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server_terminal_commands">Issuing Terminal Commands</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#local_browser">Local Browser</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="container-autopsy.html">Container Autopsy</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#what_makes_up_a_container">What makes up a Container?</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#container_image_format">Container Image Format</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#container_file">Containerfile</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#container_identification">Container Identification</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#container_runtime">Container Runtime</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#container_tools">Container Tools</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#container_registries">Container Registries</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#more_information">More information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="podman-intro.html">Running Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#run_container">Add a website</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#enter_container">Look inside a container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#copy_data">Copying data out</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#committing_containers">Committing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#stop_container">Stopping Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#remove_containers">Removing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#rerunning_container">"Re-running" Containers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="container-persistence.html">Persistence and Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#mounting_volumes">Mounting Volumes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#test_mount">Testing the Volume Mount</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Building Securely</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="build-your-own-container.html">Build your own Secure Container</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Build a Container Workshop</span>
+    <span class="version">BASE</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Build a Container Workshop</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">BASE</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Build a Container Workshop</a></li>
+    <li><a href="container-autopsy.html">Container Autopsy</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="file:///workspaces/container-workshop/documentation/modules/ROOT/pages/container-autopsy.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">A Container Autopsy</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>10 MINUTE READ</em></p>
+</div>
+<div class="paragraph">
+<p>If you are new to containers, this section will help your understanding in what actually makes up a container,
+introduce the Open Container Initiative (OCI) specifications and demystify some of what is actually happening under the covers.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/autopsy.png" alt="Autopsy!">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="what_makes_up_a_container"><a class="anchor" href="#what_makes_up_a_container"></a>1. What makes up a Container?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A Container can be defined as a process with its own file system. The process is governed by the OCI runtime specification (<a href="https://github.com/opencontainers/runtime-spec" target="_blank" rel="noopener">github.com/opencontainers/runtime-spec</a>)
+whilst the file system and configuration is governed by the OCI container image format (<a href="https://github.com/opencontainers/image-spec" target="_blank" rel="noopener">github.com/opencontainers/image-spec</a>).</p>
+</div>
+<div class="paragraph">
+<p>These specifications are open industry standards by the Open Container Initiative (OCI) which is an open governance structure for the express purpose of creating standards around container formats and runtimes.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/OCI-logo.svg" alt="OCI Logo!" width="320" height="80">
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="container_image_format"><a class="anchor" href="#container_image_format"></a>2. Container Image Format</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Container images are made up of layers, most which are immutable with the exception of a writeable upper layer. A union file system provides a logical view when the container is running. (OverlayFS is a union mount filesystem implementation for Linux). The union file system works on top of the other file-systems. It gives a single coherent and unified view to files and directories of separate file-system. In other words, it mounts multiple directories to a single root. It is more of a mounting mechanism than a file system.</p>
+</div>
+<div class="paragraph">
+<p>Today you are the container builder, so the important aspects to understand are:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Each row in a Dockerfile corresponds to a new layer.</p>
+</li>
+<li>
+<p>Choose to have less layers as it takes less time to build the logical view union file system at runtime.</p>
+</li>
+<li>
+<p>Smaller container images are preferable as they will take less time to download and use less disk space.</p>
+</li>
+<li>
+<p>Upper layers may potentially overwrite bottom layers. So a file may not be present because it was deleted by an upper layer.</p>
+</li>
+<li>
+<p>Logically deleting the file in the upper layer will still add to overall image size.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/imagelayering.png" alt="Image Layers!">
+</div>
+</div>
+<div class="paragraph">
+<p>Within the container image, layers are formatted as archives (tar files) and are indexed in Image index and Manifest (json format) files.
+Furthermore config files provide the means of storing command line options, environment variables, and properties such as time created.
+The figure below shows the extract of a container image and how the internals of layering, indexing are organised.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/tar-extract.png" alt="Extract!">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>To export a container image to a tar file and extract try the following commands</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/export-image.png" alt="How to export!">
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="container_file"><a class="anchor" href="#container_file"></a>3. Containerfile</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A Containerfile is a text based file which provides instructions to assemble an image. The available commands that are usable inside a Containerfile and a Dockerfile are equivalent.</p>
+</div>
+<div class="paragraph">
+<p>The Containerfile below is a of a mysql image from the Red Hat Container Catalog. As the image is built the commands are executed in order from top down until the image is built.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/dissectingimage.png" alt="Dissecting an Image!">
+</div>
+</div>
+<div class="paragraph">
+<p>The below table provides an overview of the are typical commands seen in a Containerfile.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">FROM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To specify the parent image.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">WORKDIR</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To set the working directory for any commands that follow in the Dockerfile.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RUN</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To install any applications and packages required for your container.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">COPY</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To copy over files or directories from a specific location.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ADD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">As COPY, but also able to handle remote URLs and unpack compressed files.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ENTRYPOINT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Command that will always be executed when the container starts. If not specified, the default is /bin/sh -c</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CMD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Arguments passed to the entrypoint. If ENTRYPOINT is not set (defaults to /bin/sh -c), the CMD will be the commands the container executes.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EXPOSE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To define which port through which to access your container application.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LABEL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To add metadata to the image.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>You may also see Containerfiles with multi stage builds where multiple FROM commands may be present. Multistage builds provide a means to help refine the runtime image as opposed to having an image which also contains all the necessary software to build. For instance you typically don&#8217;t need maven to run a java based jar but do need it to build.</p>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="container_identification"><a class="anchor" href="#container_identification"></a>4. Container Identification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Once you build a container you need to give it a tag to be able to identify it. An image tag is a label applied to a container image in a repository that distinguishes a specific image from other images. Typically, the tag represents a version number of some sort.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/container-identification.png" alt="Container Identification!">
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="container_runtime"><a class="anchor" href="#container_runtime"></a>5. Container Runtime</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Like the container image specification, there is a <a href="https://github.com/opencontainers/runtime-spec" target="blank">runtime specification</a> which defines a lifecycle for a container. This defines hooks to be invoked prior to starting, creating or shutting down.</p>
+</div>
+<div class="paragraph">
+<p>The state of a container includes the following properties</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Oci version</p>
+</li>
+<li>
+<p>Id - This MUST be unique across all containers on this host.</p>
+</li>
+<li>
+<p>Status - created, creating, running, stopped</p>
+</li>
+<li>
+<p>Pid - when container is creating or running</p>
+</li>
+<li>
+<p>bundle (string, REQUIRED) is the absolute path to the container&#8217;s bundle directory.</p>
+</li>
+<li>
+<p>annotations (map, OPTIONAL) contains the list of annotations associated</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/runtimespec.png" alt="Extract!">
+</div>
+</div>
+<div class="paragraph">
+<p>We will be able to understand the runtime aspects a little more when looking at container statuses in the following sections.</p>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="container_tools"><a class="anchor" href="#container_tools"></a>6. Container Tools</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As mentioned, the open source community have created new container tools to removed the way Docker requires the use of root access and a daemon process.
+These new tools are buildah, skopeo and podman which each provide different functionality. You can think of podman as a developers replacement for all Docker commands, skopeo as a simpler way to inspect and copy images and buildah provides specialist ways of building images whether from a Containerfile or interactively.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/container_tools.png" alt="Extract!">
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+<div class="sect2">
+<h3 id="_but_how_would_you_use_these_tools"><a class="anchor" href="#_but_how_would_you_use_these_tools"></a>But how would you use these tools?</h3>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_buildah"><a class="anchor" href="#_buildah"></a>Buildah</h3>
+<div class="paragraph">
+<p>Buildah can an act as a drop-in replacement for the Docker daemon’s docker build command (i.e., building images with a traditional Dockerfile) but is flexible enough to allow you to build images with whatever tools you prefer to use. ( bud = build-using-dockerfile )</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>buildah bud -t hello .</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Unlike Docker build, Buildah doesn’t commit changes to a layer automatically for every instruction in the Dockerfile—it builds everything from top to bottom, every time.
+<a href="https://www.redhat.com/sysadmin/getting-started-buildah" target="_blank" rel="noopener">Getting started with Buildah</a></p>
+</div>
+<div class="paragraph">
+<p>Like the below sequence of commands - Buildah can interact with the temporary container created during the build process.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># Create a container
+container=$(buildah from fedora:28)
+
+# Labels are part of the "buildah config" command
+buildah config --label maintainer="Chris Collins &lt;collins.christopher@gmail.com&gt;" $container
+
+# Grab the source code outside of the container
+curl -sSL http://ftpmirror.gnu.org/hello/hello-2.10.tar.gz -o hello-2.10.tar.gz
+
+buildah copy $container hello-2.10.tar.gz /tmp/hello-2.10.tar.gz
+
+buildah run $container dnf install -y tar gzip gcc make
+...
+# Workingdir is also a "buildah config" command
+buildah config --workingdir /opt/hello-2.10 $container
+...
+
+# Entrypoint, too, is a “buildah config” command
+buildah config --entrypoint /usr/local/bin/hello $container
+
+# Finally saves the running container to an image
+buildah commit --format docker $container hello:latest</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_podman"><a class="anchor" href="#_podman"></a>Podman</h3>
+<div class="paragraph">
+<p>Podman command format will be very familiar to Docker users but doesnt require a daemon.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>podman pull registry.fedoraproject.org/f29/httpd
+podman images
+podman run -dt -p 8080:8080/tcp registry.fedoraproject.org/f29/httpd</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_skopeo"><a class="anchor" href="#_skopeo"></a>Skopeo</h3>
+<div class="paragraph">
+<p>With the skopeo command, you can work with container images from registries without using the docker daemon or the docker command.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>skopeo inspect docker://docker.io/fedora</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In a single line the Skopeo copy command replaces the mulitple docker commands below</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>skopeo copy --dest-creds prod_user:prod_pass docker://internal.registry/myimage:latest docker://production.registry/myimage:v1.0</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>docker login ...
+docker pull internal.registry/myimage:latest
+docker tag internal.registry/myimage:latest production.registry/myimage:v1.0
+docker push production.registry/myimage:v1.0</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="container_registries"><a class="anchor" href="#container_registries"></a>7. Container Registries</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When working with container images, you need somewhere to save and access them as they are created and that’s where a container registry comes in.
+The registry essentially acts as a place to store container images and share them out via a process of uploading to (pushing) and downloading from (pulling).</p>
+</div>
+<div class="paragraph">
+<p>There are two types of container registry: public and private.</p>
+</div>
+<div class="sect2">
+<h3 id="_public_registries_are"><a class="anchor" href="#_public_registries_are"></a>Public registries are:</h3>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>great for individuals or small teams</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>get up and running quickly as possible. Basic in their abilities.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>easy to use</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_private_registries_have"><a class="anchor" href="#_private_registries_have"></a>Private registries have:</h3>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Security and privacy</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Enterprise container image storage</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Host remotely or on-premises</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_enterprises_need_to_look_for"><a class="anchor" href="#_enterprises_need_to_look_for"></a>Enterprises need to look for:</h3>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Multiple authentication systems</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Role-based access control management</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Vulnerability scanning capabilities</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Auditable logs</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Optimized for automation</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Red Hat Quay is a private container image registry that enables you to build, distribute, and deploy containers with the storage you need to scale quickly.
+It analyzes your images for security vulnerabilities using Clair, identifying potential issues and addressing them before they become security risks.
+The Red Hat Container catalog runs on Quay and provides a view of the vulnerabilities found by Clair.
+<a href="https://catalog.redhat.com/software/containers/explore" target="blank">https://catalog.redhat.com/software/containers/explore</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="more_information"><a class="anchor" href="#more_information"></a>More information</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>But what else do you need to know about containers? Well you might want to understand</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>File system mounting</p>
+</li>
+<li>
+<p>User permissions</p>
+</li>
+<li>
+<p>Port mapping</p>
+</li>
+<li>
+<p>Network</p>
+</li>
+<li>
+<p>Resource limiting</p>
+</li>
+<li>
+<p>Secrets, configuration, environment variables</p>
+</li>
+<li>
+<p>Host system</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Many of these will be covered as we step through the exercises but for more information take a look at</p>
+</div>
+<div class="paragraph">
+<p><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/building_running_and_managing_containers/index#understanding-standard-red-hat-base-images_building-running-and-managing-containers" target="_blank" rel="noopener">Building Running and Managing Containers in RHEL 8</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://www.redhat.com/en/topics/cloud-native-apps/what-is-a-container-registry" target="blank">What is a container registry?</a></p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="introduction.html" class="query-params-link">Setup</a></span>
+  <span class="next"><a href="podman-intro.html" class="query-params-link">Running Containers</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>  </body>
+</html>

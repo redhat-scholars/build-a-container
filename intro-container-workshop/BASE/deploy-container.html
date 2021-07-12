@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Containers and OpenShift :: Build a Container Workshop (Dev Mode)</title>
+    <link rel="canonical" href="http://localhost:3000/rhs-build-course/index.html/intro-container-workshop/BASE/deploy-container.html">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <style>
+    /* override master stylesheet properties for this partial here */
+
+    .navbar-item {
+      flex: unset;
+    }
+
+    .doc {
+      max-width: unset;
+    }
+
+
+  </style>
+
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="http://localhost:3000/rhs-build-course/index.html">Build a Container Workshop (Dev Mode)</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+        <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-scholars.github.io/outer-loop-guides/" target="_blank">Outer Loop</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/openshift-starter-guides/" target="_blank">OpenShift Starter</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header><div class="body">
+<div class="nav-container" data-component="intro-container-workshop" data-version="BASE">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html" class=" query-params-link">Build a Container Workshop</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="introduction.html">Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server">Code Server</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server_terminal">Open terminal</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#open_code_server_terminal_commands">Issuing Terminal Commands</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="introduction.html#local_browser">Local Browser</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="container-autopsy.html">Container Autopsy</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#what_makes_up_a_container">What makes up a Container?</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#container_image_format">Container Image Format</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#container_file">Containerfile</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#container_identification">Container Identification</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#container_runtime">Container Runtime</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#container_tools">Container Tools</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#container_registries">Container Registries</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-autopsy.html#more_information">More information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="podman-intro.html">Running Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#run_container">Add a website</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#enter_container">Look inside a container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#copy_data">Copying data out</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#committing_containers">Committing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#stop_container">Stopping Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#remove_containers">Removing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="podman-intro.html#rerunning_container">"Re-running" Containers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="container-persistence.html">Persistence and Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#mounting_volumes">Mounting Volumes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-persistence.html#test_mount">Testing the Volume Mount</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Building Securely</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="build-your-own-container.html">Build your own Secure Container</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Build a Container Workshop</span>
+    <span class="version">BASE</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Build a Container Workshop</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">BASE</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Build a Container Workshop</a></li>
+    <li><a href="deploy-container.html">Containers and OpenShift</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="file:///workspaces/container-workshop/documentation/modules/ROOT/pages/deploy-container.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Containers and OpenShift</h1>
+<div class="sect1">
+<h2 id="_login_to_openshift"><a class="anchor" href="#_login_to_openshift"></a>Login to OpenShift</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>First, let&#8217;s log into your OpenShift cluster.  Choose the tab that is most appropriate to your situation.  If you are unsure, ask your lab techs.</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_provisioned"></a>Provisioned</p>
+</li>
+<li>
+<p><a id="tabset1_openshift-developer-sandox"></a>OpenShift Developer Sandox</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_provisioned">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>You should be able to reach the OpenShift cluster provisioned for this lab <a href="https://console-openshift-console.apps.%CLUSTER_SUBDOMAIN%/" target="_blank" rel="noopener">here</a></p>
+</li>
+<li>
+<p>You should be met with a login challenge screen</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/openshift-login-challenge.png" alt="openshift login challenge">
+</div>
+</div>
+</li>
+<li>
+<p>Enter the following details</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Username</strong>: %USER%</p>
+</li>
+<li>
+<p><strong>Password</strong>: openshift</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_openshift-developer-sandox">
+<div class="sidebarblock">
+<div class="content">
+<div class="title">PREREQUISITES</div>
+<div class="paragraph">
+<p>This section assumes you:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Already have a Red Hat account</p>
+</li>
+<li>
+<p>Requested and have had an OpenShift Developer Sandbox approved prior to attempting this section</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navigate to the <a href="https://red.ht/dev-sandbox" target="_blank" rel="noopener">Red Hat Developer OpenShift Developer Sandbox page</a></p>
+</li>
+<li>
+<p>Click on "start your sandbox" and enter your Red Hat account login details</p>
+</li>
+<li>
+<p>From the OpenShift sandbox page, log into your sandbox by clicking on the "DevSandbox" button on the login challenge page</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/dev-sandbox-login-challenge.png" alt="dev sandbox login challenge">
+</div>
+</div>
+</li>
+<li>
+<p>Once you login, you should see your <code>-dev</code> project in the Developer Perspective</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/dev-sandbox-dev-perspective.png" alt="dev sandbox dev perspective">
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>If you&#8217;ve logged in successfully, you should find yourself on the (empty) start page for the Developer Perspective one the <code>%USER%</code> project<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ocp-developer-perspective.png" alt="ocp developer perspective">
+</div>
+</div>
+<div class="sect2">
+<h3 id="_console_login"><a class="anchor" href="#_console_login"></a>Console Login</h3>
+<div class="paragraph">
+<p>For this section we&#8217;re going to want to issue commands to OpenShift from the commandline.  OpenShift has a CLI called <code>oc</code> <sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> which we will leverage.</p>
+</div>
+<div class="paragraph">
+<p>Here again, choose the proper tab for your setup</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset2_provisioned"></a>Provisioned</p>
+</li>
+<li>
+<p><a id="tabset2_openshift-developer-sandbox"></a>OpenShift Developer Sandbox</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset2_provisioned">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>From the (CodeServer) terminal, enter the following command to log into OpenShift</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc login <a href="https://api.%CLUSTER_SUBDOMAIN%:6443" class="bare">https://api.%CLUSTER_SUBDOMAIN%:6443</a> \<i class="conum" data-value="1"></i><b>(1)</b>
+    --username %USER% \
+    --password 'openshift'</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This is the URL of the REST API for OpenShift with which the CLI interacts</td>
+</tr>
+</table>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Insecure connections</div>
+<div class="paragraph">
+<p>If you are met the with following question in the console</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">The server uses a certificate signed by an unknown authority.
+You can bypass the certificate check, but any data you send to the server could be intercepted by others.
+Use insecure connections? (y/n):</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can safely answer <code>y</code> (yes) at the prompt</p>
+</div>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_openshift-developer-sandbox">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>From your OpenShift Console UI, click the dropdown in the upper right (with your account name) and select <code>Copy login command</code></p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/copy-login-command.png" alt="copy login command">
+</div>
+</div>
+</li>
+<li>
+<p>Next, when presented the login challenge select <code>DevSandbox</code></p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/dev-sandbox-login-challenge.png" alt="dev sandbox login challenge">
+</div>
+</div>
+</li>
+<li>
+<p>Click the "Display Token" link</p>
+</li>
+<li>
+<p>Copy the string as indicated in the image</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/copy-login-token.png" alt="copy login token">
+</div>
+</div>
+</li>
+<li>
+<p>Paste the command into a Code Server terminal</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>If you have logged on successfully, running the following command:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc whoami</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Should yield your OpenShift username (below represents username shown if using Provisioned Cluster)</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">%USER%</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_simple_container_deployment"><a class="anchor" href="#_simple_container_deployment"></a>Simple Container Deployment</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Let&#8217;s go back to the container that we finished <a href="build-your-own-container.html#finished_container" class="page" target="_blank" rel="noopener">here</a> and look at what a simple deployment to the <code>%USER%</code> project.</p>
+</div>
+<div class="sect2">
+<h3 id="_container_registry"><a class="anchor" href="#_container_registry"></a>Container Registry</h3>
+<div class="paragraph">
+<p>In order to be able to run an image in OpenShift or Kubernetes we need to put our image somewhere we&#8217;re OpenShift can find it.  This usually involves uplaoding the image to either a public or private container registry.  Public registries include Red Hat&#8217;s <a href="quay.io" target="_blank" rel="noopener">quay.io</a> and Docker&#8217;s <a href="https://hub.docker.com/" target="_blank" rel="noopener">Docker Hub</a></p>
+</div>
+<div class="paragraph">
+<p>One of the features that OpenShift adds to Kubernetes is an inbuilt container registry called an ImageStream.  We&#8217;re going to create an ImageStream to upload our container to where OpenShift can find it.</p>
+</div>
+<div class="paragraph">
+<p>We can create the image stream either from the OpenShift Console (UI) or from the terminal (command line).  Choose one of the following tabs</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset3_terminal"></a>Terminal</p>
+</li>
+<li>
+<p><a id="tabset3_openshift-console"></a>OpenShift Console</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset3_terminal">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Enter the following command</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc create imagestream \<i class="conum" data-value="1"></i><b>(1)</b>
+    -n %USER% \<i class="conum" data-value="2"></i><b>(2)</b>
+    my-secure-web-server-image <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>ImageStream</code> is an OpenShift specific Kubernetes resource that represents a project specific container registry</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This is the namespace the ImageStream should be bound to</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>This is the name of the image registry we want to create</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset3_openshift-console">
+<div class="paragraph">
+<p><em>COMING SOON</em></p>
+</div>
+</div>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>With our ImageStream created, we can find our registry endpoint with this command</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">OCP_REGISTRY_URL=$(oc get imagestream my-secure-web-server-image \
+    -n %USER% \
+    -o jsonpath='{.status.publicDockerImageRepository}') <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>-o</code> is used to specify the output type.  In this case we specify <code>jsonpath</code> which means give the output as JSON and then act as if it were piped to <code>jq -r</code> meaning we specify the field in the JSON we are looking for</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Once we have the <code>publicDockerImageRepository</code> we can use podman to login into it with our OpenShift credentials</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman login \
+    ${OCP_REGISTRY_URL} \
+    --username %USER% \
+    --password "$(oc whoami -t)" <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>You must log into imagestream registries using a token and not your user&#8217;s password.  <code>oc whoami -t</code> returns the currently active token for a given OpenShift session</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>This should yield the following output, which indicates that you&#8217;ve authenticated with the ImageStream internal registry</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Login Succeeded!</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Now we&#8217;re going to use a new <code>podman</code> command called <code>tag</code> to associate our local image with an image that could exist in our ImageStream registry</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman tag localhost/secure-container \
+    ${OCP_REGISTRY_URL}:latest</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Once tagged, we should now be able to push this image into the ImageStream using the <code>podman push</code> command</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman push ${OCP_REGISTRY_URL}:latest</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>You should see output similar to the following</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Getting image source signatures
+Copying blob 1d505cb9245a done
+Copying blob 9e12a51e507a done
+Copying blob 01d2fb866535 done
+Copying config f8b584bce6 done
+Writing manifest to image destination
+Storing signatures</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Now we have our image in a place where we can refer to it</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_run_an_image"><a class="anchor" href="#_run_an_image"></a>Run an image</h3>
+<div class="paragraph">
+<p>The simplest way to get a container image up and running in OpenShift is with the <code>oc run</code> command.  This will create what&#8217;s called a <code>pod</code> to house our container that runs based on the image definition we just uploaded to the ImageStream</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>One of benefits of using ImageStreams is that the cluster internal addresss of the ImageStream repo does not require authentication.  Let&#8217;s use that for the image location for running our pod</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CLUSTER_LOCAL_REGISTRY_URL=$(oc get imagestream \
+    my-secure-web-server-image \<i class="conum" data-value="1"></i><b>(1)</b>
+    -o jsonpath='{.status.dockerImageRepository}') <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Notice that this is the same ImageStream name we&#8217;ve been using</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This time we&#8217;re looking not for the <code>publicDockerImageRepository</code> from the ImageStream definition, but the <code>dockerImageRepository</code> which is the same as the cluster local address of the repo</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Run the following command from the Code Server terminal</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc run \
+    my-web-server \<i class="conum" data-value="1"></i><b>(1)</b>
+    -n %USER% \
+    --image ${CLUSTER_LOCAL_REGISTRY_URL}:latest</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The name that will be given to the pod</td>
+</tr>
+</table>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">pod/my-web-server created</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Switch to the OpenShift Console (UI) and look at the <a href="https://console-openshift-console.apps.%CLUSTER_SUBDOMAIN%/topology/ns/%USER%?view=graph" target="_blank" rel="noopener">developer perpective for your project</a>.  You should see the pod running</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ocp-running-secure-image.png" alt="ocp running secure image">
+</div>
+<div class="title">Figure 1. Our image running in OpenShift</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_accessing_our_website"><a class="anchor" href="#_accessing_our_website"></a>Accessing our website</h3>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose \<i class="conum" data-value="1"></i><b>(1)</b>
+    pod/my-web-server <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>expose</code> is an <code>oc</code> CLI specific command</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Many resources can be exposed.  Exposing a pod creates a service that points to the pod based on the svcs the pod exports</td>
+</tr>
+</table>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose \
+    svc/my-web-server</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo "http://$(oc get route my-web-server -o jsonpath='{.spec.host}')/hello.html"</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/sandbox-website.png" alt="sandbox website">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_openshift_security"><a class="anchor" href="#_openshift_security"></a>OpenShift security</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This the <a href="build-your-own-container.html#basic_containerfile" class="page" target="_blank" rel="noopener">building secure container section</a> we spent a lot of time making our image suitable for running on OpenShift.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s take a quick look at how OpenShift adds a layer of protection around our running of images</p>
+</div>
+<div class="paragraph">
+<p><em>COMING SOON</em>: Upload to image stream under new tag and try running the insecure container. This should fail</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman tag \
+    quay.io/mhildenb/container-workshop-httpd:0.0.5 \
+    ${OCP_REGISTRY_URL}:insecure</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman push \
+    ${OCP_REGISTRY_URL}:insecure</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Getting image source signatures
+Copying blob bcf3865bf7f7 done
+Copying blob 86284899b0cc done
+Copying blob c9e02f9d3afe done
+Copying blob 4e7c990a129f done
+Copying blob 210af8709b71 done
+Copying blob 123257361dae done
+Copying blob 47e96512450e done
+Copying blob 8f10e6ebff19 done
+Copying blob 486383b07939 done
+Copying blob 23be1053bf93 done
+Copying blob ee738432d587 done
+Copying config 60dde8abf7 done
+Writing manifest to image destination
+Storing signatures</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc run \
+    my-web-server-insecure \<i class="conum" data-value="1"></i><b>(1)</b>
+    -n %USER% \
+    --image ${CLUSTER_LOCAL_REGISTRY_URL}:insecure <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Different pod name to distinguish from previous</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Same exact image registry, just different tag</td>
+</tr>
+</table>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get events -w</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">0s          Normal    Scheduled        pod/my-web-server-insecure   Successfully assigned %USER%/my-web-server-insecure to ip-10-0-157-41.ap-southeast-1.compute.internal
+0s          Normal    AddedInterface   pod/my-web-server-insecure   Add eth0 [10.131.0.238/23]
+0s          Normal    Pulling          pod/my-web-server-insecure   Pulling image "image-registry.openshift-image-registry.svc:5000/%USER%/my-secure-web-server-image:insecure"
+0s          Normal    Pulled           pod/my-web-server-insecure   Successfully pulled image "image-registry.openshift-image-registry.svc:5000/%USER%/my-secure-web-server-image:insecure" in 6.549828045s
+0s          Normal    Created          pod/my-web-server-insecure   Created container my-web-server-insecure
+0s          Normal    Started          pod/my-web-server-insecure   Started container my-web-server-insecure
+0s          Normal    Pulled           pod/my-web-server-insecure   Container image "image-registry.openshift-image-registry.svc:5000/%USER%/my-secure-web-server-image:insecure" already present on machine
+0s          Normal    Created          pod/my-web-server-insecure   Created container my-web-server-insecure
+0s          Normal    Started          pod/my-web-server-insecure   Started container my-web-server-insecure
+0s          Warning   BackOff          pod/my-web-server-insecure   Back-off restarting failed container
+0s          Warning   BackOff          pod/my-web-server-insecure   Back-off restarting failed container</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. <em>project</em> is an OpenShift specific term.  For the purposes of this lab you can think of is as synonymous with the Kubernetes concept of a _namespace
+</div>
+<div class="footnote" id="_footnotedef_2">
+<a href="#_footnoteref_2">2</a>. <code>oc</code> is built on top of <code>kubectl</code>, the generic Kubernetes CLI.  Any command you can issue with <code>kubectl</code> you can issue with <code>oc</code>, but <code>oc</code> builds upon <code>kubectl</code> with OpenShift specific commands, such as <code>oc login</code>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>  </body>
+</html>
