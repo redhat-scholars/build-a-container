@@ -2,10 +2,10 @@
 ec2_region: ap-southeast-2
 
 # name prefix for all the VMs
-ec2_name_prefix: test-a-container
+ec2_name_prefix: build-a-container
 
 # creates student_total of workbenches for the workshop
-student_total: 1
+student_total: 2
 
 # Set the right workshop type, like network, rhel or f5 (see above)
 workshop_type: container
@@ -22,4 +22,13 @@ admin_password: r3dh4t1!
 code_server: true
 
 # Sets the Route53 DNS zone to use for Amazon Web Services
-workshop_dns_zone: openshifttc.com
+workshop_dns_zone: sandbox1485.opentlc.com
+
+# Whether to be updating any openshift cluster that might be logged into from CMD line for use with this labs
+openshift_install: true
+
+# Password for students in the provisioned environment
+ocp_student_password: openshift
+
+# What the URL to the root of the lab guide should be
+lab_guide_url: "https://hatmarch.github.io/container-workshop/intro-container-workshop/BASE/index.html"

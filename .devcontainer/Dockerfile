@@ -8,6 +8,6 @@ RUN pip3 install --upgrade boto3 boto kubernetes openshift
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 # for htpasswd utility
-RUN yum install httpd-tools && yum clean all
+RUN yum -y install httpd-tools && yum clean all
 
 USER default
