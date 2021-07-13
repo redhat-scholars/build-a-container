@@ -108,10 +108,9 @@ image::container-identification.png[Container Identification!]
 [#container_runtime]
 == 5. Container Runtime
 
-Like the container image specification, there is a link:https://github.com/opencontainers/runtime-spec[runtime specification,window=blank] which defines a lifecycle for a container. This defines hooks to be invoked prior to starting, creating or shutting down.
+Like the container image specification, there is a link:https://github.com/opencontainers/runtime-spec[runtime specification^] which defines a lifecycle for a container. This defines hooks to be invoked prior to starting, creating or shutting down.
 
-
-The state of a container includes the following properties
+The state of a container includes the following properties:
 
 . Oci version
 . Id - This MUST be unique across all containers on this host.
@@ -218,22 +217,22 @@ There are two types of container registry: public and private.
 
 === Public registries are:
 
-<.> great for individuals or small teams
-<.> get up and running quickly as possible. Basic in their abilities.
-<.> easy to use
+* great for individuals or small teams
+* get up and running quickly as possible. Basic in their abilities.
+* easy to use
 
 === Private registries have:
-<.> Security and privacy
-<.> Enterprise container image storage
-<.> Host remotely or on-premises
+* Security and privacy
+* Enterprise container image storage
+* Host remotely or on-premises
 
 === Enterprises need to look for:
 
-<.> Multiple authentication systems
-<.> Role-based access control management
-<.> Vulnerability scanning capabilities
-<.> Auditable logs
-<.> Optimized for automation
+* Multiple authentication systems
+* Role-based access control management
+* Vulnerability scanning capabilities
+* Auditable logs
+* Optimized for automation
 
 === Red Hat's Enterprise Container Registry
 Red Hat Quay is a private container image registry that enables you to build, distribute, and deploy containers with the storage you need to scale quickly.

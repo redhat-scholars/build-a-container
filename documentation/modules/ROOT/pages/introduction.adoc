@@ -108,7 +108,7 @@ image::browser-preview-window.png[]
 
 {zwsp}
 {zwsp}
-[sidebar]
+[NOTE]
 ====
 **RHEL Web Console (Cockpit)**
 
