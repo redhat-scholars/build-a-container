@@ -5,9 +5,12 @@ include::_attributes.adoc[]
 = Containers and OpenShift
 :navtitle: Containers and OpenShift
 
+Now that we have a container let's demonstrate how one might deploy that container to a platform like Red Hat's Enterprise Kubernetes solution, OpenShift.
+
+[#openshift_login]
 == Login to OpenShift
 
-First, let's log into your OpenShift cluster.  Choose the tab that is most appropriate to your situation.  If you are unsure, ask your lab techs.
+First, let's log into your OpenShift cluster.  Choose the tab that is most appropriate to your current lab.  If you are unsure, ask your lab techs.
 
 [tabs]
 ====
@@ -125,15 +128,16 @@ Should yield your OpenShift username (below represents username shown if using P
 {USER}
 ----
 
-== Simple Container Deployment
+[#image_registry]
+== Upload Image to Image Registry
 
 Let's go back to the container that we finished xref::build-your-own-container.adoc#finished_container[here,window=_blank] and look at what a simple deployment to the `{OCP_PROJECT}` project.
 
-=== Container Registry
+=== OpenShift and Image Registries
 
 In order to be able to run an image in OpenShift or Kubernetes we need to put our image somewhere we're OpenShift can find it.  This usually involves uplaoding the image to either a public or private container registry.  Public registries include Red Hat's link:quay.io[quay.io^] and Docker's link:https://hub.docker.com/[Docker Hub^]
 
-One of the features that OpenShift adds to Kubernetes is an inbuilt container registry called an ImageStream.  We're going to create an ImageStream to upload our container to where OpenShift can find it.
+One of the features that OpenShift adds to Kubernetes is an in-built container registry called an `ImageStream`.  We're going to create an ImageStream to upload our container to where OpenShift can find it.
 
 We can create the image stream either from the OpenShift Console (UI) or from the terminal (command line).  Choose one of the following tabs
 
@@ -228,7 +232,8 @@ Storing signatures
 
 Now we have our image in a place where we can refer to it
 
-=== Run an image
+[#simple_container_run]
+== Run Container Image on OpenShift
 
 The simplest way to get a container image up and running in OpenShift is with the `oc run` command.  This will create what's called a `pod` to house our container that runs based on the image definition we just uploaded to the ImageStream
 
@@ -267,7 +272,8 @@ pod/my-web-server created
 .Our image running in OpenShift
 image::ocp-running-secure-image.png[]
 
-=== Accessing our website
+[#expose_container]
+== Exposing Container Website
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -293,6 +299,7 @@ echo "http://$(oc get route my-web-server -o jsonpath='{.spec.host}')/hello.html
 
 image::sandbox-website.png[]
 
+[#openshift_security]
 == OpenShift security
 
 This the xref::build-your-own-container.adoc#basic_containerfile[building secure container section,window=_blank] we spent a lot of time making our image suitable for running on OpenShift.  

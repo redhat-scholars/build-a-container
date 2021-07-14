@@ -30,4 +30,10 @@
 * xref:build-your-own-container.adoc[Building Securely]
 ** xref:build-your-own-container.adoc#buildah_native[Buildah Native Commands]
 ** xref:build-your-own-container.adoc#buildah_containerfile[Buildah and Containerfiles]
+* xref:deploy-container.adoc[Deploying Containers]
+** xref:deploy-container.adoc#openshift_login[OpenShift Login]
+** xref:deploy-container.adoc#image_registry[Upload to Image Registry]
+** xref:deploy-container.adoc#simple_container_run[Run Container Image on OpenShift]
+** xref:deploy-container.adoc#expose_container[Exposing Container Website]
+** xref:deploy-container.adoc#openshift_security[OpenShift Security]
 
