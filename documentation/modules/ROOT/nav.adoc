@@ -23,6 +23,10 @@
 * xref:container-persistence.adoc[Persistence and Containers]
 ** xref:container-persistence.adoc#mounting_volumes[Mounting Volumes]
 ** xref:container-persistence.adoc#test_mount[Testing the Volume Mount]
+* xref:containers-and-security.adoc[Container Security Considerations]
+** xref:containers-and-security.adoc#exploit_containers[Exploit a Container]
+** xref:containers-and-security.adoc#run_containers_responsibly[Run Containers Responsibly]
+** xref:containers-and-security.adoc#scanning_containers[Scanning Containers for Security Issues]
 * Building Securely
 ** xref:build-your-own-container.adoc[Build your own Secure Container]
 
