@@ -9,9 +9,10 @@ image::buildah.png[Buildah!,width=320,height=78]
 
 `buildah` is used to create OCI-compliant container images, such as the `{apache-server-image-insecure-image}` that we've been using.  We'll start by fixing a the security vulnerability we found in the xref::containers-and-security.adoc[previous section].
 
+[#buildah_native]
 == Buildah native commands
 
-One of the things that makes `buildah` unique is the ability to interact with container images from the host's command line.  (As we'll see in the next section, it also allows the creation of images from a `Dockerfile` or, more generically a `Containerfile`).  This will make it easy for us to remediate the vulnerability we found in the last section.
+One of the things that makes `buildah` unique is the ability to interact with container images from the host's command line.  (As we'll see in the next section, it also allows the creation of images from a `Dockerfile` or, more generically a " `Containerfile` ").  This will make it easy for us to remediate the vulnerability we found in the last section.
 
 Where we left off with our container image is that we needed to patch the bash package installed on the container
 
@@ -110,7 +111,7 @@ ls -l pass:[${CONTAINER_MOUNT_POINT}]
 ----
 +
 [.console-output]
-[source,bash,subs="+macros,+attributes"]
+[source,bash]
 ----
 total 0
 lrwxrwxrwx.  1 root root  7 Apr 20 03:58 bin -> usr/bin
@@ -234,6 +235,7 @@ check
 
 Congratulations!  You'd fixed the shellshock exploit
 
+[#buildah_containerfile]
 == Buildah and Containerfiles
 
 Though we've fixed the issue with {apache-server-image-insecure} by using the `buildah` native command line tools to fix it, there are still other aspects of the container that could be addressed to make it more secure and less likely to need special privileges from the underlying operating system such as
@@ -845,4 +847,4 @@ image::dont-click-link.png[]
 .Guestbook, but now at an arbitrary port
 image::apache-guestbook-page-random-port.png[]
 
-Congratulations!  You've build a secure container from the ground up.  Next let's look at some different ways of orchestrating and deploying containers
+Congratulations!  You've build a secure container from the ground up.  Next we'll look at ways of getting our container out there in the world.

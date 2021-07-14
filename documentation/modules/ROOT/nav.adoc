@@ -27,6 +27,7 @@
 ** xref:containers-and-security.adoc#exploit_containers[Exploit a Container]
 ** xref:containers-and-security.adoc#run_containers_responsibly[Run Containers Responsibly]
 ** xref:containers-and-security.adoc#scanning_containers[Scanning Containers for Security Issues]
-* Building Securely
-** xref:build-your-own-container.adoc[Build your own Secure Container]
+* xref:build-your-own-container.adoc[Building Securely]
+** xref:build-your-own-container.adoc#buildah_native[Buildah Native Commands]
+** xref:build-your-own-container.adoc#buildah_containerfile[Buildah and Containerfiles]
 
