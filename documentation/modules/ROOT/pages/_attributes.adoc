@@ -4,7 +4,7 @@
 :CLUSTER_SUBDOMAIN: %CLUSTER_SUBDOMAIN%
 :container-id-long: 4e9c38ac10eb38e9b8364e56aa52eb77ae09062160e61b3f20b60a5af829ba2c
 :apache-server-image-insecure-image: quay.io/mhildenb/container-workshop-httpd
-:apache-server-image-insecure-tag: 0.0.5
+:apache-server-image-insecure-tag: 0.0.6
 :apache-server-image-insecure: {apache-server-image-insecure-image}:{apache-server-image-insecure-tag}
 :apache-server-image-secure-image: localhost/container-workshop-httpd-secure
 :apache-server-image-secure-tag: latest
