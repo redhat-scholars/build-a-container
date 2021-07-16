@@ -63,6 +63,19 @@
     tar -xvzf - -C {{ oc_dir }}/ oc && chmod 755 {{ oc_dir }}/oc && ln -s {{ oc_dir }}/oc {{ oc_dir }}/kubectl
   when: oc_exists.stdout | bool == False
 
+- name: "Check for stern"
+  shell: |
+    if [[ -f {{ stern_dir }}/stern ]]; then echo "true"; fi
+  register: stern_exists
+
+- name: "Install stern"
+  shell: |
+    set -euo pipefail
+
+    curl -L https://github.com/grosser/stern/releases/download/1.12.1/stern-1.12.1-linux-amd64.tar.gz | \
+    tar -xvzf - -C {{ stern_dir }}/ stern && chmod 755 {{ stern_dir }}/stern
+  when: stern_exists.stdout | bool == False
+
 - name: "Check for Metasploit Console"
   shell: |
     if [[ -f {{ msfconsole_dir }}/msfconsole ]]; then echo "true"; fi

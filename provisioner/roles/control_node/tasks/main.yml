@@ -3,6 +3,7 @@
   vars:
     oc_dir: "/usr/local/bin"
     msfconsole_dir: "/usr/bin"
+    stern_dir: "/usr/local/bin"
   include_tasks: package_dependencies.yml
 
 - name: Install ansible.cfg and vimrc in home directory

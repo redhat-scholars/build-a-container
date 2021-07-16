@@ -10,6 +10,8 @@
 - name: Debug cluster subdomain
   debug:
     msg: "OpenShift Cluster subdomain is {{ openshift_cluster_subdomain }}"
+  when:
+    - (openshift_install is defined) and (openshift_install | bool) 
 
 - name: Configure attendance host
   import_tasks: attendance.yml

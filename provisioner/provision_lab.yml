@@ -63,7 +63,7 @@
         - include_role:
             name: workshop_attendance
           vars:
-            openshift_cluster_subdomain: "{{hostvars['localhost'].ocp_cluster_subdomain}}"
+            openshift_cluster_subdomain: "{{hostvars['localhost'].ocp_cluster_subdomain | default('none') }}"
             guide_url: "{{ lab_guide_url }}"
       when: attendance|bool
 
