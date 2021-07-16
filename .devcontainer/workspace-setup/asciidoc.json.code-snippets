@@ -44,5 +44,13 @@
       "----"
     ],
     "description": "Adds Console Output source fragment"
+  },
+  "Asciidoc Tag": {
+    "prefix": "atag",
+    "body": [
+      "// tag::${1:tag_name}[]",
+      "${2:body}",
+      "// end::${1:tag_name}[]"
+    ]
   }
 }
