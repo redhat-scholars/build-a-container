@@ -1,2 +1,2 @@
-<.> `t` opens a "pseudo tty" to the container that allows us to see `STDOUT` (output) and `i` indicates that we want to keep the `STDIN` pipe open (basically allow us to continue to enter input)
+<.> The `t` option opens a "pseudo tty" to the container that allows us to see `STDOUT` (output) and the `i` option indicates that we want to keep the `STDIN` pipe open (basically allow us to continue to enter input)
 <.> `podman exec` interprets any argument(s) that come after the `CONTAINER ID` (or `CONTAINER NAME`) to be the command and arguments we want to run within in the container.  In this case we are running the `/bin/bash` command which is just a shell.  When coupled with `-it` this allows us to effectively mimic `ssh` ing into a VM
