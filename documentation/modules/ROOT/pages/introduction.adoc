@@ -29,8 +29,12 @@ image::codeserver2.gif[]
 
 Among other things, your code-server gives you command line access to your RHEL instance.  You can open the terminal by using kbd:[CTRL+ J] (or kbd:[CMD+J] on a Mac)
 
-The first time you open it, you will find your terminal at the bottom (right) of the screen. At some points during the exercises you will need
-two screens and from the dropdown menu you can elect to have split terminals as shown above.
+The first time you open it, you will find your terminal at the bottom (right) of the screen. 
+
+.CodeServer Terminal
+image::code-server-terminal.png[]
+
+At some points during the exercises you will need two screens and from the dropdown menu you can elect to have split terminals.
 
 [#open_code_server_terminal_commands]
 == 4. Issuing Terminal Commands

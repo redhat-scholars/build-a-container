@@ -24,9 +24,14 @@ image::podman.svg[Podman!,width=320,height=86]
 +
 image::empty-browser-preview.png[]
 
-Now we're going to use podman to quickly create a running website on this instance!
+Now we're going to use podman to quickly create a running website on this instance!  
 
-. Login as `root` on your instance by running the following command:
+[TIP]
+====
+At this point we're going to be using our *code-server Terminal* to issue a number of commands.  If you're unfamiliar how to access the code-server terminal, see this section xref:introduction.adoc#open_code_server_terminal[here, window=_blank]
+====
+
+. Login as `root` on your instance by running the following command in the code-server Terminal:
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -44,7 +49,7 @@ sudo -i
 +
 [WARNING]
 ====
-Some of you with a security background are [#security_vuln]#probably fairly unconfortable with this#.  Don't worry: there's a method to our madness!  While you might feel an aversion to running commands as the `root` user on the instance, it's worth pointing out that any socket-based container runtimes (such as `Docker`) require some sort of root access to operate
+Some of you with a security background are [#security_vuln]#probably fairly uncomfortable with this#.  Don't worry: there's a method to our madness!  While you might feel an aversion to running commands as the `root` user on the instance, it's worth pointing out that any socket-based container runtimes (such as `Docker`) require some sort of root access to operate
 ====
 +
 . From inside the terminal, run the following command (see the footnotes for the breakdown of the different elements of the command):
@@ -104,7 +109,7 @@ include::partial$podman_ps.adoc[]
 .Test Page
 image::apache-test-page-trimmed.png[]
 +
-. Our website has more than a test page, it also has a visitor form (like straight out of the 90s!).  Let's take a look by navigating to this address: 
+. Our website has more than a test page, it also has a visitor form (like straight out of the 90s!).  Let's take a look by navigating to this address (use the copy button to copy the URL and paste it into the Browser Preview panel): 
 +
 [.console-input]
 [source,subs="+macros,+attributes"]
@@ -122,7 +127,7 @@ image::apache-guestbook-page.png[]
 image::apache-guestbook-submit.png[]
 +
 . Click the `here` link highlighted above to go back and enter another name
-{zwsp}+
+{zwsp}
 
 Now that we have a container up and running, let's poke around inside the container to get some idea of what's going on and how containers relate to the host instance.
 
@@ -248,7 +253,7 @@ cat {temp-filepath}
 ----
 +
 {zwsp} +
-. To make it easier to read, let's copy the hostinfo to the `/var/www/html` directory
+. To make it easier to read, let's copy the {temp-file} to the `/var/www/html` directory
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -292,7 +297,7 @@ _NOTE: We're not really logging out as much as we're causing the process that we
 [source,bash,subs="+macros,+attributes"]
 ----
 podman cp \
-  {apache-server-container-name}:/tmp/hostinfo.txt \#<.>
+  {apache-server-container-name}:{temp-filepath} \#<.>
   {container-info-filepath} #<.>
 ----
 <.> The `{apache-server-container-name}:<path>` indicates that the `path` is inside the container (i.e. container filesystem) that we named with the `--name` option at the time we issued the `podman run` command
