@@ -19,6 +19,7 @@ asciidoc:
     page-pagination: true
     # Experimental allows things like keyboard binding macros
     experimental: true
+    extended-content: false
   extensions:
     - ./lib/tab-block.js
     - ./lib/remote-include-processor.js

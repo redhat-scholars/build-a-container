@@ -304,25 +304,28 @@ image::sandbox-website.png[]
 
 This the xref::build-your-own-container.adoc#basic_containerfile[building secure container section,window=_blank] we spent a lot of time making our image suitable for running on OpenShift.  
 
-Let's take a quick look at how OpenShift adds a layer of protection around our running of images
+Let's take a quick look at how OpenShift adds a layer of protection around our running of images by looking at what happens when we try to run our insecure container on it.
 
-_COMING SOON_: Upload to image stream under new tag and try running the insecure container. This should fail
-
+. First let's make use of OpenShift's internal image registry again (the `ImageStream` we created before) by tagging the insecure image with a name that binds it to to that registry
++
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 podman tag \
     {apache-server-image-insecure} \
-    pass:[${OCP_REGISTRY_URL}]:insecure
+    pass:[${OCP_REGISTRY_URL}]:insecure #<.>
 ----
-
+<.> Same exact `ImageStream` image registry, just different tag
++
+. With the image tagged for the `ImageStream` registry, we can now push it
++
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 podman push \
     pass:[${OCP_REGISTRY_URL}]:insecure
 ----
-
++
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
 ----
@@ -342,37 +345,76 @@ Copying config 60dde8abf7 done
 Writing manifest to image destination
 Storing signatures
 ----
++
+. Before we attempt to run our image, let's setup a log watch so that we can see the logs of the pod.  We'll do this in a separate terminal, so first split your terminal, this will be referred to as *Terminal 2*
++
+image::terminal-split.png[]
++
+[tabs]
+====
+Terminal 2::
++
+--
+To monitor our pod from the terminal we're going to use a tool called `stern` (see here for more info).  It allows us to aggregate and view logs from our Kubernetes cluster.
+
+To set up a log watch enter the following command
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
+stern -n {USER} \#<.>
+   {ocp_insecure_pod_name} #<.>
+----
+<.> The `-n` option tells the stern to watch for pods in the `{USER}` namespace
+<.> This is a string that stern uses to match against any pods that exist in the specified namespace.  In this case this matches the name we are intending to give our pod
+--
+====
++
+. With our image pushed to the OpenShift image registry, we can now run the image in a pod using the following command (and the "Cluster Local" name of the registry which we obtained above)
++
+[tabs]
+====
+Terminal 1::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
 oc run \
-    my-web-server-insecure \#<.>
+    {ocp_insecure_pod_name}\#<.>
     -n {OCP_PROJECT} \
     --image pass:[${CLUSTER_LOCAL_REGISTRY_URL}]:insecure #<.>
 ----
 <.> Different pod name to distinguish from previous
 <.> Same exact image registry, just different tag
-
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-oc get events -w
-----
-
+--
+====
++
+. As the pod starts up we should see the following output from the `stern` watch in the other terminal
++
+[tabs]
+====
+Terminal 2::
++
+--
+.Recurring `stern` output
 [.console-output]
-[source,bash,subs="+macros,+attributes"]
+[source,bash,subs="+macros,+attributes,+quotes"]
 ----
-0s          Normal    Scheduled        pod/{ocp_insecure_pod_name}   Successfully assigned {USER}/{ocp_insecure_pod_name} to ip-10-0-157-41.ap-southeast-1.compute.internal
-0s          Normal    AddedInterface   pod/{ocp_insecure_pod_name}   Add eth0 [10.131.0.238/23]
-0s          Normal    Pulling          pod/{ocp_insecure_pod_name}   Pulling image "image-registry.openshift-image-registry.svc:5000/{USER}/{ocp_insecure_image_name}"
-0s          Normal    Pulled           pod/{ocp_insecure_pod_name}   Successfully pulled image "image-registry.openshift-image-registry.svc:5000/{USER}/{ocp_insecure_image_name}" in 6.549828045s
-0s          Normal    Created          pod/{ocp_insecure_pod_name}   Created container {ocp_insecure_pod_name}
-0s          Normal    Started          pod/{ocp_insecure_pod_name}   Started container {ocp_insecure_pod_name}
-0s          Normal    Pulled           pod/{ocp_insecure_pod_name}   Container image "image-registry.openshift-image-registry.svc:5000/{USER}/{ocp_insecure_image_name}" already present on machine
-0s          Normal    Created          pod/{ocp_insecure_pod_name}   Created container {ocp_insecure_pod_name}
-0s          Normal    Started          pod/{ocp_insecure_pod_name}   Started container {ocp_insecure_pod_name}
-0s          Warning   BackOff          pod/{ocp_insecure_pod_name}   Back-off restarting failed container
-0s          Warning   BackOff          pod/{ocp_insecure_pod_name}   Back-off restarting failed container
-
-----
++ {ocp_insecure_pod_name} › {ocp_insecure_pod_name} #<.>
+Error opening stream to student1/{ocp_insecure_pod_name}: {ocp_insecure_pod_name}
+: container "{ocp_insecure_pod_name}" in pod "{ocp_insecure_pod_name}" is waiting to start: ContainerCreating
+- {ocp_insecure_pod_name}
++ {ocp_insecure_pod_name} › {ocp_insecure_pod_name}
+Error opening stream to student1/{ocp_insecure_pod_name}: {ocp_insecure_pod_name}
+: container "{ocp_insecure_pod_name}" in pod "{ocp_insecure_pod_name}" is waiting to start: ContainerCreating
+- {ocp_insecure_pod_name}
++ {ocp_insecure_pod_name} › {ocp_insecure_pod_name}
+{ocp_insecure_pod_name} {ocp_insecure_pod_name} AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 10.128.2.16. Set the 'ServerName' directive globally to suppress this message 
+#{ocp_insecure_pod_name} {ocp_insecure_pod_name} (13)Permission denied: AH00058: Error retrieving pid file logs/httpd.pid#
+#{ocp_insecure_pod_name} {ocp_insecure_pod_name} AH00059: Remove it before continuing if it is corrupted.#
+- {ocp_insecure_pod_name}
+---- 
+<.> `stern` outputs logs in the format pod-name > container-name '
+--
+====

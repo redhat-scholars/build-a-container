@@ -52,5 +52,30 @@
       "${2:body}",
       "// end::${1:tag_name}[]"
     ]
-  }
+  },
+  "Partial Tag Include": {
+    "prefix": "tinclude",
+    "body": [
+      "include::partial$${1:include_name}.adoc[tags=**;!*;${2:tags_to_include}]"
+    ],
+    "description": "Include a partial with tags"
+  },
+  "Add Console Tab": {
+    "prefix": "tconsole",
+    "body": [
+      "[tabs]",
+      "====",
+      "${1:tab1}::",
+      "+",
+      "--",
+      "[.console-${2:input}]",
+      "[source,${3:bash},subs=\"${4:+macros,+attributes}\"]",
+      "----",
+      "${5:echo \"Hello World\"}",
+      "----",
+      "--",
+      "===="
+    ],
+    "description": "Add Tabs macro"
+  },
 }

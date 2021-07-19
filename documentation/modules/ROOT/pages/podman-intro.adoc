@@ -24,9 +24,14 @@ image::podman.svg[Podman!,width=320,height=86]
 +
 image::empty-browser-preview.png[]
 
-Now we're going to use podman to quickly create a running website on this instance!
+Now we're going to use podman to quickly create a running website on this instance!  
 
-. Login as `root` on your instance by running the following command:
+[TIP]
+====
+At this point we're going to be using our *code-server Terminal* to issue a number of commands.  If you're unfamiliar how to access the code-server terminal, see this section xref:introduction.adoc#open_code_server_terminal[here, window=_blank]
+====
+
+. Login as `root` on your instance by running the following command in the code-server Terminal:
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -44,7 +49,7 @@ sudo -i
 +
 [WARNING]
 ====
-Some of you with a security background are [#security_vuln]#probably fairly unconfortable with this#.  Don't worry: there's a method to our madness!  While you might feel an aversion to running commands as the `root` user on the instance, it's worth pointing out that any socket-based container runtimes (such as `Docker`) require some sort of root access to operate
+Some of you with a security background are [#security_vuln]#probably fairly uncomfortable with this#.  Don't worry: there's a method to our madness!  While you might feel an aversion to running commands as the `root` user on the instance, it's worth pointing out that any socket-based container runtimes (such as `Docker`) require some sort of root access to operate
 ====
 +
 . From inside the terminal, run the following command (see the footnotes for the breakdown of the different elements of the command):
@@ -104,7 +109,7 @@ include::partial$podman_ps.adoc[]
 .Test Page
 image::apache-test-page-trimmed.png[]
 +
-. Our website has more than a test page, it also has a visitor form (like straight out of the 90s!).  Let's take a look by navigating to this address: 
+. Our website has more than a test page, it also has a visitor form (like straight out of the 90s!).  Let's take a look by navigating to this address (use the copy button to copy the URL and paste it into the Browser Preview panel): 
 +
 [.console-input]
 [source,subs="+macros,+attributes"]
@@ -122,7 +127,7 @@ image::apache-guestbook-page.png[]
 image::apache-guestbook-submit.png[]
 +
 . Click the `here` link highlighted above to go back and enter another name
-{zwsp}+
+{zwsp}
 
 Now that we have a container up and running, let's poke around inside the container to get some idea of what's going on and how containers relate to the host instance.
 
@@ -247,33 +252,28 @@ include::partial$gather_info.adoc[]
 cat {temp-filepath}
 ----
 +
-{zwsp} +
-. To make it easier to read, let's copy the hostinfo to the `/var/www/html` directory
-+
-[.console-input]
+[.console-output]
 [source,bash,subs="+macros,+attributes"]
 ----
-cp {temp-filepath} /var/www/html/{temp-file}
+User Info:
+---------
+I am root
+uid=0(root) gid=0(root) groups=0(root)
+
+OS Version:
+----------
+NAME="Red Hat Enterprise Linux Server"
+VERSION="7.9 (Maipo)"
+... #<.>
 ----
-+
-_NOTE: The `/var/www/html` directory is the web root of the apache server that is running inside this container] so that we can view it through the container's webserver._
-+
-{zwsp} +
-. Now navigate the browser to the file we just copied and you should see something like the image below
-+
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-http://localhost:8081/{temp-file}
-----
-+
-.Container's browser displays our {temp-file}
-image::browser-display.png[]
+<.> There's a lot more lines that have been truncated
+
+It would be nice if we could easily compare the information we collected from inside the container with the information we collected from the host.  For this, we can copy the data out of the container.
 
 [#copy_data]
 == 3. Copying data out of a container
 
-Let's see just how different the two files are by doing a `diff` on them.  And for this we'd like to use the builtin Visual Studio Code support for this.  To do this we can draw on another methapor with real hosts or virtual instances, the notion of `ftp` ing or `scp` ing files.
+Let's see just how different the two files are by doing a `diff` on them.  And for this we'd like to use the builtin code-server support for this.  To do this we can draw on another methapor with real hosts or virtual instances, the notion of `ftp` ing or `scp` ing files.
 
 . First let's "log out" of the container
 +
@@ -283,7 +283,10 @@ Let's see just how different the two files are by doing a `diff` on them.  And f
 exit
 ----
 +
-_NOTE: We're not really logging out as much as we're causing the process that we `podman exec` ed to stop thus ending the `podman exec` command and returning us to the host's terminal_
+[NOTE]
+====
+_We're not really logging out as much as we're causing the process that we `podman exec` ed to stop thus ending the `podman exec` command and returning us to the host's terminal_
+====
 +
 {zwsp}
 . Next, run this command to copy the file out of the container and into the tmp drive of the host instance (Those that have used `scp` will probably find the format familiar)
@@ -292,7 +295,7 @@ _NOTE: We're not really logging out as much as we're causing the process that we
 [source,bash,subs="+macros,+attributes"]
 ----
 podman cp \
-  {apache-server-container-name}:/tmp/hostinfo.txt \#<.>
+  {apache-server-container-name}:{temp-filepath} \#<.>
   {container-info-filepath} #<.>
 ----
 <.> The `{apache-server-container-name}:<path>` indicates that the `path` is inside the container (i.e. container filesystem) that we named with the `--name` option at the time we issued the `podman run` command
@@ -351,6 +354,10 @@ include::partial$copy_visitor_info.adoc[]
 . You should now see the file appear in your *Explorer*.  Click on it to view the contents.  It should match the visitors that you entered previously
 +
 image::visitor-info.png[Visitor Info]
++ 
+. Having looked at the contents of `visitor_info.txt` let's delete our copy from off the host by right-clicking on it in the Explorer and selecting `Delete Permanently`
++
+image::delete-permanently.png[]
 
 [#stop_container]
 == 4. Stopping the Container (and Apache server)
@@ -553,9 +560,7 @@ CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES
 [#rerunning_container]
 == 7. "Re-running" Containers
 
-Let's say we want to take a look at that {temp-file} on the container again.  Let's start up our container to try to do that again
-
-{zwsp}
+Let's say we want to take a look at our visitor_info.txt file that we copied out of the container and have since deleted from the host.  Let's start up our container to try to do that again
 
 . Execute the following command (which should be familar from earlier in this section) 
 +
@@ -571,24 +576,7 @@ podman run \
 ----
 +
 {zwsp} +
-. Now open the browser and navigate to the following location
-+
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-http://localhost:8081/{temp-file}
-----
-+
-{zwsp} +
-. But alas our file is not found and we are met with a 404 Not Found page...
-+
-image::not-found-trimmed.png[]
-+
-{zwsp} +
-. How about our `visitor_info.txt` file?  Let's delete the current one by right-clicking on it in the Explorer and selecting `Delete Permanently`
-+
-{zwsp} +
-. Now attempt to copy visitor_info.txt out of the container again
+. Now attempt let's attempt to copy visitor_info.txt out of the container again
 +
 include::partial$copy_visitor_info.adoc[]
 +
@@ -603,13 +591,11 @@ Error: "/var/log/www/visitor_info.txt" could not be found on container {apache-s
 
 {zwsp}
 
-== 8. "Re-running" a stopped container by image
-
 Before we through our hands up in disgust, remember that we had the foresight of _committing_ our previously running web server container to a new image called `{apache-committed-container-image}`.  This image should container all the changes we made on top of the `{apache-server-container-name}` that we just ran and allow us access to the info that does not exist in the `{apache-server-image-insecure}`.
 
 {zwsp}
 
-. First let's stop and remove the current `{apache-server-image-insecure}` image based web server
+. Let's stop and remove the current `{apache-server-image-insecure}` image based web server
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -635,37 +621,23 @@ podman run \
 <.> We append `localhost` onto any image name that we didn't explicitly provide a registry (e.g. link:quay.io[`quay.io`]) for
 +
 {zwsp} +
-. With our committed container running, now attempt to open the browser and navigate to tempfile again
-+
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-http://localhost:8081/{temp-file}
-----
-+
-{zwsp} +
-. This time you should see the file, just as it looked before
-+
-.Container's browser once again displays our {temp-file}
-image::browser-display.png[]
-+
-{zwsp} +
-. And let's restore our `{guestbook-record-file}` by pulling it out of the container running based on the committed image by issuing the same command as before
+. With our committed container running, let's attempt to restore our `{guestbook-record-file}` by pulling it out of the container running based on the committed image by issuing the same command as before
 +
 include::partial$copy_visitor_info.adoc[]
 +
 {zwsp} +
-. Now our visitor info should be restored to the way it was when we last stopped the container (as verified by opening it in VSCode)
+. Now our visitor info should be restored to the way it was when we last stopped the container (as verified by opening it in code-server)
 +
 .`{guestbook-record-file}` restored
 image::visitor-info.png[]
 
 But what good are containers if we can never _persist_ changes we've made with them without all this stopping and committing them?  Let's look to the next section to see if there is something else that can be done.
 
+ifdef::extended-content[]
 {zwsp}
 [NOTE]
 ====
-Podman also has a really cool feature to help you manage your container apps with Systemd (the system and service manager for Linux)?
+Podman also has a really cool feature to help you manage your container apps with Systemd (the system and service manager for Linux).
 When you add your containers as units into Systemd, you can treat them just like any other service.
 Check out the output from the following command
 [.console-input]
@@ -683,3 +655,5 @@ systemctl start {container-name}
 ----
 
 ====
+endif::extended-content[]
+
