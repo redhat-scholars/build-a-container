@@ -135,7 +135,7 @@ drwxr-xr-x. 13 root root 19 Apr 20 03:58 usr
 drwxr-xr-x. 19 root root 17 May 30 08:29 var
 ----
 +
-. Now that we have a mount point we can copy files from the host directly into the container.  In our case however, we want to use the host's package management tooling to install the updated bash package on the container pass:[{$CONTAINER}]. [#upgrade_bash]#Run# this command: 
+. Now that we have a mount point we can copy files from the host directly into the container.  In our case however, we want to use the host's package management tooling to install the updated bash package on the container `pass:[${CONTAINER}]`. [#upgrade_bash]#Run# this command: 
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -145,7 +145,7 @@ dnf install -y \#<.>
     bash #<.>
 ----
 <.> dnf is the package management tool installed on your host instance.  The `-y` means that if dnf prompts the user, such as whether to install a given package, the answer will always be yes
-<.> This tells dnf that the requested packages should be installed relative to this installroot (pass:[${CONTAINER_MOUNT_POINT}] and thus the root of the container) instead of '/', the root of the host instance
+<.> This tells dnf that the requested packages should be installed relative to this installroot (`pass:[${CONTAINER_MOUNT_POINT}]` and thus the root of the container) instead of '/', the root of the host instance
 <.> We are telling dnf to install the latest available compatible version of bash for our container (i.e. at `--installroot`)
 +
 . You may see a few errors upon running this command.  They are non-critical.  In the output the key message you should see is
