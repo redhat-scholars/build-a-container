@@ -292,9 +292,6 @@ a {
             <div class="col-md-8 mx-auto">
               <h1 class="project-name">Build-A-Container<br/><strong class="text-nowrap">Technical Workshops</strong></h1>
               <h2>The Build-A-Container workshops are intended to teach secure container concepts through instructor-led workshops and self-paced exercises.</h2>
-
-                <a target=_blank href="{{guide_url}}?CLUSTER_SUBDOMAIN={{openshift_cluster_subdomain}}&USER=student<?php print $_SESSION['id']; ?>" class="btn btn-ghost">Workshop Instructions</a><br><br>
-
               <h1>Workshop Name: {{ec2_name_prefix}}</h1>
 
             </div> 
@@ -303,97 +300,14 @@ a {
     </section>
 
 <section class="main-content">
-<section>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-8">
-                {% if workshop_type in ['network', 'f5'] %}
-                <h2>Network Automation Workshops</h2>
-                <p>These workshops are focused on networking platforms like Arista, Cisco, Juniper and F5.</p>
-                {% elif create_cluster|bool and workshop_type == "rhel" %}
-                <h2>Ansible Tower Advanced Workshops</h2>
-                <p>These workshops are focused on using advanced features of Ansible Tower like clustering.</p>
-                {% elif workshop_type in ['rhel'] %}
-                <h2>Ansible Automation Workshops</h2>
-                <p>These workshops are focused on getting started with Ansible Engine and Ansible Tower in automating Linux platforms like RHEL (Red Hat Enterprise Linux).</p>
-                {% elif workshop_type in ['security'] %}
-                <h2>Security Automation Workshops</h2>
-                <p>These workshops are focused on automating security platforms like Snort, Check Point and Splunk Enterprise Security.</p>
-                {% elif workshop_type in ['windows'] %}
-                <h2>Windows Automation Workshops</h2>
-                <p>These workshops are focused on automating Microsoft Windows.</p>
-                {% endif %}
-            </div>
-        </div>
-        {% if workshop_type == "network" %}
-        <div class="row">
-          <div class="col-sm-4">
-              <a target=_blank class="btn btn-secondary btn-block" href="https://ansible.github.io/workshops/exercises/ansible_network/">Ansible Network Exercises</a>
-          </div>
-
-          <div class="col-sm-4">
-              <a target=_blank class="btn btn-secondary btn-block" href="https://ansible.github.io/workshops/decks/ansible_network.pdf">Ansible Network Deck</a>
-          </div>
-
-        </div>
-        {% elif workshop_type == "f5" %}
-        <div class="row">
-          <div class="col-sm-4">
-              <a target=_blank class="btn btn-secondary btn-block" href="https://ansible.github.io/workshops/exercises/ansible_f5/">Ansible F5 Exercises</a>
-          </div>
-
-          <div class="col-sm-4">
-              <a target=_blank class="btn btn-secondary btn-block" href="https://ansible.github.io/workshops/decks/ansible_f5.pdf">Ansible F5 Deck</a>
-          </div>
-
-        {% elif create_cluster|bool and workshop_type == "rhel" %}
-        <div class="row">
-            <div class="col-sm-4">
-                <a target=_blank class="btn btn-secondary btn-block" href="https://red.ht/advanced_tower">Ansible Tower Advanced Exercises</a>
-            </div>
-        </div>
-        </div>
-        {% elif workshop_type in ['rhel', 'rhel_90'] %}
-        <div class="row">
-            <div class="col-sm-4">
-                <a target=_blank class="btn btn-secondary btn-block" href="https://ansible.github.io/workshops/exercises/ansible_rhel/">Ansible RHEL Exercises</a>
-            </div>
-            <div class="col-sm-4">
-                <a target=_blank class="btn btn-secondary btn-block" href="https://ansible.github.io/workshops/decks/ansible_rhel.pdf">Ansible Technical Deck</a>
-            </div>
-        </div>
-        {% elif workshop_type == "security" %}
-        <div class="row">
-            <div class="col-sm-4">
-                <a target=_blank class="btn btn-secondary btn-block" href="https://ansible.github.io/workshops/exercises/ansible_security/">Ansible Security Exercises</a>
-            </div>
-            <div class="col-sm-4">
-                <a target=_blank class="btn btn-secondary btn-block" href="https://ansible.github.io/workshops/decks/ansible_security.pdf">Ansible Security Deck</a>
-          </div>
-        </div>
-        {% elif workshop_type == "windows" %}
-        <div class="row">
-            <div class="col-sm-4">
-                <a target=_blank class="btn btn-secondary btn-block" href="https://ansible.github.io/workshops/exercises/ansible_windows/">Ansible Windows Exercises</a>
-            </div>
-            <div class="col-sm-4">
-                <a target=_blank class="btn btn-secondary btn-block" href="https://ansible.github.io/workshops/decks/ansible_windows.pdf">Ansible Windows Deck</a>
-          </div>
-        </div>
-        {% endif %}
-<br><br>
-
-    </div>
-</section>
 
 <hr>
 
-
 <section>
     <div class="container">
         <div class="row">
             <div class="col-sm-8">
-                <h2>Workbench Information</h2>
+                <h2>Workshop Information</h2>
                 <p><?php print $error ?></p>
                 <a id=studentinfo></a>
             </div>
@@ -437,6 +351,14 @@ function display_student($student) {
         <p class='studentinfo'>" . ucfirst($student['username']) . "</p></div>
       <div class='content'>
         <p>
+  <div id='section_title'>Workshop Guide</div>
+  The lab guide for your workshop can be found here:<br>
+  <table>
+    <tr>
+      <td>Guide Link:</td>
+      <td><a target=_blank href='{{guide_url}}?CLUSTER_SUBDOMAIN={{openshift_cluster_subdomain}}&USER=".$student['username']."'>Workshop Instructions</a></td>
+    </tr>
+  <table><br>
   {% if code_server is defined and code_server %}
   <div id='section_title'>VS Code access</div>
   To login to Visual Studio Code via your web browser please go here:<br>
@@ -471,7 +393,7 @@ function display_student($student) {
   </table><br>';
 
   {% endif %}
-  {% if workshop_type == "windows" %}
+  {% if workshop_type in [ 'windows', 'container' ] %}
   {% else %}
   print '<div id="section_title">SSH access</div>
   To login to the Ansible Control Node use the following for SSH access:<br>
