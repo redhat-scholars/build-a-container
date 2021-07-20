@@ -1,0 +1,8 @@
+// This is intented to be targeted as a pop-up window for those that need to restart their metasploit terminal
+= Metasploit Setup
+
+To create a metasploit terminal within your code-server instance, follow these instructions
+
+include::partial$metasploit_setup.adoc[]
+
+Now you can close this window and go back to the lab instructions.
