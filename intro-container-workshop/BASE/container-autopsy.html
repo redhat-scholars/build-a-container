@@ -140,7 +140,7 @@
     <a class="nav-link" href="podman-intro.html#remove_containers">Removing Containers</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="podman-intro.html#rerunning_container">"Re-running" Containers</a>
+    <a class="nav-link" href="podman-intro.html#rerunning_container">Re-running Containers</a>
   </li>
 </ul>
   </li>
@@ -158,10 +158,49 @@
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Building Securely</span>
+    <a class="nav-link" href="containers-and-security.html">Container Security Considerations</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="build-your-own-container.html">Build your own Secure Container</a>
+    <a class="nav-link" href="containers-and-security.html#exploit_containers">Exploit a Container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="containers-and-security.html#run_containers_responsibly">Run Containers Responsibly</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="containers-and-security.html#scanning_containers">Scanning Containers for Security Issues</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="build-your-own-container.html">Building Securely</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="build-your-own-container.html#buildah_native">Buildah Native Commands</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="build-your-own-container.html#buildah_containerfile">Buildah and Containerfiles</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="deploy-container.html">Deploying Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="deploy-container.html#openshift_login">OpenShift Login</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="deploy-container.html#image_registry">Upload to Image Registry</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="deploy-container.html#simple_container_run">Run Container Image on OpenShift</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="deploy-container.html#expose_container">Exposing Container Website</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="deploy-container.html#openshift_security">OpenShift Security</a>
   </li>
 </ul>
   </li>
@@ -252,19 +291,16 @@ whilst the file system and configuration is governed by the OCI container image 
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Each row in a Dockerfile corresponds to a new layer.</p>
+<p>Choose to have <strong>fewer layers</strong> as it takes less time to build the logical view union file system at runtime.</p>
 </li>
 <li>
-<p>Choose to have less layers as it takes less time to build the logical view union file system at runtime.</p>
+<p><strong>Smaller container images are preferable</strong> as they will take less time to download and use less disk space.</p>
 </li>
 <li>
-<p>Smaller container images are preferable as they will take less time to download and use less disk space.</p>
+<p><strong>Upper layers</strong> may potentially <strong>overwrite</strong> bottom layers. So a file may not be present because it was deleted by an upper layer.</p>
 </li>
 <li>
-<p>Upper layers may potentially overwrite bottom layers. So a file may not be present because it was deleted by an upper layer.</p>
-</li>
-<li>
-<p>Logically deleting the file in the upper layer will still add to overall image size.</p>
+<p><strong>Logically deleting</strong> the file in the upper layer will <strong>still add to overall image size</strong>.</p>
 </li>
 </ol>
 </div>
@@ -291,11 +327,11 @@ The figure below shows the extract of a container image and how the internals of
 </td>
 <td class="content">
 <div class="paragraph">
-<p>To export a container image to a tar file and extract try the following commands</p>
+<p>The above container image was exported to a tar file with the following command.</p>
 </div>
-<div class="imageblock">
+<div class="listingblock">
 <div class="content">
-<img src="_images/export-image.png" alt="How to export!">
+<pre>podman save -o mysql-container.tar registry.redhat.io/rhel8/mysql-80:latest</pre>
 </div>
 </div>
 </td>
@@ -311,7 +347,7 @@ The figure below shows the extract of a container image and how the internals of
 <h2 id="container_file"><a class="anchor" href="#container_file"></a>3. Containerfile</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>A Containerfile is a text based file which provides instructions to assemble an image. The available commands that are usable inside a Containerfile and a Dockerfile are equivalent.</p>
+<p>A Containerfile is a text based file which provides instructions to assemble an image. Each row in a Containerfile corresponds to a new layer. The available commands that are usable inside a Containerfile and a Dockerfile are equivalent.</p>
 </div>
 <div class="paragraph">
 <p>The Containerfile below is a of a mysql image from the Red Hat Container Catalog. As the image is built the commands are executed in order from top down until the image is built.</p>
@@ -369,7 +405,7 @@ The figure below shows the extract of a container image and how the internals of
 </tbody>
 </table>
 <div class="paragraph">
-<p>You may also see Containerfiles with multi stage builds where multiple FROM commands may be present. Multistage builds provide a means to help refine the runtime image as opposed to having an image which also contains all the necessary software to build. For instance you typically don&#8217;t need maven to run a java based jar but do need it to build.</p>
+<p>You may also see Containerfiles with multistage builds where multiple FROM commands may be present. <strong>Multistage builds</strong> provide a means to help refine the runtime image as opposed to having an image which also contains all the necessary software to build. For instance you typically don&#8217;t need maven to run a java based jar but do need it to build.</p>
 </div>
 <div class="paragraph">
 <p>&#8203;</p>
@@ -396,10 +432,10 @@ The figure below shows the extract of a container image and how the internals of
 <h2 id="container_runtime"><a class="anchor" href="#container_runtime"></a>5. Container Runtime</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Like the container image specification, there is a <a href="https://github.com/opencontainers/runtime-spec" target="blank">runtime specification</a> which defines a lifecycle for a container. This defines hooks to be invoked prior to starting, creating or shutting down.</p>
+<p>Like the container image specification, there is a <a href="https://github.com/opencontainers/runtime-spec" target="_blank" rel="noopener">runtime specification</a> which defines a lifecycle for a container. This defines hooks to be invoked prior to starting, creating or shutting down.</p>
 </div>
 <div class="paragraph">
-<p>The state of a container includes the following properties</p>
+<p>The state of a container includes the following properties:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -561,73 +597,77 @@ The registry essentially acts as a place to store container images and share the
 </div>
 <div class="sect2">
 <h3 id="_public_registries_are"><a class="anchor" href="#_public_registries_are"></a>Public registries are:</h3>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>great for individuals or small teams</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>get up and running quickly as possible. Basic in their abilities.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>easy to use</td>
-</tr>
-</table>
+<div class="ulist">
+<ul>
+<li>
+<p>great for individuals or small teams</p>
+</li>
+<li>
+<p>get up and running quickly as possible. Basic in their abilities.</p>
+</li>
+<li>
+<p>easy to use</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_private_registries_have"><a class="anchor" href="#_private_registries_have"></a>Private registries have:</h3>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Security and privacy</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Enterprise container image storage</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Host remotely or on-premises</td>
-</tr>
-</table>
+<div class="ulist">
+<ul>
+<li>
+<p>Security and privacy</p>
+</li>
+<li>
+<p>Enterprise container image storage</p>
+</li>
+<li>
+<p>Host remotely or on-premises</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_enterprises_need_to_look_for"><a class="anchor" href="#_enterprises_need_to_look_for"></a>Enterprises need to look for:</h3>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Multiple authentication systems</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Role-based access control management</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Vulnerability scanning capabilities</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Auditable logs</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>Optimized for automation</td>
-</tr>
-</table>
+<div class="ulist">
+<ul>
+<li>
+<p>Multiple authentication systems</p>
+</li>
+<li>
+<p>Role-based access control management</p>
+</li>
+<li>
+<p>Vulnerability scanning capabilities</p>
+</li>
+<li>
+<p>Auditable logs</p>
+</li>
+<li>
+<p>Optimized for automation</p>
+</li>
+</ul>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_red_hats_enterprise_container_registry"><a class="anchor" href="#_red_hats_enterprise_container_registry"></a>Red Hat&#8217;s Enterprise Container Registry</h3>
 <div class="paragraph">
 <p>Red Hat Quay is a private container image registry that enables you to build, distribute, and deploy containers with the storage you need to scale quickly.
 It analyzes your images for security vulnerabilities using Clair, identifying potential issues and addressing them before they become security risks.
-The Red Hat Container catalog runs on Quay and provides a view of the vulnerabilities found by Clair.
-<a href="https://catalog.redhat.com/software/containers/explore" target="blank">https://catalog.redhat.com/software/containers/explore</a></p>
+&#8203;</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rh_quay_black.svg" alt="Red Hat Quay!">
+</div>
+</div>
+<div class="paragraph">
+<p>You can try Quay through a free account with <a href="https://quay.io/" target="blank">Quay.io</a> which is a managed service OR browse the results of scanning through the <a href="https://catalog.redhat.com/software/containers/explore" target="blank">Red Hat Container catalog</a> like in the figure below.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rh-container-catlog.png" alt="Red Hat Quay!">
+</div>
 </div>
 </div>
 </div>

@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Build your own Secure Container :: Build a Container Workshop (Dev Mode)</title>
     <link rel="canonical" href="http://localhost:3000/rhs-build-course/index.html/intro-container-workshop/BASE/build-your-own-container.html">
-    <link rel="prev" href="container-persistence.html">
+    <link rel="prev" href="containers-and-security.html">
+    <link rel="next" href="deploy-container.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../../_/css/site.css">
 <link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
@@ -139,7 +140,7 @@
     <a class="nav-link" href="podman-intro.html#remove_containers">Removing Containers</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="podman-intro.html#rerunning_container">"Re-running" Containers</a>
+    <a class="nav-link" href="podman-intro.html#rerunning_container">Re-running Containers</a>
   </li>
 </ul>
   </li>
@@ -157,10 +158,49 @@
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Building Securely</span>
+    <a class="nav-link" href="containers-and-security.html">Container Security Considerations</a>
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="build-your-own-container.html">Build your own Secure Container</a>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="containers-and-security.html#exploit_containers">Exploit a Container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="containers-and-security.html#run_containers_responsibly">Run Containers Responsibly</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="containers-and-security.html#scanning_containers">Scanning Containers for Security Issues</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="build-your-own-container.html">Building Securely</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#buildah_native">Buildah Native Commands</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#buildah_containerfile">Buildah and Containerfiles</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="deploy-container.html">Deploying Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="deploy-container.html#openshift_login">OpenShift Login</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="deploy-container.html#image_registry">Upload to Image Registry</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="deploy-container.html#simple_container_run">Run Container Image on OpenShift</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="deploy-container.html#expose_container">Exposing Container Website</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="deploy-container.html#openshift_security">OpenShift Security</a>
   </li>
 </ul>
   </li>
@@ -195,8 +235,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Build a Container Workshop</a></li>
-    <li>Building Securely</li>
-    <li><a href="build-your-own-container.html">Build your own Secure Container</a></li>
+    <li><a href="build-your-own-container.html">Building Securely</a></li>
   </ul>
 </nav>
   <div class="edit-this-page"><a href="file:///workspaces/container-workshop/documentation/modules/ROOT/pages/build-your-own-container.adoc">Edit this Page</a></div>
@@ -215,15 +254,15 @@
 </div>
 </div>
 <div class="paragraph">
-<p><code>buildah</code> is used to create OCI-compliant container images, such as the <code>quay.io/mhildenb/container-workshop-httpd</code> that we&#8217;ve been using.  We&#8217;ll start by fixing a the security vulnerability we found in the <a href="#:containers-and-security.adoc" class="page unresolved">previous section</a>.</p>
+<p><code>buildah</code> is used to create OCI-compliant container images, such as the <code>quay.io/mhildenb/container-workshop-httpd</code> that we&#8217;ve been using.  We&#8217;ll start by fixing a the security vulnerability we found in the <a href="containers-and-security.html" class="page">previous section</a>.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_buildah_native_commands"><a class="anchor" href="#_buildah_native_commands"></a>Buildah native commands</h2>
+<h2 id="buildah_native"><a class="anchor" href="#buildah_native"></a>Buildah native commands</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>One of the things that makes <code>buildah</code> unique is the ability to interact with container images from the host&#8217;s command line.  (As we&#8217;ll see in the next section, it also allows the creation of images from a <code>Dockerfile</code> or, more generically a <code>Containerfile</code>).  This will make it easy for us to remediate the vulnerability we found in the last section.</p>
+<p>One of the things that makes <code>buildah</code> unique is the ability to interact with container images from the host&#8217;s command line.  (As we&#8217;ll see in the next section, it also allows the creation of images from a <code>Dockerfile</code> or, more generically a " <code>Containerfile</code> ").  This will make it easy for us to remediate the vulnerability we found in the last section.</p>
 </div>
 <div class="paragraph">
 <p>Where we left off with our container image is that we needed to patch the bash package installed on the container</p>
@@ -262,7 +301,7 @@
 </td>
 <td class="content">
 <div class="paragraph">
-<p>The main reason for running this command is that we&#8217;ll be mounting filesystems inside the container and non-root users normally do not have privileges to do this.  Running <code>buildah unshare</code> is a way of preparing to work with containers "rootlessly" (if you will).  For a discussion of what this is, see <a href="https://www.redhat.com/sysadmin/buildah-unshare-command" target="_blank" rel="noopener">here</a>.  Think of it as a way that buildah can work with container "rootlessly" just as podman did in the <a href="#:containers-and-security.adoc#non_root_containers" class="page unresolved" target="_blank" rel="noopener">last section</a></p>
+<p>The main reason for running this command is that we&#8217;ll be mounting filesystems inside the container and non-root users normally do not have privileges to do this.  Running <code>buildah unshare</code> is a way of preparing to work with containers "rootlessly" (if you will).  For a discussion of what this is, see <a href="https://www.redhat.com/sysadmin/buildah-unshare-command" target="_blank" rel="noopener">here</a>.  Think of it as a way that buildah can work with container "rootlessly" just as podman did in the <a href="containers-and-security.html#non_root_containers" class="page" target="_blank" rel="noopener">last section</a></p>
 </div>
 </td>
 </tr>
@@ -389,7 +428,7 @@ drwxr-xr-x. 19 root root 17 May 30 08:29 var</code></pre>
 </div>
 </li>
 <li>
-<p>Now that we have a mount point we can copy files from the host directly into the container.  In our case however, we want to use the host&#8217;s package management tooling to install the updated bash package on the container {$CONTAINER}. <span id="upgrade_bash">Run</span> this command:</p>
+<p>Now that we have a mount point we can copy files from the host directly into the container.  In our case however, we want to use the host&#8217;s package management tooling to install the updated bash package on the container <code>${CONTAINER}</code>. <span id="upgrade_bash">Run</span> this command:</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">dnf install -y \<i class="conum" data-value="1"></i><b>(1)</b>
@@ -405,7 +444,7 @@ drwxr-xr-x. 19 root root 17 May 30 08:29 var</code></pre>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>This tells dnf that the requested packages should be installed relative to this installroot (${CONTAINER_MOUNT_POINT} and thus the root of the container) instead of '/', the root of the host instance</td>
+<td>This tells dnf that the requested packages should be installed relative to this installroot (<code>${CONTAINER_MOUNT_POINT}</code> and thus the root of the container) instead of '/', the root of the host instance</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
@@ -548,7 +587,7 @@ Storing signatures
 <p>Since our new container image is virtually identical to the original one (except for the new bash package) and we&#8217;re forwarding the same ports we can now attempt to exploit the container again with the configuration from before</p>
 </li>
 <li>
-<p>If you don&#8217;t still have the metasploit console open, then split the terminal and follow the instructions <a href="#:containers-and-security.adoc#using_metasploit" class="page unresolved" target="_blank" rel="noopener">here</a> to the point where the metasploit console is configured to target the container</p>
+<p>If you don&#8217;t still have the metasploit console open, then split the terminal and follow the instructions <a href="containers-and-security.html#using_metasploit" class="page" target="_blank" rel="noopener">here</a> to the point where the metasploit console is configured to target the container</p>
 </li>
 <li>
 <p>Next run the following command in the <strong>metasploit</strong> terminal</p>
@@ -575,10 +614,10 @@ Storing signatures
 </div>
 </div>
 <div class="sect1">
-<h2 id="_buildah_and_containerfiles"><a class="anchor" href="#_buildah_and_containerfiles"></a>Buildah and Containerfiles</h2>
+<h2 id="buildah_containerfile"><a class="anchor" href="#buildah_containerfile"></a>Buildah and Containerfiles</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Though we&#8217;ve fixed the issue with quay.io/mhildenb/container-workshop-httpd:0.0.5 by using the <code>buildah</code> native command line tools to fix it, there are still other aspects of the container that could be addressed to make it more secure and less likely to need special privileges from the underlying operating system such as</p>
+<p>Though we&#8217;ve fixed the issue with quay.io/mhildenb/container-workshop-httpd:0.0.6 by using the <code>buildah</code> native command line tools to fix it, there are still other aspects of the container that could be addressed to make it more secure and less likely to need special privileges from the underlying operating system such as</p>
 </div>
 <div class="ulist">
 <ul>
@@ -591,7 +630,7 @@ Storing signatures
 </ul>
 </div>
 <div class="paragraph">
-<p>What&#8217;s more, we have no record of the step-by-step changes we&#8217;ve made to the container that we might store in revision control.  One (valid) option would be to store all the buildah cli commands we issued in a shell script.  However, container tools like <code>docker</code> have popularized the <code>Dockerfile</code> (or, more generically, <code>Containerfile</code>) way of defining new containers.  Let&#8217;s investigate the quay.io/mhildenb/container-workshop-httpd:0.0.5&#8217;s <code>Containerfile</code> to see if we can address the points above</p>
+<p>What&#8217;s more, we have no record of the step-by-step changes we&#8217;ve made to the container that we might store in revision control.  One (valid) option would be to store all the buildah cli commands we issued in a shell script.  However, container tools like <code>docker</code> have popularized the <code>Dockerfile</code> (or, more generically, <code>Containerfile</code>) way of defining new containers.  Let&#8217;s investigate the quay.io/mhildenb/container-workshop-httpd:0.0.6&#8217;s <code>Containerfile</code> to see if we can address the points above</p>
 </div>
 <div class="sect2">
 <h3 id="basic_containerfile"><a class="anchor" href="#basic_containerfile"></a>Basic Containerfile</h3>
@@ -1698,7 +1737,7 @@ Storing signatures
 </ol>
 </div>
 <div class="paragraph">
-<p>Congratulations!  You&#8217;ve build a secure container from the ground up.  Next let&#8217;s look at some different ways of orchestrating and deploying containers</p>
+<p>Congratulations!  You&#8217;ve build a secure container from the ground up.  Next we&#8217;ll look at ways of getting our container out there in the world.</p>
 </div>
 </div>
 </div>
@@ -1716,7 +1755,8 @@ Storing signatures
 </div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="container-persistence.html" class="query-params-link">Persistence and Containers</a></span>
+  <span class="prev"><a href="containers-and-security.html" class="query-params-link">Container Security Considerations</a></span>
+  <span class="next"><a href="deploy-container.html" class="query-params-link">Deploying Containers</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
