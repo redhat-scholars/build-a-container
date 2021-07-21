@@ -484,24 +484,11 @@ Use insecure connections? (y/n):</code></pre>
 <p>In order to be able to run an image in OpenShift or Kubernetes we need to put our image somewhere we&#8217;re OpenShift can find it.  This usually involves uplaoding the image to either a public or private container registry.  Public registries include Red Hat&#8217;s <a href="quay.io" target="_blank" rel="noopener">quay.io</a> and Docker&#8217;s <a href="https://hub.docker.com/" target="_blank" rel="noopener">Docker Hub</a></p>
 </div>
 <div class="paragraph">
-<p>One of the features that OpenShift adds to Kubernetes is an in-built container registry called an <code>ImageStream</code>.  We&#8217;re going to create an ImageStream to upload our container to where OpenShift can find it.</p>
+<p>One of the features that OpenShift adds to Kubernetes is an in-built container registry called an <code>ImageStream</code>.  We&#8217;re going to create an <code>ImageStream</code> to upload our container to where OpenShift can find it.</p>
 </div>
 <div class="paragraph">
-<p>We can create the image stream either from the OpenShift Console (UI) or from the terminal (command line).  Choose one of the following tabs</p>
+<p>We can create the image stream either from the OpenShift Console (UI) or from the terminal (command line).</p>
 </div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset3_terminal"></a>Terminal</p>
-</li>
-<li>
-<p><a id="tabset3_openshift-console"></a>OpenShift Console</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset3_terminal">
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -521,7 +508,7 @@ Use insecure connections? (y/n):</code></pre>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>This is the namespace the ImageStream should be bound to</td>
+<td>This is the namespace the <code>ImageStream</code> should be bound to</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
@@ -529,21 +516,14 @@ Use insecure connections? (y/n):</code></pre>
 </tr>
 </table>
 </div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">imagestream.image.openshift.io/my-secure-web-server-image created</code></pre>
+</div>
+</div>
 </li>
-</ol>
-</div>
-</div>
-<div class="tab-pane" aria-labelledby="tabset3_openshift-console">
-<div class="paragraph">
-<p><em>COMING SOON</em></p>
-</div>
-</div>
-</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
 <li>
-<p>With our ImageStream created, we can find our registry endpoint with this command</p>
+<p>With our <code>ImageStream</code> created, we can find our registry endpoint with this command</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">OCP_REGISTRY_URL=$(oc get imagestream my-secure-web-server-image \
@@ -580,7 +560,7 @@ Use insecure connections? (y/n):</code></pre>
 </div>
 </li>
 <li>
-<p>This should yield the following output, which indicates that you&#8217;ve authenticated with the ImageStream internal registry</p>
+<p>This should yield the following output, which indicates that you&#8217;ve authenticated with the <code>ImageStream</code> internal registry</p>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Login Succeeded!</code></pre>
@@ -591,9 +571,22 @@ Use insecure connections? (y/n):</code></pre>
 <p>Now we&#8217;re going to use a new <code>podman</code> command called <code>tag</code> to associate our local image with an image that could exist in our ImageStream registry</p>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman tag localhost/secure-container \
-    ${OCP_REGISTRY_URL}:latest</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman tag \
+    localhost/secure-container \<i class="conum" data-value="1"></i><b>(1)</b>
+    ${OCP_REGISTRY_URL}:latest <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This, remember is the local name of the image we created <a href="build-your-own-container.html#finished_container" class="page" target="_blank" rel="noopener">in the previous section</a></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>If you <code>echo</code> this in a shell, this will look something like <code>default-route-openshift-image-registry.apps.%CLUSTER_SUBDOMAIN%/%USER%/my-secure-web-server-image:latest</code> which is similar to container identification names as we discussed in the <a href="container-autopsy.html#container_identification" class="page" target="_blank" rel="noopener">Container Autopsy section</a></td>
+</tr>
+</table>
 </div>
 </li>
 <li>
@@ -696,10 +689,14 @@ Storing signatures</code></pre>
 <div class="sect1">
 <h2 id="expose_container"><a class="anchor" href="#expose_container"></a>Exposing Container Website</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Our container is running in OpenShift, but we&#8217;d like the rest of the world to have access to our guestbook.  To do this on OpenShift we create a <code>Service</code> in that "exposes" our pod and then a <code>Route</code> that "exposes" our service to the world outside the OpenShift cluster.</p>
+</div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose \<i class="conum" data-value="1"></i><b>(1)</b>
-    pod/my-web-server <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+    --port 8080 \<i class="conum" data-value="2"></i><b>(2)</b>
+    pod/my-web-server <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -710,9 +707,21 @@ Storing signatures</code></pre>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Many resources can be exposed.  Exposing a pod creates a service that points to the pod based on the svcs the pod exports</td>
+<td>We want our service to expose port 8080</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Many resources can be exposed.  Exposing a pod (as we&#8217;re referencing here) creates a service that points to the pod based on the svcs the pod exports</td>
 </tr>
 </table>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">service/my-web-server exposed</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once our service is created, we can expose our <code>Service</code> (or <code>svc</code>)</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -720,10 +729,29 @@ Storing signatures</code></pre>
     svc/my-web-server</code></pre>
 </div>
 </div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">route.route.openshift.io/my-web-server exposed</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Exposing our service creates a <code>Route</code> in OpenShift.  We can interrogate this created route to determine what the publicly accessible endpoint is for our service:</p>
+</div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo "http://$(oc get route my-web-server -o jsonpath='{.spec.host}')/hello.html"</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>This should return output something like this:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">http://my-web-server-%USER%.apps.%CLUSTER_SUBDOMAIN%/hello.html</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Copy the output and paste it into any internet connected browser.  You should get access to an operating guestbook</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -733,7 +761,7 @@ Storing signatures</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="openshift_security"><a class="anchor" href="#openshift_security"></a>OpenShift security</h2>
+<h2 id="openshift_security"><a class="anchor" href="#openshift_security"></a>OpenShift Security</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>This the <a href="build-your-own-container.html#basic_containerfile" class="page" target="_blank" rel="noopener">building secure container section</a> we spent a lot of time making our image suitable for running on OpenShift.</p>
@@ -800,12 +828,12 @@ Storing signatures</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset4_terminal-2"></a>Terminal 2</p>
+<p><a id="tabset3_terminal-2"></a>Terminal 2</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset4_terminal-2">
+<div class="tab-pane" aria-labelledby="tabset3_terminal-2">
 <div class="paragraph">
 <p>To monitor our pod from the terminal we&#8217;re going to use a tool called <code>stern</code> (see here for more info).  It allows us to aggregate and view logs from our Kubernetes cluster.</p>
 </div>
@@ -840,12 +868,12 @@ Storing signatures</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset5_terminal-1"></a>Terminal 1</p>
+<p><a id="tabset4_terminal-1"></a>Terminal 1</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset5_terminal-1">
+<div class="tab-pane" aria-labelledby="tabset4_terminal-1">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc run \
@@ -876,12 +904,12 @@ Storing signatures</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset6_terminal-2"></a>Terminal 2</p>
+<p><a id="tabset5_terminal-2"></a>Terminal 2</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset6_terminal-2">
+<div class="tab-pane" aria-labelledby="tabset5_terminal-2">
 <div class="listingblock console-output">
 <div class="title">Recurring <code>stern</code> output</div>
 <div class="content">

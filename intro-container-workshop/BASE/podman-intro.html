@@ -548,24 +548,10 @@ root        1103  0.0  0.0  13656  1508 tty1     Ss+  Jun21   0:00 /sbin/agetty 
 </div>
 </li>
 <li>
-<p>Now let&#8217;s get into the container so that we can run the same command.  But first <code>podman</code> needs to know which container we mean.  There are two different ways to reference the running container, <span id="find_container_id">by <strong>CONTAINER ID</strong></span> or by <strong>NAME</strong>.  Pick the tab of your choice to show how we can enter the container using either approach:</p>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset1_name"></a>NAME</p>
-</li>
-<li>
-<p><a id="tabset1_container-id"></a>CONTAINER ID</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_name">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
+<p>Now let&#8217;s get into the container so that we can run the same command.</p>
+<div class="paragraph">
 <p>Remember how we used the <code>--name</code> option when we ran our container?  Now we can use this to indicate to podman which container we want to <code>exec</code> into:</p>
+</div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman exec \
@@ -585,77 +571,6 @@ root        1103  0.0  0.0  13656  1508 tty1     Ss+  Jun21   0:00 /sbin/agetty 
 <td><code>podman exec</code> interprets any argument(s) that come after the <code>CONTAINER ID</code> (or <code>CONTAINER NAME</code>) to be the command and arguments we want to run within in the container.  In this case we are running the <code>/bin/bash</code> command which is just a shell.  When coupled with <code>-it</code> this allows us to effectively mimic <code>ssh</code> ing into a VM</td>
 </tr>
 </table>
-</div>
-</li>
-</ol>
-</div>
-</div>
-<div class="tab-pane" aria-labelledby="tabset1_container-id">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Once again, let&#8217;s use the <code>podman ps</code> command to get that info and save it into the variable <code>CONTAINER_ID</code></p>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman ps</code></pre>
-</div>
-</div>
-<div class="listingblock console-output">
-<div class="title">Assign Container ID to CONTAINER_ID</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER ID  IMAGE                                            COMMAND               CREATED      STATUS          PORTS                 NAMES
-4e9c38ac10eb  quay.io/mhildenb/container-workshop-httpd:0.0.6  /usr/sbin/httpd -...  3 hours ago  Up 3 hours ago  0.0.0.0:8081-&gt;80/tcp  my-web-server</code></pre>
-</div>
-</div>
-<div class="sidebarblock">
-<div class="content">
-<div class="title">Tip</div>
-<div class="paragraph">
-<p>Since we have only one container running, we can get its id quickly by running the following command to store the id in the <code>CONTAINER_ID</code> variable:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER_ID=$(podman ps -q) <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The <code>-q</code> flag indicates that podman should not output any headers or any other information about running containers other than their ID</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-</li>
-<li>
-<p>Knowing our <code>CONTAINER_ID</code>, we can now "enter" the container by way of the <code>podman exec</code> command:</p>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman exec \
-   -it \<i class="conum" data-value="1"></i><b>(1)</b>
-   ${CONTAINER_ID}
-   /bin/bash <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The <code>t</code> option opens a "pseudo tty" to the container that allows us to see <code>STDOUT</code> (output) and the <code>i</code> option indicates that we want to keep the <code>STDIN</code> pipe open (basically allow us to continue to enter input)</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td><code>podman exec</code> interprets any argument(s) that come after the <code>CONTAINER ID</code> (or <code>CONTAINER NAME</code>) to be the command and arguments we want to run within in the container.  In this case we are running the <code>/bin/bash</code> command which is just a shell.  When coupled with <code>-it</code> this allows us to effectively mimic <code>ssh</code> ing into a VM</td>
-</tr>
-</table>
-</div>
-</li>
-</ol>
-</div>
-</div>
-</div>
 </div>
 <div class="paragraph">
 <p>&#8203;<br></p>
@@ -929,24 +844,7 @@ Now click anywhere within the left editor where the <code>hostinfo.txt</code> sh
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>You can stop a container by its <strong>CONTAINER ID</strong> or by its <strong>NAME</strong>.  Choose whichever tab you want to access and stop the container</p>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset2_name"></a>NAME</p>
-</li>
-<li>
-<p><a id="tabset2_container-id"></a>CONTAINER ID</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset2_name">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Since we used the <code>--name</code> option to name the container when we ran it, it&#8217;s easy to stop the right container</p>
+<p>Let&#8217;s stop the container</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman stop my-web-server <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
@@ -960,35 +858,15 @@ Now click anywhere within the left editor where the <code>hostinfo.txt</code> sh
 </tr>
 </table>
 </div>
-</li>
-</ol>
-</div>
-</div>
-<div class="tab-pane" aria-labelledby="tabset2_container-id">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Luckily, we have already gotten the container&#8217;s ID and stored it in <code>CONTAINER_ID</code> (see <a href="#find_container_id">here</a> if you skipped that part).</p>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman stop ${CONTAINER_ID}</code></pre>
-</div>
-</div>
 <div class="sidebarblock">
 <div class="content">
 <div class="title">TIP</div>
 <div class="paragraph">
-<p>Alternatively, you can use this command to find and kill any container that reports as <code>UP</code></p>
+<p>You can stop a container by its name or container id.. Alternatively, you can use this command to find and kill any container that reports as <code>UP</code></p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman stop $(podman ps -a | grep Up | cut -d" " -f1)</code></pre>
-</div>
-</div>
-</div>
-</div>
-</li>
-</ol>
 </div>
 </div>
 </div>
@@ -1248,11 +1126,11 @@ quay.io/mhildenb/container-workshop-httpd  0.0.6   ec71626c6cd3  3 hours ago    
 </td>
 <td class="content">
 <div class="paragraph">
-<p>As with the other <code>podman</code> commands, it&#8217;s possible to remove containers by <strong>CONTAINER ID</strong>.  In that case you&#8217;d just issue this command (assuming you followed directions above to store the container id in <code>${CONTAINER_ID}</code>)</p>
+<p>As with the other <code>podman</code> commands, it&#8217;s possible to remove containers by container id.</p>
 </div>
-<div class="listingblock console-input">
+<div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman rm ${CONTAINER_ID}</code></pre>
+<pre>podman rm {CONTAINER_ID}</pre>
 </div>
 </div>
 </td>

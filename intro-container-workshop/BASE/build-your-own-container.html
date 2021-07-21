@@ -743,15 +743,15 @@ Storing signatures
 <h2 id="buildah_containerfile"><a class="anchor" href="#buildah_containerfile"></a>Buildah and Containerfiles</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Though we&#8217;ve fixed the issue with <code>quay.io/mhildenb/container-workshop-httpd:0.0.6</code> by using the <code>buildah</code> native command line tools to fix it, there are still other aspects of the container that could be addressed to make it more secure and less likely to need special privileges from the underlying operating system such as</p>
+<p>Though we&#8217;ve fixed the issue with <code>quay.io/mhildenb/container-workshop-httpd:0.0.6</code> by using the <code>buildah</code> native command line tools to fix it, there are are still additional steps we could take to make this image even more resilient against attack or exploit.  Here are two issues:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Not running as the root user (and thus the apache server not running as <code>root</code>)</p>
+<p>The web server is running on port 80 in the container.  This is a privileged port.  Better to have this run at port run in an privileged port above 1024 (such as 8080)</p>
 </li>
 <li>
-<p>Not requiring a port &lt; 1024.  Currently the apache server in the container images listens on port 80</p>
+<p>Running as a specific user can be problematic as that user can implicitly have privileges afforded to them via <code>sudo</code> (either at runtime or in the ongoing maintenance of the container).  It would be better if we could run the container as the unknown or "anonymous" user</p>
 </li>
 </ul>
 </div>
@@ -763,6 +763,9 @@ Storing signatures
 </div>
 <div class="sect2">
 <h3 id="basic_containerfile"><a class="anchor" href="#basic_containerfile"></a>Basic Containerfile</h3>
+<div class="paragraph">
+<p>A <code>Containerfile</code> defines one (or more) base images and a number operations to perform in those images to create a new image.</p>
+</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -1311,8 +1314,80 @@ RUN yum install -y httpd &amp;&amp; yum update -y &amp;&amp; yum clean all
 </table>
 </div>
 </li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="no_privilege"><a class="anchor" href="#no_privilege"></a>Improving Container Security</h3>
+<div class="paragraph">
+<p>Now that we have the basics of our new image, let&#8217;s attempt to address some of the security concerns we mentioned at the start.</p>
+</div>
+<div class="sect3">
+<h4 id="_privileged_ports"><a class="anchor" href="#_privileged_ports"></a>Privileged Ports</h4>
+<div class="paragraph">
+<p>One issue we mentioned is that the webserver in our original image is attempting to bind to a privileged port.  Furthmore, since we&#8217;re no longer planning to run the apache server as <code>root</code> this is not possible.  The fixing of this issue highlights another activity that you might need to undertake when converting applications to run in arbitrary containers: you might need to change the <em>configuration</em> of the service that you&#8217;re attempting to containerize.</p>
+</div>
+<div class="paragraph">
+<p>For our apache webserver we&#8217;re going to need to change its default configuration file.  In the last section we already copied the <code>httpd.conf</code> out of the (old) container.  Now we can edit it locally before we copy it back in</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
-<p>Rebuild the container with the <code>buildah bud</code> command again:</p>
+<p>To edit the apache server configuration, click on the <code>httpd.conf</code> file to edit it in VSCode</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/httpd-conf.png" alt="httpd conf">
+</div>
+</div>
+</li>
+<li>
+<p>Use <span class="keyseq"><kbd>CTRL</kbd>+<kbd>f</kbd></span> (or <span class="keyseq"><kbd>CMD</kbd>+<kbd>f</kbd></span>) to search for the <code>Listen</code> directive near the start of the <code>httpd.conf</code></p>
+</li>
+<li>
+<p>Change this line so that it matches the highlighted line so that the server listens on port 8080 (instead of 80)</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code>#
+ServerRoot "/etc/httpd"
+
+#
+# Listen: Allows you to bind Apache to specific IP addresses and/or
+# ports, instead of the default. See also the &lt;VirtualHost&gt;
+# directive.
+#
+# Change this to Listen on specific IP addresses as shown below to
+# prevent Apache from glomming onto all bound IP addresses.
+#
+# Listen 12.34.56.78:80
+<mark>Listen 8080</mark>
+
+#
+# Dynamic Shared Object (DSO) Support
+#</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Next, in anticipation of our next step, we don&#8217;t want the configuration to specify that our web server should run as <code>root</code>.  Remove (or comment out) the lines that are struckthrough in your <code>httpd.conf</code></p>
+<div class="listingblock">
+<div class="content">
+<pre>#
+# If you wish httpd to run as a different user or group, you must run
+# httpd as root initially and it will switch.
+#
+# User/Group: The name (or #number) of the user/group to run httpd as.
+# It is usually good practice to create a dedicated user and group for
+# running httpd, as with most system services.
+#
+<span class="line-through">User root</span>
+<span class="line-through">Group root</span>
+
+# 'Main' server configuration</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Next let&#8217;s rebuild the container so that it includes the edits we just made to <code>httpd.conf</code> locally</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">buildah bud \
@@ -1323,114 +1398,38 @@ RUN yum install -y httpd &amp;&amp; yum update -y &amp;&amp; yum clean all
 </div>
 </li>
 <li>
-<p>This should yield output similar to before but appended with the following (&#8230;&#8203; represents content that has been omitted)</p>
+<p>This should yield output similar to before but appended with the following (<code>&#8230;&#8203;</code> represents content that has been omitted)</p>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">STEP 1: FROM registry.access.redhat.com/ubi7
 ...
 STEP 4: COPY hello.html /var/www/html
 STEP 5: COPY log-visitor.sh /var/www/cgi-bin
-STEP 6: RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
-STEP 7: COMMIT localhost/secure-container
+STEP 6: COPY httpd.conf /etc/httpd/conf/httpd.conf
+STEP 7: RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
+STEP 8: COMMIT localhost/secure-container
 Getting image source signatures
-Copying blob 01d2fb866535 skipped: already exists
-Copying blob 9e12a51e507a skipped: already exists
-Copying blob e7b33fa87b36 done
-Copying config ddbfdfbd09 done
+Copying blob 132ca6509b35 skipped: already exists
+Copying blob 1eaba82ed886 skipped: already exists
+Copying blob cc1db2cbf9f1 done
+Copying config 2e4e3518ba done
 Writing manifest to image destination
 Storing signatures
---&gt; ddbfdfbd096
-ddbfdfbd0960f0db36cf608e4066d9c26fb4f87f62c2d3cdb7203ea379213cbd</code></pre>
+--&gt; 2e4e3518bab
+2e4e3518babb0c918576f55399ae533191db263959d2d3e244f07a05bc228131</code></pre>
 </div>
-</div>
-</li>
-<li>
-<p>Now let&#8217;s see if this is enough to run our site</p>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
-    --rm -d \
-    -p 8081:80/tcp \
-    --name my-web-server \
-    localhost/secure-container \
-    /usr/sbin/httpd -DFOREGROUND</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Once the container is running, as before, paste the following in the Browser Preview navbar:</p>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"><a href="http://localhost:8081/hello.html" class="bare">http://localhost:8081/hello.html</a></code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>And you should now see the guestbook:</p>
-<div class="imageblock">
-<div class="content">
-<img src="_images/apache-guestbook-page.png" alt="apache guestbook page">
-</div>
-<div class="title">Figure 3. Guestbook restored</div>
-</div>
-</li>
-<li>
-<p>Go ahead and "sign" the guestbook by entering your <strong>name</strong> (such as "Alice") and pressing <code>Log to Guestbook</code>.  When you do so, you should be greeted with a page like this:</p>
-<div class="imageblock">
-<div class="content">
-<img src="_images/guestbook-more-secure-container.png" alt="guestbook more secure container">
-</div>
-</div>
-</li>
-<li>
-<p>Of note is that this time the httpd server is running as the <code>apache</code> user and not <code>root</code> (see highlight in image)</p>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="title">Why is the webserver running as <code>apache</code>?</div>
-<div class="paragraph">
-<p>Given that our <code>Containerfile</code> is running as <code>root</code> (per the last <code>USER</code> directive) you might be wondering why the webserver is running as <code>apache</code>.  This is because the httpd package that is installed from <code>yum</code> defaults to running as apache, regardless of the user that executes the <code>/usr/sbin/httpd</code> command</p>
-</div>
-</td>
-</tr>
-</table>
 </div>
 </li>
 </ol>
 </div>
-<div class="paragraph">
-<p>At this point our container image is looking pretty good.  Aside from the volume mount (so that our guestbook can be persisted between runs) things are looking pretty good.  However, there are still additional steps we take to make this image even more resilient to attack or exploit.  Here are two issues:</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>The web server is running on port 80 in the container.  This is a privileged port.  Better to have this run at port run in an privileged port above 1024 (such as 8080)</p>
-</li>
-<li>
-<p>Running as a specific user can be problematic as that user can implicitly have privileges afforded to them via sudo (either at runtime or in the ongoing maintenance of the container).  It would be better if we could run the container as the unknown or "anonymous" user</p>
-</li>
-</ul>
+<div class="sect3">
+<h4 id="_running_as_an_arbitrary_user"><a class="anchor" href="#_running_as_an_arbitrary_user"></a>Running as an "Arbitrary User"</h4>
+<div class="paragraph">
+<p>To futher limit the attack surface of containers, Kubernetes products such as OpenShift by default run containers with an <strong>arbitrarily assigned user</strong>.  This effectively overrides the <code>USER</code> directive of the <code>Containerfile</code>.  Explanation and reasons for this can be found <a href="https://access.redhat.com/articles/4859371" target="_blank" rel="noopener">here</a>.</p>
 </div>
 <div class="paragraph">
-<p>We&#8217;ll address both of these concerns in the next section.  For now, as before, let&#8217;s stop and remove this container by running the following</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman rm -f my-web-server</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="no_privilege"><a class="anchor" href="#no_privilege"></a>Running as an "Arbitrary User"</h3>
-<div class="paragraph">
-<p>To futher limit the attack surface of containers, Kubernetes products such as OpenShift by default run containers with an arbitrarily assigned user.  This effectively overrides the <code>USER</code> directive of the <code>Containerfile</code>.  Explanation and reasons for this can be found <a href="https://access.redhat.com/articles/4859371" target="_blank" rel="noopener">here</a>.</p>
-</div>
-<div class="paragraph">
-<p>When a container is run with an arbitrary user, the only thing that we are guaranteed is that the user will be part of the <code>root</code> group.  This fact will become important in a minute.  First let&#8217;s take a look at what happens to the container when we run as a random user and fix the issues in the <code>Containerfile</code> as they arise</p>
+<p>When a container is run with an arbitrary user, the only thing that we are guaranteed is that the user will be part of the <code>root</code> group.  This fact will become important in a minute.  First let&#8217;s take a look at what happens to our current version of the container when we attempt to run as a random user</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1461,7 +1460,7 @@ ddbfdfbd0960f0db36cf608e4066d9c26fb4f87f62c2d3cdb7203ea379213cbd</code></pre>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code>AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 10.0.2.100. Set the 'ServerName' directive globally to suppress this message
-(13)Permission denied: AH00058: Error retrieving pid file /run/httpd/httpd.pid
+(13)<mark>Permission denied</mark>: AH00058: Error retrieving pid file /run/httpd/httpd.pid
 AH00059: Remove it before continuing if it is corrupted.</code></pre>
 </div>
 </div>
@@ -1469,7 +1468,7 @@ AH00059: Remove it before continuing if it is corrupted.</code></pre>
 </ol>
 </div>
 <div class="paragraph">
-<p>The issue here is that by default an arbitrary user won&#8217;t have access to most of the files that the webserver needs to run.  This is where the fact that our arbitrary user will always be part of the <code>root</code> group (gid: 0) will come in handy.  We need to make sure that the root group is assigned to the files and folders that the webserver needs and that the group has appropriate permissions.</p>
+<p>The issue here is that by default an arbitrary user won&#8217;t have access to most of the files that the webserver needs to run.  This is where the fact that our arbitrary user will always be part of the <code>root</code> group (<code>gid</code>: <code>0</code>) will come in handy.  We need to make sure that the <code>root</code> group is assigned to the files and folders that the webserver needs and that the group has appropriate permissions.</p>
 </div>
 <div class="paragraph">
 <p>The process for doing this might be one of trial and error if you&#8217;re not familiar with the software that you&#8217;re attempting to run in the container.  In this case we know exactly which directories need to be adjusted.  Let&#8217;s return to the <code>Containerfile</code></p>
@@ -1487,229 +1486,49 @@ RUN yum install -y httpd &amp;&amp; yum update -y &amp;&amp; yum clean all
 
 COPY hello.html /var/www/html
 COPY log-visitor.sh /var/www/cgi-bin
+COPY httpd.conf /etc/httpd/conf/httpd.conf
 RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
 
-<mark>RUN chown -R 1001:0 /run/httpd &amp;&amp; chmod -R g=u /run/httpd</mark>
-<mark>RUN chown -R 1001:0 /var/log/httpd/ &amp;&amp; chmod -R g=u /var/log/httpd/</mark>
+<mark>RUN chown -R 1001:0 /run/httpd &amp;&amp; chmod -R g=u /run/httpd</mark> <i class="conum" data-value="1"></i><b>(1)</b>
+<mark>RUN chown -R 1001:0 /var/log/httpd/ &amp;&amp; chmod -R g=u /var/log/httpd/</mark> <i class="conum" data-value="2"></i><b>(2)</b>
 
 <mark>USER 1001</mark></code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Rebuild the container with the <code>buildah bud</code> command again:</p>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">buildah bud \
-  -f Containerfile \
-  -t localhost/secure-container \
-  /home/%USER%/container-workshop/secure-container</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>This should yield output similar to before but appended with the following (&#8230;&#8203; represents content that has been omitted)</p>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">STEP 1: FROM registry.access.redhat.com/ubi7
-...
-STEP 6: RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
-STEP 7: RUN chown -R 1001:0 /run/httpd &amp;&amp; chmod -R g=u /run/httpd
-STEP 8: RUN chown -R 1001:0 /var/log/httpd/ &amp;&amp; chmod -R g=u /var/log/httpd/
-STEP 9: USER 1001
-STEP 10: COMMIT localhost/secure-container
-Getting image source signatures
-Copying blob 01d2fb866535 skipped: already exists
-Copying blob 9e12a51e507a skipped: already exists
-Copying blob ecd87ecc84d1 done
-Copying config 8f4119c775 done
-Writing manifest to image destination
-Storing signatures
---&gt; 8f4119c7756
-8f4119c7756aba7d105ecf07adb5d7fc24d4d1240de0071875d5c6528fa3c636</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Now let&#8217;s try running the container again</p>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Even through we&#8217;ve set a default user in the container, let&#8217;s still run with an arbitrary one to test that aspect of the container</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
-    --rm \
-    -u $((1000 + ${RANDOM})) \
-    -p 8081:80/tcp \
-    --name my-web-server \
-    localhost/secure-container \
-    /usr/sbin/httpd -DFOREGROUND</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Which shows some progress but highlights a new issue:</p>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code>AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 10.0.2.100. Set the 'ServerName' directive globally to suppress this message
-<mark>(13)Permission denied: AH00072: make_sock: could not bind to address [::]:80</mark>
-<mark>(13)Permission denied: AH00072: make_sock: could not bind to address 0.0.0.0:80</mark>
-no listening sockets available, shutting down
-AH00015: Unable to open logs</code></pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>So the issue here is something that we assumed we would need to change, namely, that the webserver is attempting to bind to a privileged port.  Since we&#8217;re no longer running the command as root this is not possible.  This highlights another issue that you might run into trying to support arbitrary containers in your containers: you might need to change the configuration of the service that you&#8217;re attempting to containerize.</p>
-</div>
-<div class="paragraph">
-<p>For our apache webserver we&#8217;re going to need to change its default configuration file.  Normally this is done by having our configuration on the host, editing it to our liking there, and using the <code>COPY</code> directive to replace the default configuration in the container.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Let&#8217;s edit the copy of the httpd.conf we pulled out of our original container earlier.  Click on the httpd.conf to edit it in VSCode</p>
-<div class="imageblock">
-<div class="content">
-<img src="_images/httpd-conf.png" alt="httpd conf">
-</div>
-</div>
-</li>
-<li>
-<p>Find the <code>Listen</code> directive near the start of the <code>httpd.conf</code> and change it to match the highlighted line so that the server listens on port 8080</p>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code>#
-ServerRoot "/etc/httpd"
-
-#
-# Listen: Allows you to bind Apache to specific IP addresses and/or
-# ports, instead of the default. See also the &lt;VirtualHost&gt;
-# directive.
-#
-# Change this to Listen on specific IP addresses as shown below to
-# prevent Apache from glomming onto all bound IP addresses.
-#
-# Listen 12.34.56.78:80
-<mark>Listen 8080</mark>
-
-#
-# Dynamic Shared Object (DSO) Support
-#</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>OPTIONAL: Given that our server will not be started by the root user, there is no need to define a user and group the server should run as.  Remove (or comment out) the lines that are struckthrough in your <code>httpd.conf</code></p>
-<div class="listingblock">
-<div class="content">
-<pre>#
-# If you wish httpd to run as a different user or group, you must run
-# httpd as root initially and it will switch.
-#
-# User/Group: The name (or #number) of the user/group to run httpd as.
-# It is usually good practice to create a dedicated user and group for
-# running httpd, as with most system services.
-#
-<span class="line-through">User apache</span>
-<span class="line-through">Group apache</span>
-
-# 'Main' server configuration</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Build the container</p>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">buildah bud \
-  -f Containerfile \
-  -t localhost/secure-container \
-  /home/%USER%/container-workshop/secure-container</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>This should yield output similar to before but appended with the following (&#8230;&#8203; represents content that has been omitted)</p>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">STEP 1: FROM registry.access.redhat.com/ubi7
-...
-STEP 6: RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
-STEP 7: RUN chown -R 1001:0 /run/httpd &amp;&amp; chmod -R g=u /run/httpd
-STEP 8: RUN chown -R 1001:0 /var/log/httpd/ &amp;&amp; chmod -R g=u /var/log/httpd/
-STEP 9: USER 1001
-STEP 10: COMMIT localhost/secure-container
-Getting image source signatures
-Copying blob 01d2fb866535 skipped: already exists
-Copying blob 9e12a51e507a skipped: already exists
-Copying blob ecd87ecc84d1 done
-Copying config 8f4119c775 done
-Writing manifest to image destination
-Storing signatures
---&gt; 8f4119c7756
-8f4119c7756aba7d105ecf07adb5d7fc24d4d1240de0071875d5c6528fa3c636</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Run the container (in the foreground) again to test it</p>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
-    --rm \
-    -u $((1000 + ${RANDOM})) \
-    -p 8081:<mark>8080</mark>/tcp \<i class="conum" data-value="1"></i><b>(1)</b>
-    --name my-web-server \
-    localhost/secure-container \
-    /usr/sbin/httpd -DFOREGROUND</code></pre>
 </div>
 </div>
 <div class="colist arabic">
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Notice that we&#8217;ve had to change the port that we&#8217;re forwarding to as our webserver should now bind to port 8080 in the container</td>
+<td><code>chown</code> here recursively puts the <code>/run/httpd</code> directory and anything in it under the ownership of the <code>root</code> group (<code>gid</code>: <code>0</code>) and then <code>chmod</code> recursively sets group permissions to match existing user permissions</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>chown</code> here recursively puts the <code>/var/log/httpd</code> directory and anything in it under the ownership of the <code>root</code> group (<code>gid</code>: <code>0</code>) and then <code>chmod</code> recursively sets group permissions to match existing user permissions</td>
 </tr>
 </table>
-</div>
-</li>
-<li>
-<p>Next navigate to <code><a href="http://localhost:8081/hello.html" class="bare">http://localhost:8081/hello.html</a></code>, enter a name (such as "Alice") into the guestbook and hit submit.  You should see the following page</p>
-<div class="imageblock">
-<div class="content">
-<img src="_images/arbitrary-user-guestbook.png" alt="arbitrary user guestbook">
-</div>
-<div class="title">Figure 4. Notice the random uid (yours will vary)</div>
 </div>
 </li>
 </ol>
 </div>
 </div>
+</div>
 <div class="sect2">
 <h3 id="finish_container"><a class="anchor" href="#finish_container"></a>Additional Containerfile Commands</h3>
 <div class="paragraph">
-<p>Our container is in pretty good shape, but it&#8217;s a little annoying that we have to specify a command every time, for instance, what&#8217;s highlighted here:</p>
+<p>Our container is in pretty good shape, but there are some finishing touches we should add before it&#8217;s suitable to be run in the wild.</p>
+</div>
+<div class="paragraph">
+<p>For starters, it&#8217;s a little annoying that we have to manually specify the <code>httpd</code> command (and the <code>-DFOREGROUND</code> option) every time in order to get the container to run as we intended.</p>
+</div>
+<div class="paragraph">
+<p>It would be good if we could <strong>specify the start command</strong> (highlighted from previous runs of the container) in the container image itself:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
     --rm \
     -u $((1000 + ${RANDOM})) \
-    -p 8081:8080/tcp \<i class="conum" data-value="1"></i><b>(1)</b>
+    -p 8081:8080/tcp
     --name my-web-server \
     localhost/secure-container \
     <mark>/usr/sbin/httpd -DFOREGROUND</mark></code></pre>
@@ -1719,7 +1538,7 @@ Storing signatures
 <p>For this we can add a directive to our <code>Containerfile</code> called <code>CMD</code> which tells the container runtime which command should be executed to start the container<sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup></p>
 </div>
 <div class="paragraph">
-<p>The other thing that would be good to advertise is the port that the container listens on at runtime (now 8080).  There is a directive for this as well called <code>EXPOSE</code>.  This does not actually publish the port but rather serves as documentation between the person who builds the image and those that run it (or, as we&#8217;ll see, a container orchestration platform such as Kubernetes)</p>
+<p>The other thing that would be good to advertise is the <strong>port that the container listens on at runtime (now 8080)</strong>.  There is a directive for this as well called <code>EXPOSE</code>.  This does not actually publish the port but rather serves as documentation between the person who builds the image and those that run it (or, as we&#8217;ll see, a container orchestration platform such as Kubernetes)</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1800,10 +1619,11 @@ Storing signatures
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
     --rm \
+    -u $((1000 + ${RANDOM})) \
     -d \
     -P \<i class="conum" data-value="1"></i><b>(1)</b>
     --name my-web-server \
-    localhost/secure-container</code></pre>
+    localhost/secure-container <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1811,6 +1631,10 @@ Storing signatures
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
 <td>the <code>-P</code> flag leverages the <code>EXPOSE</code> directives from the <code>Containerfile</code> and forwards all exposed ports to <strong>random</strong> ports on the host</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>notice that no command is provided on the command line</td>
 </tr>
 </table>
 </div>
@@ -1877,13 +1701,22 @@ Storing signatures
 <div class="content">
 <img src="_images/apache-guestbook-page-random-port.png" alt="apache guestbook page random port">
 </div>
-<div class="title">Figure 5. Guestbook, but now at an arbitrary port</div>
+<div class="title">Figure 3. Guestbook, but now at an arbitrary port</div>
+</div>
+</li>
+<li>
+<p>Finally, go ahead and "sign" the guestbook by entering your <strong>name</strong> (such as "Alice") and pressing <code>Log to Guestbook</code>.  When you do so, you should see the following page</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/arbitrary-user-guestbook.png" alt="arbitrary user guestbook">
+</div>
+<div class="title">Figure 4. Notice the random uid (yours will vary)</div>
 </div>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>Congratulations!  You&#8217;ve build a secure container from the ground up.  Next we&#8217;ll look at ways of getting our container out there in the world.</p>
+<p>Congratulations!  You&#8217;ve build a secure container from the ground up.  Next we&#8217;ll look at ways of getting our container out there in the world using Kubernetes.</p>
 </div>
 </div>
 </div>
