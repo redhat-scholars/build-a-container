@@ -7,7 +7,7 @@ In this chapter we'll try to make the container image we've been using a bit mor
 
 image::buildah.png[Buildah!,width=320,height=78]
 
-`buildah` is used to create OCI-compliant container images, such as the `{apache-server-image-insecure-image}` that we've been using.  We'll start by fixing a the security vulnerability we found in the xref::containers-and-security.adoc[previous section].
+`buildah` is used to create OCI-compliant container images, such as the `{apache-server-image-insecure-image}` that we've been using.  We'll start by fixing a the security vulnerability we found in the xref::containers-and-security.adoc[previous section,window=_blank].
 
 [#buildah_native]
 == Buildah native commands
@@ -135,7 +135,7 @@ drwxr-xr-x. 13 root root 19 Apr 20 03:58 usr
 drwxr-xr-x. 19 root root 17 May 30 08:29 var
 ----
 +
-. Now that we have a mount point we can copy files from the host directly into the container.  In our case however, we want to use the host's package management tooling to install the updated bash package on the container `pass:[${CONTAINER}]`. [#upgrade_bash]#Run# this command: 
+. Now that we have a mount point we can copy files from the host directly into the container.  In our case however, we want to use the *host's* package management tooling to install the updated bash package on the container `pass:[${CONTAINER}]`. [#upgrade_bash]#Run# this command: 
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -148,7 +148,12 @@ dnf install -y \#<.>
 <.> This tells dnf that the requested packages should be installed relative to this installroot (`pass:[${CONTAINER_MOUNT_POINT}]` and thus the root of the container) instead of '/', the root of the host instance
 <.> We are telling dnf to install the latest available compatible version of bash for our container (i.e. at `--installroot`)
 +
-. You may see a few errors upon running this command.  They are non-critical.  In the output the key message you should see is
+[NOTE]
+====
+You may see a few errors upon running the above command.  They are non-critical.  The important thing is that you see the highlighted section below in your own local output
+====
++
+. In the output the key message you should see is highlighted:
 +
 include::partial$dnf_output.adoc[]
 +
@@ -189,7 +194,7 @@ Storing signatures
 6b4a460f1e4077bd64b862fcdabe93928779e441ed3e84bb161e8cead079a3e0
 ----
 +
-. Now we can leave the unshare environment to test out our container fix
+. Now we can `exit` the unshare environment so that we can properly test out our container fix
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -201,6 +206,35 @@ exit
 
 Now that we committed a new image, we can test this committed image
 
+. First make sure there are no containers running with the `{apache-server-container-name}`
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman rm -f {apache-server-container-name}
+----
++ 
+[TIP]
+====
+If there was a container running you will see something like
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+17af59003b1f956717b2a90919119b20bca1133e3677999f628f00e026a0079f
+----
+
+And if there were none running you'll see something like
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+Error: failed to evict container: "": failed to find container "my-web-server" in state: no container with name or ID my-web-server found: no such container
+----
+
+Getting either output it's fine to proceed
+====
++
 . Run the new container "rootlessly" in the terminal by running the following command: 
 +
 [.console-input]
@@ -208,42 +242,51 @@ Now that we committed a new image, we can test this committed image
 ----
 podman run \
     -d \
-    -p 8081:80/tcp \ 
+    -p 8081:80/tcp \#<.>
     --name {apache-server-container-name} \
     -v {container-workshop-exercise-path}:/var/log/www:Z \
     {apache-server-image-secure-image}
 ----
+<.> Since our new container image is virtually identical to the original one (except for the new bash package) and we're forwarding the same ports we can now attempt to exploit the container again with the configuration from before
+
+include::partial$metasploit_shell_return.adoc[]
+
+Next run the following command in the *metasploit* terminal (*{metasploit-terminal}*)
+
+[tabs]
+====
+{metasploit-terminal}::
 +
-. Since our new container image is virtually identical to the original one (except for the new bash package) and we're forwarding the same ports we can now attempt to exploit the container again with the configuration from before
-. If you don't still have the metasploit console open, then split the terminal and follow the instructions xref::containers-and-security.adoc#using_metasploit[here, window=_blank] to the point where the metasploit console is configured to target the container
-. Next run the following command in the *metasploit* terminal
-+
+--
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 check
 ----
-+
-. And this should result in the following output
-+
+
+And this should result in the following output:
+
 [.console-output]
 [source,bash,subs="+macros,+attributes,+quotes"]
 ----
 [*] 127.0.0.1:8081 - The target is #not# exploitable.
 ----
-+
+--
+====
 
-Congratulations!  You'd fixed the shellshock exploit
+Congratulations!  You'd fixed the shellshock exploit of the original `{apache-server-image-insecure-image}` container!
 
 [#buildah_containerfile]
 == Buildah and Containerfiles
 
-Though we've fixed the issue with {apache-server-image-insecure} by using the `buildah` native command line tools to fix it, there are still other aspects of the container that could be addressed to make it more secure and less likely to need special privileges from the underlying operating system such as
+Though we've fixed the issue with `{apache-server-image-insecure}` by using the `buildah` native command line tools to fix it, there are still other aspects of the container that could be addressed to make it more secure and less likely to need special privileges from the underlying operating system such as
 
 * Not running as the root user (and thus the apache server not running as `root`)
 * Not requiring a port < 1024.  Currently the apache server in the container images listens on port 80
 
-What's more, we have no record of the step-by-step changes we've made to the container that we might store in revision control.  One (valid) option would be to store all the buildah cli commands we issued in a shell script.  However, container tools like `docker` have popularized the `Dockerfile` (or, more generically, `Containerfile`) way of defining new containers.  Let's investigate the {apache-server-image-insecure}'s `Containerfile` to see if we can address the points above
+What's more, we have no record of the step-by-step changes we've made to the container that we might store in revision control.  One (valid) option would be to store all the buildah cli commands we issued in a shell script.  
+
+Another option, popularized by container tools like `docker` is the `Dockerfile` (or, more generically, `Containerfile`) way of defining new containers.  Let's investigate the `{apache-server-image-insecure}` 's `Containerfile` to see if we can address the points above
 
 [#basic_containerfile]
 === Basic Containerfile
@@ -327,6 +370,7 @@ Storing signatures
 [source,bash,subs="+macros,+attributes"]
 ----
 podman run \
+  --rm \
   -it \
   {apache-server-containerfile-image} \
   bash #<.>
@@ -341,20 +385,43 @@ podman run \
 +
 . Let's take a look at the version of `bash` that's running
 +
+[tabs]
+====
+Container::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+yum info bash
+----
+
+Should yield:
+
 include::partial$yum_info_bash.adoc[]
+
+Be sure to exit the container to get back to the host
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+exit
+----
+--
+====
 +
 . Notice that the version (highlighted), is the same version that we installed using the buildah command line <<upgrade_bash,here>>
 +
 [TIP]
 .Why didn't we have to patch bash
 ====
-While Shellshock is by now an old CVE, this demonstrates more broadly the value of starting your container with one of Red Hat's Universal Base Images.  These images are updated every quarter, their internal packages patched by Red Hat to fix all known CVEs.  For more in depth information on the UBI program see link:https://developers.redhat.com/books/red-hat-universal-base-images-ubi?sc_cid=7013a0000026GuZAAU[here]
+While Shellshock is by now an old CVE, this demonstrates more broadly the value of starting your container with one of *Red Hat's Universal Base Images*.  These images are updated every quarter, their internal packages patched by Red Hat to fix all known CVEs.  For more in depth information on the UBI program see link:https://developers.redhat.com/books/red-hat-universal-base-images-ubi?sc_cid=7013a0000026GuZAAU[here^]
 ====
 
 [#containerfile_run]
 === Running Commands in a Containerfile
 
-Our image is a good start, but it doesn't yet have a webserver on it; this is something we're going to have to install.  As we've seen, the ubi base has `yum` installed in it.  So instead of using `buildah` native commands we can instead add directives to the Containerfile to `RUN` commands within the Container as it's being built.   
+Our image is a good start, but it doesn't yet have a webserver on it; this is something we're going to have to install.  As we've seen, the UBI base has `yum` installed in it.  So instead of using `buildah` native commands we can instead add directives to the Containerfile to `RUN` commands within the Container as it's being built.   
 
 . If you are still in the container, exit it to get back to the {USER} terminal on the host instance
 . From the IDE, add the highlighted lines to the Containerfile
@@ -383,7 +450,7 @@ include::partial$buildah_bud_output_run.adoc[]
 [source,bash,subs="+macros,+attributes"]
 ----
 podman run \
-    -d \
+    --rm -d \
     -p 8081:80/tcp \ 
     --name {apache-server-container-name} \
     {apache-server-containerfile-image} \
@@ -391,11 +458,23 @@ podman run \
 ----
 <.> As we did above with `bash`, we are now wanting to run `httpd` as the root process of {apache-server-containerfile-image} and this time we're providing that command the `-DFOREGROUND` argument
 +
-. Open you're Browser Preview window and navigate to `localhost:8081` and you should see a familiar sight (or site, if you will)
+. Open your Browser Preview window and paste the following URL in the navbar to see a familiar sight (or "site", if you will)
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+http://localhost:8081
+----
 +
 image::apache-test-page.png[]
 +
-. This is encouraging, but we don't yet have the non-boilerplate aspects of our site in the container.  For instance, if we navigate to our rudimentary guestbook functionality at `localhost:8081/hello.html`
+. This is encouraging, but we don't yet have the non-boilerplate aspects of our site in the container.  For instance, if we navigate to our rudimentary guestbook functionality by pasting the following in the Browser Preview navbar
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+http://localhost:8081/hello.html
+----
 +
 .Guestbook functionality does not exist in the container
 image::guestbook-not-found.png[]
@@ -405,13 +484,13 @@ image::guestbook-not-found.png[]
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-podman rm -f {apache-server-container-name}
+podman stop {apache-server-container-name}
 ----
 
 [#containerfile_copy]
 === Copying files into the container
 
-So we're got a container image that is able to run a generic apache site, but how do we customize this to run our specific site.  This is where another Container file directive, `COPY` comes in.  In this section we're going to get a little help from the builah native commands to retrieve our custom content.  Then we're going to show how we can use `COPY` and the Containerfile to get those assets onto our container
+So we're got a container image that is able to run a generic apache site, but how do we customize this to run our specific site?  This is where another Container file directive, `COPY` comes in.  In this section we're going to get a little help from the builah native commands to retrieve our custom content.  Then we're going to show how we can use `COPY` and the Containerfile to get those assets onto our container
 
 . First let's leverage `buildah` to pull our custom website files onto our host.  We'll need to mount the container and since we're not a root user we're going to first need to issue
 +
@@ -441,16 +520,17 @@ WORKING_CONTAINER_OLD=$(buildah from {apache-server-image-insecure-image})
 WORKING_CONTAINER_OLD_IMAGE_MOUNT=$(buildah mount pass:[${WORKING_CONTAINER_OLD}])
 ----
 +
-. Now we don't want very many files from the old container, we only want the files involved with guestbook.  We can pull them out and into our `Containerfile` working directory by running the following commands
+. Now we don't want very many files from the old container, we only want the files involved with our guestbook website.  We can pull them out and into our `Containerfile` working directory by running the following commands
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 cp pass:[${WORKING_CONTAINER_OLD_IMAGE_MOUNT}]/var/www/cgi-bin/log-visitor.sh /home/{USER}/container-workshop/secure-container
 cp pass:[${WORKING_CONTAINER_OLD_IMAGE_MOUNT}]/var/www/html/hello.html /home/{USER}/container-workshop/secure-container
+cp pass:[${WORKING_CONTAINER_OLD_IMAGE_MOUNT}]/etc/httpd/conf/httpd.conf /home/{USER}/container-workshop/secure-container
 ----
 +
-. At this point you should see the two files appear in the `secure-container` directory.  You can also click on them and take a look at the (simple) HTML and bash code
+. At this point you should see the three files appear in the `secure-container` directory.  You can also click on them and take a look at them like you would any file on the host
 +
 image::guestbook-files.png[]
 +
@@ -480,6 +560,7 @@ RUN yum install -y httpd && yum update -y && yum clean all
 
 #COPY hello.html /var/www/html# #<.>
 #COPY log-visitor.sh /var/www/cgi-bin# 
+#COPY httpd.conf /etc/httpd/conf/httpd.conf#
 #RUN chmod 755 /var/www/cgi-bin/log-visitor.sh# #<.>
 ----
 <.> The `COPY` directive moves files from the current working directory on the host and copies them to the specified location in the container image (in this case `/var/www/html`).  This is analogous to what we did before with the `buildah mount` commands
@@ -499,19 +580,27 @@ include::partial$buildah_bud_output_copy.adoc[]
 [source,bash,subs="+macros,+attributes"]
 ----
 podman run \
-    -d \
+    --rm -d \
     -p 8081:80/tcp \ 
     --name {apache-server-container-name} \
     {apache-server-containerfile-image} \
     /usr/sbin/httpd -DFOREGROUND 
 ----
 +
-. Once the container is running, if you navigate to `localhost:8081/hello.html` you should now see the guestbook
+. Once the container is running, as before, paste the following in the Browser Preview navbar: 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+http://localhost:8081/hello.html
+----
++
+. And you should now see the guestbook:
 +
 .Guestbook restored
 image::apache-guestbook-page.png[]
 +
-. Go ahead and "sign" the guestbook by entering your name (such as Alice) and hit `Submit`.  You should be greeted with a page like this
+. Go ahead and "sign" the guestbook by entering your *name* (such as "Alice") and pressing `Log to Guestbook`.  When you do so, you should be greeted with a page like this:
 +
 image::guestbook-more-secure-container.png[]
 +
@@ -635,20 +724,7 @@ So the issue here is something that we assumed we would need to change, namely, 
 
 For our apache webserver we're going to need to change its default configuration file.  Normally this is done by having our configuration on the host, editing it to our liking there, and using the `COPY` directive to replace the default configuration in the container.
 
-. First let's use buildah's native commands to pull the `httpd.conf` file out of our image and into our working folder.  Run the following command in the terminal:
-+
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-buildah unshare
-WORKING_CONTAINER=$(buildah from {apache-server-containerfile-image})
-WORKING_CONTAINER_MOUNT=$(buildah mount pass:[${WORKING_CONTAINER}])
-cp pass:[${WORKING_CONTAINER_MOUNT}]/etc/httpd/conf/httpd.conf /home/{USER}/container-workshop/secure-container
-exit
-
-----
-+
-. When the commands finish you should have a copy of the httpd.conf from the image in the `container-workshop` directory (you might need to refresh the explorer first).  Click on the httpd.conf to edit it in VSCode
+. Let's edit the copy of the httpd.conf we pulled out of our original container earlier.  Click on the httpd.conf to edit it in VSCode
 +
 image::httpd-conf.png[]
 +
@@ -692,27 +768,6 @@ ServerRoot "/etc/httpd"
 [.line-through]#Group apache#
 
 # 'Main' server configuration
-----
-+
-. Now with the configuration updated, we need to once again update our `Containerfile` with the highlighted lines
-+
-[.console-input]
-[source,Containerfile,subs="+macros,+attributes,+quotes"]
-----
-FROM registry.access.redhat.com/ubi7 
-USER root 
-
-RUN yum install -y httpd && yum update -y && yum clean all
-
-COPY hello.html /var/www/html
-COPY log-visitor.sh /var/www/cgi-bin 
-#COPY httpd.conf /etc/httpd/conf/httpd.conf#
-RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
-
-RUN chown -R 1001:0 /run/httpd && chmod -R g=u /run/httpd
-RUN chown -R 1001:0 /var/log/httpd/ && chmod -R g=u /var/log/httpd/
-
-USER 1001
 ----
 +
 . Build the container

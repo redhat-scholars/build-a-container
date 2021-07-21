@@ -1,0 +1,36 @@
+Let's return to our metasploit terminal (*{metasploit-terminal}*) for the next section
+
+[TIP]
+====
+If you have accidentally closed your metasploit terminal, you can recreate/reopen it by following xref:metasploit_setup_standalone.adoc[these instructions,window=_blank] fully in the other tab and then returning to this point in the lab.
+====
+
+If you've left your terminal open, you may need to first press kbd:[RETURN] to get back to the metasploit command line.  When you do so you may be greeted with the following prompt: 
+
+[tabs]
+====
+{metasploit-terminal}::
++
+--
+[.console-output]
+[source,bash,subs="+quotes"]
+----
+Terminate channel 1? [#y#/N] 
+----
+--
+====
+
+Just enter `y` to get back to the metasploit prompt:
+
+[tabs]
+====
+{metasploit-terminal}::
++
+--
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+msf6 exploit(multi/http/apache_mod_cgi_bash_env_exec) > 
+----
+--
+====
