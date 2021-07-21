@@ -137,15 +137,9 @@ Let's go back to the container that we finished xref::build-your-own-container.a
 
 In order to be able to run an image in OpenShift or Kubernetes we need to put our image somewhere we're OpenShift can find it.  This usually involves uplaoding the image to either a public or private container registry.  Public registries include Red Hat's link:quay.io[quay.io^] and Docker's link:https://hub.docker.com/[Docker Hub^]
 
-One of the features that OpenShift adds to Kubernetes is an in-built container registry called an `ImageStream`.  We're going to create an ImageStream to upload our container to where OpenShift can find it.
+One of the features that OpenShift adds to Kubernetes is an in-built container registry called an `ImageStream`.  We're going to create an `ImageStream` to upload our container to where OpenShift can find it.
 
-We can create the image stream either from the OpenShift Console (UI) or from the terminal (command line).  Choose one of the following tabs
-
-[tabs]
-====
-Terminal::
-+
---
+We can create the image stream either from the OpenShift Console (UI) or from the terminal (command line).  
 
 . Enter the following command
 +
@@ -157,18 +151,16 @@ oc create imagestream \#<.>
     {ocp_secure_image_name} #<.>
 ----
 <.> `ImageStream` is an OpenShift specific Kubernetes resource that represents a project specific container registry
-<.> This is the namespace the ImageStream should be bound to
+<.> This is the namespace the `ImageStream` should be bound to
 <.> This is the name of the image registry we want to create
-
---
-OpenShift Console::
 +
---
-_COMING SOON_
---
-====
-
-. With our ImageStream created, we can find our registry endpoint with this command
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+imagestream.image.openshift.io/my-secure-web-server-image created
+----
++
+. With our `ImageStream` created, we can find our registry endpoint with this command
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -191,7 +183,7 @@ podman login \
 ----
 <.> You must log into imagestream registries using a token and not your user's password.  `oc whoami -t` returns the currently active token for a given OpenShift session
 +
-. This should yield the following output, which indicates that you've authenticated with the ImageStream internal registry
+. This should yield the following output, which indicates that you've authenticated with the `ImageStream` internal registry
 +
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
@@ -204,9 +196,12 @@ Login Succeeded!
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-podman tag {apache-server-containerfile-image} \
-    pass:[${OCP_REGISTRY_URL}]:latest 
+podman tag \
+    {apache-server-containerfile-image} \#<.>
+    pass:[${OCP_REGISTRY_URL}]:latest #<.>
 ----
+<.> This, remember is the local name of the image we created xref::build-your-own-container.adoc#finished_container[in the previous section,window=_blank]
+<.> If you `echo` this in a shell, this will look something like `default-route-openshift-image-registry.apps.{CLUSTER_SUBDOMAIN}/{USER}/pass:[my-secure-web-server-image:latest]` which is similar to container identification names as we discussed in the xref:container-autopsy.adoc#container_identification[Container Autopsy section,window=_blank]
 + 
 . Once tagged, we should now be able to push this image into the ImageStream using the `podman push` command 
 +
@@ -275,14 +270,26 @@ image::ocp-running-secure-image.png[]
 [#expose_container]
 == Exposing Container Website
 
+Our container is running in OpenShift, but we'd like the rest of the world to have access to our guestbook.  To do this on OpenShift we create a `Service` in that "exposes" our pod and then a `Route` that "exposes" our service to the world outside the OpenShift cluster.
+
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 oc expose \#<.>
+    --port 8080 \#<.>
     pod/my-web-server #<.>
 ----
 <.> `expose` is an `oc` CLI specific command
-<.> Many resources can be exposed.  Exposing a pod creates a service that points to the pod based on the svcs the pod exports
+<.> We want our service to expose port 8080
+<.> Many resources can be exposed.  Exposing a pod (as we're referencing here) creates a service that points to the pod based on the svcs the pod exports
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+service/my-web-server exposed
+----
+
+Once our service is created, we can expose our `Service` (or `svc`)
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -291,16 +298,36 @@ oc expose \
     svc/my-web-server
 ----
 
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+route.route.openshift.io/my-web-server exposed
+----
+
+Exposing our service creates a `Route` in OpenShift.  We can interrogate this created route to determine what the publicly accessible endpoint is for our service:
+
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 echo "http://$(oc get route my-web-server -o jsonpath='{.spec.host}')/hello.html"
 ----
 
+// FIXME: Add tab or instructions for doing this via Topology View in OpenShift UI
+
+This should return output something like this:
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+pass:[http://my-web-server-]{USER}pass:[.apps.]{CLUSTER_SUBDOMAIN}/hello.html
+----
+
+Copy the output and paste it into any internet connected browser.  You should get access to an operating guestbook
+
 image::sandbox-website.png[]
 
 [#openshift_security]
-== OpenShift security
+== OpenShift Security
 
 This the xref::build-your-own-container.adoc#basic_containerfile[building secure container section,window=_blank] we spent a lot of time making our image suitable for running on OpenShift.  
 
