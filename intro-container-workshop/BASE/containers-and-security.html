@@ -427,23 +427,44 @@ msf6 exploit(multi/http/apache_mod_cgi_bash_env_exec) &gt;</code></pre>
 </div>
 </div>
 </li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>To ensure everything&#8217;s setup right, we can check whether our setup is currently targeting a vulnerable container</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
 <li>
-<p>To ensure we&#8217;ve got everything right, we can check whether our setup is currently targeting a vulnerable container</p>
+<p><a id="tabset2_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset2_terminal-2">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">check</code></pre>
 </div>
 </div>
-</li>
-<li>
+<div class="paragraph">
 <p>Which should report the following output if successful:</p>
+</div>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[+] 127.0.0.1:8081 - The target is vulnerable.</code></pre>
 </div>
 </div>
-</li>
-</ol>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">TIP</div>
+<div class="paragraph">
+<p>If you get a message that the target is not vulnerable (and you are expecting it to be, make sure the <code>quay.io/mhildenb/container-workshop-httpd:0.0.6</code> is running</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -458,12 +479,12 @@ msf6 exploit(multi/http/apache_mod_cgi_bash_env_exec) &gt;</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset2_terminal-2"></a>Terminal 2</p>
+<p><a id="tabset3_terminal-2"></a>Terminal 2</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset2_terminal-2">
+<div class="tab-pane" aria-labelledby="tabset3_terminal-2">
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -533,12 +554,12 @@ Channel 1 created.</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset3_terminal-2"></a>Terminal 2</p>
+<p><a id="tabset4_terminal-2"></a>Terminal 2</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset3_terminal-2">
+<div class="tab-pane" aria-labelledby="tabset4_terminal-2">
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -665,12 +686,12 @@ EOF</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset4_terminal-2"></a>Terminal 2</p>
+<p><a id="tabset5_terminal-2"></a>Terminal 2</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset4_terminal-2">
+<div class="tab-pane" aria-labelledby="tabset5_terminal-2">
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -738,12 +759,12 @@ drwxr-xr-x. 2 1001 1001 34 May 28 08:50 sql
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset5_terminal-2"></a>Terminal 2</p>
+<p><a id="tabset6_terminal-2"></a>Terminal 2</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset5_terminal-2">
+<div class="tab-pane" aria-labelledby="tabset6_terminal-2">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">fdisk -l</code></pre>
@@ -841,12 +862,12 @@ touch /mnt/hack/hax0red.txt</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset6_terminal-1"></a>Terminal 1</p>
+<p><a id="tabset7_terminal-1"></a>Terminal 1</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset6_terminal-1">
+<div class="tab-pane" aria-labelledby="tabset7_terminal-1">
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -894,12 +915,12 @@ drwxr-xr-x.  20 root root  278 May 28 08:44 var</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset7_terminal-2"></a>Terminal 2</p>
+<p><a id="tabset8_terminal-2"></a>Terminal 2</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset7_terminal-2">
+<div class="tab-pane" aria-labelledby="tabset8_terminal-2">
 <div class="listingblock console-input">
 <div class="title">Let&#8217;s take a look at some sensitive ssh info</div>
 <div class="content">
@@ -981,12 +1002,12 @@ drwxr-xr-x.  20 root root  278 May 28 08:44 var</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset8_terminal-1"></a>Terminal 1</p>
+<p><a id="tabset9_terminal-1"></a>Terminal 1</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset8_terminal-1">
+<div class="tab-pane" aria-labelledby="tabset9_terminal-1">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman rm -f my-web-server</code></pre>
@@ -1002,12 +1023,12 @@ drwxr-xr-x.  20 root root  278 May 28 08:44 var</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset9_terminal-2"></a>Terminal 2</p>
+<p><a id="tabset10_terminal-2"></a>Terminal 2</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset9_terminal-2">
+<div class="tab-pane" aria-labelledby="tabset10_terminal-2">
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[*] 127.0.0.1 - Meterpreter session 1 closed.  Reason: Died</code></pre>
@@ -1023,12 +1044,12 @@ drwxr-xr-x.  20 root root  278 May 28 08:44 var</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset10_terminal-1"></a>Terminal 1</p>
+<p><a id="tabset11_terminal-1"></a>Terminal 1</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset10_terminal-1">
+<div class="tab-pane" aria-labelledby="tabset11_terminal-1">
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -1091,12 +1112,12 @@ drwxr-xr-x.  20 root root  278 May 28 08:44 var</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset11_terminal-1"></a>Terminal 1</p>
+<p><a id="tabset12_terminal-1"></a>Terminal 1</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset11_terminal-1">
+<div class="tab-pane" aria-labelledby="tabset12_terminal-1">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
@@ -1160,15 +1181,15 @@ drwxr-xr-x.  20 root root  278 May 28 08:44 var</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset12_terminal-2"></a>Terminal 2</p>
+<p><a id="tabset13_terminal-2"></a>Terminal 2</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset12_terminal-2">
+<div class="tab-pane" aria-labelledby="tabset13_terminal-2">
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Terminate channel 1? [y/N]</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Terminate channel 1? [<mark>y</mark>/N]</code></pre>
 </div>
 </div>
 </div>
@@ -1181,12 +1202,12 @@ drwxr-xr-x.  20 root root  278 May 28 08:44 var</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset13_terminal-2"></a>Terminal 2</p>
+<p><a id="tabset14_terminal-2"></a>Terminal 2</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset13_terminal-2">
+<div class="tab-pane" aria-labelledby="tabset14_terminal-2">
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">msf6 exploit(multi/http/apache_mod_cgi_bash_env_exec) &gt;</code></pre>
@@ -1199,12 +1220,12 @@ drwxr-xr-x.  20 root root  278 May 28 08:44 var</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset14_terminal-2"></a>Terminal 2</p>
+<p><a id="tabset15_terminal-2"></a>Terminal 2</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset14_terminal-2">
+<div class="tab-pane" aria-labelledby="tabset15_terminal-2">
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -1271,12 +1292,12 @@ Channel 1 created.</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset15_terminal-2"></a>Terminal 2</p>
+<p><a id="tabset16_terminal-2"></a>Terminal 2</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset15_terminal-2">
+<div class="tab-pane" aria-labelledby="tabset16_terminal-2">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">touch /var/log/www/hello_from_rootless_podman.txt</code></pre>
@@ -1303,12 +1324,12 @@ Channel 1 created.</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset16_terminal-2"></a>Terminal 2</p>
+<p><a id="tabset17_terminal-2"></a>Terminal 2</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset16_terminal-2">
+<div class="tab-pane" aria-labelledby="tabset17_terminal-2">
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -1352,12 +1373,12 @@ Channel 1 created.</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset17_terminal-1"></a>Terminal 1</p>
+<p><a id="tabset18_terminal-1"></a>Terminal 1</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset17_terminal-1">
+<div class="tab-pane" aria-labelledby="tabset18_terminal-1">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ls -l /home/%USER%/container-workshop/hello_from_rootless_podman.txt</code></pre>
@@ -1387,12 +1408,12 @@ Channel 1 created.</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset18_terminal-2"></a>Terminal 2</p>
+<p><a id="tabset19_terminal-2"></a>Terminal 2</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset18_terminal-2">
+<div class="tab-pane" aria-labelledby="tabset19_terminal-2">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">fdisk -l</code></pre>
@@ -1482,12 +1503,12 @@ Channel 1 created.</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset19_terminal-1"></a>Terminal 1</p>
+<p><a id="tabset20_terminal-1"></a>Terminal 1</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset19_terminal-1">
+<div class="tab-pane" aria-labelledby="tabset20_terminal-1">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo oscap-podman quay.io/mhildenb/container-workshop-httpd:0.0.6 \<i class="conum" data-value="1"></i><b>(1)</b>
