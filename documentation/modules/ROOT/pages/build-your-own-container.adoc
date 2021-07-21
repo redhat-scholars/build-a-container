@@ -7,7 +7,7 @@ In this chapter we'll try to make the container image we've been using a bit mor
 
 image::buildah.png[Buildah!,width=320,height=78]
 
-`buildah` is used to create OCI-compliant container images, such as the `{apache-server-image-insecure-image}` that we've been using.  We'll start by fixing a the security vulnerability we found in the xref::containers-and-security.adoc[previous section].
+`buildah` is used to create OCI-compliant container images, such as the `{apache-server-image-insecure-image}` that we've been using.  We'll start by fixing a the security vulnerability we found in the xref::containers-and-security.adoc[previous section,window=_blank].
 
 [#buildah_native]
 == Buildah native commands
@@ -135,7 +135,7 @@ drwxr-xr-x. 13 root root 19 Apr 20 03:58 usr
 drwxr-xr-x. 19 root root 17 May 30 08:29 var
 ----
 +
-. Now that we have a mount point we can copy files from the host directly into the container.  In our case however, we want to use the host's package management tooling to install the updated bash package on the container `pass:[${CONTAINER}]`. [#upgrade_bash]#Run# this command: 
+. Now that we have a mount point we can copy files from the host directly into the container.  In our case however, we want to use the *host's* package management tooling to install the updated bash package on the container `pass:[${CONTAINER}]`. [#upgrade_bash]#Run# this command: 
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -148,7 +148,12 @@ dnf install -y \#<.>
 <.> This tells dnf that the requested packages should be installed relative to this installroot (`pass:[${CONTAINER_MOUNT_POINT}]` and thus the root of the container) instead of '/', the root of the host instance
 <.> We are telling dnf to install the latest available compatible version of bash for our container (i.e. at `--installroot`)
 +
-. You may see a few errors upon running this command.  They are non-critical.  In the output the key message you should see is
+[NOTE]
+====
+You may see a few errors upon running the above command.  They are non-critical.  The important thing is that you see the highlighted section below in your own local output
+====
++
+. In the output the key message you should see is highlighted:
 +
 include::partial$dnf_output.adoc[]
 +
@@ -189,7 +194,7 @@ Storing signatures
 6b4a460f1e4077bd64b862fcdabe93928779e441ed3e84bb161e8cead079a3e0
 ----
 +
-. Now we can leave the unshare environment to test out our container fix
+. Now we can `exit` the unshare environment so that we can properly test out our container fix
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -201,6 +206,35 @@ exit
 
 Now that we committed a new image, we can test this committed image
 
+. First make sure there are no containers running with the `{apache-server-container-name}`
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman rm -f {apache-server-container-name}
+----
++ 
+[TIP]
+====
+If there was a container running you will see something like
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+17af59003b1f956717b2a90919119b20bca1133e3677999f628f00e026a0079f
+----
+
+And if there were none running you'll see something like
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+Error: failed to evict container: "": failed to find container "my-web-server" in state: no container with name or ID my-web-server found: no such container
+----
+
+Getting either output it's fine to proceed
+====
++
 . Run the new container "rootlessly" in the terminal by running the following command: 
 +
 [.console-input]
@@ -208,42 +242,51 @@ Now that we committed a new image, we can test this committed image
 ----
 podman run \
     -d \
-    -p 8081:80/tcp \ 
+    -p 8081:80/tcp \#<.>
     --name {apache-server-container-name} \
     -v {container-workshop-exercise-path}:/var/log/www:Z \
     {apache-server-image-secure-image}
 ----
+<.> Since our new container image is virtually identical to the original one (except for the new bash package) and we're forwarding the same ports we can now attempt to exploit the container again with the configuration from before
+
+include::partial$metasploit_shell_return.adoc[]
+
+Next run the following command in the *metasploit* terminal (*{metasploit-terminal}*)
+
+[tabs]
+====
+{metasploit-terminal}::
 +
-. Since our new container image is virtually identical to the original one (except for the new bash package) and we're forwarding the same ports we can now attempt to exploit the container again with the configuration from before
-. If you don't still have the metasploit console open, then split the terminal and follow the instructions xref::containers-and-security.adoc#using_metasploit[here, window=_blank] to the point where the metasploit console is configured to target the container
-. Next run the following command in the *metasploit* terminal
-+
+--
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 check
 ----
-+
-. And this should result in the following output
-+
+
+And this should result in the following output:
+
 [.console-output]
 [source,bash,subs="+macros,+attributes,+quotes"]
 ----
 [*] 127.0.0.1:8081 - The target is #not# exploitable.
 ----
-+
+--
+====
 
-Congratulations!  You'd fixed the shellshock exploit
+Congratulations!  You'd fixed the shellshock exploit of the original `{apache-server-image-insecure-image}` container!
 
 [#buildah_containerfile]
 == Buildah and Containerfiles
 
-Though we've fixed the issue with {apache-server-image-insecure} by using the `buildah` native command line tools to fix it, there are still other aspects of the container that could be addressed to make it more secure and less likely to need special privileges from the underlying operating system such as
+Though we've fixed the issue with `{apache-server-image-insecure}` by using the `buildah` native command line tools to fix it, there are still other aspects of the container that could be addressed to make it more secure and less likely to need special privileges from the underlying operating system such as
 
 * Not running as the root user (and thus the apache server not running as `root`)
 * Not requiring a port < 1024.  Currently the apache server in the container images listens on port 80
 
-What's more, we have no record of the step-by-step changes we've made to the container that we might store in revision control.  One (valid) option would be to store all the buildah cli commands we issued in a shell script.  However, container tools like `docker` have popularized the `Dockerfile` (or, more generically, `Containerfile`) way of defining new containers.  Let's investigate the {apache-server-image-insecure}'s `Containerfile` to see if we can address the points above
+What's more, we have no record of the step-by-step changes we've made to the container that we might store in revision control.  One (valid) option would be to store all the buildah cli commands we issued in a shell script.  
+
+Another option, popularized by container tools like `docker` is the `Dockerfile` (or, more generically, `Containerfile`) way of defining new containers.  Let's investigate the `{apache-server-image-insecure}` 's `Containerfile` to see if we can address the points above
 
 [#basic_containerfile]
 === Basic Containerfile
