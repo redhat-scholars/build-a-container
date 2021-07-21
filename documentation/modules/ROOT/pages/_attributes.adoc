@@ -21,3 +21,5 @@
 :ocp_insecure_pod_name: my-web-server-insecure
 :ocp_insecure_imagestream_name: my-secure-web-server-image
 :ocp_insecure_image_name: {ocp_insecure_imagestream_name}:insecure
+
+:metasploit-terminal: Terminal 2

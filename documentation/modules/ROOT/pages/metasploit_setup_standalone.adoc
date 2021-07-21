@@ -1,5 +1,6 @@
 // This is intented to be targeted as a pop-up window for those that need to restart their metasploit terminal
 = Metasploit Setup
+include::_attributes.adoc[]
 
 To create a metasploit terminal within your code-server instance, follow these instructions
 

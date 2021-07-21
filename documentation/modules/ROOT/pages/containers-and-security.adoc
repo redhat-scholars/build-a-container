@@ -1,4 +1,4 @@
-include::ROOT:page$_attributes.adoc[]
+include::_attributes.adoc[]
 :source-highlighter: highlightjs
 
 = Container Security
@@ -39,6 +39,34 @@ We're going to use a tool called link:https://www.metasploit.com/[metasploit] (w
 // This is common to the metasploit_setup_standalone page
 include::partial$metasploit_setup.adoc[]
 
+To ensure everything's setup right, we can check whether our setup is currently targeting a vulnerable container
+
+[tabs]
+====
+{metasploit-terminal}::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+check
+----
+
+Which should report the following output if successful: 
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+[+] 127.0.0.1:8081 - The target is vulnerable.
+----
+
+.TIP
+****
+If you get a message that the target is not vulnerable (and you are expecting it to be, make sure the `{apache-server-image-insecure}` is running
+****
+--
+====
+
 
 [#exploit_shellshock]
 === Exploiting Shellshock
@@ -54,7 +82,7 @@ Now that we're in the container, let's show the kind of vulnerabilities we've ex
 
 [tabs]
 ====
-Terminal 2::
+{metasploit-terminal}::
 +
 --
 . First, notice the user we're running as: 
@@ -140,7 +168,7 @@ One key consideration when running containers as a given user is that this gener
 
 [tabs]
 ====
-Terminal 2::
+{metasploit-terminal}::
 +
 --
 . From within the same metasploit shell, let's poke around the directory where visitors were getting logged
@@ -187,7 +215,7 @@ This demonstrates that a malicious intruder could actually read and change files
 +
 [tabs]
 ====
-Terminal 2::
+{metasploit-terminal}::
 +
 --
 
@@ -312,7 +340,7 @@ include::example$hacked_root.txt[]
 +
 [tabs]
 ====
-Terminal 2::
+{metasploit-terminal}::
 +
 --
 .Let's take a look at some sensitive ssh info
@@ -377,7 +405,7 @@ podman rm -f {apache-server-container-name}
 +
 [tabs]
 ====
-Terminal 2::
+{metasploit-terminal}::
 +
 --
 [.console-output]
@@ -469,42 +497,7 @@ podman run \
 You will notice that the container needs to be downloaded again.  Didn't we do this already?  We did, but as `root`.  Each user keeps their own local container storage separate from all other users.
 ====
 
-Let's return to our metasploit terminal (*Terminal 2*) for the next section
-
-[TIP]
-====
-If you have accidentally closed your metasploit terminal, you can recreate/reopen it by following xref:metasploit_setup_standalone.adoc[these instructions,window=_blank] fully in the other tab and then returning to this point in the lab.
-====
-
-If you've left your terminal open, you may need to first press kbd:[RETURN] to get back to the metasploit command line.  When you do so you may be greeted with the following prompt: 
-
-[tabs]
-====
-Terminal 2::
-+
---
-[.console-output]
-[source,bash,subs="+quotes"]
-----
-Terminate channel 1? [y/N] 
-----
---
-====
-
-Just enter `y` to get back to the metasploit prompt:
-
-[tabs]
-====
-Terminal 2::
-+
---
-[.console-output]
-[source,bash,subs="+macros,+attributes"]
-----
-msf6 exploit(multi/http/apache_mod_cgi_bash_env_exec) > 
-----
---
-====
+include::partial$metasploit_shell_return.adoc[]
 
 include::partial$metasploit_exploit_shell.adoc[]
 
@@ -512,7 +505,7 @@ Now with your shell setup from metasploit, run the following command:
 
 [tabs]
 ====
-Terminal 2::
+{metasploit-terminal}::
 +
 --
 [.console-input]
@@ -530,7 +523,7 @@ When you create the file, you should see a file appear in the `container_worksho
 
 [tabs]
 ====
-Terminal 2::
+{metasploit-terminal}::
 +
 --
 . Run the following command to look at the permissions of the file
@@ -596,7 +589,7 @@ Finally, remember how we ran this container with the `--privileged` flag even th
 
 [tabs]
 ====
-Terminal 2::
+{metasploit-terminal}::
 +
 --
 [.console-input]

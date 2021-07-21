@@ -1,4 +1,4 @@
-We are going to run metasploit as a non-root user in another terminal which we'll refer to as *Terminal 2* in the tabs below.  If you haven't already, you can split your terminal to open a new, non-root, shell
+We are going to run metasploit as a non-root user in another terminal which we'll refer to as *{metasploit-terminal}* in the tabs below.  If you haven't already, you can split your terminal to open a new, non-root, shell
 
 .Terminal Split button
 image::terminal-split-annotated.png[]
@@ -7,7 +7,7 @@ Then run the following commands in the newly created terminal:
 
 [tabs]
 ====
-Terminal 2::
+{metasploit-terminal}::
 +
 --
 . Start up metasploit in your terminal by running the following command:
@@ -45,22 +45,6 @@ Would you like to use and setup a new database (recommended)?
 [source,bash,subs="+macros,+attributes"]
 ----
 include::partial$metasploit_output_initial.adoc[]
-----
-+
-. To ensure we've got everything right, we can check whether our setup is currently targeting a vulnerable container
-+
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-check
-----
-+
-. Which should report the following output if successful: 
-+
-[.console-output]
-[source,bash,subs="+macros,+attributes"]
-----
-[+] 127.0.0.1:8081 - The target is vulnerable.
 ----
 --
 ====
