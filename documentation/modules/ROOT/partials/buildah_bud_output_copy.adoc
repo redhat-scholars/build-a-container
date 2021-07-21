@@ -4,16 +4,17 @@
 STEP 1: FROM registry.access.redhat.com/ubi7
 ...
 STEP 4: COPY hello.html /var/www/html 
-STEP 5: COPY log-visitor.sh /var/www/cgi-bin 
-STEP 6: RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
-STEP 7: COMMIT localhost/secure-container
+STEP 5: COPY log-visitor.sh /var/www/cgi-bin
+STEP 6: COPY httpd.conf /etc/httpd/conf/httpd.conf
+STEP 7: RUN chmod 755 /var/www/cgi-bin/log-visitor.sh 
+STEP 8: COMMIT localhost/secure-container
 Getting image source signatures
-Copying blob 01d2fb866535 skipped: already exists  
-Copying blob 9e12a51e507a skipped: already exists  
-Copying blob e7b33fa87b36 done  
-Copying config ddbfdfbd09 done  
+Copying blob 132ca6509b35 skipped: already exists  
+Copying blob 1eaba82ed886 skipped: already exists  
+Copying blob cc1db2cbf9f1 done  
+Copying config 2e4e3518ba done  
 Writing manifest to image destination
 Storing signatures
---> ddbfdfbd096
-ddbfdfbd0960f0db36cf608e4066d9c26fb4f87f62c2d3cdb7203ea379213cbd
+--> 2e4e3518bab
+2e4e3518babb0c918576f55399ae533191db263959d2d3e244f07a05bc228131
 ----
