@@ -226,7 +226,7 @@ podman run \
 <.> Since our new container image is virtually identical to the original one (except for the new bash package) and we're forwarding the same ports we can now attempt to exploit the container again with the configuration from before
 
 include::partial$metasploit_shell_return.adoc[]
-
+ 
 Next run the following command in the *metasploit* terminal (*{metasploit-terminal}*)
 
 [tabs]

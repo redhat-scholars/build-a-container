@@ -1,6 +1,6 @@
 include::_attributes.adoc[]
 
-= A Container Autopsy
+= Container Anatomy
 
 _10 MINUTE READ_
 
@@ -8,7 +8,7 @@ _10 MINUTE READ_
 If you are new to containers, this section will help your understanding in what actually makes up a container,
 introduce the Open Container Initiative (OCI) specifications and demystify some of what is actually happening under the covers.
 
-image::autopsy.png[Autopsy!]
+image::anatomy.png[Anatomy!]
 
 [#what_makes_up_a_container]
 == 1. What makes up a Container?

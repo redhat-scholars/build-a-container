@@ -201,7 +201,7 @@ podman tag \
     pass:[${OCP_REGISTRY_URL}]:latest #<.>
 ----
 <.> This, remember is the local name of the image we created xref::build-your-own-container.adoc#finished_container[in the previous section,window=_blank]
-<.> If you `echo` this in a shell, this will look something like `default-route-openshift-image-registry.apps.{CLUSTER_SUBDOMAIN}/{USER}/pass:[my-secure-web-server-image:latest]` which is similar to container identification names as we discussed in the xref:container-autopsy.adoc#container_identification[Container Autopsy section,window=_blank]
+<.> If you `echo` this in a shell, this will look something like `default-route-openshift-image-registry.apps.{CLUSTER_SUBDOMAIN}/{USER}/pass:[my-secure-web-server-image:latest]` which is similar to container identification names as we discussed in the link:container-anatomy.html?{guide-query-string}#container_identification[Container Anatomy section^]
 + 
 . Once tagged, we should now be able to push this image into the ImageStream using the `podman push` command 
 +
