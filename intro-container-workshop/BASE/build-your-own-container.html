@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Build your own Secure Container :: Build a Container Workshop (Dev Mode)</title>
+    <title>Build your own Secure Container :: Build a Container Workshop</title>
     <link rel="canonical" href="http://localhost:3000/rhs-build-course/index.html/intro-container-workshop/BASE/build-your-own-container.html">
     <link rel="prev" href="containers-and-security.html">
     <link rel="next" href="deploy-container.html">
@@ -32,7 +32,7 @@
     <div class="navbar-brand">
       <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
           src="../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
-      <a class="navbar-item" style="font-size: 24px; color: white" href="http://localhost:3000/rhs-build-course/index.html">Build a Container Workshop (Dev Mode)</a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="http://localhost:3000/rhs-build-course/index.html">Build a Container Workshop</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
         <span></span>
@@ -254,7 +254,7 @@
 </div>
 </div>
 <div class="paragraph">
-<p><code>buildah</code> is used to create OCI-compliant container images, such as the <code>quay.io/mhildenb/container-workshop-httpd</code> that we&#8217;ve been using.  We&#8217;ll start by fixing a the security vulnerability we found in the <a href="containers-and-security.html" class="page" target="_blank" rel="noopener">previous section</a>.</p>
+<p><code>buildah</code> is used to create OCI-compliant container images, such as the <code>quay.io/mhildenb/container-workshop-httpd</code> that we&#8217;ve been using.  We&#8217;ll start by fixing a the security vulnerability we found in the <a href="containers-and-security.html?FOO=bar" target="_blank" rel="noopener">previous section</a>.</p>
 </div>
 </div>
 </div>
@@ -301,7 +301,10 @@
 </td>
 <td class="content">
 <div class="paragraph">
-<p>The main reason for running this command is that we&#8217;ll be mounting filesystems inside the container and non-root users normally do not have privileges to do this.  Running <code>buildah unshare</code> is a way of preparing to work with containers "rootlessly" (if you will).  For a discussion of what this is, see <a href="https://www.redhat.com/sysadmin/buildah-unshare-command" target="_blank" rel="noopener">here</a>.  Think of it as a way that buildah can work with container "rootlessly" just as podman did in the <a href="containers-and-security.html#non_root_containers" class="page" target="_blank" rel="noopener">last section</a></p>
+<p>The main reason for running this command is that we&#8217;ll be mounting filesystems inside the container and non-root users normally do not have privileges to do this.  Running <code>buildah unshare</code> is a way of preparing to work with containers "rootlessly" (if you will).  For a discussion of what this is, see <a href="https://www.redhat.com/sysadmin/buildah-unshare-command" target="_blank" rel="noopener">here</a>.</p>
+</div>
+<div class="paragraph">
+<p>Think of it as a way that <code>buildah</code> can work with container "rootlessly" just as <code>podman</code> did in the <a href="containers-and-security.html?USER=%USER%&amp;CLUSTER_SUBDOMAIN=%CLUSTER_SUBDOMAIN%#non_root_containers" target="_blank" rel="noopener">last section</a></p>
 </div>
 </td>
 </tr>
@@ -344,7 +347,7 @@
 </td>
 <td class="content">
 <div class="paragraph">
-<p>If you haven&#8217;t yet downloaded the image, the image might be downloaded first from the repo before you can enter the next command</p>
+<p>If you haven&#8217;t yet downloaded the image, the image might be downloaded first from the image registry before you can enter the next command</p>
 </div>
 </td>
 </tr>
@@ -502,10 +505,10 @@ Running transaction
   Verifying        : bash-4.2.45-2.el7.x86_64                                                  2/2
 Installed products updated.
 
-Upgraded:
+<mark>Upgraded:</mark>
   <mark>bash-4.2.46-34.el7.x86_64</mark>  <i class="conum" data-value="1"></i><b>(1)</b>
 
-Complete!</code></pre>
+<mark>Complete!</mark></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -599,7 +602,7 @@ Storing signatures
 </td>
 <td class="content">
 <div class="paragraph">
-<p>If there was a container running you will see something like</p>
+<p>If there were a container running you would see something like:</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
@@ -607,7 +610,7 @@ Storing signatures
 </div>
 </div>
 <div class="paragraph">
-<p>And if there were none running you&#8217;ll see something like</p>
+<p>And if there weren&#8217;t one running you would see something like:</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
@@ -615,7 +618,7 @@ Storing signatures
 </div>
 </div>
 <div class="paragraph">
-<p>Getting either output it&#8217;s fine to proceed</p>
+<p>If the output you see is either of the above, it&#8217;s okay to proceed.</p>
 </div>
 </td>
 </tr>
@@ -656,7 +659,7 @@ Storing signatures
 </td>
 <td class="content">
 <div class="paragraph">
-<p>If you have accidentally closed your metasploit terminal, you can recreate/reopen it by following <a href="metasploit_setup_standalone.html" class="page" target="_blank" rel="noopener">these instructions</a> fully in the other tab and then returning to this point in the lab.</p>
+<p>If you have accidentally closed your metasploit terminal, you can recreate/reopen it by following <a href="metasploit_setup_standalone.html?USER=%USER%&amp;CLUSTER_SUBDOMAIN=%CLUSTER_SUBDOMAIN%" target="_blank" rel="noopener">these instructions</a> fully in the other tab and then returning to this point in the lab.</p>
 </div>
 </td>
 </tr>
@@ -735,6 +738,59 @@ Storing signatures
 </div>
 <div class="paragraph">
 <p>Congratulations!  You&#8217;d fixed the shellshock exploit of the original <code>quay.io/mhildenb/container-workshop-httpd</code> container!</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">TIP</div>
+<div class="paragraph">
+<p>You are now done with metasploit and Terminal 2.  You can close down that terminal with the following commands:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset4_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset4_terminal-2">
+<div class="paragraph">
+<p>First exit out of metasploit</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">exit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which should return you to the lab instance terminal</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[%USER%@ansible-1 ~]$</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And now exit out of that terminal</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">exit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which should return you terminal to a single "unsplit" terminal window</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/terminal-unsplit.png" alt="terminal unsplit">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -910,12 +966,12 @@ Storing signatures
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset4_container"></a>Container</p>
+<p><a id="tabset5_container"></a>Container</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset4_container">
+<div class="tab-pane" aria-labelledby="tabset5_container">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">yum info bash</code></pre>
