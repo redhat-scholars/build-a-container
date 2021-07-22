@@ -251,8 +251,16 @@ podman cp \
 <.> The `{apache-server-container-name}:<path>` indicates that the `path` is inside the container (i.e. container filesystem) that we named with the `--name` option at the time we issued the `podman run` command
 <.> This path, undecorated by a container name or id, indicates that we are referencing a path on the host (i.e. local filesystem)
 +
+. Next, copy the name of the container info file to your clipboard (we'll use this in a following step): 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+{container-info-filepath}
+----
++
 {zwsp} +
-Now click anywhere within the left editor where the `{temp-file}` should still be open to give that editor focus.
+. Now click anywhere within the left editor where the `{temp-file}` should still be open to give that editor focus.
 +
 {zwsp} +
 . With the `{temp-file}` still in focus, hit kbd:[SHIFT+CTRL+p] (or kbd:[CMD+CTRL+p] on a Mac) to open the *Command Palette* and start typing `compare` so that you can select the command `File: Compare Active File With...`
@@ -260,7 +268,7 @@ Now click anywhere within the left editor where the `{temp-file}` should still b
 image::compare-command.png[]
 +
 {zwsp} +
-. Then type `{container-info-filepath}` in the next dialog that pops up until the file is selectable.  Then click on it.
+. Now paste `{container-info-filepath}` (with you copied a few steps back) into the next dialog that pops up and press kbd:[ENTER] (or kbd:[RETURN] depending on your machine).
 +
 image::container-info-select.png[]
 +
@@ -280,20 +288,32 @@ image::info-diff.png[]
 +
 . Some differences and similarities between the two
 +
-[cols="1,1"]
+[cols="1,1,1"]
 .Similarities and Differences between Host and Container
 |===
-|*Similarities*
-|*Differences*
-
-|Running RHEL
-|Version 8.4 vs 7.9
-
-|`root` user
 |
+|*Host*
+|*Container*
 
-|Running many processes
-|Running few processes
+|*OS*
+|Linux
+|Linux
+
+|*Distro*
+|RHEL: version 8.4
+|RHEL: version 7.9
+
+|*User*
+|`root` (_with extra SELinux context_)
+|`root` 
+
+|*Number of Processes*
+|Running many processes (144footnote:[The number you get may vary])
+|Running fewer processes (14footnote:[Again, the number of processes in the container may vary from this])
+
+|*Init Process (`pid 1`)*
+|`systemd`
+|`httpd` 
 |===
 +
 . Finally, let's look at our guestbook visitor log in VSCode by copying the visitor guestbook to our local VM

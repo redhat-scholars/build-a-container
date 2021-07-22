@@ -6,9 +6,13 @@ $(id)
 
 OS Version:
 ----------
-$(cat /etc/os-release)
+$(cat /etc/os-release | head -4)
+
+$(cat /etc/os-release | tail -4)
 
 Processes:
 ---------
-$(ps -euf)
+Total: $(ps -aux | wc -l)
+
+$(ps -aux --sort pid | head -6)
 EOF
