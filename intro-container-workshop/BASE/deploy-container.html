@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Containers and OpenShift :: Build a Container Workshop</title>
     <link rel="canonical" href="http://localhost:3000/rhs-build-course/index.html/intro-container-workshop/BASE/deploy-container.html">
-    <link rel="prev" href="build-your-own-container.html">
+    <link rel="prev" href="build-your-own-container-containerfile.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../../_/css/site.css">
 <link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
@@ -178,7 +178,7 @@
     <a class="nav-link" href="build-your-own-container.html#buildah_native">Buildah Native Commands</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="build-your-own-container.html#buildah_containerfile">Buildah and Containerfiles</a>
+    <a class="nav-link" href="build-your-own-container-containerfile.html">Buildah and Containerfiles</a>
   </li>
 </ul>
   </li>
@@ -476,7 +476,7 @@ Use insecure connections? (y/n):</code></pre>
 <h2 id="image_registry"><a class="anchor" href="#image_registry"></a>Upload Image to Image Registry</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Let&#8217;s go back to the container that we finished <a href="build-your-own-container.html#finished_container" class="page" target="_blank" rel="noopener">here</a> and look at what a simple deployment to the <code>%USER%</code> project.</p>
+<p>Let&#8217;s go back to the container that we finished <a href="build-your-own-container-containerfile.html?USER=%USER%&amp;CLUSTER_SUBDOMAIN=%CLUSTER_SUBDOMAIN%#finished_container" target="_blank" rel="noopener">here</a> and look at what a simple deployment to the <code>%USER%</code> project.</p>
 </div>
 <div class="sect2">
 <h3 id="_openshift_and_image_registries"><a class="anchor" href="#_openshift_and_image_registries"></a>OpenShift and Image Registries</h3>
@@ -764,7 +764,7 @@ Storing signatures</code></pre>
 <h2 id="openshift_security"><a class="anchor" href="#openshift_security"></a>OpenShift Security</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This the <a href="build-your-own-container.html#basic_containerfile" class="page" target="_blank" rel="noopener">building secure container section</a> we spent a lot of time making our image suitable for running on OpenShift.</p>
+<p>In the <a href="build-your-own-container-containerfile.html?USER=%USER%&amp;CLUSTER_SUBDOMAIN=%CLUSTER_SUBDOMAIN%#basic_containerfile" target="_blank" rel="noopener">building secure container section</a> we spent a lot of time making our image suitable for running on OpenShift.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s take a quick look at how OpenShift adds a layer of protection around our running of images by looking at what happens when we try to run our insecure container on it.</p>
@@ -954,7 +954,7 @@ my-web-server-insecure my-web-server-insecure AH00558: httpd: Could not reliably
 </div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="build-your-own-container.html" class="query-params-link">Building Securely</a></span>
+  <span class="prev"><a href="build-your-own-container-containerfile.html" class="query-params-link">Buildah and Containerfiles</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
