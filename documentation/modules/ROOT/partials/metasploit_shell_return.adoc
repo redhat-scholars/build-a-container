@@ -2,7 +2,7 @@ Let's return to our metasploit terminal (*{metasploit-terminal}*) for the next s
 
 [TIP]
 ====
-If you have accidentally closed your metasploit terminal, you can recreate/reopen it by following xref:metasploit_setup_standalone.adoc[these instructions,window=_blank] fully in the other tab and then returning to this point in the lab.
+If you have accidentally closed your metasploit terminal, you can recreate/reopen it by following link:metasploit_setup_standalone.html?{guide-query-string}[these instructions^] fully in the other tab and then returning to this point in the lab.
 ====
 
 If you've left your terminal open, you may need to first press kbd:[RETURN] to get back to the metasploit command line.  When you do so you may be greeted with the following prompt: 

@@ -22,4 +22,5 @@
 :ocp_insecure_imagestream_name: my-secure-web-server-image
 :ocp_insecure_image_name: {ocp_insecure_imagestream_name}:insecure
 
+:guide-query-string: USER={USER}&CLUSTER_SUBDOMAIN={CLUSTER_SUBDOMAIN}
 :metasploit-terminal: Terminal 2

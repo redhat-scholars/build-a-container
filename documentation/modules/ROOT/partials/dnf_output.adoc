@@ -32,9 +32,9 @@ Running transaction
   Verifying        : bash-4.2.45-2.el7.x86_64                                                  2/2 
 Installed products updated.
 
-Upgraded:
+#Upgraded:#
   #bash-4.2.46-34.el7.x86_64#  #<.>                                                                     
 
-Complete!
+#Complete!#
 ----
 <.> Notice that this package is more recent than the minimum release needed to address the vulnerability

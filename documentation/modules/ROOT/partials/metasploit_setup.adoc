@@ -32,14 +32,14 @@ set targeturi /cgi-bin/log-visitor.sh" #<.>
 +
 .NOTE
 ****
-If asked if you want to setup a new database, answer no
+If asked if you want to setup a new database, answer *no*
 
 ----
 Would you like to use and setup a new database (recommended)?
 ----
 ****
 +
-. When it's done initializing, you should see output something like this (ASCII art, "tip", and LHOST will vary)
+. When it's done initializing, you should see output something like this (ASCII art, "tip", and `LHOST` will vary)
 +
 [.console-output]
 [source,bash,subs="+macros,+attributes"]

@@ -7,7 +7,7 @@ In this chapter we'll try to make the container image we've been using a bit mor
 
 image::buildah.png[Buildah!,width=320,height=78]
 
-`buildah` is used to create OCI-compliant container images, such as the `{apache-server-image-insecure-image}` that we've been using.  We'll start by fixing a the security vulnerability we found in the xref::containers-and-security.adoc[previous section,window=_blank].
+`buildah` is used to create OCI-compliant container images, such as the `{apache-server-image-insecure-image}` that we've been using.  We'll start by fixing a the security vulnerability we found in the link:containers-and-security.html?FOO=bar[previous section^].
 
 [#buildah_native]
 == Buildah native commands
@@ -39,7 +39,9 @@ whoami
 +
 [NOTE]
 ====
-The main reason for running this command is that we'll be mounting filesystems inside the container and non-root users normally do not have privileges to do this.  Running `buildah unshare` is a way of preparing to work with containers "rootlessly" (if you will).  For a discussion of what this is, see link:https://www.redhat.com/sysadmin/buildah-unshare-command[here^].  Think of it as a way that buildah can work with container "rootlessly" just as podman did in the xref::containers-and-security.adoc#non_root_containers[last section, window=_blank]
+The main reason for running this command is that we'll be mounting filesystems inside the container and non-root users normally do not have privileges to do this.  Running `buildah unshare` is a way of preparing to work with containers "rootlessly" (if you will).  For a discussion of what this is, see link:https://www.redhat.com/sysadmin/buildah-unshare-command[here^].  
+
+Think of it as a way that `buildah` can work with container "rootlessly" just as `podman` did in the link:containers-and-security.html?{guide-query-string}#non_root_containers[last section^]
 ====
 +
 [.console-input]
@@ -67,7 +69,7 @@ CONTAINER=$(buildah from {apache-server-image-insecure-image}) #<.>
 +
 [NOTE]
 ====
-If you haven't yet downloaded the image, the image might be downloaded first from the repo before you can enter the next command
+If you haven't yet downloaded the image, the image might be downloaded first from the image registry before you can enter the next command
 ====
 +
 . To confirm that our working container is up, we can run the following command (which is a little like `podman ps` but for "working containers")
@@ -216,7 +218,7 @@ podman rm -f {apache-server-container-name}
 + 
 [TIP]
 ====
-If there was a container running you will see something like
+If there were a container running you would see something like: 
 
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
@@ -224,7 +226,7 @@ If there was a container running you will see something like
 17af59003b1f956717b2a90919119b20bca1133e3677999f628f00e026a0079f
 ----
 
-And if there were none running you'll see something like
+And if there weren't one running you would see something like: 
 
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
@@ -232,7 +234,7 @@ And if there were none running you'll see something like
 Error: failed to evict container: "": failed to find container "my-web-server" in state: no container with name or ID my-web-server found: no such container
 ----
 
-Getting either output it's fine to proceed
+If the output you see is either of the above, it's okay to proceed.
 ====
 +
 . Run the new container "rootlessly" in the terminal by running the following command: 
@@ -275,6 +277,48 @@ And this should result in the following output:
 ====
 
 Congratulations!  You'd fixed the shellshock exploit of the original `{apache-server-image-insecure-image}` container!
+
+.TIP
+****
+You are now done with metasploit and {metasploit-terminal}.  You can close down that terminal with the following commands:
+
+[tabs]
+====
+{metasploit-terminal}::
++
+--
+
+First exit out of metasploit
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+exit
+----
+
+Which should return you to the lab instance terminal
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+[{USER}@ansible-1 ~]$
+----
+
+And now exit out of that terminal
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+exit
+----
+
+Which should return you terminal to a single "unsplit" terminal window
+
+image::terminal-unsplit.png[]
+
+--
+====
+****
 
 [#buildah_containerfile]
 == Buildah and Containerfiles
