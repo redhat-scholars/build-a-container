@@ -1,0 +1,1 @@
+. Copy the lines below, open the `Containerfile`, use kbd:[CTRL+a] (or kbd:[CMD+a] on MacOS) to select all the lines of the `Containerfile` and paste to replace with the contents below.  _The highlighted lines are the lines that we're adding_

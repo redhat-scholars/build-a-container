@@ -1,0 +1,543 @@
+include::ROOT:page$_attributes.adoc[]
+
+= Buildah and Containerfiles
+:navtitle: Buildah and Containerfiles
+
+Though we've fixed the issue with `{apache-server-image-insecure}` by using the `buildah` native command line tools to fix it, there are are still additional steps we could take to make this image even more resilient against attack or exploit.  Here are two issues:
+
+* The web server is running on port 80 in the container.  This is a privileged port.  Better to have this run at port run in an privileged port above 1024 (such as 8080)
+* Running as a specific user can be problematic as that user can implicitly have privileges afforded to them via `sudo` (either at runtime or in the ongoing maintenance of the container).  It would be better if we could run the container as the unknown or "anonymous" user
+
+What's more, we have no record of the step-by-step changes we've made to the container that we might store in revision control.  One (valid) option would be to store all the buildah cli commands we issued in a shell script.  
+
+Another option, popularized by container tools like `docker` is the `Dockerfile` (or, more generically, `Containerfile`) way of defining new containers.  Let's investigate the `{apache-server-image-insecure}` 's `Containerfile` to see if we can address the points above
+
+[#basic_containerfile]
+== Basic Containerfile
+
+A `Containerfile` defines one (or more) base images and a number operations to perform in those images to create a new image.  
+
+. To start, let's create a folder where we'll do the work of building our container.  Right click on the `container-workshop` folder in the explorer, select `New Folder`.  Name the new folder `secure-container`
++
+image:new-folder.png[width=500]
+image:create-container-folder.png[width=300]
++
+. In a normal user terminal, change into this newly created directory
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cd /home/{USER}/container-workshop/secure-container
+----
++
+. Next we're going to create a new Containerfile.  Right-click on the `secure-container` folder and select `New File`.
++
+.New Containerfile
+image:new-containerfile.png[]
++
+. The Containerfile you just created should appear in the editor window.  We'll be slowly adding to this Containfile bit by bit
++
+include::partial$containerfile_paste_snippet.adoc[]
++
+[.console-input]
+[source,Containerfile,subs="+macros,+attributes"]
+----
+FROM registry.access.redhat.com/ubi7 #<.>
+USER root #<.>
+----
+<.> `FROM` is the base container that this container will start from.  `ubi7` stands for link:https://www.redhat.com/en/blog/introducing-red-hat-universal-base-image["Universal Base Image"^].  It will serve as a secure basis for the rest of our container.  See more information on ubi below
+<.> `USER` indicates that we want to operate as the `root` user for all the commands that follow, until another `USER` directive is found
++
+. To get a sense of what we've done, let's build a container from this Containerfile using `buildah`.  Run the following command:
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+buildah bud \#<.>
+  -f Containerfile \#<.>
+  -t {apache-server-containerfile-image} \#<.>
+  /home/{USER}/container-workshop/secure-container #<.>
+----
+<.> `bud` indicates that buildah should operate from a `Containerfile` (or `Dockerfile`)
+<.> `-f` indicates a the name of the Containerfile that should be used (in this instance, the one that just created)
+<.> `-t` names the tag that should be given to the resultant image
+<.> The final parameter is the directory in which the command should be run
++
+. You should see output something like this:
++
+[.console-output]
+[source,subs="+macros,+attributes"]
+----
+STEP 1: FROM registry.access.redhat.com/ubi7
+Getting image source signatures
+Checking if image destination supports signatures
+Copying blob 93156a512b98 done  
+Copying blob f8c518873786 done  
+Copying config 67d3aabcdb done  
+Writing manifest to image destination
+Storing signatures
+STEP 2: USER root 
+STEP 3: COMMIT {apache-server-containerfile-image} #<.>
+Getting image source signatures
+Copying blob 01d2fb866535 skipped: already exists  
+Copying blob 9e12a51e507a skipped: already exists  
+Copying blob 5f70bf18a086 done  
+Copying config 3d4cd1585c done  
+Writing manifest to image destination
+Storing signatures
+--> 3d4cd1585cd
+3d4cd1585cd258b57399e3cd74516bca85ea745a1066e6ff26e1ee170122d232
+----
+<.> Notice that the `COMMIT` command is implicit and reminiscent of the buildah native command that we issued
++
+. Let's take a look inside the container we've just created and check to see if we need to address the bash vulnerability
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+  --rm \
+  -it \
+  {apache-server-containerfile-image} \
+  bash #<.>
+----
+<.> This argument, always on the other side of the container image to run, represents the command that should be run in the container.  When this command exits, the container will exit.  Normally containers have a default command, but we haven't configured that (yet, see later in the lab).  For now we're telling the container to run `bash` as the sustaining or "root" process of the container
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+[root@0c388bc22ff6 /]#
+----
++
+. Let's take a look at the version of `bash` that's running
++
+[tabs]
+====
+Container::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+yum info bash
+----
+
+Should yield:
+
+include::partial$yum_info_bash.adoc[]
+
+Be sure to exit the container to get back to the host
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+exit
+----
+--
+====
++
+. Notice that the version (highlighted), is the same version that we installed using the buildah command line <<upgrade_bash,here>>
++
+[TIP]
+.Why didn't we have to patch bash?
+====
+While Shellshock is by now an old CVE, this demonstrates more broadly the value of starting your container with one of *Red Hat's Universal Base Images*.  These images are updated every quarter, their internal packages patched by Red Hat to fix all known CVEs.  For more in depth information on the UBI program see link:https://developers.redhat.com/books/red-hat-universal-base-images-ubi?sc_cid=7013a0000026GuZAAU[here^]
+====
+
+[#containerfile_run]
+== Running Commands in a Containerfile
+
+Our image is a good start, but it doesn't yet have a webserver on it; this is something we're going to have to install.  As we've seen, the UBI base has `yum` installed in it.  So instead of using `buildah` native commands we can instead add directives to the Containerfile to `RUN` commands within the Container as it's being built.   
+
+include::partial$containerfile_paste_snippet.adoc[]
++
+[.console-input]
+[source,Containerfile,subs="+macros,+attributes,+quotes"]
+----
+FROM registry.access.redhat.com/ubi7 
+USER root 
+
+#RUN yum install -y httpd && yum update -y && yum clean all# #<.>
+----
+<.> The `RUN` directive allows us to run a command as the user currently selected by the `USER` directive.  In this instance we chain a bunch of yum commands together to install our httpd server, ensure that all our packages are up to date (there may have been CVE patches since the last publishing of the ubi base image), and cleanup any temporary files (as we don't want these bloating the size of our final image)
++
+. Now from the terminal run the following command to build our container 
++
+include::partial$buildah_bud_no_annotations.adoc[]
++
+. This should yield output similarfootnote:[Packages that are upgraded by yum will vary based on which packages have been updated by Red Hat since the last published ubi image] to the following:
++
+include::partial$buildah_bud_output_run.adoc[]
+
+=== Test Generic Apache Install in Container
+
+Let's see if this image has a webserver running now.  First let's clean up any old instances
+
+:stop-container-name: {apache-server-container-name}
+include::partial$ensure_no_running_container.adoc[]
+
+. Run the following command in the terminal
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+    --rm -d \
+    -p 8081:80/tcp \ 
+    --name {apache-server-container-name} \
+    {apache-server-containerfile-image} \
+    /usr/sbin/httpd -DFOREGROUND #<.>
+----
+<.> As we did above with `bash`, we are now wanting to run `httpd` as the root process of {apache-server-containerfile-image} and this time we're providing that command the `-DFOREGROUND` argument
++
+. Open your Browser Preview window and paste the following URL in the navbar to see a familiar sight (or "site", if you will)
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+http://localhost:8081
+----
++
+image::apache-test-page.png[]
++
+. This is encouraging, but we don't yet have the non-boilerplate aspects of our site in the container.  For instance, if we navigate to our rudimentary guestbook functionality by pasting the following in the Browser Preview navbar
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+http://localhost:8081/hello.html
+----
++
+.Guestbook functionality does not exist in the container
+image::guestbook-not-found.png[]
++
+. We'll address this problem in the next section.  For now, let's stop and remove this container by running the following
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman stop {apache-server-container-name}
+----
+
+[#containerfile_copy]
+== Copying files into the container
+
+So we're got a container image that is able to run a generic apache site, but how do we customize this to run our specific site?  This is where another Container file directive, `COPY` comes in.  In this section we're going to get a little help from the builah native commands to retrieve our custom content.  Then we're going to show how we can use `COPY` and the Containerfile to get those assets onto our container
+
+. First let's leverage `buildah` to pull our custom website files onto our host.  We'll need to mount the container and since we're not a root user we're going to first need to issue
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+buildah unshare
+----
++
+[.console-output]
+[source,subs="+macros,+attributes"]
+----
+[root@ansible-1 ~]# 
+----
++
+. Next we'll run the next few commands to mount the old insecure container
++
+[NOTE]
+====
+Normally a team would already have custom content handy on the host already.  In this instance we're wanting to show off `buildah` a little more but it is a reasonably typical practice to copy files from one container image to another, particularly in build scenarios where assets are built in one container and copied to another.  This use case is out of the scope of this workshop however.
+====
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+WORKING_CONTAINER_OLD=$(buildah from {apache-server-image-insecure-image}) 
+WORKING_CONTAINER_OLD_IMAGE_MOUNT=$(buildah mount pass:[${WORKING_CONTAINER_OLD}])
+----
++
+. Now we don't want very many files from the old container, we only want the files involved with our guestbook website.  We can pull them out and into our `Containerfile` working directory by running the following commands
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cp pass:[${WORKING_CONTAINER_OLD_IMAGE_MOUNT}]/var/www/cgi-bin/log-visitor.sh /home/{USER}/container-workshop/secure-container
+cp pass:[${WORKING_CONTAINER_OLD_IMAGE_MOUNT}]/var/www/html/hello.html /home/{USER}/container-workshop/secure-container
+cp pass:[${WORKING_CONTAINER_OLD_IMAGE_MOUNT}]/etc/httpd/conf/httpd.conf /home/{USER}/container-workshop/secure-container
+----
++
+. At this point you should see the three files appear in the `secure-container` directory.  You can also click on them and take a look at them like you would any file on the host
++
+image::guestbook-files.png[]
++
+. Now that we've retrieved the files, we can exit the `buildah unshare` sesssion
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+exit
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+[{USER}@ansible-1 ~]pass:[$] 
+----
++
+include::partial$containerfile_paste_snippet.adoc[]
++
+[.console-input]
+[source,Containerfile,subs="+macros,+attributes,+quotes"]
+----
+FROM registry.access.redhat.com/ubi7 
+USER root 
+
+RUN yum install -y httpd && yum update -y && yum clean all
+
+#COPY hello.html /var/www/html# #<.>
+#COPY log-visitor.sh /var/www/cgi-bin# 
+#COPY httpd.conf /etc/httpd/conf/httpd.conf#
+#RUN chmod 755 /var/www/cgi-bin/log-visitor.sh# #<.>
+----
+<.> The `COPY` directive moves files from the current working directory on the host and copies them to the specified location in the container image (in this case `/var/www/html`).  This is analogous to what we did before with the `buildah mount` commands
+<.> To ensure our cgi-bin script has execute privileges it's generally good practice to use a `RUN` directive to use the `chmod` command to ensure this. 
+
+[#no_privilege]
+== Improving Container Security
+
+Now that we have the basics of our new image, let's attempt to address some of the security concerns we mentioned at the start.
+
+=== Privileged Ports
+
+One issue we mentioned is that the webserver in our original image is attempting to bind to a privileged port.  Furthmore, since we're no longer planning to run the apache server as `root` this is not possible.  The fixing of this issue highlights another activity that you might need to undertake when converting applications to run in arbitrary containers: you might need to change the _configuration_ of the service that you're attempting to containerize.  
+
+For our apache webserver we're going to need to change its default configuration file.  In the last section we already copied the `httpd.conf` out of the (old) container.  Now we can edit it locally before we copy it back in
+
+. To edit the apache server configuration, click on the `httpd.conf` file to edit it in VSCode
++
+image::httpd-conf.png[]
++
+. Use kbd:[CTRL+f] (or kbd:[CMD+f]) to search for the `Listen` directive near the start of the `httpd.conf`
+. Change this line so that it matches the highlighted line so that the server listens on port 8080 (instead of 80)
++
+[.console-input]
+[source,subs="+macros,+attributes,+quotes"]
+----
+#
+ServerRoot "/etc/httpd"
+
+#
+# Listen: Allows you to bind Apache to specific IP addresses and/or
+# ports, instead of the default. See also the <VirtualHost>
+# directive.
+#
+# Change this to Listen on specific IP addresses as shown below to 
+# prevent Apache from glomming onto all bound IP addresses.
+#
+# Listen 12.34.56.78:80
+#Listen 8080#
+
+#
+# Dynamic Shared Object (DSO) Support
+#
+----
++
+. Next, in anticipation of our next step, we don't want the configuration to specify that our web server should run as `root`.  Remove (or comment out) the lines that are struckthrough in your `httpd.conf`
++
+[subs="+macros,+specialchars,+quotes"]
+----
+#
+# If you wish httpd to run as a different user or group, you must run
+# httpd as root initially and it will switch.  
+#
+# User/Group: The name (or pass:[#]number) of the user/group to run httpd as.
+# It is usually good practice to create a dedicated user and group for
+# running httpd, as with most system services.
+#
+[.line-through]#User root#
+[.line-through]#Group root#
+# User apache
+# Group apache
+
+# 'Main' server configuration
+----
++
+. Next let's rebuild the container so that it includes the edits we just made to `httpd.conf` locally
++
+include::partial$buildah_bud_no_annotations.adoc[]
++
+. This should yield output similar to before but appended with the following (`...` represents content that has been omitted)
++
+include::partial$buildah_bud_output_copy.adoc[]
+
+
+=== Running as an "Arbitrary User"
+
+To futher limit the attack surface of containers, Kubernetes products such as OpenShift by default run containers with an *arbitrarily assigned user*.  This effectively overrides the `USER` directive of the `Containerfile`.  Explanation and reasons for this can be found link:https://access.redhat.com/articles/4859371[here^].  
+
+When a container is run with an arbitrary user, the only thing that we are guaranteed is that the user will be part of the `root` group.  This fact will become important in a minute.  First let's take a look at what happens to our current version of the container when we attempt to run as a random user
+
+. We can already run our container image with an arbitrary user using the `-u` flag with `podman run`.  Let's attempt to run our container (but this time without the `-d` flag so that we can see the output right away)
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+    --rm \
+    -u pass:[$((1000 + ${RANDOM}))] \#<.>
+    -p 8081:80/tcp \ 
+    --name {apache-server-container-name} \
+    {apache-server-containerfile-image} \
+    /usr/sbin/httpd -DFOREGROUND 
+----
+<.> `-u` allows us to override the user the container should be run as.  In this case we're using `pass:[${RANDOM}]` footnote:[Random is an internal bash function that returns a pseudorandom integer in the range 0-32767.  See also link:http://www.ing.iac.es/~docs/external/bash/abs-guide/randomvar.html#:~:text=%24RANDOM%20is%20an%20internal%20Bash,to%20generate%20an%20encryption%20key.&text=Jipe%20points%20out%20a%20set,number%20between%206%20and%2030.[here]] offset by 1000 (to prevent collisions with existing users in the container)
++
+. You'll notice that it fails with this error message
++
+[.console-output]
+[source,subs="+macros,+attributes,+quotes"]
+----
+AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 10.0.2.100. Set the 'ServerName' directive globally to suppress this message
+(13)#Permission denied#: AH00058: Error retrieving pid file /run/httpd/httpd.pid
+AH00059: Remove it before continuing if it is corrupted.
+----
+
+The issue here is that by default an arbitrary user won't have access to most of the files that the webserver needs to run.  This is where the fact that our arbitrary user will always be part of the `root` group (`gid`: `0`) will come in handy.  We need to make sure that the `root` group is assigned to the files and folders that the webserver needs and that the group has appropriate permissions.
+
+The process for doing this might be one of trial and error if you're not familiar with the software that you're attempting to run in the container.  In this case we know exactly which directories need to be adjusted.  Let's return to the `Containerfile`
+
+include::partial$containerfile_paste_snippet.adoc[]
++
+[.console-input]
+[source,Containerfile,subs="+macros,+attributes,+quotes"]
+----
+FROM registry.access.redhat.com/ubi7 
+USER root 
+
+RUN yum install -y httpd && yum update -y && yum clean all
+
+COPY hello.html /var/www/html
+COPY log-visitor.sh /var/www/cgi-bin 
+COPY httpd.conf /etc/httpd/conf/httpd.conf
+RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
+
+#RUN chown -R 1001:0 /run/httpd && chmod -R g=u /run/httpd# #<.>
+#RUN chown -R 1001:0 /var/log/httpd/ && chmod -R g=u /var/log/httpd/# #<.>
+
+#USER 1001#
+----
+<.> `chown` here recursively puts the `/run/httpd` directory and anything in it under the ownership of the `root` group (`gid`: `0`) and then `chmod` recursively sets group permissions to match existing user permissions
+<.> `chown` here recursively puts the `/var/log/httpd` directory and anything in it under the ownership of the `root` group (`gid`: `0`) and then `chmod` recursively sets group permissions to match existing user permissions
+
+[#finish_container]
+== Additional Containerfile Commands
+
+Our container is in pretty good shape, but there are some finishing touches we should add before it's suitable to be run in the wild.
+
+For starters, it's a little annoying that we have to manually specify the `httpd` command (and the `-DFOREGROUND` option) every time in order to get the container to run as we intended.
+
+It would be good if we could *specify the start command* (highlighted from previous runs of the container) in the container image itself:
+
+[source,bash,subs="+macros,+attributes,+quotes"]
+----
+podman run \
+    --rm \
+    -u pass:[$((1000 + ${RANDOM}))] \
+    -p 8081:8080/tcp
+    --name {apache-server-container-name} \
+    {apache-server-containerfile-image} \
+    #/usr/sbin/httpd -DFOREGROUND#
+----
+
+For this we can add a directive to our `Containerfile` called `CMD` which tells the container runtime which command should be executed to start the containerfootnote:[There is another similar directive called `ENTRYPOINT`.  You can read more about `ENTRYPOINT` and its interaction with `CMD` link:https://docs.docker.com/engine/reference/builder/#entrypoint[here^]]
+
+The other thing that would be good to advertise is the *port that the container listens on at runtime (now 8080)*.  There is a directive for this as well called `EXPOSE`.  This does not actually publish the port but rather serves as documentation between the person who builds the image and those that run it (or, as we'll see, a container orchestration platform such as Kubernetes)
+
+include::partial$containerfile_paste_snippet.adoc[]
++
+[.console-input]
+[source,Containerfile,subs="+macros,+attributes,+quotes"]
+----
+FROM registry.access.redhat.com/ubi7 
+USER root 
+
+RUN yum install -y httpd && yum update -y && yum clean all
+
+COPY hello.html /var/www/html
+COPY log-visitor.sh /var/www/cgi-bin 
+COPY httpd.conf /etc/httpd/conf/httpd.conf
+RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
+
+RUN chown -R 1001:0 /run/httpd && chmod -R g=u /run/httpd
+RUN chown -R 1001:0 /var/log/httpd/ && chmod -R g=u /var/log/httpd/
+
+#EXPOSE 8080/tcp# #<.>
+
+USER 1001
+
+#CMD /usr/sbin/httpd -DFOREGROUND# #<.>
+----
+<.> as with port forwarding in `podman run` we can specify the protocol (tcp)
+<.> This is the same command we were running manually with podman run
++
+. Build the container
++
+include::partial$buildah_bud_no_annotations.adoc[]
++
+. This should yield output similar to before but appended with the following (... represents content that has been omitted)
++
+include::partial$buildah_bud_output_cmd.adoc[]
++
+. Run [#finished_container]#the container# again to test it (notice the differences in the command)
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+    --rm \
+    -u pass:[$((1000 + ${RANDOM}))] \
+    -d \
+    -P \#<.>
+    --name {apache-server-container-name} \
+    {apache-server-containerfile-image} #<.>
+----
+<.> the `-P` flag leverages the `EXPOSE` directives from the `Containerfile` and forwards all exposed ports to *random* ports on the host
+<.> notice that no command is provided on the command line
++
+. You'll notice that we can no longer hit the webserver at port 8081 (or it's at least very unlikely that we can) and instead we need to find out the port that podman assigned on the host.  Capture that with this command: 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+HOST_PORT=$(podman ps \#<.>
+    -f name={apache-server-container-name} \#<.>
+    --format json | jq -r ".[0].Ports[0].hostPort") #<.>
+----
+<.> The output of this string of commands will give us the port on the host that is forwarded to our exposed container port
+<.> This returns only information for containers with the name `{apache-server-container-name}`
+<.> `--format` returns extended information in JSON format which we pipe to the `jq` command to quickly parse the JSON for the field we're after
++
+. Next, we're pretty-print the url of our guestbook so that we can paste it into our Browser Preview window
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+echo "http://localhost:pass:[${HOST_PORT}]/hello.html"
+----
++
+. Copy the echo'ed string into the Browser Preview window
++
+[TIP]
+====
+If you hover over the string in the terminal window with your mouse you might be prompted to kbd:[CTRL]-click (or kbd:[CMD]-click on Mac OSX) to open the link in your browser.  *This will not work* because it will open the URL in your browser instead of in the Browser Preview of your VSCode host instance.
+
+image::dont-click-link.png[]
+====
++
+. You should now see your guestbook
++
+.Guestbook, but now at an arbitrary port
+image::apache-guestbook-page-random-port.png[]
++
+. Finally, go ahead and "sign" the guestbook by entering your *name* (such as "Alice") and pressing `Log to Guestbook`.  When you do so, you should see the following page
++
+.Notice the random uid (yours will vary)
+image::arbitrary-user-guestbook.png[]
+
+Congratulations!  You've build a secure container from the ground up.  Next we'll look at ways of getting our container out there in the world using Kubernetes.

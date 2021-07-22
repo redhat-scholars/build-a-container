@@ -1,0 +1,28 @@
+Make sure there are no containers running with the `{stop-container-name}`
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman rm -f {stop-container-name}
+----
+
+[TIP]
+====
+If there were a container running you would see something like: 
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+17af59003b1f956717b2a90919119b20bca1133e3677999f628f00e026a0079f
+----
+
+And if there weren't one running you would see something like: 
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+Error: failed to evict container: "": failed to find container "my-web-server" in state: no container with name or ID my-web-server found: no such container
+----
+
+If the output you see is either of the above, it's okay to proceed.
+====

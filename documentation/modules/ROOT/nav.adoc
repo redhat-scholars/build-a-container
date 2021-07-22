@@ -29,7 +29,7 @@
 ** xref:containers-and-security.adoc#scanning_containers[Scanning Containers for Security Issues]
 * xref:build-your-own-container.adoc[Building Securely]
 ** xref:build-your-own-container.adoc#buildah_native[Buildah Native Commands]
-** xref:build-your-own-container.adoc#buildah_containerfile[Buildah and Containerfiles]
+** xref:build-your-own-container-containerfile.adoc[Buildah and Containerfiles]
 * xref:deploy-container.adoc[Deploying Containers]
 ** xref:deploy-container.adoc#openshift_login[OpenShift Login]
 ** xref:deploy-container.adoc#image_registry[Upload to Image Registry]

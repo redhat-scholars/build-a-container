@@ -131,7 +131,7 @@ Should yield your OpenShift username (below represents username shown if using P
 [#image_registry]
 == Upload Image to Image Registry
 
-Let's go back to the container that we finished xref::build-your-own-container.adoc#finished_container[here,window=_blank] and look at what a simple deployment to the `{OCP_PROJECT}` project.
+Let's go back to the container that we finished link:build-your-own-container-containerfile.html?{guide-query-string}#finished_container[here^] and look at what a simple deployment to the `{OCP_PROJECT}` project.
 
 === OpenShift and Image Registries
 
@@ -329,7 +329,7 @@ image::sandbox-website.png[]
 [#openshift_security]
 == OpenShift Security
 
-This the xref::build-your-own-container.adoc#basic_containerfile[building secure container section,window=_blank] we spent a lot of time making our image suitable for running on OpenShift.  
+In the link:build-your-own-container-containerfile.html?{guide-query-string}#basic_containerfile[building secure container section^] we spent a lot of time making our image suitable for running on OpenShift.  
 
 Let's take a quick look at how OpenShift adds a layer of protection around our running of images by looking at what happens when we try to run our insecure container on it.
 
