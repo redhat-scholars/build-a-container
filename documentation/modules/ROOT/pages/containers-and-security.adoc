@@ -12,7 +12,7 @@ Sometimes people can be lulled into a false sense of security around containers 
 
 In order to get a sense of how consequential these security exploits can be, let's exploit some of the issues in the containers we already have running
 
-image:shellshock-logo.png[role=right,width=50]
+image:Shellshock-logo.png[role=right,width=50]
 Our `{apache-server-image-insecure}` has a huge vulnerability in it that is further excerbated by the manner in which we've run our container.  The vulnerability is the (in)famous link:https://en.wikipedia.org/wiki/Shellshock_(software_bug)[Shellshock vulnerability^] 
 
 . First ensure the `{apache-server-image-insecure}` is running by running the following command in the terminal
