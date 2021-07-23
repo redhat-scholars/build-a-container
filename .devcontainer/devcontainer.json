@@ -18,6 +18,8 @@
 		//"AWS_PROFILE=${env:AWS_PROFILE}"
 	],
 	"postStartCommand": "rsync -a .devcontainer/workspace-setup/ ${containerWorkspaceFolder}/.vscode/ --ignore-existing",
+	// Make sure git lfs is initialized for the user
+	"postAttachCommand": "git lfs install",
 	"extensions": [
 		"joaompinto.asciidoctor-vscode",
 		"humao.rest-client",
