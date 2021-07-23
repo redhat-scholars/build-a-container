@@ -12,8 +12,6 @@
 		"-v", "${env:HOME}/.helm:/opt/app-root/src/.helm:Z",
 		// mount npm cache locally
 		"-v", "${env:HOME}/.npm:/opt/app-root/src/.npm:Z",
-		"-v", "${env:HOME}/.gitconfig:/opt/app-root/src/.gitconfig:Z",
-
 		// Used for AWS based clusters
 		"-e", "AWS_PROFILE=rhpds",
 		"-e", "REGION=ap-southeast-2"
