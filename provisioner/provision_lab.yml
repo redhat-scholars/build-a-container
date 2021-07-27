@@ -82,19 +82,6 @@
     - user_accounts
     - common
 
-## REMOVE?
-# - name: Configure /etc/hosts
-#   hosts: 'control_nodes'
-#   gather_facts: true
-#   become: true
-#   tasks:
-#     - name: setup /etc/hosts file per student
-#       copy:
-#         src: "{{ playbook_dir }}/{{ec2_name_prefix}}/{{ username }}-etchosts.txt"
-#         dest: "/etc/hosts"
-#         owner: "{{ username }}"
-#         group: "{{ username }}"
-
 - name: configure ansible control node
   hosts: '*ansible-1'
   gather_facts: true
