@@ -1,6 +1,9 @@
 {
 	"name": "Container Workshop Development",
-	"dockerFile": "Dockerfile${env:DEVCONTAINER_SUFFIX}",
+	"build":{
+		"dockerfile": "Dockerfile",
+		"target": "${env:DEVCONTAINER_TARGET_PREFIX}devcontainer" 
+	},
 	"runArgs": [
 		"-v", "${env:HOME}/.aws:/opt/app-root/src/.aws:Z",
 		"-v", "${env:HOME}/.kube:/opt/app-root/src/.kube:Z",
