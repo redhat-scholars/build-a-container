@@ -52,13 +52,13 @@ podman save -o mysql-container.tar registry.redhat.io/rhel8/mysql-80:latest
 [#container_file]
 == 3. Containerfile
 
-A Containerfile is a text based file which provides instructions to assemble an image. Each row in a Containerfile corresponds to a new layer. The available commands that are usable inside a Containerfile and a Dockerfile are equivalent.
+A Containerfile is a text based file which provides instructions to assemble an image. **Each row in a Containerfile corresponds to a new layer**. The available commands that are usable inside a Containerfile and a Dockerfile are equivalent.
 
-The Containerfile below is a of a mysql image from the Red Hat Container Catalog. As the image is built the commands are executed in order from top down until the image is built.
+The Containerfile below is a of a mysql image from the link:https://catalog.redhat.com/software/containers/search?q=mysql&p=1[Red Hat Container Catalog,window=_blank].
 
 image::dissectingimage.png[Dissecting an Image!]
 
-The below table provides an overview of the are typical commands seen in a Containerfile.
+As the image is built the commands are executed in order from top down until the image is built. The table below provides an overview of typical commands seen in a Containerfile.
 
 [cols="1,3"]
 |===
@@ -91,7 +91,7 @@ The below table provides an overview of the are typical commands seen in a Conta
 
 |===
 
-You may also see Containerfiles with multistage builds where multiple FROM commands may be present. **Multistage builds** provide a means to help refine the runtime image as opposed to having an image which also contains all the necessary software to build. For instance you typically don't need maven to run a java based jar but do need it to build.
+You may also see Containerfiles with multistage builds where **multiple FROM commands** may be present. **Multistage builds** provide a means to help refine the runtime image as opposed to having an image which also contains all the necessary software to build. For instance you typically don't need maven to run a java based jar but do need it to build.
 
 {zwsp}
 [#container_identification]
@@ -99,81 +99,52 @@ You may also see Containerfiles with multistage builds where multiple FROM comma
 
 Once you build a container you need to give it a tag to be able to identify it. An image tag is a label applied to a container image in a repository that distinguishes a specific image from other images. Typically, the tag represents a version number of some sort.
 
+
+Containers fully qualified image registry path is below:
+
+
 image::container-identification.png[Container Identification!]
+[NOTE]
+====
+If you only reference a container by its short name i.e.  rhel8/mysql-80:latest , there will be an assumption made as to which register to try. For example in RHEL 8, the default registries that will be looked up are
+registry.access.redhat.com, registry.redhat.io, docker.io
 
-
-
+Red Hat recommends that users always use fully qualified names when referring to container images in any context.
+====
 {zwsp}
 
 [#container_runtime]
 == 5. Container Runtime
 
-Like the container image specification, there is a link:https://github.com/opencontainers/runtime-spec[runtime specification^] which defines a lifecycle for a container. This defines hooks to be invoked prior to starting, creating or shutting down.
-
-The state of a container includes the following properties:
-
-. Oci version
-. Id - This MUST be unique across all containers on this host.
-. Status - created, creating, running, stopped
-. Pid - when container is creating or running
-. bundle (string, REQUIRED) is the absolute path to the container's bundle directory.
-. annotations (map, OPTIONAL) contains the list of annotations associated
+Like the container image specification, there is a link:https://github.com/opencontainers/runtime-spec[runtime specification^] which defines a lifecycle for a container. This defines hooks to be invoked prior to starting, creating or shutting down the container.
 
 image::runtimespec.png[Extract!]
 
-We will be able to understand the runtime aspects a little more when looking at container statuses in the following sections.
+
+The state of a container includes properties like OCI Version, status, process id (pid) and container ID. The container id and must be unique across all containers on this host and can be found with the following command:
+
+----
+podman ps
+CONTAINER ID IMAGE         COMMAND    CREATED    STATUS                PORTS NAMES     IS INFRA
+d65aecc325a4 ubi8/ubi      /bin/bash  3 secs ago Exited (0) 5 secs ago peaceful_hopper false
+74b1da000a11 rhel8/rsyslog rsyslog.sh 2 mins ago Up About a minute     musing_brown    false
+----
 
 {zwsp}
 
 [#container_tools]
 == 6. Container Tools
 
-As mentioned, the open source community have created new container tools to removed the way Docker requires the use of root access and a daemon process.
-These new tools are buildah, skopeo and podman which each provide different functionality. You can think of podman as a developers replacement for all Docker commands, skopeo as a simpler way to inspect and copy images and buildah provides specialist ways of building images whether from a Containerfile or interactively.
+The open source community have created new container tools to **eliminate the required use of root access and a daemon process** compared with how Docker is designed.
+
+These new tools **buildah, skopeo and podman** each provide more focussed functionality. You can think of **podman as a developers replacement for Docker**,
+**skopeo** as a simpler way to inspect and copy images and **buildah** provides specialist ways of building images whether from a Containerfile or interactively.
 
 image::container_tools.png[Extract!]
 
 {zwsp}
 
 === But how would you use these tools?
-{zwsp}
-
-=== Buildah
-
-Buildah can an act as a drop-in replacement for the Docker daemon’s docker build command (i.e., building images with a traditional Dockerfile) but is flexible enough to allow you to build images with whatever tools you prefer to use. ( bud = build-using-dockerfile )
-----
-buildah bud -t hello .
-----
-
-
-Unlike Docker build, Buildah doesn’t commit changes to a layer automatically for every instruction in the Dockerfile—it builds everything from top to bottom, every time.
-link:https://www.redhat.com/sysadmin/getting-started-buildah[Getting started with Buildah,window=_blank]
-
-Like the below sequence of commands - Buildah can interact with the temporary container created during the build process.
-----
-# Create a container
-container=$(buildah from fedora:28)
-
-# Labels are part of the "buildah config" command
-buildah config --label maintainer="Chris Collins <collins.christopher@gmail.com>" $container
-
-# Grab the source code outside of the container
-curl -sSL http://ftpmirror.gnu.org/hello/hello-2.10.tar.gz -o hello-2.10.tar.gz
-
-buildah copy $container hello-2.10.tar.gz /tmp/hello-2.10.tar.gz
-
-buildah run $container dnf install -y tar gzip gcc make
-...
-# Workingdir is also a "buildah config" command
-buildah config --workingdir /opt/hello-2.10 $container
-...
-
-# Entrypoint, too, is a “buildah config” command
-buildah config --entrypoint /usr/local/bin/hello $container
-
-# Finally saves the running container to an image
-buildah commit --format docker $container hello:latest
-----
 {zwsp}
 
 === Podman
@@ -184,20 +155,83 @@ podman pull registry.fedoraproject.org/f29/httpd
 podman images
 podman run -dt -p 8080:8080/tcp registry.fedoraproject.org/f29/httpd
 ----
+{zwsp}
+
+=== Buildah
+
+Buildah can an act as a drop-in replacement for the Docker daemon’s docker build command (i.e., building images with a traditional Dockerfile) but is flexible enough to allow you to build images with whatever tools you prefer to use. ( bud = build-using-dockerfile )
+----
+buildah bud -t hello .
+----
+is the same as
+----
+docker build -t hello .
+----
+{zwsp}
+
+Unlike Docker build, **Buildah doesn’t commit changes to a layer automatically for every instruction**  meaning
+it results in a single layer (great news for union file system performance). Furthermore it allows you to build images from scratch (i.e. no base container or no FROM image) so you can make containers as small as possible.
+
+To use Buildah in an interactive mode:
+
+
+. Start with creating a working container with Buildah.
++
+The following saves the container name into the $container variable to use in subsequent commands. You can view working containers with the buildah
+containers commmand.
++
+----
+# container=$(buildah from registry.access.redhat.com/ubi8/python-38)
+# echo $container
+python-38-working-container
+# buildah containers
+CONTAINER ID  BUILDER  IMAGE ID     IMAGE NAME                       CONTAINER NAME
+df1d24a08d19     *     a6d7938156c7 registry.access.redhat.com/ub... python-38-working-container
+----
++
+. Interact with a bash shell as your are building it like below.
++
+----
+# buildah run $container bash
+(app-root) bash-4.4$ mkdir scripts
+.....
+exit
+----
++
+. Next add configuration, labels and environment variables.
++
+----
+# buildah config --label maintainer="John Smith <john.smith@gmail.com>" $container
+# buildah config --env FLASK_APP=flaskr --env FLASK_ENV=development $container
+# buildah config --workingdir /opt/hello-2.10 $container
+# buildah config --entrypoint /usr/local/bin/hello $container
+# buildah copy $container hello-2.10.tar.gz /tmp/hello-2.10.tar.gz
+----
++
+. Finally save the working container to an image hello:latest which will then be available to run
++
+----
+# buildah commit $container hello:latest
+----
+{zwsp}
+
+For more information see link:https://www.redhat.com/sysadmin/getting-started-buildah[Getting started with Buildah,window=_blank]
+
+{zwsp}
 
 === Skopeo
 
-With the skopeo command, you can work with container images from registries without using the docker daemon or the docker command.
+Inspect a container without needing the docker daemon.
 ----
 skopeo inspect docker://docker.io/fedora
 
 ----
 
-In a single line the Skopeo copy command replaces the mulitple docker commands below
+Copy containers from one registry to another.
 ----
 skopeo copy --dest-creds prod_user:prod_pass docker://internal.registry/myimage:latest docker://production.registry/myimage:v1.0
 ----
-
+In the single line above the skopeo copy command replaces the 4 commands below.
 ----
 docker login ...
 docker pull internal.registry/myimage:latest
@@ -226,13 +260,10 @@ There are two types of container registry: public and private.
 * Enterprise container image storage
 * Host remotely or on-premises
 
-=== Enterprises need to look for:
+Typically your enterprise will require a container registry and we recommend to look for features such as: multiple authentication systems; role-based access control management; vulnerability scanning capabilities; auditable logs
+and optimized for automation.
 
-* Multiple authentication systems
-* Role-based access control management
-* Vulnerability scanning capabilities
-* Auditable logs
-* Optimized for automation
+{zwsp}
 
 === Red Hat's Enterprise Container Registry
 Red Hat Quay is a private container image registry that enables you to build, distribute, and deploy containers with the storage you need to scale quickly.

@@ -3,6 +3,8 @@ include::_attributes.adoc[]
 = Build your own Secure Container
 :navtitle: Build your own Secure Container
 
+_30 MINUTE EXERCISE_
+
 In this chapter we'll try to make the container image we've been using a bit more secure using a related tool to `podman`, namely `buildah`.
 
 image::buildah.png[Buildah!,width=320,height=78]

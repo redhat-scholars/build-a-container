@@ -5,6 +5,8 @@ include::_attributes.adoc[]
 = Containers and OpenShift
 :navtitle: Containers and OpenShift
 
+_15 MINUTE EXERCISE_
+
 Now that we have a container let's demonstrate how one might deploy that container to a platform like Red Hat's Enterprise Kubernetes solution, OpenShift.
 
 [#openshift_login]
