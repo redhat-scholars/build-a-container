@@ -2,7 +2,7 @@ runtime:
   cache_dir: ./.cache/antora
 
 site:
-  title: Build a Container Workshop
+  title: Build a Container Workshop (Dev Mode)
   url: http://localhost:3000/rhs-build-course/index.html
   start_page: intro-container-workshop::index.adoc
 
@@ -23,7 +23,7 @@ asciidoc:
     - ./lib/tab-block.js
 ui:
   bundle:
-    url: https://github.com/hatmarch/course-ui/releases/download/v0.1.11/ui-bundle.zip
+    url: https://github.com/redhat-scholars/course-ui/releases/download/v0.1.11/ui-bundle.zip
     snapshot: true
   supplemental_files: ./supplemental-ui
 output:
