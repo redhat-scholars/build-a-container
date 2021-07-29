@@ -1,6 +1,6 @@
 * xref:introduction.adoc[Setup]
 ** xref:introduction.adoc#open_code_server[Code Server]
-** xref:introduction.adoc#open_code_server_terminal[Open terminal]
+** xref:introduction.adoc#open_code_server_terminal[Open Terminal]
 ** xref:introduction.adoc#open_code_server_terminal_commands[Issuing Terminal Commands]
 ** xref:introduction.adoc#local_browser[Local Browser]
 * xref:container-anatomy.adoc[Container Anatomy]
