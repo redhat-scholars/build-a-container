@@ -72,7 +72,7 @@
 
 - name: Download extension files to host
   get_url:
-    url: "{{ code_extension_src_url }}/{{ item }}"
+    url: "{{ code_extension_src_url }}/{{ item }}{{ code_extension_src_url_append }}"
     dest: "{{ ext_dest_dir }}/{{ item }}"
     owner: "{{ username }}"
     group: "{{ username }}"
