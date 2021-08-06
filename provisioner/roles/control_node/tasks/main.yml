@@ -77,7 +77,7 @@
     accept_hostkey: true
     clone: true
     dest: /tmp/workshops
-    repo: '{{ container_exercises_url | default("https://github.com/hatmarch/container-workshop-exercises.git") }}'
+    repo: '{{ container_exercises_url | default("https://github.com/bfarr-rh/container-workshop-exercises.git") }}'
     version: '{{ ansible_workshops_version | default("master") }}'
     refspec: '{{ ansible_workshops_refspec | default("") }}'
     force: true
