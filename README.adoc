@@ -45,6 +45,24 @@ When you are happy with the documentation changes, you can run the following com
 ${DEMO_HOME}/scripts/github-pages-publish.sh
 ----
 
+== Provisioning Lab
+
+. Load the code in VSCode and use devcontainers which contains all neccessary tools to use.
+. Setup AWS and ./aws/credentials  (may need rhpds profile rather than default)
+. Change to the `provisioner` directory (the ansible-playbook command must be run from here)
+. Adjust extra_vars as required
+. Run the provision_lab playbook passing in the extra_vars.  For example: 
++
+----
+ansible-playbook provision_lab.yml -e @extra_vars.yaml
+----
++
+. To teardown the workshop (e.g. delete instances created for workshop) run: 
++
+----
+ansible-playbook teardown_lab.yml -e @extra_vars.yaml
+----
+
 == git lfs Support (Deactivated)
 
 This repo used to use link:https://git-lfs.github.com/[*Git Large File Storage*] (git lfs) to store the binary assets therein (e.g. rpms, images, etc).  This was found to be more trouble than it was worth when it came to generating sites with antora and was abandoned
