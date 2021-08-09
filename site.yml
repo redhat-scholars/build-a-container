@@ -7,6 +7,7 @@ site:
   start_page: intro-container-workshop::index.adoc
 
 content:
+  edit_url: ~
   sources:
     - url: .
       tags: []

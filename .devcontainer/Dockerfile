@@ -1,4 +1,4 @@
-FROM quay.io/mhildenb/container-workshop-base:latest as podmandevcontainer
+FROM quay.io/bfarr/container-workshop-base:latest as podmandevcontainer
 
 USER root
 
