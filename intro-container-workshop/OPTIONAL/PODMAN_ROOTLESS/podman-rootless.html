@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Podman with a non-root user :: BUILD-A-CONTAINER WORKSHOP</title>
+    <link rel="canonical" href="https://bfarr-rh.github.io/build-a-container/intro-container-workshop/OPTIONAL/PODMAN_ROOTLESS/podman-rootless.html">
+    <link rel="prev" href="../PODMAN_COMPOSE/compose-container.html">
+    <link rel="next" href="../SECURITY/containers-and-security.html">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+<link rel="icon" href="../../../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+   $( document ).ready(function() {
+    $('li.version a, a.version').click(function() {
+            var querystring = window.location.search;
+            var href = $(this).attr('href');
+            location.href = href + querystring;
+            return false;
+      });
+  });
+    
+  </script>
+  <style>
+    /* override master stylesheet properties for this partial here */
+
+    .navbar-item {
+      flex: unset;
+    }
+
+    .doc {
+      max-width: unset;
+    }
+
+
+  </style>
+
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://bfarr-rh.github.io/build-a-container">BUILD-A-CONTAINER WORKSHOP</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+        <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-scholars.github.io/outer-loop-guides/" target="_blank">Outer Loop</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/openshift-starter-guides/" target="_blank">OpenShift Starter</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header><div class="body">
+<div class="nav-container" data-component="intro-container-workshop" data-version="OPTIONAL">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html" class=" query-params-link">Build a Container Workshop</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../DATABASES/databases-and-containers.html">Containerized Databases</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../PODMAN_COMPOSE/compose-container.html">Multi containers with Podman</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="podman-rootless.html">Rootless Containers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Container Security</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../SECURITY/containers-and-security.html">Container Security</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../SECURITY/containers-and-security.html#scanning_containers">Scanning Containers</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../OPENSHIFT/deploy-container.html">Containers and OpenShift</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Build a Container Workshop</span>
+    <span class="version">OPTIONAL</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Build a Container Workshop</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">OPTIONAL</a>
+        </li>
+        <li class="version">
+          <a href="../../BASE/index.html">BASE</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Build a Container Workshop</a></li>
+    <li><a href="podman-rootless.html">Rootless Containers</a></li>
+  </ul>
+</nav>
+<div class="page-versions">
+  <button class="version-menu-toggle" title="Show other versions of page">OPTIONAL</button>
+  <div class="version-menu">
+    <a class="version is-current" href="podman-rootless.html">OPTIONAL</a>
+    <a class="version" href="../../BASE/PODMAN_ROOTLESS/podman-rootless.html">BASE</a>
+  </div>
+</div>
+</div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Podman with a non-root user</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>10 MINUTE EXERCISE</em></p>
+</div>
+<div class="paragraph">
+<p>Running the container tools as a user with superuser privileges (root user) is the best way to ensure that your containers have full access to any feature available on your system.
+However, with the feature called "Rootless Containers" generally available as of RHEL 8.1, you can work with containers as a regular user.</p>
+</div>
+<div class="paragraph">
+<p>Although container engines, such as Docker, let you run Docker commands as a regular (non-root) user, the Docker daemon that carries out those requests runs as root. As a result, regular users can make requests through their containers that can harm the system. By setting up rootless container users, system administrators prevent potentially damaging container activities from regular users, while still allowing those users to safely run most container features under their own accounts.</p>
+</div>
+<div class="paragraph">
+<p>In this section, we are going to demonstrate the steps you need to setup Podman to run as a non-root user and issues you may need to overcome.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_procedure"><a class="anchor" href="#_procedure"></a>Procedure</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Install the podman and slirp4netns packages:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo yum install slirp4netns podman -y</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create a new user account using commands like below. The user is automatically configured to be able to use rootless Podman.
+The useradd command automatically sets the range of accessible user and group IDs automatically in the /etc/subuid and /etc/subgid files.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">useradd -c "Joe Jones" joe
+passwd joe</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Connect to the user. Using su or su - commands do not set the correct environment variables.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>ssh joe@localhost</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Pull the registry.access.redhat.com/ubi8/ubi container image.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman pull registry.access.redhat.com/ubi8/ubi</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the container named myubi and display the OS version.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run --name=myubi registry.access.redhat.com/ubi8/ubi cat /etc/os-release</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_actual_user_are_you_running_with_podman"><a class="anchor" href="#_what_actual_user_are_you_running_with_podman"></a>What actual user are you running with Podman?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A UID (user identifier) is a number assigned by Linux to each user on the system. This number is used to identify the user to the system and to determine which system resources the user can access.
+<strong>UID of 0 is reserved for root.</strong></p>
+</div>
+<div class="paragraph">
+<p>In Podman, there is a new set of user IDs (UIDs) and group IDs (GIDs) which are separate from the UIDs and  GIDs on your host. The
+ table shows the 4 main rootless/rootful operating modes of Podman and how the user appears on the host</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/uidpodman.png" alt="table!">
+</div>
+</div>
+<div class="paragraph">
+<p>To understand this further, where podman is running as non-root, we can see the the uid as viewed on the host by
+looking at the uid map.  To view use the following command.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ podman unshare cat /proc/self/uid_map
+      0    3267      1
+      1    100000    65536</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This result shows that UID 0 is mapped to my UID, 3267, while UID 1 is mapped to 100000, UID 2 is mapped to 100001, and so on. This result means that inside of the container, UID 26 runs as UID 100025.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_problem_container_could_not_create_a_file"><a class="anchor" href="#_problem_container_could_not_create_a_file"></a>Problem! - Container could not create a file</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>With rootless mode you may a problem in that the user of the container does not have permissions on the host volume.</p>
+</div>
+<div class="paragraph">
+<p>First lets run the busybox container as user 123 and mount a directory on the host ./src which will be mapped to /dest in our container</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run -dit --volume ./src:/dest:z --user 123:123 --name busybox busybox</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Confirm the user id thats running.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman exec busybox id</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Lets now list the directory via the container</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman exec busybox ls -ld /dest</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now lets simulate the container creating a file in our mounted directory. For instance in a real use case this could be a database container running as a postrgres user that is creating index files.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman exec busybox touch /dest/file</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Did it work? The issue is that the directory created was owned by your UID. This UID looks like root inside of the container and we are not running busybox with the root user. Therefore, the container is unable to write to the directory.</p>
+</div>
+<div class="paragraph">
+<p>So lets allow the user (UID 123 in the containers) to own and write to the directory.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman unshare chown 123:123 ./src</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now when we try the command again it works.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman exec busybox touch /dest/file</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now lets view the directory as it would be in a container with this unshare command.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman unshare ls -al ./src</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>What do you see?</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_special_considerations_for_rootless_containers"><a class="anchor" href="#_special_considerations_for_rootless_containers"></a>Special considerations for rootless containers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are several considerations when running containers as a non-root user:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>The path to the host container storage is different for root users (/var/lib/containers/storage) and non-root users ($HOME/.local/share/containers/storage).</p>
+</li>
+<li>
+<p>Users running rootless containers are given special permission to run as a range of user and group IDs on the host system. However, they have no root privileges to the operating system on the host.</p>
+</li>
+<li>
+<p>A rootless container cannot access a port numbered less than 1024. (ie wouldn&#8217;t be able to expose the port to the host system unless run with root)
+.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_more_information"><a class="anchor" href="#_more_information"></a>More information</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For more information take a look at these links:</p>
+</div>
+<div class="paragraph">
+<p><a href="https://www.redhat.com/sysadmin/rootless-podman-makes-sense" target="blank">Running rootless Podman as a non-root user</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://blog.christophersmart.com/2021/01/31/volumes-and-rootless-podman/" target="blank">Volumes and rootless Podman</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://www.youtube.com/watch?v=ZgXpWKgQclc" target="blank">Overview of rootless Podman</a></p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="../PODMAN_COMPOSE/compose-container.html" class="query-params-link">Multi containers with Podman</a></span>
+  <span class="next"><a href="../SECURITY/containers-and-security.html" class="query-params-link">Container Security</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../../_/js/vendor/clipboard.js"></script>
+<script src="../../../_/js/site.js"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>  </body>
+</html>

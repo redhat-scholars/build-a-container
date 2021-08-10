@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Containers and OpenShift :: Build a Container Workshop</title>
-    <link rel="canonical" href="http://localhost:3000/rhs-build-course/index.html/intro-container-workshop/BASE/deploy-container.html">
+    <title>Containers and OpenShift :: BUILD-A-CONTAINER WORKSHOP</title>
+    <link rel="canonical" href="https://bfarr-rh.github.io/build-a-container/intro-container-workshop/OPTIONAL/deploy-container.html">
     <link rel="prev" href="build-your-own-container-containerfile.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../../_/css/site.css">
@@ -13,6 +13,19 @@
   </head>
   <body class="article">
 <header class="header">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+   $( document ).ready(function() {
+    $('li.version a, a.version').click(function() {
+            var querystring = window.location.search;
+            var href = $(this).attr('href');
+            location.href = href + querystring;
+            return false;
+      });
+  });
+    
+  </script>
   <style>
     /* override master stylesheet properties for this partial here */
 
@@ -31,7 +44,7 @@
     <div class="navbar-brand">
       <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
           src="../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
-      <a class="navbar-item" style="font-size: 24px; color: white" href="http://localhost:3000/rhs-build-course/index.html">Build a Container Workshop</a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://bfarr-rh.github.io/build-a-container">BUILD-A-CONTAINER WORKSHOP</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
         <span></span>
@@ -76,7 +89,7 @@
     <a class="nav-link" href="introduction.html#open_code_server">Code Server</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="introduction.html#open_code_server_terminal">Open terminal</a>
+    <a class="nav-link" href="introduction.html#open_code_server_terminal">Open Terminal</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="introduction.html#open_code_server_terminal_commands">Issuing Terminal Commands</a>
@@ -217,7 +230,10 @@
     <li class="component is-current">
       <span class="title">Build a Container Workshop</span>
       <ul class="versions">
-        <li class="version is-current is-latest">
+        <li class="version is-latest">
+          <a href="../OPTIONAL/index.html">OPTIONAL</a>
+        </li>
+        <li class="version is-current">
           <a href="index.html">BASE</a>
         </li>
       </ul>
@@ -230,20 +246,30 @@
 <main class="article">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
-  <a href="index.html" class="home-link"></a>
+  <a href="../OPTIONAL/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Build a Container Workshop</a></li>
     <li><a href="deploy-container.html">Deploying Containers</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="file:///workspaces/container-workshop/documentation/modules/ROOT/pages/deploy-container.adoc">Edit this Page</a></div>
+<div class="page-versions">
+  <button class="version-menu-toggle" title="Show other versions of page">BASE</button>
+  <div class="version-menu">
+    <a class="version" href="../OPTIONAL/deploy-container.html">OPTIONAL</a>
+    <a class="version is-current" href="deploy-container.html">BASE</a>
+  </div>
+</div>
+  <div class="edit-this-page"><a href="file:///Users/bfarr/projects/build-a-container-workshop/documentation/modules/ROOT/pages/deploy-container.adoc">Edit this Page</a></div>
 </div>
   <div class="content">
 <article class="doc">
 <h1 class="page">Containers and OpenShift</h1>
 <div id="preamble">
 <div class="sectionbody">
+<div class="paragraph">
+<p><em>15 MINUTE EXERCISE</em></p>
+</div>
 <div class="paragraph">
 <p>Now that we have a container let&#8217;s demonstrate how one might deploy that container to a platform like Red Hat&#8217;s Enterprise Kubernetes solution, OpenShift.</p>
 </div>
@@ -584,7 +610,7 @@ Use insecure connections? (y/n):</code></pre>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>If you <code>echo</code> this in a shell, this will look something like <code>default-route-openshift-image-registry.apps.%CLUSTER_SUBDOMAIN%/%USER%/my-secure-web-server-image:latest</code> which is similar to container identification names as we discussed in the <a href="container-anatomy.html?USER=%USER%&amp;CLUSTER_SUBDOMAIN=%CLUSTER_SUBDOMAIN%#container_identification" target="_blank" rel="noopener">Container Anatomy section</a></td>
+<td>If you <code>echo</code> this in a shell, this will look something like <code>default-route-openshift-image-registry.apps.%CLUSTER_SUBDOMAIN%/%USER%/my-secure-web-server-image:latest</code> which is similar to container identification names as we discussed in the <a href="container-anatomy.html#container_identification" class="page" target="_blank" rel="noopener">Container Anatomy section</a></td>
 </tr>
 </table>
 </div>

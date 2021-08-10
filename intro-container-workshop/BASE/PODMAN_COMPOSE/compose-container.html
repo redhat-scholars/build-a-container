@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Using Podman with Multiple Containers :: Build a Container Workshop</title>
-    <link rel="canonical" href="http://localhost:3000/rhs-build-course/index.html/intro-container-workshop/BASE/PODMAN_COMPOSE/compose-container.html">
+    <title>Using Podman with Multiple Containers :: BUILD-A-CONTAINER WORKSHOP</title>
+    <link rel="canonical" href="https://bfarr-rh.github.io/build-a-container/intro-container-workshop/OPTIONAL/PODMAN_COMPOSE/compose-container.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../../../_/css/site.css">
 <link rel="icon" href="../../../_/img/favicon.ico" type="image/x-icon">
@@ -12,6 +12,19 @@
   </head>
   <body class="article">
 <header class="header">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+   $( document ).ready(function() {
+    $('li.version a, a.version').click(function() {
+            var querystring = window.location.search;
+            var href = $(this).attr('href');
+            location.href = href + querystring;
+            return false;
+      });
+  });
+    
+  </script>
   <style>
     /* override master stylesheet properties for this partial here */
 
@@ -30,7 +43,7 @@
     <div class="navbar-brand">
       <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
           src="../../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
-      <a class="navbar-item" style="font-size: 24px; color: white" href="http://localhost:3000/rhs-build-course/index.html">Build a Container Workshop</a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://bfarr-rh.github.io/build-a-container">BUILD-A-CONTAINER WORKSHOP</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
         <span></span>
@@ -75,7 +88,7 @@
     <a class="nav-link" href="../introduction.html#open_code_server">Code Server</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../introduction.html#open_code_server_terminal">Open terminal</a>
+    <a class="nav-link" href="../introduction.html#open_code_server_terminal">Open Terminal</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../introduction.html#open_code_server_terminal_commands">Issuing Terminal Commands</a>
@@ -216,7 +229,10 @@
     <li class="component is-current">
       <span class="title">Build a Container Workshop</span>
       <ul class="versions">
-        <li class="version is-current is-latest">
+        <li class="version is-latest">
+          <a href="../../OPTIONAL/index.html">OPTIONAL</a>
+        </li>
+        <li class="version is-current">
           <a href="../index.html">BASE</a>
         </li>
       </ul>
@@ -229,14 +245,21 @@
 <main class="article">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
-  <a href="../index.html" class="home-link"></a>
+  <a href="../../OPTIONAL/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Build a Container Workshop</a></li>
     <li><a href="compose-container.html">Using Podman with Multiple Containers</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="file:///workspaces/container-workshop/documentation/modules/PODMAN_COMPOSE/pages/compose-container.adoc">Edit this Page</a></div>
+<div class="page-versions">
+  <button class="version-menu-toggle" title="Show other versions of page">BASE</button>
+  <div class="version-menu">
+    <a class="version" href="../../OPTIONAL/PODMAN_COMPOSE/compose-container.html">OPTIONAL</a>
+    <a class="version is-current" href="compose-container.html">BASE</a>
+  </div>
+</div>
+  <div class="edit-this-page"><a href="file:///Users/bfarr/projects/build-a-container-workshop/documentation/modules/PODMAN_COMPOSE/pages/compose-container.adoc">Edit this Page</a></div>
 </div>
   <div class="content">
 <article class="doc">

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Container Concepts and Security :: BUILD-A-CONTAINER WORKSHOP</title>
+    <link rel="canonical" href="https://bfarr-rh.github.io/build-a-container/intro-container-workshop/OPTIONAL/databases-and-containers.html">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+   $( document ).ready(function() {
+    $('li.version a, a.version').click(function() {
+            var querystring = window.location.search;
+            var href = $(this).attr('href');
+            location.href = href + querystring;
+            return false;
+      });
+  });
+    
+  </script>
+  <style>
+    /* override master stylesheet properties for this partial here */
+
+    .navbar-item {
+      flex: unset;
+    }
+
+    .doc {
+      max-width: unset;
+    }
+
+
+  </style>
+
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://bfarr-rh.github.io/build-a-container">BUILD-A-CONTAINER WORKSHOP</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+        <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-scholars.github.io/outer-loop-guides/" target="_blank">Outer Loop</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/openshift-starter-guides/" target="_blank">OpenShift Starter</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header><div class="body">
+<div class="nav-container" data-component="intro-container-workshop" data-version="OPTIONAL">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html" class=" query-params-link">Build a Container Workshop</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="DATABASES/databases-and-containers.html">Containerized Databases</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PODMAN_COMPOSE/compose-container.html">Multi containers with Podman</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PODMAN_ROOTLESS/podman-rootless.html">Rootless Containers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Container Security</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="SECURITY/containers-and-security.html">Container Security</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="SECURITY/containers-and-security.html#scanning_containers">Scanning Containers</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="OPENSHIFT/deploy-container.html">Containers and OpenShift</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Build a Container Workshop</span>
+    <span class="version">OPTIONAL</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Build a Container Workshop</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">OPTIONAL</a>
+        </li>
+        <li class="version">
+          <a href="../BASE/index.html">BASE</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Build a Container Workshop</a></li>
+    <li><a href="databases-and-containers.html">Container Concepts and Security</a></li>
+  </ul>
+</nav>
+<div class="page-versions">
+  <button class="version-menu-toggle" title="Show other versions of page">OPTIONAL</button>
+  <div class="version-menu">
+    <a class="version is-current" href="databases-and-containers.html">OPTIONAL</a>
+    <a class="version" href="../BASE/databases-and-containers.html">BASE</a>
+  </div>
+</div>
+</div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Container Concepts and Security</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>We&#8217;ll go deeper into some container concepts in this exercise using a MySQL database running in a container</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_containers_and_persistence"><a class="anchor" href="#_containers_and_persistence"></a>Containers and Persistence</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Containers are meant to be run as "immutable" instances meaning that they are not mean to persist changes in state.  So if that&#8217;s true, why would anyone attempt to run a database in a container.  Through out this section we will aim to answer this whilst demonstrating some additional container concepts.</p>
+</div>
+<div class="sect2">
+<h3 id="_start_database_container"><a class="anchor" href="#_start_database_container"></a>Start Database Container</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Start your database by running the following command:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
+    --rm <i class="conum" data-value="1"></i><b>(1)</b>
+    --name mysql_database <i class="conum" data-value="2"></i><b>(2)</b>
+    -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=db <i class="conum" data-value="3"></i><b>(3)</b>
+    -p 3306:3306
+    quay.io/mhildenb/mysql-80</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This means the container should be removed once stopped</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Instead of referring to the container by its <code>Container ID</code> we can provide a name by which we&#8217;d like to address the container</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>These are environment variables that we would like to be made available within the container.  In this instance, these are all environment variables that MySQL uses to set itself up</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>The terminal should be taken over with log output from the container.  This is because we did not run the container in "daemon mode" and instead it is running in the foreground of our terminal.</p>
+</li>
+<li>
+<p>Open a second terminal to the side by hitting the terminal split button</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/terminal-split.png" alt="terminal split">
+</div>
+<div class="title">Figure 1. Terminal split button</div>
+</div>
+</li>
+<li>
+<p>Observe the running container image by running the <code>podman ps</code> command</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman ps</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER ID  IMAGE                             COMMAND               CREATED         STATUS             PORTS                   NAMES
+e658d0e1d5c1  quay.io/mhildenb/mysql-80:latest  run-mysqld --defa...  13 minutes ago  Up 13 minutes ago  0.0.0.0:3306-&gt;3306/tcp  mysql_database <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Notice that this is the name we assigned the container above</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_create_database"><a class="anchor" href="#_create_database"></a>Create Database</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Let&#8217;s create our database providing the output of a .sql file to a mysql cli that is running in the container.  To do this we will use the <code>podman exec</code> command</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat /home/%USER%/container-workshop/sql/example_database.sql | \<i class="conum" data-value="1"></i><b>(1)</b>
+    podman exec \<i class="conum" data-value="2"></i><b>(2)</b>
+    -i \<i class="conum" data-value="3"></i><b>(3)</b>
+    mysql_database \<i class="conum" data-value="4"></i><b>(4)</b>
+    mysql -u user -p'pass' -D db <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>output the contents of the .sql file that creates the example database to STDIN</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Run a command in a (running) container</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>interactive: makes STDIN available to whatever command we are exec&#8217;ing</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The name (or <code>Container ID</code>) of the running container where we want to run the command</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The command that we mean to run</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>  </body>
+</html>
