@@ -251,12 +251,12 @@ podman cp \
 <.> The `{apache-server-container-name}:<path>` indicates that the `path` is inside the container (i.e. container filesystem) that we named with the `--name` option at the time we issued the `podman run` command
 <.> This path, undecorated by a container name or id, indicates that we are referencing a path on the host (i.e. local filesystem)
 +
-. Next, copy the name of the container info file to your clipboard (we'll use this in a following step): 
+. Next, lets view the files, the following command can be run in the terminal.
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-{container-info-filepath}
+/usr/lib/code-server/bin/code-server -r {temp-filepath} {container-info-filepath}
 ----
 +
 {zwsp} +

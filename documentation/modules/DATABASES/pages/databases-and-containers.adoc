@@ -21,7 +21,7 @@ podman run \
     --name mysql_database #<.>
     -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=db <.>
     -p 3306:3306
-    quay.io/mhildenb/mysql-80
+    quay.io/bfarr/mysql-80
 ----
 <.> This means the container should be removed once stopped
 <.> Instead of referring to the container by its `Container ID` we can provide a name by which we'd like to address the container
@@ -45,7 +45,7 @@ podman ps
 [source,bash,subs="+macros,+attributes"]
 ----
 CONTAINER ID  IMAGE                             COMMAND               CREATED         STATUS             PORTS                   NAMES
-e658d0e1d5c1  quay.io/mhildenb/mysql-80:latest  run-mysqld --defa...  13 minutes ago  Up 13 minutes ago  0.0.0.0:3306->3306/tcp  mysql_database <.>
+e658d0e1d5c1  quay.io/bfarr/mysql-80:latest  run-mysqld --defa...  13 minutes ago  Up 13 minutes ago  0.0.0.0:3306->3306/tcp  mysql_database <.>
 ----
 <.> Notice that this is the name we assigned the container above
 
@@ -88,7 +88,7 @@ podman run \
     --name mysql_database #<.>
     -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=db <.>
     -p 3306:3306 
-    quay.io/mhildenb/mysql-80
+    quay.io/bfarr/mysql-80
 ----
 <.> This means the container should be removed once stopped
 <.> Instead of referring to the container by its `Container ID` we can provide a name by which we'd like to address the container
@@ -112,7 +112,7 @@ podman ps
 [source,bash,subs="+macros,+attributes"]
 ----
 CONTAINER ID  IMAGE                             COMMAND               CREATED         STATUS             PORTS                   NAMES
-e658d0e1d5c1  quay.io/mhildenb/mysql-80:latest  run-mysqld --defa...  13 minutes ago  Up 13 minutes ago  0.0.0.0:3306->3306/tcp  mysql_database <.>
+e658d0e1d5c1  quay.io/bfarr/mysql-80:latest  run-mysqld --defa...  13 minutes ago  Up 13 minutes ago  0.0.0.0:3306->3306/tcp  mysql_database <.>
 ----
 <.> Notice that this is the name we assigned the container above
 
