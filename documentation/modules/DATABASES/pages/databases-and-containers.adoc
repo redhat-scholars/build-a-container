@@ -2,25 +2,33 @@ include::ROOT:page$_attributes.adoc[]
 
 
 [#containerized_databases]
-== Containerized Databases
+= Containerized Databases
 
-[WARNING]
-====
-This section is not yet completed
-====
+_10 MINUTE EXERCISE_
 
-Given that containers have the ability to mount other (persistent) filesystems, database servers also become candidates for running in containers.  (Non ephemeral) containerized databases use volume mounts for their `data` directory where they write and persist the contents of the database to the filesystem.
+Every developer sometimes needs to run databases locally or in multiple environments. Containers provide a great way to reduce the complexity and resources required to achieve this. In production, containers also
+provide a good candidate to run databases for microservices patterns and these days more and more traditional enterprise databases are using container based methods of deployment.
 
-. Start your database by running the following command:
+In this section we will demonstrate a simple task of running a MYSQL database in a container, creating and inserting data into the database and finally how you can still manage to simply interact with the database
+through your typical database UI tools.
+
+== Run the Database Container
+. Start your database by running the following commands (ensure you are running as the root user in new terminals with sudo -i):
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+sudo -i
+----
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 podman run \
-    --rm #<.>
-    --name mysql_database #<.>
-    -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=db <.>
-    -p 3306:3306
+    --rm \#<.>
+    --name mysql_database \#<.>
+    -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=db \#<.>
+    -p 3306:3306 \
     quay.io/bfarr/mysql-80
 ----
 <.> This means the container should be removed once stopped
@@ -49,8 +57,16 @@ e658d0e1d5c1  quay.io/bfarr/mysql-80:latest  run-mysqld --defa...  13 minutes ag
 ----
 <.> Notice that this is the name we assigned the container above
 
-=== Create Database
-. Let's create our database providing the output of a .sql file to a mysql cli that is running in the container.  To do this we will use the `podman exec` command
+== Create the Database
+. Lets view the sql file which we will run against our database. You will notice it creates a table and inserts some rows into the table.
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+/usr/lib/code-server/bin/code-server -r /home/student1/container-workshop/sql/example_database.sql
+----
++
+. Now lets run this sql against our database providing via the mysql cli that is running in the container.  To do this we will use the `podman exec` command
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -67,72 +83,67 @@ cat /home/{user}/container-workshop/sql/example_database.sql | \#<.>
 <.> The name (or `Container ID`) of the running container where we want to run the command
 <.> The command that we mean to run
 
-= Container Concepts and Security
-:navtitle: Container Concepts and Security
+== Run a Query
+Your VS Code server IDE has a MYSQL extension installed that we will use to run a query. We will use this to run a simole select statement to demonstrate that the database UI tools that are traditionally used can
+continue to be used with containerised databases. Though we are simply here using local url and port settings, when containers run in a container platform such as OpenShift there are cli tools that help to
+tunnel the port to your local desktop or ports can be exposed outside the cluster.
 
-We'll go deeper into some container concepts in this exercise using a MySQL database running in a container 
-
-== Containers and Persistence
-
-Containers are meant to be run as "immutable" instances meaning that they are not mean to persist changes in state.  So if that's true, why would anyone attempt to run a database in a container.  Through out this section we will aim to answer this whilst demonstrating some additional container concepts.
-
-=== Start Database Container
-
-. Start your database by running the following command:
+. Find the MYSQL extension at the bottom left of the Code Server and click the + symbol to create a new connection
++
+image::mysql-extension.png[]
++
+. Input the host and user values as it prompts you to do so:
++
+image::host-input.png[]
++
+image::user-input.png[]
++
+. Type pass as we have set in the parameters in running the container.
++
+image::password-input.png[]
++
+image::port-input.png[]
++
+. Press enter with no value.
++
+image::cert-input.png[]
++
+. If successful you should see a new connection with localhost that you can expand and start to inspect databases.
++
+image::connected.png[]
++
+. Next right click on the localhost icon and select "New Query"
++
+image::new-query.png[]
++
+. Cut and paste "select * from db.catalog;" into the window, right click and select "Run MySQL Query".
 +
 [.console-input]
-[source,bash,subs="+macros,+attributes"]
+[source,subs="+macros,+attributes"]
 ----
-podman run \
-    --rm #<.>
-    --name mysql_database #<.>
-    -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=db <.>
-    -p 3306:3306 
-    quay.io/bfarr/mysql-80
-----
-<.> This means the container should be removed once stopped
-<.> Instead of referring to the container by its `Container ID` we can provide a name by which we'd like to address the container
-<.> These are environment variables that we would like to be made available within the container.  In this instance, these are all environment variables that MySQL uses to set itself up
-+
-. The terminal should be taken over with log output from the container.  This is because we did not run the container in "daemon mode" and instead it is running in the foreground of our terminal.
-. Open a second terminal to the side by hitting the terminal split button 
-+
-.Terminal split button
-image::terminal-split.png[]
-+
-. Observe the running container image by running the `podman ps` command
-+
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-podman ps
+select * from db.catalog;
 ----
 +
-[.console-output]
-[source,bash,subs="+macros,+attributes"]
-----
-CONTAINER ID  IMAGE                             COMMAND               CREATED         STATUS             PORTS                   NAMES
-e658d0e1d5c1  quay.io/bfarr/mysql-80:latest  run-mysqld --defa...  13 minutes ago  Up 13 minutes ago  0.0.0.0:3306->3306/tcp  mysql_database <.>
-----
-<.> Notice that this is the name we assigned the container above
+image::run-query.png[]
++
+. If successful you will now see the results of your query.
++
+image::results.png[]
 
-=== Create Database
-. Let's create our database providing the output of a .sql file to a mysql cli that is running in the container.  To do this we will use the `podman exec` command
-+
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-cat /home/{user}/container-workshop/sql/example_database.sql | \#<.>
-    podman exec \#<.>
-    -i \#<.>
-    mysql_database \#<.>
-    mysql -u user -p'pass' -D db #<.>
-----
-<.> output the contents of the .sql file that creates the example database to STDIN
-<.> Run a command in a (running) container
-<.> interactive: makes STDIN available to whatever command we are exec'ing
-<.> The name (or `Container ID`) of the running container where we want to run the command
-<.> The command that we mean to run
+
+== Considerations for Database Containerisation
+
+This simple exercise was designed to introduce working with database in containers. Today containers are provided for many databases including:
+PostgreSQL, MySQL, MariaDB, MongoDB, SQL Server. See link:https://catalog.redhat.com/software/containers/search?p=1&application_categories_list=Database%20%26%20Data%20Management[Database Containers,window=_blank]
+
+In kubernetes environments, link:https://operatorhub.io/?category=Database[operators,window=_blank] are being provided by organisations to ease the burden in managing the full lifecycle.
+
+An example of container based deployment is link:https://cloudblogs.microsoft.com/sqlserver/2020/06/23/expanding-sql-server-big-data-clusters-capabilities-now-on-red-hat-openshift/[Microsoft's SQL Server Big Data Clusters,window=_blank]
+
+__SQL Server Big Data Clusters (BDC) is a new capability brought to market as part of the SQL Server 2019 release. BDC extends SQL Server’s analytical capabilities
+beyond in-database processing of transactional and analytical workloads by uniting the SQL engine with Apache Spark and Apache Hadoop to create a single, secure and unified data platform.
+BDC is available exclusively to run on Linux containers, orchestrated by Kubernetes, and can be deployed in multiple-cloud providers or on-premises.__
+
 
 
 
