@@ -270,7 +270,7 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Though we&#8217;ve fixed the issue with <code>quay.io/mhildenb/container-workshop-httpd:0.0.6</code> by using the <code>buildah</code> native command line tools to fix it, there are are still additional steps we could take to make this image even more resilient against attack or exploit.  Here are two issues:</p>
+<p>Though we&#8217;ve fixed the issue with <code>quay.io/bfarr/container-workshop-httpd:0.0.6</code> by using the <code>buildah</code> native command line tools to fix it, there are are still additional steps we could take to make this image even more resilient against attack or exploit.  Here are two issues:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -286,7 +286,7 @@
 <p>What&#8217;s more, we have no record of the step-by-step changes we&#8217;ve made to the container that we might store in revision control.  One (valid) option would be to store all the buildah cli commands we issued in a shell script.</p>
 </div>
 <div class="paragraph">
-<p>Another option, popularized by container tools like <code>docker</code> is the <code>Dockerfile</code> (or, more generically, <code>Containerfile</code>) way of defining new containers.  Let&#8217;s investigate the <code>quay.io/mhildenb/container-workshop-httpd:0.0.6</code> 's <code>Containerfile</code> to see if we can address the points above</p>
+<p>Another option, popularized by container tools like <code>docker</code> is the <code>Dockerfile</code> (or, more generically, <code>Containerfile</code>) way of defining new containers.  Let&#8217;s investigate the <code>quay.io/bfarr/container-workshop-httpd:0.0.6</code> 's <code>Containerfile</code> to see if we can address the points above</p>
 </div>
 </div>
 </div>
@@ -829,7 +829,7 @@ Storing signatures
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">WORKING_CONTAINER_OLD=$(buildah from quay.io/mhildenb/container-workshop-httpd)
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">WORKING_CONTAINER_OLD=$(buildah from quay.io/bfarr/container-workshop-httpd)
 WORKING_CONTAINER_OLD_IMAGE_MOUNT=$(buildah mount ${WORKING_CONTAINER_OLD})</code></pre>
 </div>
 </div>

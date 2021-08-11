@@ -189,12 +189,12 @@
 </div>
 <div class="paragraph">
 <p><span class="image right"><img src="_images/Shellshock-logo.png" alt="Shellshock logo" width="50"></span>
-Our <code>quay.io/mhildenb/container-workshop-httpd:0.0.6</code> has a huge vulnerability in it that is further excerbated by the manner in which we&#8217;ve run our container.  The vulnerability is the (in)famous <a href="https://en.wikipedia.org/wiki/Shellshock_(software_bug)" target="_blank" rel="noopener">Shellshock vulnerability</a></p>
+Our <code>quay.io/bfarr/container-workshop-httpd:0.0.6</code> has a huge vulnerability in it that is further excerbated by the manner in which we&#8217;ve run our container.  The vulnerability is the (in)famous <a href="https://en.wikipedia.org/wiki/Shellshock_(software_bug)" target="_blank" rel="noopener">Shellshock vulnerability</a></p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>First ensure the <code>quay.io/mhildenb/container-workshop-httpd:0.0.6</code> is running by running the following command in the terminal</p>
+<p>First ensure the <code>quay.io/bfarr/container-workshop-httpd:0.0.6</code> is running by running the following command in the terminal</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman ps</code></pre>
@@ -206,7 +206,7 @@ Our <code>quay.io/mhildenb/container-workshop-httpd:0.0.6</code> has a huge vuln
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER ID  IMAGE                                            COMMAND               CREATED      STATUS          PORTS                 NAMES
-4e9c38ac10eb  quay.io/mhildenb/container-workshop-httpd:0.0.6  /usr/sbin/httpd -...  3 hours ago  Up 3 hours ago  0.0.0.0:8081-&gt;80/tcp  my-web-server</code></pre>
+4e9c38ac10eb  quay.io/bfarr/container-workshop-httpd:0.0.6  /usr/sbin/httpd -...  3 hours ago  Up 3 hours ago  0.0.0.0:8081-&gt;80/tcp  my-web-server</code></pre>
 </div>
 </div>
 </li>
@@ -390,7 +390,7 @@ msf6 exploit(multi/http/apache_mod_cgi_bash_env_exec) &gt;</code></pre>
 <div class="content">
 <div class="title">TIP</div>
 <div class="paragraph">
-<p>If you get a message that the target is not vulnerable (and you are expecting it to be, make sure the <code>quay.io/mhildenb/container-workshop-httpd:0.0.6</code> is running</p>
+<p>If you get a message that the target is not vulnerable (and you are expecting it to be, make sure the <code>quay.io/bfarr/container-workshop-httpd:0.0.6</code> is running</p>
 </div>
 </div>
 </div>
@@ -1054,7 +1054,7 @@ drwxr-xr-x.  20 root root  278 May 28 08:44 var</code></pre>
     -p 8081:80/tcp \
     --name my-web-server \
     -v /home/%USER%/container-workshop:/var/log/www:Z \
-    quay.io/mhildenb/container-workshop-httpd:0.0.6</code></pre>
+    quay.io/bfarr/container-workshop-httpd:0.0.6</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1439,7 +1439,7 @@ Channel 1 created.</code></pre>
 <div class="tab-pane" aria-labelledby="tabset20_terminal-1">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo oscap-podman quay.io/mhildenb/container-workshop-httpd:0.0.6 \<i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo oscap-podman quay.io/bfarr/container-workshop-httpd:0.0.6 \<i class="conum" data-value="1"></i><b>(1)</b>
     oval eval \<i class="conum" data-value="2"></i><b>(2)</b>
     --report /home/%USER%/container-workshop/oval/vuln-report.html \<i class="conum" data-value="3"></i><b>(3)</b>
      /home/%USER%/container-workshop/oval/rhel-7.oval.xml <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
@@ -1480,7 +1480,7 @@ Channel 1 created.</code></pre>
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Target of the scan not found: 'quay.io/mhildenb/container-workshop-httpd:0.0.6'.</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Target of the scan not found: 'quay.io/bfarr/container-workshop-httpd:0.0.6'.</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1488,7 +1488,7 @@ Channel 1 created.</code></pre>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo podman pull quay.io/mhildenb/container-workshop-httpd:0.0.6</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo podman pull quay.io/bfarr/container-workshop-httpd:0.0.6</code></pre>
 </div>
 </div>
 </td>
@@ -1599,7 +1599,7 @@ Evaluation done.</code></pre>
 </ol>
 </div>
 <div class="paragraph">
-<p>Now that we know what we need to do to our container, we&#8217;re left with the question of HOW we&#8217;re meant to update the container given that containers are supposed to be immutable.  When dealing with containers, we don&#8217;t need to change the running container, but rather the <em>image</em> that the container runs as.  In our case we&#8217;re going to want to update our <code>quay.io/mhildenb/container-workshop-httpd:0.0.6</code> image.</p>
+<p>Now that we know what we need to do to our container, we&#8217;re left with the question of HOW we&#8217;re meant to update the container given that containers are supposed to be immutable.  When dealing with containers, we don&#8217;t need to change the running container, but rather the <em>image</em> that the container runs as.  In our case we&#8217;re going to want to update our <code>quay.io/bfarr/container-workshop-httpd:0.0.6</code> image.</p>
 </div>
 <div class="paragraph">
 <p>This is where <code>buildah</code> comes in, which we&#8217;ll explore next.</p>

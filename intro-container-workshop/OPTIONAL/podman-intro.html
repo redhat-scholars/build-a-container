@@ -262,7 +262,7 @@
     -d \<i class="conum" data-value="3"></i><b>(3)</b>
     -p 8081:80/tcp \<i class="conum" data-value="4"></i><b>(4)</b>
     --name my-web-server \<i class="conum" data-value="5"></i><b>(5)</b>
-    quay.io/mhildenb/container-workshop-httpd:0.0.6 <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
+    quay.io/bfarr/container-workshop-httpd:0.0.6 <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -298,7 +298,7 @@
 <p>After the image is "pulled" you should see something like the following in the terminal which represents the id of the running container</p>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Trying to pull quay.io/mhildenb/container-workshop-httpd:0.0.6...
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Trying to pull quay.io/bfarr/container-workshop-httpd:0.0.6...
 Getting image source signatures
 Copying blob b5f2e1583bc1 done
 Copying config 68f54f9c95 done
@@ -330,7 +330,7 @@ Storing signatures
 <div class="title">NOTE: notice that the beginning of the CONTAINER ID matches the id the was output from the <code>podman run</code> command</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER ID  IMAGE                                            COMMAND               CREATED      STATUS          PORTS                 NAMES
-4e9c38ac10eb  quay.io/mhildenb/container-workshop-httpd:0.0.6  /usr/sbin/httpd -...  3 hours ago  Up 3 hours ago  0.0.0.0:8081-&gt;80/tcp  my-web-server</code></pre>
+4e9c38ac10eb  quay.io/bfarr/container-workshop-httpd:0.0.6  /usr/sbin/httpd -...  3 hours ago  Up 3 hours ago  0.0.0.0:8081-&gt;80/tcp  my-web-server</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -635,10 +635,10 @@ VERSION="7.9 (Maipo)"
 </div>
 </li>
 <li>
-<p>Next, copy the name of the container info file to your clipboard (we&#8217;ll use this in a following step):</p>
+<p>Next, lets view the files, the following command can be run in the terminal.</p>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">/tmp/containerinfo.txt</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">/usr/lib/code-server/bin/code-server -r /tmp/hostinfo.txt /tmp/containerinfo.txt</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -918,7 +918,7 @@ VERSION="7.9 (Maipo)"
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">4e9c38ac10eb  quay.io/mhildenb/container-workshop-httpd:0.0.6  /usr/sbin/httpd -...  10 minutes ago  Exited (0) 2 minutes ago  0.0.0.0:8081-&gt;80/tcp  my-web-server</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">4e9c38ac10eb  quay.io/bfarr/container-workshop-httpd:0.0.6  /usr/sbin/httpd -...  10 minutes ago  Exited (0) 2 minutes ago  0.0.0.0:8081-&gt;80/tcp  my-web-server</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1022,7 +1022,7 @@ f154f395c55ed7192f180502495b96cb3c223d9ce50273cda41bb63e272be7d8 <i class="conum
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">REPOSITORY                                 TAG     IMAGE ID      CREATED        SIZE
 localhost/container-workshop-commit        latest  f154f395c55e  3 minutes ago  265 MB <i class="conum" data-value="1"></i><b>(1)</b>
-quay.io/mhildenb/container-workshop-httpd  0.0.6   ec71626c6cd3  3 hours ago    265 MB</code></pre>
+quay.io/bfarr/container-workshop-httpd  0.0.6   ec71626c6cd3  3 hours ago    265 MB</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1126,7 +1126,7 @@ quay.io/mhildenb/container-workshop-httpd  0.0.6   ec71626c6cd3  3 hours ago    
     -d \
     -p 8081:80/tcp \
     --name my-web-server \
-    quay.io/mhildenb/container-workshop-httpd:0.0.6</code></pre>
+    quay.io/bfarr/container-workshop-httpd:0.0.6</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1168,7 +1168,7 @@ quay.io/mhildenb/container-workshop-httpd  0.0.6   ec71626c6cd3  3 hours ago    
 <p>&#8203;</p>
 </div>
 <div class="paragraph">
-<p>Before we through our hands up in disgust, remember that we had the foresight of <em>committing</em> our previously running web server container to a new image called <code>container-workshop-commit</code>.  This image should container all the changes we made on top of the <code>my-web-server</code> that we just ran and allow us access to the info that does not exist in the <code>quay.io/mhildenb/container-workshop-httpd:0.0.6</code>.</p>
+<p>Before we through our hands up in disgust, remember that we had the foresight of <em>committing</em> our previously running web server container to a new image called <code>container-workshop-commit</code>.  This image should container all the changes we made on top of the <code>my-web-server</code> that we just ran and allow us access to the info that does not exist in the <code>quay.io/bfarr/container-workshop-httpd:0.0.6</code>.</p>
 </div>
 <div class="paragraph">
 <p>&#8203;</p>
@@ -1176,7 +1176,7 @@ quay.io/mhildenb/container-workshop-httpd  0.0.6   ec71626c6cd3  3 hours ago    
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Let&#8217;s stop and remove the current <code>quay.io/mhildenb/container-workshop-httpd:0.0.6</code> image based web server</p>
+<p>Let&#8217;s stop and remove the current <code>quay.io/bfarr/container-workshop-httpd:0.0.6</code> image based web server</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman stop -a <i class="conum" data-value="1"></i><b>(1)</b>

@@ -372,7 +372,7 @@ Deleted: f154f395c55ed7192f180502495b96cb3c223d9ce50273cda41bb63e272be7d8</code>
 </div>
 </li>
 <li>
-<p>Next, we&#8217;ll <span id="podman_run_httpd">run</span> our initial <code>quay.io/mhildenb/container-workshop-httpd:0.0.6</code> image, but this time with an additional <code>-v</code> option</p>
+<p>Next, we&#8217;ll <span id="podman_run_httpd">run</span> our initial <code>quay.io/bfarr/container-workshop-httpd:0.0.6</code> image, but this time with an additional <code>-v</code> option</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
@@ -381,7 +381,7 @@ Deleted: f154f395c55ed7192f180502495b96cb3c223d9ce50273cda41bb63e272be7d8</code>
     -p 8081:80/tcp \
     --name my-web-server \
     -v /home/%USER%/container-workshop:/var/log/www:Z \<i class="conum" data-value="1"></i><b>(1)</b>
-    quay.io/mhildenb/container-workshop-httpd:0.0.6</code></pre>
+    quay.io/bfarr/container-workshop-httpd:0.0.6</code></pre>
 </div>
 </div>
 <div class="colist arabic">

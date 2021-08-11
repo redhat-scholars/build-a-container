@@ -182,7 +182,7 @@
 </div>
 </div>
 <div class="paragraph">
-<p><code>buildah</code> is used to create OCI-compliant container images, such as the <code>quay.io/mhildenb/container-workshop-httpd</code> that we&#8217;ve been using.  We&#8217;ll start by fixing a the security vulnerability we found in the <a href="containers-and-security.html?FOO=bar" target="_blank" rel="noopener">previous section</a>.</p>
+<p><code>buildah</code> is used to create OCI-compliant container images, such as the <code>quay.io/bfarr/container-workshop-httpd</code> that we&#8217;ve been using.  We&#8217;ll start by fixing a the security vulnerability we found in the <a href="containers-and-security.html?FOO=bar" target="_blank" rel="noopener">previous section</a>.</p>
 </div>
 </div>
 </div>
@@ -256,7 +256,7 @@
 <p>Next we tell buildah to implicitly create a "working container" from our currently vulnerable image:</p>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER=$(buildah from quay.io/mhildenb/container-workshop-httpd) <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER=$(buildah from quay.io/bfarr/container-workshop-httpd) <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -292,7 +292,7 @@
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER ID  BUILDER  IMAGE ID     IMAGE NAME                       CONTAINER NAME
-ef575a8a3408     *     60dde8abf76e quay.io/mhildenb/container-wo... container-workshop-httpd-working-container</code></pre>
+ef575a8a3408     *     60dde8abf76e quay.io/bfarr/container-wo... container-workshop-httpd-working-container</code></pre>
 </div>
 </div>
 </li>
@@ -665,7 +665,7 @@ Storing signatures
 </div>
 </div>
 <div class="paragraph">
-<p>Congratulations!  You&#8217;d fixed the shellshock exploit of the original <code>quay.io/mhildenb/container-workshop-httpd</code> container!</p>
+<p>Congratulations!  You&#8217;d fixed the shellshock exploit of the original <code>quay.io/bfarr/container-workshop-httpd</code> container!</p>
 </div>
 <div class="sidebarblock">
 <div class="content">
