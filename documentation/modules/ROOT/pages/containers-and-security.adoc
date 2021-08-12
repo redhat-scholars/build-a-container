@@ -363,21 +363,16 @@ Yields all the information about the private key!
 ====
 
 [#run_containers_responsibly]
-== Running containers responsibly
+== Run containers responsibly
 
 Following the link:https://en.wikipedia.org/wiki/Principle_of_least_privilege[principle of least privilege^], there is a lot we could have done to limit the damage of any attacker such as:
 
-* xref:SECURITY:containers-and-security.adoc#privileged_containers[don't run privileged containers,window=_blank]
-* xref:SECURITY:containers-and-security.adoc#se_linux[use SELinux to fine tune container access to volume mounts,window=_blank]
+* don't run privileged containers
+* use SELinux to fine tune container access to volume mounts
 * don't run containers as root
 * ensure that your containers do not include known vulnerabilities or CVEs
 
 For the purposes of this lab, we're only going to investigate the last two items on this list.  
-
-[TIP]
-====
-If you'd like to go deeper on the first two points, follow the links provided in the bullet points above
-====
 
 [#non_root_containers]
 === Non-root containers
@@ -602,11 +597,6 @@ fdisk -l
 
 But this time it will appear as if we had not run with the `--privileged` flag at all:
 
-[.console-output]
-[source,bash,subs="+macros,+attributes"]
-----
-
-----
 --
 ====
 

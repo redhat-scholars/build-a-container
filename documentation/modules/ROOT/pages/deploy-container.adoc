@@ -2,8 +2,8 @@ include::_attributes.adoc[]
 
 :OCP_PROJECT: {USER}
 
-= Containers and OpenShift
-:navtitle: Containers and OpenShift
+= Deploying to OpenShift
+:navtitle: Deploying to OpenShift
 
 _15 MINUTE EXERCISE_
 

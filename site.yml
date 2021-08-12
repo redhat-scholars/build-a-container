@@ -11,7 +11,7 @@ content:
   sources:
     - url: .
       tags: []
-      branches: ["master", "optional-exercises"]
+      branches: ["master"]
       start_path: documentation
 
 asciidoc:

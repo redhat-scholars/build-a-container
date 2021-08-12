@@ -1,10 +1,7 @@
 name: intro-container-workshop
 title: Build a Container Workshop
-version: "OPTIONAL"
+version: "1.0"
 nav:
-#  - modules/ROOT/nav.adoc
-  - modules/DATABASES/nav.adoc
-  - modules/PODMAN_COMPOSE/nav.adoc
-  - modules/PODMAN_ROOTLESS/nav.adoc
-  - modules/SECURITY/nav.adoc
+  - modules/ROOT/nav.adoc
+  - modules/OPTIONAL/nav.adoc
 start_page: ROOT:index.adoc

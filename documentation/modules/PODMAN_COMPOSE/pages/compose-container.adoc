@@ -8,7 +8,7 @@ include::ROOT:page$_attributes.adoc[]
 = Using Podman with Multiple Containers
 :navtitle: Using Podman with Multiple Containers
 
-_10 MINUTE EXERCISE_
+_15 MINUTE EXERCISE_
 
 As soon as you start using one container, you start to recognise the need for multiple containers and get to the problem of scaling and orchestrating.
 

@@ -3,6 +3,11 @@ include::ROOT:page$_attributes.adoc[]
 = Buildah and Containerfiles
 :navtitle: Buildah and Containerfiles
 
+_25 MINUTE EXERCISE_
+
+image::buildah.png[Buildah!,width=320,height=78]
+
+{zwsp} +
 Though we've fixed the issue with `{apache-server-image-insecure}` by using the `buildah` native command line tools to fix it, there are are still additional steps we could take to make this image even more resilient against attack or exploit.  Here are two issues:
 
 * The web server is running on port 80 in the container.  This is a privileged port.  Better to have this run at port run in an privileged port above 1024 (such as 8080)
