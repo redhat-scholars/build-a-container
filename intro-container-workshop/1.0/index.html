@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Welcome to the BUILD-A-CONTAINER Workshop :: BUILD-A-CONTAINER WORKSHOP</title>
+    <title>WELCOME TO THE BUILD-A-CONTAINER WORKSHOP :: BUILD-A-CONTAINER WORKSHOP</title>
     <link rel="canonical" href="https://bfarr-rh.github.io/build-a-container/intro-container-workshop/1.0/index.html">
     <link rel="next" href="introduction.html">
     <meta name="generator" content="Antora 2.3.4">
@@ -37,6 +37,15 @@
       max-width: unset;
     }
 
+    .bac-red {
+        color: red;
+    }
+    .bac-h1 {
+        font-size: 1.8em;
+        margin: auto;
+        display:table;
+        color: red;
+    }
 
   </style>
 
@@ -77,7 +86,7 @@
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="index.html" class=" query-params-link">Build a Container Workshop</a></h3>
+    <h3 class="title"><a href="index.html" class=" query-params-link">BUILD-A-CONTAINER</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
@@ -210,7 +219,7 @@
     <a class="nav-link" href="DATABASES/databases-and-containers.html">Containerized Databases</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="PODMAN_COMPOSE/compose-container.html">Multi containers with Podman</a>
+    <a class="nav-link" href="PODMAN_COMPOSE/compose-container.html">Docker Compose &amp; Pods</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="PODMAN_ROOTLESS/podman-rootless.html">Rootless Containers</a>
@@ -224,12 +233,12 @@
 </div>
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
-    <span class="title">Build a Container Workshop</span>
+    <span class="title">BUILD-A-CONTAINER</span>
     <span class="version">1.0</span>
   </div>
   <ul class="components">
     <li class="component is-current">
-      <span class="title">Build a Container Workshop</span>
+      <span class="title">BUILD-A-CONTAINER</span>
       <ul class="versions">
         <li class="version is-current is-latest">
           <a href="index.html">1.0</a>
@@ -247,29 +256,102 @@
   <a href="index.html" class="home-link is-current"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li><a href="index.html">Build a Container Workshop</a></li>
-    <li><a href="index.html">Welcome to the BUILD-A-CONTAINER Workshop</a></li>
+    <li><a href="index.html">BUILD-A-CONTAINER</a></li>
+    <li><a href="index.html">WELCOME TO THE <span class="bac-red">BUILD-A-CONTAINER</span> WORKSHOP</a></li>
   </ul>
 </nav>
   <div class="edit-this-page"><a href="file:///Users/bfarr/projects/build-a-container-workshop/documentation/modules/ROOT/pages/index.adoc">Edit this Page</a></div>
 </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Welcome to the BUILD-A-CONTAINER Workshop</h1>
+<h1 class="page">WELCOME TO THE <span class="bac-red">BUILD-A-CONTAINER</span> WORKSHOP</h1>
 <div class="sect1 text-center strong">
 <h2>Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This immersive workshop will introduce you to the world of Containers and Containerization.
-The goals of this hands-on workshop is to give you a crash course introduction to containers, their many use cases and steps you can take to securely containerise your in-house applications.</p>
+<p><span class="bac-h1">The future of enterprise applications is containers!</span></p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/splash-containers.jpeg" alt="Containers!" width="320" height="213">
+<img src="_images/horizon.jpeg" alt="Containers!" width="437" height="271">
 </div>
 </div>
 <div class="paragraph">
-<p>Throughout this workshop, you will use <strong>Red Hat Enterprise Linux 8</strong> (RHEL 8) Container tools including <strong>Podman</strong> and <strong>Buildah</strong> which provide secure means of building and running containers.</p>
+<p>This is because they provide a universal and portable packaging method for workloads and are the stepping stone to a fully automated and agile environment.</p>
+</div>
+<div class="paragraph">
+<p>We know from speaking many people that it’s <strong>hard to find talent, solutions or answers to what’s best for your organization</strong>. Containers and Kubernetes are hand in glove but without first understanding Containers it&#8217;s a lot to take in.</p>
+</div>
+<div class="paragraph">
+<p>This <strong>3hr immersive session</strong> is a crash course introduction to containers, what you should be concerned about and steps you can take to securely containerise applications. Specifically we look at:</p>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Best practices in creating secure and containerised applications</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Run, manage and deploy containers</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Security exploits and how to address them</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Container provenance</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Hands on building a secure container</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The hands-on workshop is for developers, operations, architects or anyone curious about what makes up a container and how to use them in a linux environment.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2>Use Cases</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Whilst creating this workshop, we drew inspiration from a number of use cases (illustrated below) and the experience that there was a lot of "assumed knowledge" when a person from a traditional VM based environment tries out OpenShift or Kubernetes workshops.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/work.jpeg" alt="Containers!" width="437" height="271">
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Alan had an application with many dependencies which he spent hours on constantly setting up across multiple environments. Its configuration could be semi automated, but he thought containers may provide a better way.</p>
+</li>
+<li>
+<p>Kat’s team had to maintain and develop many VM based web servers. They knew they had problems in how to maintain code, environments and the cost of cloud.</p>
+</li>
+<li>
+<p>Bob worked for a government agency who were very traditional in skills, development methodology and security. The business had a new appetite and budget for more feature development. But this resulted in requests for more environments and servers in the data centre. Operations were loathing these requests with little way of chargeback for what was their cost centre. They knew containers would provide greater automation and efficient use of resources but were not sure of security implications.</p>
+</li>
+<li>
+<p>Melanie worked for a construction operation who were upgrading a COTS system. The new version required a container based install. The company had little understanding of containers and what it meant from a technical and enterprise security perspective.</p>
+</li>
+<li>
+<p>Craig’s company was running cloud based services which were starting to take off until the company was hacked. The hack resulted in 2 weeks downtime to reset and restore systems, and they were looking for a way to ensure their containerised applications were secure and had greater control over software provenance.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2>Red Hat Container History</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Red Hat’s contributions to containers go back to the creation of those core container primitives of Linux namespaces and cGroups in the early 2000s.
+Containers have been a core feature of Red Hat Enterprise Linux over multiple major releases and was the foundation of Red Hat OpenShift since its initial release in 2011.</p>
 </div>
 <div class="imageblock left">
 <div class="content">
@@ -286,14 +368,8 @@ The goals of this hands-on workshop is to give you a crash course introduction t
 <img src="_images/Logo-Red_Hat-Enterprise_Linux_8-A-Standard-RGB.png" alt="RHEL 8!" width="320" height="73">
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2>Red Hat Container History</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>Red Hat’s contributions to containers go back to the creation of those core container primitives of Linux namespaces and cGroups in the early 2000s.
-Containers have been a core feature of Red Hat Enterprise Linux over multiple major releases and was the foundation of Red Hat OpenShift since its initial release in 2011.</p>
+<p>&#8203;</p>
 </div>
 <div class="paragraph">
 <p>Interest in containers technology continues to grow, as more organizations realize the benefits they can provide for how they manage applications and infrastructure.
@@ -312,6 +388,9 @@ That’s why, despite the very recent introduction of Windows containers, the ma
 </div>
 <div class="paragraph">
 <p><em>Container reliability is Linux reliability</em></p>
+</div>
+<div class="paragraph">
+<p>Throughout this workshop, you will use <strong>Red Hat Enterprise Linux 8</strong> (RHEL 8) Container tools including <strong>Podman</strong> and <strong>Buildah</strong> which provide secure means of building and running containers.</p>
 </div>
 </div>
 </div>

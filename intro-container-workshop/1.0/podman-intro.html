@@ -38,6 +38,15 @@
       max-width: unset;
     }
 
+    .bac-red {
+        color: red;
+    }
+    .bac-h1 {
+        font-size: 1.8em;
+        margin: auto;
+        display:table;
+        color: red;
+    }
 
   </style>
 
@@ -78,7 +87,7 @@
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="index.html" class=" query-params-link">Build a Container Workshop</a></h3>
+    <h3 class="title"><a href="index.html" class=" query-params-link">BUILD-A-CONTAINER</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
@@ -211,7 +220,7 @@
     <a class="nav-link" href="DATABASES/databases-and-containers.html">Containerized Databases</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="PODMAN_COMPOSE/compose-container.html">Multi containers with Podman</a>
+    <a class="nav-link" href="PODMAN_COMPOSE/compose-container.html">Docker Compose &amp; Pods</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="PODMAN_ROOTLESS/podman-rootless.html">Rootless Containers</a>
@@ -225,12 +234,12 @@
 </div>
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
-    <span class="title">Build a Container Workshop</span>
+    <span class="title">BUILD-A-CONTAINER</span>
     <span class="version">1.0</span>
   </div>
   <ul class="components">
     <li class="component is-current">
-      <span class="title">Build a Container Workshop</span>
+      <span class="title">BUILD-A-CONTAINER</span>
       <ul class="versions">
         <li class="version is-current is-latest">
           <a href="index.html">1.0</a>
@@ -248,7 +257,7 @@
   <a href="index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li><a href="index.html">Build a Container Workshop</a></li>
+    <li><a href="index.html">BUILD-A-CONTAINER</a></li>
     <li><a href="podman-intro.html">Running Containers</a></li>
   </ul>
 </nav>
@@ -453,6 +462,9 @@ Storing signatures
 <img src="_images/apache-guestbook-page.png" alt="apache guestbook page">
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
 <p>Now enter a name into the <code>Name:</code> field to be logged to the guestbook and press the <code>Log to Guestbook</code> button.  You should now be presented a screen like this:</p>
@@ -461,10 +473,20 @@ Storing signatures
 <img src="_images/apache-guestbook-submit.png" alt="apache guestbook submit">
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;<br></p>
+</div>
 </li>
 <li>
-<p>Click the <code>here</code> link highlighted above to go back and enter another name
-&#8203;</p>
+<p>Click the <code>here</code> link highlighted above to go back and enter another name. Alternatively run the following command to add users if you have problems with the browser.</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code>curl <a href="http://localhost:8081/cgi-bin/log-visitor.sh?visitor=Danny" class="bare">http://localhost:8081/cgi-bin/log-visitor.sh?visitor=Danny</a></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 </ol>
 </div>
@@ -856,7 +878,12 @@ VERSION="7.9 (Maipo)"
 </div>
 </li>
 <li>
-<p>You should now see the file appear in your <strong>Explorer</strong>.  Click on it to view the contents.  It should match the visitors that you entered previously</p>
+<p>You should now see the file appear in your <strong>Explorer</strong>.  Click on it to view the contents.  It should match the visitors that you entered previously. Alternative run the following command to load it.</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">/usr/lib/code-server/bin/code-server -r /home/%USER%/container-workshop/visitor_info.txt</code></pre>
+</div>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="_images/visitor-info.png" alt="Visitor Info">
@@ -864,10 +891,10 @@ VERSION="7.9 (Maipo)"
 </div>
 </li>
 <li>
-<p>Having looked at the contents of <code>visitor_info.txt</code> let&#8217;s delete our copy from off the host by right-clicking on it in the Explorer and selecting <code>Delete Permanently</code></p>
-<div class="imageblock">
+<p>Once you have looked at the contents of <code>visitor_info.txt</code> , remove the file with the command below.</p>
+<div class="listingblock console-input">
 <div class="content">
-<img src="_images/delete-permanently.png" alt="delete permanently">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">rm /home/%USER%/container-workshop/visitor_info.txt</code></pre>
 </div>
 </div>
 </li>
