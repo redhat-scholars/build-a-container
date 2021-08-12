@@ -3,9 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Containers and OpenShift :: Build a Container Workshop</title>
-    <link rel="canonical" href="https://hatmarch.github.io/container-workshop/intro-container-workshop/1.0/deploy-container.html">
-    <link rel="prev" href="compose-container.html">
+    <title>Deploying to OpenShift :: BUILD-A-CONTAINER WORKSHOP</title>
+    <link rel="canonical" href="https://bfarr-rh.github.io/build-a-container/intro-container-workshop/1.0/deploy-container.html">
+    <link rel="prev" href="build-your-own-container-containerfile.html">
+    <link rel="next" href="DATABASES/databases-and-containers.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../../_/css/site.css">
 <link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
@@ -13,6 +14,19 @@
   </head>
   <body class="article">
 <header class="header">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+   $( document ).ready(function() {
+    $('li.version a, a.version').click(function() {
+            var querystring = window.location.search;
+            var href = $(this).attr('href');
+            location.href = href + querystring;
+            return false;
+      });
+  });
+    
+  </script>
   <style>
     /* override master stylesheet properties for this partial here */
 
@@ -31,7 +45,7 @@
     <div class="navbar-brand">
       <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
           src="../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
-      <a class="navbar-item" style="font-size: 24px; color: white" href="https://hatmarch.github.io/container-workshop">Build a Container Workshop</a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://bfarr-rh.github.io/build-a-container">BUILD-A-CONTAINER WORKSHOP</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
         <span></span>
@@ -76,13 +90,43 @@
     <a class="nav-link" href="introduction.html#open_code_server">Code Server</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="introduction.html#open_code_server_terminal">Open terminal</a>
+    <a class="nav-link" href="introduction.html#open_code_server_terminal">Open Terminal</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="introduction.html#open_code_server_terminal_commands">Issuing Terminal Commands</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="introduction.html#local_browser">Local Browser</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="container-anatomy.html">Container Anatomy</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-anatomy.html#what_makes_up_a_container">What makes up a Container?</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-anatomy.html#container_image_format">Container Image Format</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-anatomy.html#container_file">Containerfile</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-anatomy.html#container_identification">Container Identification</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-anatomy.html#container_runtime">Container Runtime</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-anatomy.html#container_tools">Container Tools</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-anatomy.html#container_registries">Container Registries</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-anatomy.html#more_information">More information</a>
   </li>
 </ul>
   </li>
@@ -109,7 +153,7 @@
     <a class="nav-link" href="podman-intro.html#remove_containers">Removing Containers</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="podman-intro.html#rerunning_container">"Re-running" Containers</a>
+    <a class="nav-link" href="podman-intro.html#rerunning_container">Re-running Containers</a>
   </li>
 </ul>
   </li>
@@ -123,35 +167,54 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="container-persistence.html#test_mount">Testing the Volume Mount</a>
   </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="containers-and-security.html">Container Security</a>
+<ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="container-persistence.html#tcontainerized_databases">Containerized Databases</a>
+    <a class="nav-link" href="containers-and-security.html#exploit_containers">Exploit a Container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="containers-and-security.html#run_containers_responsibly">Run Containers Responsibly</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="containers-and-security.html#scanning_containers">Scanning Containers for Security Issues</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Building Securely</span>
+    <a class="nav-link" href="build-your-own-container.html">Building Securely</a>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="containers-and-security.html">Container Security</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="containers-and-security.html#scanning_containers">Scanning Containers</a>
-  </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="build-your-own-container.html">Build your own Secure Container</a>
   </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="build-your-own-container-containerfile.html">Buildah and Containerfiles</a>
+  </li>
 </ul>
   </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="deploy-container.html">Deploying to OpenShift</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Scaling and Deploying Containers</span>
+    <a class="nav-link" href="DATABASES/databases-and-containers.html">Optional</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="compose-container.html">Multi containers with Podman</a>
+    <a class="nav-link" href="DATABASES/databases-and-containers.html">Containerized Databases</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="deploy-container.html">Containers and OpenShift</a>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="PODMAN_COMPOSE/compose-container.html">Multi containers with Podman</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="PODMAN_ROOTLESS/podman-rootless.html">Rootless Containers</a>
   </li>
 </ul>
   </li>
@@ -186,20 +249,29 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Build a Container Workshop</a></li>
-    <li>Scaling and Deploying Containers</li>
-    <li><a href="deploy-container.html">Containers and OpenShift</a></li>
+    <li><a href="deploy-container.html">Deploying to OpenShift</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/hatmarch/container-workshop/edit/master/documentation/modules/ROOT/pages/deploy-container.adoc">Edit this Page</a></div>
-  </div>
+  <div class="edit-this-page"><a href="file:///Users/bfarr/projects/build-a-container-workshop/documentation/modules/ROOT/pages/deploy-container.adoc">Edit this Page</a></div>
+</div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Containers and OpenShift</h1>
-<div class="sect1">
-<h2 id="_login_to_openshift"><a class="anchor" href="#_login_to_openshift"></a>Login to OpenShift</h2>
+<h1 class="page">Deploying to OpenShift</h1>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>First, let&#8217;s log into your OpenShift cluster.  Choose the tab that is most appropriate to your situation.  If you are unsure, ask your lab techs.</p>
+<p><em>15 MINUTE EXERCISE</em></p>
+</div>
+<div class="paragraph">
+<p>Now that we have a container let&#8217;s demonstrate how one might deploy that container to a platform like Red Hat&#8217;s Enterprise Kubernetes solution, OpenShift.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="openshift_login"><a class="anchor" href="#openshift_login"></a>Login to OpenShift</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>First, let&#8217;s log into your OpenShift cluster.  Choose the tab that is most appropriate to your current lab.  If you are unsure, ask your lab techs.</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -419,35 +491,22 @@ Use insecure connections? (y/n):</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_simple_container_deployment"><a class="anchor" href="#_simple_container_deployment"></a>Simple Container Deployment</h2>
+<h2 id="image_registry"><a class="anchor" href="#image_registry"></a>Upload Image to Image Registry</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Let&#8217;s go back to the container that we finished <a href="build-your-own-container.html#finished_container" class="page" target="_blank" rel="noopener">here</a> and look at what a simple deployment to the <code>%USER%</code> project.</p>
+<p>Let&#8217;s go back to the container that we finished <a href="build-your-own-container-containerfile.html?USER=%USER%&amp;CLUSTER_SUBDOMAIN=%CLUSTER_SUBDOMAIN%#finished_container" target="_blank" rel="noopener">here</a> and look at what a simple deployment to the <code>%USER%</code> project.</p>
 </div>
 <div class="sect2">
-<h3 id="_container_registry"><a class="anchor" href="#_container_registry"></a>Container Registry</h3>
+<h3 id="_openshift_and_image_registries"><a class="anchor" href="#_openshift_and_image_registries"></a>OpenShift and Image Registries</h3>
 <div class="paragraph">
 <p>In order to be able to run an image in OpenShift or Kubernetes we need to put our image somewhere we&#8217;re OpenShift can find it.  This usually involves uplaoding the image to either a public or private container registry.  Public registries include Red Hat&#8217;s <a href="quay.io" target="_blank" rel="noopener">quay.io</a> and Docker&#8217;s <a href="https://hub.docker.com/" target="_blank" rel="noopener">Docker Hub</a></p>
 </div>
 <div class="paragraph">
-<p>One of the features that OpenShift adds to Kubernetes is an inbuilt container registry called an ImageStream.  We&#8217;re going to create an ImageStream to upload our container to where OpenShift can find it.</p>
+<p>One of the features that OpenShift adds to Kubernetes is an in-built container registry called an <code>ImageStream</code>.  We&#8217;re going to create an <code>ImageStream</code> to upload our container to where OpenShift can find it.</p>
 </div>
 <div class="paragraph">
-<p>We can create the image stream either from the OpenShift Console (UI) or from the terminal (command line).  Choose one of the following tabs</p>
+<p>We can create the image stream either from the OpenShift Console (UI) or from the terminal (command line).</p>
 </div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset3_terminal"></a>Terminal</p>
-</li>
-<li>
-<p><a id="tabset3_openshift-console"></a>OpenShift Console</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset3_terminal">
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -467,7 +526,7 @@ Use insecure connections? (y/n):</code></pre>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>This is the namespace the ImageStream should be bound to</td>
+<td>This is the namespace the <code>ImageStream</code> should be bound to</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
@@ -475,21 +534,14 @@ Use insecure connections? (y/n):</code></pre>
 </tr>
 </table>
 </div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">imagestream.image.openshift.io/my-secure-web-server-image created</code></pre>
+</div>
+</div>
 </li>
-</ol>
-</div>
-</div>
-<div class="tab-pane" aria-labelledby="tabset3_openshift-console">
-<div class="paragraph">
-<p><em>COMING SOON</em></p>
-</div>
-</div>
-</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
 <li>
-<p>With our ImageStream created, we can find our registry endpoint with this command</p>
+<p>With our <code>ImageStream</code> created, we can find our registry endpoint with this command</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">OCP_REGISTRY_URL=$(oc get imagestream my-secure-web-server-image \
@@ -526,7 +578,7 @@ Use insecure connections? (y/n):</code></pre>
 </div>
 </li>
 <li>
-<p>This should yield the following output, which indicates that you&#8217;ve authenticated with the ImageStream internal registry</p>
+<p>This should yield the following output, which indicates that you&#8217;ve authenticated with the <code>ImageStream</code> internal registry</p>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Login Succeeded!</code></pre>
@@ -537,9 +589,22 @@ Use insecure connections? (y/n):</code></pre>
 <p>Now we&#8217;re going to use a new <code>podman</code> command called <code>tag</code> to associate our local image with an image that could exist in our ImageStream registry</p>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman tag localhost/secure-container \
-    ${OCP_REGISTRY_URL}:latest</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman tag \
+    localhost/secure-container \<i class="conum" data-value="1"></i><b>(1)</b>
+    ${OCP_REGISTRY_URL}:latest <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This, remember is the local name of the image we created <a href="build-your-own-container.html#finished_container" class="page" target="_blank" rel="noopener">in the previous section</a></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>If you <code>echo</code> this in a shell, this will look something like <code>default-route-openshift-image-registry.apps.%CLUSTER_SUBDOMAIN%/%USER%/my-secure-web-server-image:latest</code> which is similar to container identification names as we discussed in the <a href="container-anatomy.html#container_identification" class="page" target="_blank" rel="noopener">Container Anatomy section</a></td>
+</tr>
+</table>
 </div>
 </li>
 <li>
@@ -570,8 +635,11 @@ Storing signatures</code></pre>
 <p>Now we have our image in a place where we can refer to it</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_run_an_image"><a class="anchor" href="#_run_an_image"></a>Run an image</h3>
+</div>
+</div>
+<div class="sect1">
+<h2 id="simple_container_run"><a class="anchor" href="#simple_container_run"></a>Run Container Image on OpenShift</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>The simplest way to get a container image up and running in OpenShift is with the <code>oc run</code> command.  This will create what&#8217;s called a <code>pod</code> to house our container that runs based on the image definition we just uploaded to the ImageStream</p>
 </div>
@@ -635,12 +703,18 @@ Storing signatures</code></pre>
 </ol>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_accessing_our_website"><a class="anchor" href="#_accessing_our_website"></a>Accessing our website</h3>
+</div>
+<div class="sect1">
+<h2 id="expose_container"><a class="anchor" href="#expose_container"></a>Exposing Container Website</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Our container is running in OpenShift, but we&#8217;d like the rest of the world to have access to our guestbook.  To do this on OpenShift we create a <code>Service</code> in that "exposes" our pod and then a <code>Route</code> that "exposes" our service to the world outside the OpenShift cluster.</p>
+</div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose \<i class="conum" data-value="1"></i><b>(1)</b>
-    pod/my-web-server <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+    --port 8080 \<i class="conum" data-value="2"></i><b>(2)</b>
+    pod/my-web-server <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -651,9 +725,21 @@ Storing signatures</code></pre>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Many resources can be exposed.  Exposing a pod creates a service that points to the pod based on the svcs the pod exports</td>
+<td>We want our service to expose port 8080</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Many resources can be exposed.  Exposing a pod (as we&#8217;re referencing here) creates a service that points to the pod based on the svcs the pod exports</td>
 </tr>
 </table>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">service/my-web-server exposed</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once our service is created, we can expose our <code>Service</code> (or <code>svc</code>)</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -661,10 +747,29 @@ Storing signatures</code></pre>
     svc/my-web-server</code></pre>
 </div>
 </div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">route.route.openshift.io/my-web-server exposed</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Exposing our service creates a <code>Route</code> in OpenShift.  We can interrogate this created route to determine what the publicly accessible endpoint is for our service:</p>
+</div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo "http://$(oc get route my-web-server -o jsonpath='{.spec.host}')/hello.html"</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>This should return output something like this:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">http://my-web-server-%USER%.apps.%CLUSTER_SUBDOMAIN%/hello.html</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Copy the output and paste it into any internet connected browser.  You should get access to an operating guestbook</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -673,26 +778,37 @@ Storing signatures</code></pre>
 </div>
 </div>
 </div>
-</div>
 <div class="sect1">
-<h2 id="_openshift_security"><a class="anchor" href="#_openshift_security"></a>OpenShift security</h2>
+<h2 id="openshift_security"><a class="anchor" href="#openshift_security"></a>OpenShift Security</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This the <a href="build-your-own-container.html#basic_containerfile" class="page" target="_blank" rel="noopener">building secure container section</a> we spent a lot of time making our image suitable for running on OpenShift.</p>
+<p>In the <a href="build-your-own-container-containerfile.html?USER=%USER%&amp;CLUSTER_SUBDOMAIN=%CLUSTER_SUBDOMAIN%#basic_containerfile" target="_blank" rel="noopener">building secure container section</a> we spent a lot of time making our image suitable for running on OpenShift.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s take a quick look at how OpenShift adds a layer of protection around our running of images</p>
+<p>Let&#8217;s take a quick look at how OpenShift adds a layer of protection around our running of images by looking at what happens when we try to run our insecure container on it.</p>
 </div>
-<div class="paragraph">
-<p><em>COMING SOON</em>: Upload to image stream under new tag and try running the insecure container. This should fail</p>
-</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>First let&#8217;s make use of OpenShift&#8217;s internal image registry again (the <code>ImageStream</code> we created before) by tagging the insecure image with a name that binds it to to that registry</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman tag \
-    quay.io/mhildenb/container-workshop-httpd:0.0.5 \
-    ${OCP_REGISTRY_URL}:insecure</code></pre>
+    quay.io/bfarr/container-workshop-httpd:0.0.6 \
+    ${OCP_REGISTRY_URL}:insecure <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Same exact <code>ImageStream</code> image registry, just different tag</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>With the image tagged for the <code>ImageStream</code> registry, we can now push it</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman push \
@@ -718,10 +834,68 @@ Writing manifest to image destination
 Storing signatures</code></pre>
 </div>
 </div>
+</li>
+<li>
+<p>Before we attempt to run our image, let&#8217;s setup a log watch so that we can see the logs of the pod.  We&#8217;ll do this in a separate terminal, so first split your terminal, this will be referred to as <strong>Terminal 2</strong></p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/terminal-split.png" alt="terminal split">
+</div>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset3_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset3_terminal-2">
+<div class="paragraph">
+<p>To monitor our pod from the terminal we&#8217;re going to use a tool called <code>stern</code> (see here for more info).  It allows us to aggregate and view logs from our Kubernetes cluster.</p>
+</div>
+<div class="paragraph">
+<p>To set up a log watch enter the following command</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">stern -n %USER% \<i class="conum" data-value="1"></i><b>(1)</b>
+   my-web-server-insecure <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>-n</code> option tells the stern to watch for pods in the <code>%USER%</code> namespace</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This is a string that stern uses to match against any pods that exist in the specified namespace.  In this case this matches the name we are intending to give our pod</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>With our image pushed to the OpenShift image registry, we can now run the image in a pod using the following command (and the "Cluster Local" name of the registry which we obtained above)</p>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset4_terminal-1"></a>Terminal 1</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset4_terminal-1">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc run \
-    my-web-server-insecure \<i class="conum" data-value="1"></i><b>(1)</b>
+    my-web-server-insecure\<i class="conum" data-value="1"></i><b>(1)</b>
     -n %USER% \
     --image ${CLUSTER_LOCAL_REGISTRY_URL}:insecure <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
@@ -738,25 +912,53 @@ Storing signatures</code></pre>
 </tr>
 </table>
 </div>
-<div class="listingblock console-input">
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>As the pod starts up we should see the following output from the <code>stern</code> watch in the other terminal</p>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset5_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get events -w</code></pre>
-</div>
-</div>
+<div class="tab-pane" aria-labelledby="tabset5_terminal-2">
 <div class="listingblock console-output">
+<div class="title">Recurring <code>stern</code> output</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">0s          Normal    Scheduled        pod/my-web-server-insecure   Successfully assigned %USER%/my-web-server-insecure to ip-10-0-157-41.ap-southeast-1.compute.internal
-0s          Normal    AddedInterface   pod/my-web-server-insecure   Add eth0 [10.131.0.238/23]
-0s          Normal    Pulling          pod/my-web-server-insecure   Pulling image "image-registry.openshift-image-registry.svc:5000/%USER%/my-secure-web-server-image:insecure"
-0s          Normal    Pulled           pod/my-web-server-insecure   Successfully pulled image "image-registry.openshift-image-registry.svc:5000/%USER%/my-secure-web-server-image:insecure" in 6.549828045s
-0s          Normal    Created          pod/my-web-server-insecure   Created container my-web-server-insecure
-0s          Normal    Started          pod/my-web-server-insecure   Started container my-web-server-insecure
-0s          Normal    Pulled           pod/my-web-server-insecure   Container image "image-registry.openshift-image-registry.svc:5000/%USER%/my-secure-web-server-image:insecure" already present on machine
-0s          Normal    Created          pod/my-web-server-insecure   Created container my-web-server-insecure
-0s          Normal    Started          pod/my-web-server-insecure   Started container my-web-server-insecure
-0s          Warning   BackOff          pod/my-web-server-insecure   Back-off restarting failed container
-0s          Warning   BackOff          pod/my-web-server-insecure   Back-off restarting failed container</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">+ my-web-server-insecure › my-web-server-insecure <i class="conum" data-value="1"></i><b>(1)</b>
+Error opening stream to student1/my-web-server-insecure: my-web-server-insecure
+: container "my-web-server-insecure" in pod "my-web-server-insecure" is waiting to start: ContainerCreating
+- my-web-server-insecure
++ my-web-server-insecure › my-web-server-insecure
+Error opening stream to student1/my-web-server-insecure: my-web-server-insecure
+: container "my-web-server-insecure" in pod "my-web-server-insecure" is waiting to start: ContainerCreating
+- my-web-server-insecure
++ my-web-server-insecure › my-web-server-insecure
+my-web-server-insecure my-web-server-insecure AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 10.128.2.16. Set the 'ServerName' directive globally to suppress this message
+<mark>my-web-server-insecure my-web-server-insecure (13)Permission denied: AH00058: Error retrieving pid file logs/httpd.pid</mark>
+<mark>my-web-server-insecure my-web-server-insecure AH00059: Remove it before continuing if it is corrupted.</mark>
+- my-web-server-insecure</code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>stern</code> outputs logs in the format pod-name &gt; container-name '</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -770,7 +972,8 @@ Storing signatures</code></pre>
 </div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="compose-container.html" class="query-params-link">Multi containers with Podman</a></span>
+  <span class="prev"><a href="build-your-own-container-containerfile.html" class="query-params-link">Buildah and Containerfiles</a></span>
+  <span class="next"><a href="DATABASES/databases-and-containers.html" class="query-params-link">Optional</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
@@ -784,6 +987,5 @@ Storing signatures</code></pre>
 </footer>
 <script src="../../_/js/vendor/clipboard.js"></script>
 <script src="../../_/js/site.js"></script>
-<script async src="../../_/js/vendor/highlight.js"></script>
-<script src="../../_/js/local-overrides.js"></script>  </body>
+<script async src="../../_/js/vendor/highlight.js"></script>  </body>
 </html>

@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Welcome to the Build a Container Workshop :: Build a Container Workshop</title>
-    <link rel="canonical" href="https://hatmarch.github.io/container-workshop/intro-container-workshop/1.0/index.html">
+    <title>Welcome to the BUILD-A-CONTAINER Workshop :: BUILD-A-CONTAINER WORKSHOP</title>
+    <link rel="canonical" href="https://bfarr-rh.github.io/build-a-container/intro-container-workshop/1.0/index.html">
     <link rel="next" href="introduction.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../../_/css/site.css">
@@ -13,6 +13,19 @@
   </head>
   <body class="article">
 <header class="header">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+   $( document ).ready(function() {
+    $('li.version a, a.version').click(function() {
+            var querystring = window.location.search;
+            var href = $(this).attr('href');
+            location.href = href + querystring;
+            return false;
+      });
+  });
+    
+  </script>
   <style>
     /* override master stylesheet properties for this partial here */
 
@@ -31,7 +44,7 @@
     <div class="navbar-brand">
       <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
           src="../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
-      <a class="navbar-item" style="font-size: 24px; color: white" href="https://hatmarch.github.io/container-workshop">Build a Container Workshop</a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://bfarr-rh.github.io/build-a-container">BUILD-A-CONTAINER WORKSHOP</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
         <span></span>
@@ -76,13 +89,43 @@
     <a class="nav-link" href="introduction.html#open_code_server">Code Server</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="introduction.html#open_code_server_terminal">Open terminal</a>
+    <a class="nav-link" href="introduction.html#open_code_server_terminal">Open Terminal</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="introduction.html#open_code_server_terminal_commands">Issuing Terminal Commands</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="introduction.html#local_browser">Local Browser</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="container-anatomy.html">Container Anatomy</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-anatomy.html#what_makes_up_a_container">What makes up a Container?</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-anatomy.html#container_image_format">Container Image Format</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-anatomy.html#container_file">Containerfile</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-anatomy.html#container_identification">Container Identification</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-anatomy.html#container_runtime">Container Runtime</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-anatomy.html#container_tools">Container Tools</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-anatomy.html#container_registries">Container Registries</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="container-anatomy.html#more_information">More information</a>
   </li>
 </ul>
   </li>
@@ -109,7 +152,7 @@
     <a class="nav-link" href="podman-intro.html#remove_containers">Removing Containers</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="podman-intro.html#rerunning_container">"Re-running" Containers</a>
+    <a class="nav-link" href="podman-intro.html#rerunning_container">Re-running Containers</a>
   </li>
 </ul>
   </li>
@@ -123,35 +166,54 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="container-persistence.html#test_mount">Testing the Volume Mount</a>
   </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="containers-and-security.html">Container Security</a>
+<ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="container-persistence.html#tcontainerized_databases">Containerized Databases</a>
+    <a class="nav-link" href="containers-and-security.html#exploit_containers">Exploit a Container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="containers-and-security.html#run_containers_responsibly">Run Containers Responsibly</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="containers-and-security.html#scanning_containers">Scanning Containers for Security Issues</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Building Securely</span>
+    <a class="nav-link" href="build-your-own-container.html">Building Securely</a>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="containers-and-security.html">Container Security</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="containers-and-security.html#scanning_containers">Scanning Containers</a>
-  </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="build-your-own-container.html">Build your own Secure Container</a>
   </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="build-your-own-container-containerfile.html">Buildah and Containerfiles</a>
+  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deploy-container.html">Deploying to OpenShift</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Scaling and Deploying Containers</span>
+    <a class="nav-link" href="DATABASES/databases-and-containers.html">Optional</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="compose-container.html">Multi containers with Podman</a>
+    <a class="nav-link" href="DATABASES/databases-and-containers.html">Containerized Databases</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="deploy-container.html">Containers and OpenShift</a>
+    <a class="nav-link" href="PODMAN_COMPOSE/compose-container.html">Multi containers with Podman</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="PODMAN_ROOTLESS/podman-rootless.html">Rootless Containers</a>
   </li>
 </ul>
   </li>
@@ -186,14 +248,14 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Build a Container Workshop</a></li>
-    <li><a href="index.html">Welcome to the Build a Container Workshop</a></li>
+    <li><a href="index.html">Welcome to the BUILD-A-CONTAINER Workshop</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/hatmarch/container-workshop/edit/master/documentation/modules/ROOT/pages/index.adoc">Edit this Page</a></div>
-  </div>
+  <div class="edit-this-page"><a href="file:///Users/bfarr/projects/build-a-container-workshop/documentation/modules/ROOT/pages/index.adoc">Edit this Page</a></div>
+</div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Welcome to the Build a Container Workshop</h1>
+<h1 class="page">Welcome to the BUILD-A-CONTAINER Workshop</h1>
 <div class="sect1 text-center strong">
 <h2>Overview</h2>
 <div class="sectionbody">
@@ -268,6 +330,5 @@ That’s why, despite the very recent introduction of Windows containers, the ma
 </footer>
 <script src="../../_/js/vendor/clipboard.js"></script>
 <script src="../../_/js/site.js"></script>
-<script async src="../../_/js/vendor/highlight.js"></script>
-<script src="../../_/js/local-overrides.js"></script>  </body>
+<script async src="../../_/js/vendor/highlight.js"></script>  </body>
 </html>

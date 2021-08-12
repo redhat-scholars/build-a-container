@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Containerized Databases :: BUILD-A-CONTAINER WORKSHOP</title>
+    <link rel="canonical" href="https://bfarr-rh.github.io/build-a-container/intro-container-workshop/1.0/DATABASES/databases-and-containers.html">
+    <link rel="prev" href="../deploy-container.html">
+    <link rel="next" href="../PODMAN_COMPOSE/compose-container.html">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+<link rel="icon" href="../../../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+   $( document ).ready(function() {
+    $('li.version a, a.version').click(function() {
+            var querystring = window.location.search;
+            var href = $(this).attr('href');
+            location.href = href + querystring;
+            return false;
+      });
+  });
+    
+  </script>
+  <style>
+    /* override master stylesheet properties for this partial here */
+
+    .navbar-item {
+      flex: unset;
+    }
+
+    .doc {
+      max-width: unset;
+    }
+
+
+  </style>
+
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://bfarr-rh.github.io/build-a-container">BUILD-A-CONTAINER WORKSHOP</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+        <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-scholars.github.io/outer-loop-guides/" target="_blank">Outer Loop</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/openshift-starter-guides/" target="_blank">OpenShift Starter</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header><div class="body">
+<div class="nav-container" data-component="intro-container-workshop" data-version="1.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html" class=" query-params-link">Build a Container Workshop</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../introduction.html">Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../introduction.html#open_code_server">Code Server</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../introduction.html#open_code_server_terminal">Open Terminal</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../introduction.html#open_code_server_terminal_commands">Issuing Terminal Commands</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../introduction.html#local_browser">Local Browser</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../container-anatomy.html">Container Anatomy</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-anatomy.html#what_makes_up_a_container">What makes up a Container?</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-anatomy.html#container_image_format">Container Image Format</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-anatomy.html#container_file">Containerfile</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-anatomy.html#container_identification">Container Identification</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-anatomy.html#container_runtime">Container Runtime</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-anatomy.html#container_tools">Container Tools</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-anatomy.html#container_registries">Container Registries</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-anatomy.html#more_information">More information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../podman-intro.html">Running Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../podman-intro.html#run_container">Add a website</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../podman-intro.html#enter_container">Look inside a container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../podman-intro.html#copy_data">Copying data out</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../podman-intro.html#committing_containers">Committing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../podman-intro.html#stop_container">Stopping Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../podman-intro.html#remove_containers">Removing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../podman-intro.html#rerunning_container">Re-running Containers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../container-persistence.html">Persistence and Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-persistence.html#mounting_volumes">Mounting Volumes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-persistence.html#test_mount">Testing the Volume Mount</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../containers-and-security.html">Container Security</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../containers-and-security.html#exploit_containers">Exploit a Container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../containers-and-security.html#run_containers_responsibly">Run Containers Responsibly</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../containers-and-security.html#scanning_containers">Scanning Containers for Security Issues</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../build-your-own-container.html">Building Securely</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../build-your-own-container.html">Build your own Secure Container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../build-your-own-container-containerfile.html">Buildah and Containerfiles</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../deploy-container.html">Deploying to OpenShift</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="databases-and-containers.html">Optional</a>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="databases-and-containers.html">Containerized Databases</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../PODMAN_COMPOSE/compose-container.html">Multi containers with Podman</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../PODMAN_ROOTLESS/podman-rootless.html">Rootless Containers</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Build a Container Workshop</span>
+    <span class="version">1.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Build a Container Workshop</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">1.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Build a Container Workshop</a></li>
+    <li><a href="databases-and-containers.html">Optional</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="file:///Users/bfarr/projects/build-a-container-workshop/documentation/modules/DATABASES/pages/databases-and-containers.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Containerized Databases</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>10 MINUTE EXERCISE</em></p>
+</div>
+<div class="paragraph">
+<p>Every developer sometimes needs to run databases locally or in multiple environments. Containers provide a great way to reduce the complexity and resources required to achieve this. In production, containers also
+provide a good candidate to run databases for microservices patterns and these days more and more traditional enterprise databases are using container based methods of deployment.</p>
+</div>
+<div class="paragraph">
+<p>In this section we will demonstrate a simple task of running a MYSQL database in a container, creating and inserting data into the database and finally how you can still manage to simply interact with the database
+through your typical database UI tools.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_run_the_database_container"><a class="anchor" href="#_run_the_database_container"></a>Run the Database Container</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Start your database by running the following commands (ensure you are running as the root user in new terminals with sudo -i):</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo -i</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
+    --rm \<i class="conum" data-value="1"></i><b>(1)</b>
+    --name mysql_database \<i class="conum" data-value="2"></i><b>(2)</b>
+    -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=db \<i class="conum" data-value="3"></i><b>(3)</b>
+    -p 3306:3306 \
+    quay.io/bfarr/mysql-80</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This means the container should be removed once stopped</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Instead of referring to the container by its <code>Container ID</code> we can provide a name by which we&#8217;d like to address the container</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>These are environment variables that we would like to be made available within the container.  In this instance, these are all environment variables that MySQL uses to set itself up</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>The terminal should be taken over with log output from the container.  This is because we did not run the container in "daemon mode" and instead it is running in the foreground of our terminal.</p>
+</li>
+<li>
+<p>Open a second terminal to the side by hitting the terminal split button</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/terminal-split.png" alt="terminal split">
+</div>
+<div class="title">Figure 1. Terminal split button</div>
+</div>
+</li>
+<li>
+<p>Observe the running container image by running the <code>podman ps</code> command</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman ps</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER ID  IMAGE                             COMMAND               CREATED         STATUS             PORTS                   NAMES
+e658d0e1d5c1  quay.io/bfarr/mysql-80:latest  run-mysqld --defa...  13 minutes ago  Up 13 minutes ago  0.0.0.0:3306-&gt;3306/tcp  mysql_database <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Notice that this is the name we assigned the container above</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_the_database"><a class="anchor" href="#_create_the_database"></a>Create the Database</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Lets view the sql file which we will run against our database. You will notice it creates a table and inserts some rows into the table.</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">/usr/lib/code-server/bin/code-server -r /home/student1/container-workshop/sql/example_database.sql</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Now lets run this sql against our database providing via the mysql cli that is running in the container.  To do this we will use the <code>podman exec</code> command</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat /home/%USER%/container-workshop/sql/example_database.sql | \<i class="conum" data-value="1"></i><b>(1)</b>
+    podman exec \<i class="conum" data-value="2"></i><b>(2)</b>
+    -i \<i class="conum" data-value="3"></i><b>(3)</b>
+    mysql_database \<i class="conum" data-value="4"></i><b>(4)</b>
+    mysql -u user -p'pass' -D db <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>output the contents of the .sql file that creates the example database to STDIN</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Run a command in a (running) container</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>interactive: makes STDIN available to whatever command we are exec&#8217;ing</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The name (or <code>Container ID</code>) of the running container where we want to run the command</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The command that we mean to run</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_run_a_query"><a class="anchor" href="#_run_a_query"></a>Run a Query</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Your VS Code server IDE has a MYSQL extension installed that we will use to run a query. We will use this to run a simole select statement to demonstrate that the database UI tools that are traditionally used can
+continue to be used with containerised databases. Though we are simply here using local url and port settings, when containers run in a container platform such as OpenShift there are cli tools that help to
+tunnel the port to your local desktop or ports can be exposed outside the cluster.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Find the MYSQL extension at the bottom left of the Code Server and click the + symbol to create a new connection</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/mysql-extension.png" alt="mysql extension">
+</div>
+</div>
+</li>
+<li>
+<p>Input the host and user values as it prompts you to do so:</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/host-input.png" alt="host input">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/user-input.png" alt="user input">
+</div>
+</div>
+</li>
+<li>
+<p>Type pass as we have set in the parameters in running the container.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/password-input.png" alt="password input">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/port-input.png" alt="port input">
+</div>
+</div>
+</li>
+<li>
+<p>Press enter with no value.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/cert-input.png" alt="cert input">
+</div>
+</div>
+</li>
+<li>
+<p>If successful you should see a new connection with localhost that you can expand and start to inspect databases.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/connected.png" alt="connected">
+</div>
+</div>
+</li>
+<li>
+<p>Next right click on the localhost icon and select "New Query"</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/new-query.png" alt="new query">
+</div>
+</div>
+</li>
+<li>
+<p>Cut and paste "select * from db.catalog;" into the window, right click and select "Run MySQL Query".</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code>select * from db.catalog;</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/run-query.png" alt="run query">
+</div>
+</div>
+</li>
+<li>
+<p>If successful you will now see the results of your query.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/results.png" alt="results">
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_considerations_for_database_containerisation"><a class="anchor" href="#_considerations_for_database_containerisation"></a>Considerations for Database Containerisation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This simple exercise was designed to introduce working with database in containers. Today containers are provided for many databases including:
+PostgreSQL, MySQL, MariaDB, MongoDB, SQL Server. See <a href="https://catalog.redhat.com/software/containers/search?p=1&amp;application_categories_list=Database%20%26%20Data%20Management" target="_blank" rel="noopener">Database Containers</a></p>
+</div>
+<div class="paragraph">
+<p>In kubernetes environments, <a href="https://operatorhub.io/?category=Database" target="_blank" rel="noopener">operators</a> are being provided by organisations to ease the burden in managing the full lifecycle.</p>
+</div>
+<div class="paragraph">
+<p>An example of container based deployment is <a href="https://cloudblogs.microsoft.com/sqlserver/2020/06/23/expanding-sql-server-big-data-clusters-capabilities-now-on-red-hat-openshift/" target="_blank" rel="noopener">Microsoft&#8217;s SQL Server Big Data Clusters</a></p>
+</div>
+<div class="paragraph">
+<p><em>SQL Server Big Data Clusters (BDC) is a new capability brought to market as part of the SQL Server 2019 release. BDC extends SQL Server’s analytical capabilities
+beyond in-database processing of transactional and analytical workloads by uniting the SQL engine with Apache Spark and Apache Hadoop to create a single, secure and unified data platform.
+BDC is available exclusively to run on Linux containers, orchestrated by Kubernetes, and can be deployed in multiple-cloud providers or on-premises.</em></p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="../deploy-container.html" class="query-params-link">Deploying to OpenShift</a></span>
+  <span class="next"><a href="../PODMAN_COMPOSE/compose-container.html" class="query-params-link">Multi containers with Podman</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../../_/js/vendor/clipboard.js"></script>
+<script src="../../../_/js/site.js"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>  </body>
+</html>
