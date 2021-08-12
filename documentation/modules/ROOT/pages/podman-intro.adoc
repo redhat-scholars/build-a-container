@@ -122,11 +122,20 @@ http://localhost:8081/hello.html
 +
 image::apache-guestbook-page.png[]
 +
+{zwsp} +
 . Now enter a name into the `Name:` field to be logged to the guestbook and press the `Log to Guestbook` button.  You should now be presented a screen like this: 
 +
 image::apache-guestbook-submit.png[]
 +
-. Click the `here` link highlighted above to go back and enter another name
+{zwsp} +
+. Click the `here` link highlighted above to go back and enter another name. Alternatively run the following command to add users if you have problems with the browser.
++
+[.console-input]
+[source,subs="+macros,+attributes"]
+----
+curl http://localhost:8081/cgi-bin/log-visitor.sh?visitor=Danny
+----
++
 {zwsp}
 
 Now that we have a container up and running, let's poke around inside the container to get some idea of what's going on and how containers relate to the host instance.
@@ -321,13 +330,24 @@ image::info-diff.png[]
 include::partial$copy_visitor_info.adoc[]
 +
 {zwsp} +
-. You should now see the file appear in your *Explorer*.  Click on it to view the contents.  It should match the visitors that you entered previously
+. You should now see the file appear in your *Explorer*.  Click on it to view the contents.  It should match the visitors that you entered previously. Alternative run the following command to load it.
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+/usr/lib/code-server/bin/code-server -r {container-workshop-exercise-path}/visitor_info.txt
+----
 +
 image::visitor-info.png[Visitor Info]
 + 
-. Having looked at the contents of `visitor_info.txt` let's delete our copy from off the host by right-clicking on it in the Explorer and selecting `Delete Permanently`
+. Once you have looked at the contents of `visitor_info.txt` , remove the file with the command below.
 +
-image::delete-permanently.png[]
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+rm {container-workshop-exercise-path}/visitor_info.txt
+----
+
 
 [#stop_container]
 == 4. Stopping the Container (and Apache server)

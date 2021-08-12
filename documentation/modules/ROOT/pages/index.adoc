@@ -1,25 +1,55 @@
-= Welcome to the BUILD-A-CONTAINER Workshop
+= WELCOME TO THE [.bac-red]#BUILD-A-CONTAINER# WORKSHOP
 :page-layout: home
 :!sectids:
 
 [.text-center.strong]
 == Overview
 
-This immersive workshop will introduce you to the world of Containers and Containerization.
-The goals of this hands-on workshop is to give you a crash course introduction to containers, their many use cases and steps you can take to securely containerise your in-house applications.
+[.bac-h1]#The future of enterprise applications is containers!#
 
-image::splash-containers.jpeg[Containers!,width=320,height=213]
+image::horizon.jpeg[Containers!,width=437,height=271]
+
+This is because they provide a universal and portable packaging method for workloads and are the stepping stone to a fully automated and agile environment.
+
+We know from speaking many people that it’s **hard to find talent, solutions or answers to what’s best for your organization**. Containers and Kubernetes are hand in glove but without first understanding Containers it's a lot to take in.
+
+This **3hr immersive session** is a crash course introduction to containers, what you should be concerned about and steps you can take to securely containerise applications. Specifically we look at:
+
+<.> Best practices in creating secure and containerised applications
+<.> Run, manage and deploy containers
+<.> Security exploits and how to address them
+<.> Container provenance
+<.> Hands on building a secure container
+
+The hands-on workshop is for developers, operations, architects or anyone curious about what makes up a container and how to use them in a linux environment.
+
+== Use Cases
+
+Whilst creating this workshop, we drew inspiration from a number of use cases (illustrated below) and the experience that there was a lot of "assumed knowledge" when a person from a traditional VM based environment tries out OpenShift or Kubernetes workshops.
+
+image::work.jpeg[Containers!,width=437,height=271]
+
+. Alan had an application with many dependencies which he spent hours on constantly setting up across multiple environments. Its configuration could be semi automated, but he thought containers may provide a better way.
++
+. Kat’s team had to maintain and develop many VM based web servers. They knew they had problems in how to maintain code, environments and the cost of cloud.
++
+. Bob worked for a government agency who were very traditional in skills, development methodology and security. The business had a new appetite and budget for more feature development. But this resulted in requests for more environments and servers in the data centre. Operations were loathing these requests with little way of chargeback for what was their cost centre. They knew containers would provide greater automation and efficient use of resources but were not sure of security implications.
++
+. Melanie worked for a construction operation who were upgrading a COTS system. The new version required a container based install. The company had little understanding of containers and what it meant from a technical and enterprise security perspective.
++
+. Craig’s company was running cloud based services which were starting to take off until the company was hacked. The hack resulted in 2 weeks downtime to reset and restore systems, and they were looking for a way to ensure their containerised applications were secure and had greater control over software provenance.
 
 
-Throughout this workshop, you will use **Red Hat Enterprise Linux 8** (RHEL 8) Container tools including **Podman** and **Buildah** which provide secure means of building and running containers.
+
+== Red Hat Container History
+Red Hat’s contributions to containers go back to the creation of those core container primitives of Linux namespaces and cGroups in the early 2000s.
+Containers have been a core feature of Red Hat Enterprise Linux over multiple major releases and was the foundation of Red Hat OpenShift since its initial release in 2011.
 
 image::podman.svg[Podman!,width=320,height=86,float="left"]
 image::buildah.png[Buildah!,width=320,height=78,float="right"]
 image::Logo-Red_Hat-Enterprise_Linux_8-A-Standard-RGB.png[RHEL 8!,width=320,height=73]
 
-== Red Hat Container History
-Red Hat’s contributions to containers go back to the creation of those core container primitives of Linux namespaces and cGroups in the early 2000s.
-Containers have been a core feature of Red Hat Enterprise Linux over multiple major releases and was the foundation of Red Hat OpenShift since its initial release in 2011.
+{zwsp}
 
 Interest in containers technology continues to grow, as more organizations realize the benefits they can provide for how they manage applications and infrastructure.
 But it’s easy to get lost in all the hype and forget what containers are really about. Ultimately, **containers are a feature of Linux**.
@@ -33,3 +63,6 @@ __Container security is Linux security__
 __Container performance is Linux performance__
 
 __Container reliability is Linux reliability__
+
+Throughout this workshop, you will use **Red Hat Enterprise Linux 8** (RHEL 8) Container tools including **Podman** and **Buildah** which provide secure means of building and running containers.
+

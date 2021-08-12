@@ -10,7 +10,7 @@ content:
   edit_url: ~
   sources:
     - url: .
-      branches: optional-exercises, HEAD
+      branches: HEAD
       start_path: documentation
 asciidoc:
   attributes:

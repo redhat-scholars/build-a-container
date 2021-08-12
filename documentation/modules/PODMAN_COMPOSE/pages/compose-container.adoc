@@ -5,8 +5,8 @@ include::ROOT:page$_attributes.adoc[]
 :WORKSHOP_GIT_REPO: %WORKSHOP_GIT_REPO%
 :WORKSHOP_GIT_REF: %WORKSHOP_GIT_REF%
 
-= Using Podman with Multiple Containers
-:navtitle: Using Podman with Multiple Containers
+= Docker Compose & Pods
+:navtitle: Docker Compose & Pods
 
 _15 MINUTE EXERCISE_
 
