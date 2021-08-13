@@ -154,10 +154,18 @@ include::partial$gather_info.adoc[]
 ----
 +
 {zwsp} +
-. Next, let's use the VS Code editor to see what our command found out.  Use kbd:[CTRL+o] (or kbd:[CMD+o] on a Mac) to show the "Open File" dialog.  Type the name of the file we wrote out to in the dialog (that is `{temp-filepath}`)
+. Next, let's use the VS Code editor to see what our command found out. Use the following to load the file in the editor.
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+/usr/lib/code-server/bin/code-server -r {temp-filepath}
+----
++
+Or you can use kbd:[CTRL+o] (or kbd:[CMD+o] on a Mac) to show the "Open File" dialog.  Type the name of the file we wrote out to in the dialog (that is `{temp-filepath}`)
 +
 .Open File Or Folder dialog
-image::file-or-folder-dialog.png[]
+image::file-or-folder-dialog.jpg[]
 +
 {zwsp} +
 . This should open the file in the left editor pane.  The output should look something like the following
@@ -292,7 +300,7 @@ Double-click the tab again to restore it to its original size
 ====
 +
 .Host vs. Container output of above commands
-image::info-diff.png[]
+image::info-diff.jpg[]
 {zwsp} +
 +
 . Some differences and similarities between the two

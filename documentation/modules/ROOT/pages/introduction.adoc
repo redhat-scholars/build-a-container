@@ -101,12 +101,12 @@ Your code-server instance also has a chromium based browser installed (as a VSCo
 
 . To open the _Browser Preview_, click the _browser preview_ button on the panel on the left
 +
-image::browser-preview.png[]
+image::browser-preview.jpg[]
 +
 . This will open a nested browser on the right side of the screen.  
 +
 .Just your average web browser
-image::browser-preview-window.png[]
+image::browser-preview-window.jpg[]
 +
 . Feel free to type in the address of your favorite website to show that it's just a typical (chrome-based) web browser
 

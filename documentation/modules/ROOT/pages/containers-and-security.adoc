@@ -623,7 +623,7 @@ One of podman tools is an oscap compatible scanner, called `oscap-podman` which 
 . To save time, we have provided you with a suitable oval document already.  Let's take a quick look at it by using kbd:[CTRL+p] (or kbd:[CMD+p] on MacOS) to quickly open `rhel-7-oval.xml` (which can be found in the `container-workshop\oval` directory on your instance)
 +
 .OVAL document
-image::oval-document.png[OVAL document]
+image::oval-document.jpg[OVAL document]
 +
 [NOTE]
 ====
@@ -713,7 +713,7 @@ You can double-click on the browser preview tab to expand that pane.  Double-cli
 . Let's go a little deeper into the vulnerability that this oval scan uncovered.  Included in the scan output is helpful information about what the vulnerability is, how it's exploited, and how it can be resolved.  Click on link shown in the image below to learn more
 +
 .OSCAP Vulnerability Report
-image::oscap-vulnerability-report.png[Vulnerability Report]
+image::oscap-vulnerability-report.jpg[Vulnerability Report]
 +
 . Your `Browser Preview` should navigate to Red Hat's CVE information on the exploit which, in this case, is the famous Shellshock vulnerability that we have been expoiting on our container for most of this lab.
 +
@@ -728,12 +728,12 @@ When clicking on the link, a new Browser Preview will open in a new tab.  This m
 . Feel free to read through the advisory.  To determine how to fix the issue we're going to follow the "Vulnerability Response" link highlighted below
 +
 .Red Hat advisory on Shellshock CVE
-image::cve-advisory.png[]
+image::cve-advisory.jpg[]
 +
 . Once on the security bulletin, select the "Resolve" tab as shown below.  From this we can see that the recommended remediation is to update the version of bash that is running in our container to `bash-4.2.45-.el7_0.4`
 +
 .Security Bulletin with Shellshock remediation
-image::security-bulletin.png[]
+image::security-bulletin.jpg[]
 
 Now that we know what we need to do to our container, we're left with the question of HOW we're meant to update the container given that containers are supposed to be immutable.  When dealing with containers, we don't need to change the running container, but rather the _image_ that the container runs as.  In our case we're going to want to update our `{apache-server-image-insecure}` image.
 

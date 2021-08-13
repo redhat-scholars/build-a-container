@@ -39,7 +39,7 @@ podman run \
 . Open a second terminal to the side by hitting the terminal split button
 +
 .Terminal split button
-image::terminal-split.png[]
+image::ROOT:terminal-split.jpg[]
 +
 . Observe the running container image by running the `podman ps` command
 +

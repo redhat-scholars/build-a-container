@@ -203,7 +203,7 @@ podman run \
 http://localhost:8081
 ----
 +
-image::apache-test-page.png[]
+image::apache-test-page-trimmed.jpg[]
 +
 . This is encouraging, but we don't yet have the non-boilerplate aspects of our site in the container.  For instance, if we navigate to our rudimentary guestbook functionality by pasting the following in the Browser Preview navbar
 +

@@ -377,7 +377,7 @@ Storing signatures
 +
 . Before we attempt to run our image, let's setup a log watch so that we can see the logs of the pod.  We'll do this in a separate terminal, so first split your terminal, this will be referred to as *Terminal 2*
 +
-image::terminal-split.png[]
+image::terminal-split.jpg[]
 +
 [tabs]
 ====

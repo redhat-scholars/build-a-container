@@ -19,7 +19,7 @@ One of the things that makes `buildah` unique is the ability to interact with co
 Where we left off with our container image is that we needed to patch the bash package installed on the container
 
 .Need to upgrade bash
-image::security-bulletin.png[]
+image::security-bulletin.jpg[]
 
 This can be problematic if our image does not already have installed on it all the tools (such as package management tools like `dnf` or `yum`) necessary to remediate the problem.  But with buildah's *native command functionality* this is no longer a problem.
 
