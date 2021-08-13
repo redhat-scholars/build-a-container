@@ -31,4 +31,4 @@ openshift_install: true
 ocp_student_password: openshift
 
 # What the URL to the root of the lab guide should be
-lab_guide_url: "https://bfarr-rh.github.io/build-a-container/intro-container-workshop/BASE/index.html"
+lab_guide_url: "https://bfarr-rh.github.io/build-a-container-workshop/intro-container-workshop/1.0/index.html"

@@ -1,6 +1,6 @@
 :imagesdir: documentation/modules/ROOT/assets/images
 
-See  https://hatmarch.github.io/container-workshop/[workshop documentation] for assets generated from this workshop
+See  https://bfarr-rh.github.io/build-a-container-workshop[workshop documentation] for assets generated from this workshop
 
 == Documentation Updates
 
