@@ -532,10 +532,18 @@ EOF</code></pre>
 </div>
 </li>
 <li>
-<p>Next, let&#8217;s use the VS Code editor to see what our command found out.  Use <span class="keyseq"><kbd>CTRL</kbd>+<kbd>o</kbd></span> (or <span class="keyseq"><kbd>CMD</kbd>+<kbd>o</kbd></span> on a Mac) to show the "Open File" dialog.  Type the name of the file we wrote out to in the dialog (that is <code>/tmp/hostinfo.txt</code>)</p>
+<p>Next, let&#8217;s use the VS Code editor to see what our command found out. Use the following to load the file in the editor.</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">/usr/lib/code-server/bin/code-server -r /tmp/hostinfo.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or you can use <span class="keyseq"><kbd>CTRL</kbd>+<kbd>o</kbd></span> (or <span class="keyseq"><kbd>CMD</kbd>+<kbd>o</kbd></span> on a Mac) to show the "Open File" dialog.  Type the name of the file we wrote out to in the dialog (that is <code>/tmp/hostinfo.txt</code>)</p>
+</div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/file-or-folder-dialog.png" alt="file or folder dialog">
+<img src="_images/file-or-folder-dialog.jpg" alt="file or folder dialog">
 </div>
 <div class="title">Figure 2. Open File Or Folder dialog</div>
 </div>
@@ -805,7 +813,7 @@ VERSION="7.9 (Maipo)"
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/info-diff.png" alt="info diff">
+<img src="_images/info-diff.jpg" alt="info diff">
 </div>
 <div class="title">Figure 3. Host vs. Container output of above commands</div>
 </div>
