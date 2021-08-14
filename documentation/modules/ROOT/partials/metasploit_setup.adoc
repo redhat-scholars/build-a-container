@@ -1,7 +1,7 @@
 We are going to run metasploit as a non-root user in another terminal which we'll refer to as *{metasploit-terminal}* in the tabs below.  If you haven't already, you can split your terminal to open a new, non-root, shell
 
 .Terminal Split button
-image::terminal-split-annotated.png[]
+image::terminal-split-annotated.jpg[]
 
 Then run the following commands in the newly created terminal: 
 

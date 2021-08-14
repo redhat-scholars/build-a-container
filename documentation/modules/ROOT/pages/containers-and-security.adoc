@@ -151,7 +151,7 @@ http://localhost:8081/hello.html
 ----
 
 .The guestbook might now work so well anymore...
-image::apache-guestbook-page.png[]
+image::apache-guestbook-page.jpg[]
 
 and enter a name into the Name: field and press the `Log to Guestbook` button you will get an error
 

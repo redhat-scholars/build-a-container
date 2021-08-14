@@ -120,12 +120,12 @@ http://localhost:8081/hello.html
 {zwsp} +
 . You should see something like this: 
 +
-image::apache-guestbook-page.png[]
+image::apache-guestbook-page.jpg[]
 +
 {zwsp} +
 . Now enter a name into the `Name:` field to be logged to the guestbook and press the `Log to Guestbook` button.  You should now be presented a screen like this: 
 +
-image::apache-guestbook-submit.png[]
+image::apache-guestbook-submit.jpg[]
 +
 {zwsp} +
 . Click the `here` link highlighted above to go back and enter another name. Alternatively run the following command to add users if you have problems with the browser.

@@ -140,7 +140,7 @@ The open source community have created new container tools to **eliminate the re
 These new tools **buildah, skopeo and podman** each provide more focussed functionality. You can think of **podman as a developers replacement for Docker**,
 **skopeo** as a simpler way to inspect and copy images and **buildah** provides specialist ways of building images whether from a Containerfile or interactively.
 
-image::container_tools.png[Extract!]
+image::container_tools.jpg[Extract!]
 
 {zwsp}
 

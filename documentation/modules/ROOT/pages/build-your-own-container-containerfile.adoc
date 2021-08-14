@@ -538,11 +538,11 @@ image::dont-click-link.png[]
 . You should now see your guestbook
 +
 .Guestbook, but now at an arbitrary port
-image::apache-guestbook-page-random-port.png[]
+image::apache-guestbook-page-random-port.jpg[]
 +
 . Finally, go ahead and "sign" the guestbook by entering your *name* (such as "Alice") and pressing `Log to Guestbook`.  When you do so, you should see the following page
 +
 .Notice the random uid (yours will vary)
-image::arbitrary-user-guestbook.png[]
+image::arbitrary-user-guestbook.jpg[]
 
 Congratulations!  You've build a secure container from the ground up.  Next we'll look at ways of getting our container out there in the world using Kubernetes.

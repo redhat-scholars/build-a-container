@@ -46,7 +46,7 @@ Just to see that you are logged into the server, issue the following command
 The first time you try to copy and paste the commands below your browser may prompt you with a window like this:
 
 .Chrome alert pop-up
-image::copy-paste-popup.png[Popup, 300]
+image::copy-paste-popup.jpg[Popup, 300]
 
 Please click on `Allow` so that you can copy and paste within your code-server instance
 

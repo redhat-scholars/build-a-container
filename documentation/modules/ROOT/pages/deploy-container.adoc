@@ -22,7 +22,7 @@ Provisioned::
 . You should be able to reach the OpenShift cluster provisioned for this lab link:https://console-openshift-console.apps.{CLUSTER_SUBDOMAIN}/[here^]
 . You should be met with a login challenge screen
 +
-image::openshift-login-challenge.png[]
+image::openshift-login-challenge.jpg[]
 +
 . Enter the following details
 ** *Username*: {USER}
@@ -108,7 +108,7 @@ image::dev-sandbox-login-challenge.png[]
 . Click the "Display Token" link
 . Copy the string as indicated in the image
 +
-image::copy-login-token.png[]
+image::copy-login-token.jpg[]
 +
 . Paste the command into a Code Server terminal
 --

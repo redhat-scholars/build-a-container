@@ -78,7 +78,7 @@ Now that the container is running mounted to the `{container-workshop-exercise-p
 
 . Make sure you have the `{guestbook-record-file}` open in VSCode in an editor pane adject to the *Browser Preview* pane as shown
 +
-image::mounted-visitor-info-setup.png[]
+image::mounted-visitor-info-setup.jpg[]
 +
 . Next, navigate to the guestbook URL by navigating pasting this in the *Browser Preview*
 +
@@ -92,4 +92,4 @@ localhost:8081/hello.html
 . You should now see _Danny_ (or whatever name you entered) added to the `{guestbook-record-file}` on the host in real time
 +
 .See visitors on the host
-image::mounted-visitor-info.png[]
+image::mounted-visitor-info.jpg[]
