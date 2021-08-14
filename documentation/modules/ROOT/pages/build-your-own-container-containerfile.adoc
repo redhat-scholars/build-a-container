@@ -316,7 +316,7 @@ For our apache webserver we're going to need to change its default configuration
 
 . To edit the apache server configuration, click on the `httpd.conf` file to edit it in VSCode
 +
-image::httpd-conf.png[]
+image::httpd-conf.jpg[]
 +
 . Use kbd:[CTRL+f] (or kbd:[CMD+f]) to search for the `Listen` directive near the start of the `httpd.conf`
 . Change this line so that it matches the highlighted line so that the server listens on port 8080 (instead of 80)
