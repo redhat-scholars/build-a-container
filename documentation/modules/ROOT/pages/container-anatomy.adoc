@@ -38,7 +38,7 @@ Within the container image, layers are formatted as archives (tar files) and are
 Furthermore config files provide the means of storing command line options, environment variables, and properties such as time created.
 The figure below shows the extract of a container image and how the internals of layering, indexing are organised.
 
-image::tar-extract.png[Extract!]
+image::tar-extract.jpg[Extract!]
 
 [NOTE]
 ====
@@ -56,7 +56,7 @@ A Containerfile is a text based file which provides instructions to assemble an 
 
 The Containerfile below is a of a mysql image from the link:https://catalog.redhat.com/software/containers/search?q=mysql&p=1[Red Hat Container Catalog,window=_blank].
 
-image::dissectingimage.png[Dissecting an Image!]
+image::dissectingimage.jpg[Dissecting an Image!]
 
 As the image is built the commands are executed in order from top down until the image is built. The table below provides an overview of typical commands seen in a Containerfile.
 
@@ -274,7 +274,7 @@ image::rh_quay_black.svg[Red Hat Quay!]
 
 You can try Quay through a free account with link:https://quay.io/[Quay.io, window=blank] which is a managed service OR browse the results of scanning through the link:https://catalog.redhat.com/software/containers/explore[Red Hat Container catalog, window=blank] like in the figure below.
 
-image::rh-container-catlog.png[Red Hat Quay!]
+image::rh-container-catlog.jpg[Red Hat Quay!]
 
 [#more_information]
 == More information

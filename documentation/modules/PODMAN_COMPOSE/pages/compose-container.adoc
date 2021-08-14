@@ -467,7 +467,7 @@ sudo podman play kube gitea_pod.yml
 
 Navigate to localhost:3000 in your local browser and check the gitea is now running now in a pod rather than through Docker compose.
 
-image::gitea.png[Gitea!]
+image::gitea.jpg[Gitea!]
 
 We can list the pods using podman pod ls or podman pod list command:
 [.console-input]

@@ -49,13 +49,13 @@ image::dev-sandbox-login-challenge.png[]
 +
 . Once you login, you should see your `-dev` project in the Developer Perspective
 +
-image::dev-sandbox-dev-perspective.png[]
+image::dev-sandbox-dev-perspective.jpg[]
 --
 ====
 
 If you've logged in successfully, you should find yourself on the (empty) start page for the Developer Perspective one the `{OCP_PROJECT}` projectfootnote:[_project_ is an OpenShift specific term.  For the purposes of this lab you can think of is as synonymous with the Kubernetes concept of a _namespace]
 
-image::ocp-developer-perspective.png[]
+image::ocp-developer-perspective.jpg[]
 
 === Console Login
 
@@ -267,7 +267,7 @@ pod/my-web-server created
 . Switch to the OpenShift Console (UI) and look at the link:https://console-openshift-console.apps.{CLUSTER_SUBDOMAIN}/topology/ns/{OCP_PROJECT}?view=graph[developer perpective for your project^].  You should see the pod running
 +
 .Our image running in OpenShift
-image::ocp-running-secure-image.png[]
+image::ocp-running-secure-image.jpg[]
 
 [#expose_container]
 == Exposing Container Website

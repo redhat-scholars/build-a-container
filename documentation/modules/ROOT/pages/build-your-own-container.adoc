@@ -290,7 +290,7 @@ exit
 
 Which should return you terminal to a single "unsplit" terminal window
 
-image::terminal-unsplit.png[]
+image::terminal-unsplit.jpg[]
 
 --
 ====

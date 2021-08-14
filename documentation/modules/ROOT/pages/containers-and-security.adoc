@@ -701,7 +701,7 @@ Evaluation done.
 . The report `vuln-report.html` should have appeared in your `container-workshop` directory of your explorer.  To look at it from within the browser preview, right click on the file and select `Open in Browser Preview`
 +
 .Open report in preview
-image::open-report-in-preview.png[Open in preview]
+image::open-report-in-preview.jpg[Open in preview]
 +
 . On the right side of the screen, you should now see the generated report (as also seen in the image below).  Feel free to scroll around to get familiar with the output.  This report shows how our container fared against the different vulnerability checks and in our case indicates one big security issue.
 +

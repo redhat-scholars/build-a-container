@@ -282,7 +282,7 @@ podman cp \
 {zwsp} +
 . With the `{temp-file}` still in focus, hit kbd:[SHIFT+CTRL+p] (or kbd:[CMD+CTRL+p] on a Mac) to open the *Command Palette* and start typing `compare` so that you can select the command `File: Compare Active File With...`
 +
-image::compare-command.png[]
+image::compare-command.jpg[]
 +
 {zwsp} +
 . Now paste `{container-info-filepath}` (with you copied a few steps back) into the next dialog that pops up and press kbd:[ENTER] (or kbd:[RETURN] depending on your machine).
@@ -346,7 +346,7 @@ include::partial$copy_visitor_info.adoc[]
 /usr/lib/code-server/bin/code-server -r {container-workshop-exercise-path}/visitor_info.txt
 ----
 +
-image::visitor-info.png[Visitor Info]
+image::visitor-info.jpg[Visitor Info]
 + 
 . Once you have looked at the contents of `visitor_info.txt` , remove the file with the command below.
 +
@@ -604,7 +604,7 @@ include::partial$copy_visitor_info.adoc[]
 . Now our visitor info should be restored to the way it was when we last stopped the container (as verified by opening it in code-server)
 +
 .`{guestbook-record-file}` restored
-image::visitor-info.png[]
+image::visitor-info.jpg[]
 
 But what good are containers if we can never _persist_ changes we've made with them without all this stopping and committing them?  Let's look to the next section to see if there is something else that can be done.
 
