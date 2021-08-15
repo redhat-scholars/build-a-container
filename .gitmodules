@@ -2,3 +2,7 @@
 	path = container-workshop-exercises
 	url = https://github.com/bfarr-rh/container-workshop-exercises.git
 	branch = master
+[submodule "lab-assets"]
+	path = lab-assets
+	url = https://github.com/bfarr-rh/build-a-container-lab-assets.git
+	branch = master
