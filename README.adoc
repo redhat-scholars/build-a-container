@@ -1,5 +1,17 @@
 :imagesdir: documentation/modules/ROOT/assets/images
 
+= WELCOME TO THE BUILD-A-CONTAINER WORKSHOP
+
+This 3hr immersive session is a crash course introduction to containers, what you should be concerned about and steps you can take to securely containerise applications. Specifically we look at:
+
+. Best practices in creating secure and containerised applications
+. Run, manage and deploy containers
+. Security exploits and how to address them
+. Container provenance
+. Hands on building a secure container
+
+The hands-on workshop is for developers, operations, architects or anyone curious about what makes up a container and how to use them in a linux environment.
+
 See  https://bfarr-rh.github.io/build-a-container-workshop[workshop documentation] for assets generated from this workshop
 
 == Documentation Updates
@@ -50,8 +62,9 @@ ${DEMO_HOME}/scripts/github-pages-publish.sh
 . Load the code in VSCode and use devcontainers which contains all neccessary tools to use.
 . Setup AWS and ./aws/credentials  (may need rhpds profile rather than default)
 . Change to the `provisioner` directory (the ansible-playbook command must be run from here)
+. Optionally you can provision an OpenShift environment (needed for the Deploying to OpenShift exercise)
 . Adjust extra_vars as required
-. Run the provision_lab playbook passing in the extra_vars.  For example: 
+. Run the provision_lab playbook passing in the extra_vars.  For example:
 +
 ----
 ansible-playbook provision_lab.yml -e @extra_vars.yaml
@@ -70,3 +83,4 @@ This repo used to use link:https://git-lfs.github.com/[*Git Large File Storage*]
 If you use VSCode remote, git-lfs is already installed on the remote container and the `lfs` plugin to the `git` CLI is activated upon starting up the container (see link:.devcontainer/Dockerfile[`Dockerfile`^] and link:.devcontainer/devcontainer.json[`devcontainer.json`^])
 
 Should you want to re-enable this, see link:https://github.com/git-lfs/git-lfs/blob/main/docs/man/git-lfs-migrate.1.ronn[this documentation^] and link:https://github.com/git-lfs/git-lfs/wiki/Tutorial[this tutorial^]
+
