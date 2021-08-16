@@ -12,7 +12,7 @@ This 3hr immersive session is a crash course introduction to containers, what yo
 
 The hands-on workshop is for developers, operations, architects or anyone curious about what makes up a container and how to use them in a linux environment.
 
-See  https://bfarr-rh.github.io/build-a-container-workshop[workshop documentation] for assets generated from this workshop
+See  https://redhat-scholars.github.io/build-a-container[workshop documentation] for assets generated from this workshop
 
 == Documentation Updates
 
