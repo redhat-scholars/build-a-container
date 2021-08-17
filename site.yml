@@ -3,7 +3,7 @@ runtime:
 
 site:
   title: BUILD-A-CONTAINER WORKSHOP
-  url: https://bfarr-rh.github.io/build-a-container/
+  url: https://redhat-scholars.github.io/build-a-container/
   start_page: intro-container-workshop::index.adoc
 
 content:
