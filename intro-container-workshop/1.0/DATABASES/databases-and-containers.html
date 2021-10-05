@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Containerized Databases :: BUILD-A-CONTAINER WORKSHOP</title>
-    <link rel="canonical" href="https://bfarr-rh.github.io/build-a-container/intro-container-workshop/1.0/DATABASES/databases-and-containers.html">
+    <link rel="canonical" href="https://redhat-scholars.github.io/build-a-container/intro-container-workshop/1.0/DATABASES/databases-and-containers.html">
     <link rel="prev" href="../deploy-container.html">
     <link rel="next" href="../PODMAN_COMPOSE/compose-container.html">
     <meta name="generator" content="Antora 2.3.4">
@@ -54,7 +54,7 @@
     <div class="navbar-brand">
       <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
           src="../../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
-      <a class="navbar-item" style="font-size: 24px; color: white" href="https://bfarr-rh.github.io/build-a-container">BUILD-A-CONTAINER WORKSHOP</a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://redhat-scholars.github.io/build-a-container">BUILD-A-CONTAINER WORKSHOP</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
         <span></span>
@@ -108,6 +108,9 @@
     <a class="nav-link" href="../introduction.html#local_browser">Local Browser</a>
   </li>
 </ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><em>Module I</em></span>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
@@ -179,6 +182,9 @@
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
+    <span class="nav-text"><em>Module II</em></span>
+  </li>
+  <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="../containers-and-security.html">Container Security</a>
 <ul class="nav-list">
@@ -212,20 +218,17 @@
   </li>
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><em>Module III</em></span>
+  </li>
   <li class="nav-item is-current-page" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="databases-and-containers.html">Optional</a>
-<ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="databases-and-containers.html">Containerized Databases</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="../PODMAN_COMPOSE/compose-container.html">Docker Compose &amp; Pods</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="../PODMAN_ROOTLESS/podman-rootless.html">Rootless Containers</a>
-  </li>
-</ul>
   </li>
 </ul>
   </li>
@@ -258,10 +261,10 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">BUILD-A-CONTAINER</a></li>
-    <li><a href="databases-and-containers.html">Optional</a></li>
+    <li><a href="databases-and-containers.html">Containerized Databases</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="file:///Users/bfarr/projects/build-a-container-workshop/documentation/modules/DATABASES/pages/databases-and-containers.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="file:///Users/bfarr/projects/build-a-container/documentation/modules/DATABASES/pages/databases-and-containers.adoc">Edit this Page</a></div>
 </div>
   <div class="content">
 <article class="doc">
@@ -364,10 +367,10 @@ e658d0e1d5c1  quay.io/bfarr/mysql-80:latest  run-mysqld --defa...  13 minutes ag
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Lets view the sql file which we will run against our database. You will notice it creates a table and inserts some rows into the table.</p>
+<p>Lets view the sql file which we will run against our database. Use the command below or alternatively you can open via the code server menu. You will notice it creates a table and inserts some rows into the table.</p>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">/usr/lib/code-server/bin/code-server -r /home/student1/container-workshop/sql/example_database.sql</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">/usr/lib/code-server/bin/code-server -r /home/%USER%/container-workshop/sql/example_database.sql</code></pre>
 </div>
 </div>
 </li>
