@@ -58,12 +58,12 @@ e658d0e1d5c1  quay.io/bfarr/mysql-80:latest  run-mysqld --defa...  13 minutes ag
 <.> Notice that this is the name we assigned the container above
 
 == Create the Database
-. Lets view the sql file which we will run against our database. You will notice it creates a table and inserts some rows into the table.
+. Lets view the sql file which we will run against our database. Use the command below or alternatively you can open via the code server menu. You will notice it creates a table and inserts some rows into the table.
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-/usr/lib/code-server/bin/code-server -r /home/student1/container-workshop/sql/example_database.sql
+/usr/lib/code-server/bin/code-server -r /home/{USER}/container-workshop/sql/example_database.sql
 ----
 +
 . Now lets run this sql against our database providing via the mysql cli that is running in the container.  To do this we will use the `podman exec` command
