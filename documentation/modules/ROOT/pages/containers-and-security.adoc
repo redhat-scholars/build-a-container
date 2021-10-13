@@ -210,7 +210,7 @@ image::hax0red.png[]
 [NOTE]
 .Access to host filesystem via volume mounts
 ====
-This demonstrates that a malicious intruder could actually read and change files on the host system, provided access was afforded them through our volume mounts.  But it gets even worse in this case because of our use of the `privileged` flag.  This gives the container OS level capabilities, which we'll exploit to potentially devestating effect next
+This demonstrates that a malicious intruder could actually read and change files on the host system, provided access was afforded them through our volume mounts.  But it gets even worse in this case because of our use of the `privileged` flag.  This gives the container OS level capabilities, which we'll exploit to potentially devastating effect next
 ====
 +
 . Enter the following command to look at the disks(!) on the host operating system
@@ -620,7 +620,7 @@ The link:https://static.open-scap.org/openscap-1.2/oscap_user_manual.html[Open S
 
 One of podman tools is an oscap compatible scanner, called `oscap-podman` which adapts oscap for use with containers instead of just operating systems.
 
-. To save time, we have provided you with a suitable oval document already.  Let's take a quick look at it by using kbd:[CTRL+p] (or kbd:[CMD+p] on MacOS) to quickly open `rhel-7-oval.xml` (which can be found in the `container-workshop\oval` directory on your instance)
+. To save time, we have provided you with a suitable oval document already.  Let's take a quick look at it by using kbd:[CTRL+p] (or kbd:[CMD+p] on MacOS) to quickly open `rhel-7-oval.xml` (which can be found in the `container-workshop/oval` directory on your instance)
 +
 .OVAL document
 image::oval-document.jpg[OVAL document]

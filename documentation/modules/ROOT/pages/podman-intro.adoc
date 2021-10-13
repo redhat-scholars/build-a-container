@@ -154,7 +154,7 @@ include::partial$gather_info.adoc[]
 ----
 +
 {zwsp} +
-. Next, let's use the VS Code editor to see what our command found out. Use the following to load the file in the editor.
+. Next, let's use the VS Code editor to see what our command found out. Use the following to load the file in the editor. If this doesnt work use the steps below to open.
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -388,9 +388,8 @@ podman stop $(podman ps -a | grep Up | cut -d" " -f1)
 [.console-output]
 [source,bash,subs="+macros,+attributes"]
 ----
-{container-id-long}#<.>
+{apache-server-container-name}
 ----
-<.> This will match the `CONTAINER ID` of any running container that was stopped
 +
 {zwsp} +
 . Confirm that the container is stopped by hitting refresh in the Browser Preview.  You should again see a blank page as there is not longer anything listening on port 8081

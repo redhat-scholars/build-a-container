@@ -42,10 +42,7 @@ image::tar-extract.jpg[Extract!]
 
 [NOTE]
 ====
-The above container image was exported to a tar file with the following command.
-----
-podman save -o mysql-container.tar registry.redhat.io/rhel8/mysql-80:latest
-----
+The above container image was exported to a tar file with the podman link:https://docs.podman.io/en/latest/markdown/podman-save.1.html[save,window=_blank] command.
 ====
 
 {zwsp}
