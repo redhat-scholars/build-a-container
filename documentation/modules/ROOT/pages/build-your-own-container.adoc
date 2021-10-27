@@ -67,7 +67,7 @@ buildah unshare
 ----
 CONTAINER=$(buildah from {apache-server-image-insecure-image}) #<.>
 ----
-<.> We're effectively assigning a the shell variable `CONTAINER` to the id of the buildah container that starts with the state of the image we want to update
+<.> We're effectively assigning a shell variable `CONTAINER` to the id of the buildah container that starts with the state of the image we want to update
 +
 [NOTE]
 ====
