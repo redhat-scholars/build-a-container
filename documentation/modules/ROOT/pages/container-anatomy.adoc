@@ -141,15 +141,18 @@ image::container_tools.jpg[Extract!]
 
 {zwsp}
 
-=== But how would you use these tools?
+=== But how would you use these tools? The commands are presented as examples to read and not run.
 {zwsp}
 
 === Podman
 
 Podman command format will be very familiar to Docker users but doesnt require a daemon.
 ----
-podman pull registry.fedoraproject.org/f29/httpd
+# Pull an image from the registry
+podman pull registry.fedoraproject.org/f34/python3  
+# List images in local storage
 podman images
+# Run the container in the background and map ports
 podman run -dt -p 8080:8080/tcp registry.fedoraproject.org/f29/httpd
 ----
 {zwsp}
