@@ -40,7 +40,7 @@ cd /home/{USER}/container-workshop/secure-container
 .New Containerfile
 image:new-containerfile.png[]
 +
-. The Containerfile you just created should appear in the editor window.  We'll be slowly adding to this Containfile bit by bit
+. The Containerfile you just created should appear in the editor window.  We'll be slowly adding to this Containerfile bit by bit
 +
 include::partial$containerfile_paste_snippet.adoc[]
 +

@@ -280,7 +280,7 @@ podman cp \
 . Now click anywhere within the left editor where the `{temp-file}` should still be open to give that editor focus.
 +
 {zwsp} +
-. With the `{temp-file}` still in focus, hit kbd:[SHIFT+CTRL+p] (or kbd:[CMD+CTRL+p] on a Mac) to open the *Command Palette* and start typing `compare` so that you can select the command `File: Compare Active File With...`
+. With the `{temp-file}` still in focus, hit kbd:[SHIFT+CTRL+p] (or kbd:[CMD+SHIFT+p] on a Mac) to open the *Command Palette* and start typing `compare` so that you can select the command `File: Compare Active File With...`
 +
 image::compare-command.jpg[]
 +
@@ -566,7 +566,7 @@ Error: "/var/log/www/visitor_info.txt" could not be found on container {apache-s
 
 {zwsp}
 
-Before we through our hands up in disgust, remember that we had the foresight of _committing_ our previously running web server container to a new image called `{apache-committed-container-image}`.  This image should container all the changes we made on top of the `{apache-server-container-name}` that we just ran and allow us access to the info that does not exist in the `{apache-server-image-insecure}`.
+Before we throw our hands up in disgust, remember that we had the foresight of _committing_ our previously running web server container to a new image called `{apache-committed-container-image}`.  This image should container all the changes we made on top of the `{apache-server-container-name}` that we just ran and allow us access to the info that does not exist in the `{apache-server-image-insecure}`.
 
 {zwsp}
 

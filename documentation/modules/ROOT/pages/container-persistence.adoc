@@ -76,7 +76,7 @@ podman run \
 
 Now that the container is running mounted to the `{container-workshop-exercise-path}` on the host, we should be able to test out its effects
 
-. Make sure you have the `{guestbook-record-file}` open in VSCode in an editor pane adject to the *Browser Preview* pane as shown
+. Make sure you have the `{guestbook-record-file}` open in VSCode in an editor pane next to the *Browser Preview* pane as shown
 +
 image::mounted-visitor-info-setup.jpg[]
 +

@@ -44,6 +44,7 @@
       - cockpit-podman
       - udica
       - jq
+      - bash-completion
     state: present
   register: dnf_check
   until: dnf_check is not failed
