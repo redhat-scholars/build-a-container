@@ -537,8 +537,11 @@ d65aecc325a4 ubi8/ubi      /bin/bash  3 secs ago Exited (0) 5 secs ago peaceful_
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>podman pull registry.fedoraproject.org/f29/httpd
+<pre># Pull an image from the registry
+podman pull registry.fedoraproject.org/f34/python3
+# List images in local storage
 podman images
+# Run the container in the background and map ports
 podman run -dt -p 8080:8080/tcp registry.fedoraproject.org/f29/httpd</pre>
 </div>
 </div>
