@@ -5,6 +5,8 @@ include::_attributes.adoc[]
 :container-info-filepath: /tmp/containerinfo.txt
 
 = Running your First Container with Podman
+:description: Introduction to Containers, Container Security and Container Tools including Podman and Buildah
+:keywords: docker, podman, buildah, skopeo, security, secure containers, containers, Red Hat, RHEL, Linux, Containerization, cloud, build a container, workshop, cloud native, openshift
 
 _20 MINUTE EXERCISE_
 
@@ -381,15 +383,6 @@ You can stop a container by its name or container id.. Alternatively, you can us
 podman stop $(podman ps -a | grep Up | cut -d" " -f1)
 ----
 ****
-+
-{zwsp} +
-. If you were successful in stopping the container, you should see the following output: 
-+
-[.console-output]
-[source,bash,subs="+macros,+attributes"]
-----
-{apache-server-container-name}
-----
 +
 {zwsp} +
 . Confirm that the container is stopped by hitting refresh in the Browser Preview.  You should again see a blank page as there is not longer anything listening on port 8081

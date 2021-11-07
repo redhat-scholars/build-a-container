@@ -1,0 +1,47 @@
+include::_attributes.adoc[]
+
+[.text-center.strong]
+== References
+
+=== Articles
+The following list is our pick of articles and websites that provide information on containers and security.
+
+. link:https://developers.redhat.com/blog/2018/02/22/container-terminology-practical-introduction#[A Practical Introduction to Container Terminology,window=_blank]
+
+. link:https://www.redhat.com/en/resources/CTO-guide-to-containers-analyst-paper[CTO'S GUIDE Containers and Kubernetes: Answering the Top 10 FAQs,window=_blank]
+
+. link:https://www.redhat.com/en/blog/containers-understanding-difference-between-portability-compatibility-and-supportability[Can I move my containers around between container hosts? Containers: Understanding the difference between portability, compatibility and supportability,window=_blank]
+
+. link:http://crunchtools.com/comparison-linux-container-images/[A Comparison of Linux Container Images. What difference does the container base image make?,window=_blank]
+
+. link:https://developers.redhat.com/blog/2020/03/24/red-hat-universal-base-images-for-docker-users/[Red Hat Universal Base Images for Docker users,window=_blank]
+
+. link:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/building_running_and_managing_containers/index#understanding-standard-red-hat-base-images_building-running-and-managing-containers[Building Running and Managing Containers in RHEL 8,window=_blank]
+
+. link:https://cloud.redhat.com/blog/container-image-security-beyond-vulnerability-scanning[Container Image Security: Beyond Vulnerability Scanning,window=_blank]
+
+. link:https://medium.com/ibm-data-ai/how-to-red-hat-certify-a-docker-image-in-8-steps-everything-you-need-to-know-6207cfe9ec3d[How to Red Hat Certify a Docker Image in 8 Steps - Everything You Need To Know,window=_blank]
+
+. link:https://www.stackrox.com/post/2019/09/docker-security-101/[Docker Container Security 101: Risks and 33 Best Practices,window=_blank]
+
+
+
+=== Courses
+
+. link:https://www.redhat.com/en/services/training/do080-deploying-containerized-applications-technical-overview[DO080 - Containers, Kubernetes and Red Hat OpenShift Technical Overview]
+
+. link:https://www.redhat.com/en/services/training/do092-developing-cloud-native-applications-microservices-architectures[DO092 - Developing Cloud-Native Applications with Microservices Architectures]
+
+. link:https://learn.openshift.com[Learn.openshift.com - Experiment with OpenShift]
+
+. link:https://www.redhat.com/en/services/training/do180-red-hat-openshift-I-containers-kubernetes[DO180 - Red Hat OpenShift I: Containers & Kubernetes]
+
+. link:https://www.redhat.com/en/services/training/do720-container-adoption-boot-camp-for-developers[DO720 - Container Adoption Boot Camp for Developers]
+
+. link:https://www.redhat.com/en/services/training/rh124-red-hat-system-administration-i[RH124 - Red Hat System Administration I]
+
+. link:https://www.redhat.com/en/services/training/rh134-red-hat-system-administration-ii[RH134 - Red Hat System Administration II]
+
+=== Workshops
+
+Keep an eye out for other workshops on the Red Hat website in your region that we run throughout the year with RHEL, Ansbible, OpenShift and Cloud Native Development workshops.

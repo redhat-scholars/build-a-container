@@ -2,6 +2,8 @@ include::_attributes.adoc[]
 :source-highlighter: highlightjs
 
 = Container Security
+:description: Introduction to Containers, Container Security and Container Tools including Podman and Buildah
+:keywords: docker, podman, buildah, skopeo, security, secure containers, containers, Red Hat, RHEL, Linux, Containerization, cloud, build a container, workshop, cloud native, openshift
 
 _30 MINUTE EXERCISE_
 

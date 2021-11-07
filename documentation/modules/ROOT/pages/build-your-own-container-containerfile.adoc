@@ -2,6 +2,8 @@ include::ROOT:page$_attributes.adoc[]
 
 = Buildah and Containerfiles
 :navtitle: Buildah and Containerfiles
+:description: Introduction to Containers, Container Security and Container Tools including Podman and Buildah
+:keywords: docker, podman, buildah, skopeo, security, secure containers, containers, Red Hat, RHEL, Linux, Containerization, cloud, build a container, workshop, cloud native, openshift
 
 _25 MINUTE EXERCISE_
 

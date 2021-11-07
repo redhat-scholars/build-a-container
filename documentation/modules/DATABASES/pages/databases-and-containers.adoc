@@ -3,6 +3,8 @@ include::ROOT:page$_attributes.adoc[]
 
 [#containerized_databases]
 = Containerized Databases
+:description: Introduction to Containers, Container Security and Container Tools including Podman and Buildah
+:keywords: docker, podman, buildah, skopeo, security, secure containers, containers, Red Hat, RHEL, Linux, Containerization, cloud, build a container, workshop, cloud native, mysql, postgres, openshift
 
 _10 MINUTE EXERCISE_
 

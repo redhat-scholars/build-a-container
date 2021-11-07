@@ -7,6 +7,8 @@ include::ROOT:page$_attributes.adoc[]
 
 = Docker Compose & Pods
 :navtitle: Docker Compose & Pods
+:description: Introduction to Containers, Container Security and Container Tools including Podman and Buildah
+:keywords: docker, podman, buildah, skopeo, security, secure containers, containers, Red Hat, RHEL, Linux, Containerization, cloud, build a container, workshop, cloud native, docker compose
 
 _15 MINUTE EXERCISE_
 

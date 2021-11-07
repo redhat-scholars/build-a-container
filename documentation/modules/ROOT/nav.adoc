@@ -3,6 +3,7 @@
 ** xref:introduction.adoc#open_code_server_terminal[Open Terminal]
 ** xref:introduction.adoc#open_code_server_terminal_commands[Issuing Terminal Commands]
 ** xref:introduction.adoc#local_browser[Local Browser]
+* {zwsp}
 * __Module I__
 * xref:container-anatomy.adoc[Container Anatomy]
 ** xref:container-anatomy.adoc#what_makes_up_a_container[What makes up a Container?]
@@ -24,6 +25,7 @@
 * xref:container-persistence.adoc[Persistence and Containers]
 ** xref:container-persistence.adoc#mounting_volumes[Mounting Volumes]
 ** xref:container-persistence.adoc#test_mount[Testing the Volume Mount]
+* {zwsp}
 * __Module II__
 * xref:containers-and-security.adoc[Container Security]
 ** xref:containers-and-security.adoc#exploit_containers[Exploit a Container]

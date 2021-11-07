@@ -1,5 +1,7 @@
 = WELCOME TO THE [.bac-red]#BUILD-A-CONTAINER# WORKSHOP
 :page-layout: home
+:description: Introduction to Containers, Container Security and Container Tools including Podman and Buildah
+:keywords: docker, podman, buildah, skopeo, security, secure containers, containers, Red Hat, RHEL, Linux, Containerization, cloud, build a container, workshop, cloud native, openshift
 :!sectids:
 
 [.text-center.strong]

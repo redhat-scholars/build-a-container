@@ -7,6 +7,8 @@ include::ROOT:page$_attributes.adoc[]
 
 = Podman with a non-root user
 :navtitle: Podman with a non-root user
+:description: Introduction to Containers, Container Security and Container Tools including Podman and Buildah
+:keywords: docker, podman, buildah, skopeo, security, secure containers, containers, Red Hat, RHEL, Linux, Containerization, cloud, build a container, workshop, cloud native, openshift
 
 _10 MINUTE EXERCISE_
 
