@@ -28,19 +28,19 @@ The following list is our pick of articles and websites that provide information
 
 === Courses
 
-. link:https://www.redhat.com/en/services/training/do080-deploying-containerized-applications-technical-overview[DO080 - Containers, Kubernetes and Red Hat OpenShift Technical Overview]
+. link:https://www.redhat.com/en/services/training/do080-deploying-containerized-applications-technical-overview[DO080 - Containers, Kubernetes and Red Hat OpenShift Technical Overview,window=_blank]
 
-. link:https://www.redhat.com/en/services/training/do092-developing-cloud-native-applications-microservices-architectures[DO092 - Developing Cloud-Native Applications with Microservices Architectures]
+. link:https://www.redhat.com/en/services/training/do092-developing-cloud-native-applications-microservices-architectures[DO092 - Developing Cloud-Native Applications with Microservices Architectures,window=_blank]
 
-. link:https://learn.openshift.com[Learn.openshift.com - Experiment with OpenShift]
+. link:https://learn.openshift.com[Learn.openshift.com - Experiment with OpenShift,window=_blank]
 
-. link:https://www.redhat.com/en/services/training/do180-red-hat-openshift-I-containers-kubernetes[DO180 - Red Hat OpenShift I: Containers & Kubernetes]
+. link:https://www.redhat.com/en/services/training/do180-red-hat-openshift-I-containers-kubernetes[DO180 - Red Hat OpenShift I: Containers & Kubernetes,window=_blank]
 
-. link:https://www.redhat.com/en/services/training/do720-container-adoption-boot-camp-for-developers[DO720 - Container Adoption Boot Camp for Developers]
+. link:https://www.redhat.com/en/services/training/do720-container-adoption-boot-camp-for-developers[DO720 - Container Adoption Boot Camp for Developers,window=_blank]
 
-. link:https://www.redhat.com/en/services/training/rh124-red-hat-system-administration-i[RH124 - Red Hat System Administration I]
+. link:https://www.redhat.com/en/services/training/rh124-red-hat-system-administration-i[RH124 - Red Hat System Administration I,window=_blank]
 
-. link:https://www.redhat.com/en/services/training/rh134-red-hat-system-administration-ii[RH134 - Red Hat System Administration II]
+. link:https://www.redhat.com/en/services/training/rh134-red-hat-system-administration-ii[RH134 - Red Hat System Administration II,window=_blank]
 
 === Workshops
 
