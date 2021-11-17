@@ -316,7 +316,7 @@ Though we&#8217;ve fixed the issue with <code>quay.io/bfarr/container-workshop-h
 <div class="ulist">
 <ul>
 <li>
-<p>The web server is running on port 80 in the container.  This is a privileged port.  Better to have this run at port run in an privileged port above 1024 (such as 8080)</p>
+<p>The web server is running on port 80 in the container.  This is a privileged port.  Better to have this run in a privileged port above 1024 (such as 8080)</p>
 </li>
 <li>
 <p>Running as a specific user can be problematic as that user can implicitly have privileges afforded to them via <code>sudo</code> (either at runtime or in the ongoing maintenance of the container).  It would be better if we could run the container as the unknown or "anonymous" user</p>
