@@ -12,7 +12,7 @@ image::buildah.png[Buildah!,width=320,height=78]
 {zwsp} +
 Though we've fixed the issue with `{apache-server-image-insecure}` by using the `buildah` native command line tools to fix it, there are are still additional steps we could take to make this image even more resilient against attack or exploit.  Here are two issues:
 
-* The web server is running on port 80 in the container.  This is a privileged port.  Better to have this run at port run in an privileged port above 1024 (such as 8080)
+* The web server is running on port 80 in the container.  This is a privileged port.  Better to have this run in a privileged port above 1024 (such as 8080)
 * Running as a specific user can be problematic as that user can implicitly have privileges afforded to them via `sudo` (either at runtime or in the ongoing maintenance of the container).  It would be better if we could run the container as the unknown or "anonymous" user
 
 What's more, we have no record of the step-by-step changes we've made to the container that we might store in revision control.  One (valid) option would be to store all the buildah cli commands we issued in a shell script.  

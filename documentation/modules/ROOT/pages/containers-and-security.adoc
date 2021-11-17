@@ -622,7 +622,7 @@ The link:https://static.open-scap.org/openscap-1.2/oscap_user_manual.html[Open S
 
 One of podman tools is an oscap compatible scanner, called `oscap-podman` which adapts oscap for use with containers instead of just operating systems.
 
-. To save time, we have provided you with a suitable oval document already.  Let's take a quick look at it by using kbd:[CTRL+p] (or kbd:[CMD+p] on MacOS) to quickly open `rhel-7-oval.xml` (which can be found in the `container-workshop/oval` directory on your instance)
+. To save time, we have provided you with a suitable oval document already.  Let's take a quick look at it by using kbd:[CTRL+p] (or kbd:[CMD+p] on MacOS) to quickly open `rhel-7.oval.xml` (which can be found in the `container-workshop/oval` directory on your instance)
 +
 .OVAL document
 image::oval-document.jpg[OVAL document]
@@ -656,8 +656,8 @@ sudo oscap-podman {apache-server-image-insecure} \#<.>
 ----
 <.> The oscap-podman command must run as `root` due to the container evaluation itself needing elevated privileges.  Hence we use the `sudo` prefix
 <.> This indicates that we are wanting to evaluate the document using the `oval` format (as opposed to XCCDF)
-<.> This is the location of the oval document we just viewed in VS Code
 <.> Indicates that we want the output as an (HTML) report in the specified directory
+<.> This is the location of the oval document we just viewed in VS Code
 --
 ====
 +
