@@ -379,7 +379,7 @@ passwd joe</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>To understand this further, where podman is running as non-root, we can see the the uid as viewed on the host by
+<p>To understand this further, where podman is running as non-root, we can see the uid as viewed on the host by
 looking at the uid map.  To view use the following command.</p>
 </div>
 <div class="listingblock">
@@ -398,7 +398,7 @@ looking at the uid map.  To view use the following command.</p>
 <h2 id="_problem_container_could_not_create_a_file"><a class="anchor" href="#_problem_container_could_not_create_a_file"></a>Problem! - Container could not create a file</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>With rootless mode you may a problem in that the user of the container does not have permissions on the host volume.</p>
+<p>With rootless mode you may have a problem in that the user of the container does not have permissions on the host volume.</p>
 </div>
 <div class="paragraph">
 <p>First lets run the busybox container as user 123 and mount a directory on the host ./src which will be mapped to /dest in our container</p>
@@ -409,7 +409,7 @@ looking at the uid map.  To view use the following command.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Confirm the user id thats running.</p>
+<p>Confirm the user id that&#8217;s running.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -425,7 +425,7 @@ looking at the uid map.  To view use the following command.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Now lets simulate the container creating a file in our mounted directory. For instance in a real use case this could be a database container running as a postrgres user that is creating index files.</p>
+<p>Now lets simulate the container creating a file in our mounted directory. For instance in a real use case this could be a database container running as a postgres user that is creating index files.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -436,7 +436,7 @@ looking at the uid map.  To view use the following command.</p>
 <p>Did it work? The issue is that the directory created was owned by your UID. This UID looks like root inside of the container and we are not running busybox with the root user. Therefore, the container is unable to write to the directory.</p>
 </div>
 <div class="paragraph">
-<p>So lets allow the user (UID 123 in the containers) to own and write to the directory.</p>
+<p>So let&#8217;s allow the user (UID 123 in the containers) to own and write to the directory.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -452,7 +452,7 @@ looking at the uid map.  To view use the following command.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Now lets view the directory as it would be in a container with this unshare command.</p>
+<p>Now let&#8217;s view the directory as it would be in a container with this unshare command.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">

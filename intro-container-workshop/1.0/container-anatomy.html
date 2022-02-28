@@ -338,7 +338,7 @@ whilst the file system and configuration is governed by the OCI container image 
 <h2 id="container_image_format"><a class="anchor" href="#container_image_format"></a>2. Container Image Format</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Container images are made up of layers, most which are immutable with the exception of a writeable upper layer. A union file system provides a logical view when the container is running. (OverlayFS is a union mount filesystem implementation for Linux). The union file system works on top of the other file-systems. It gives a single coherent and unified view to files and directories of separate file-system. In other words, it mounts multiple directories to a single root. It is more of a mounting mechanism than a file system.</p>
+<p>Container images are made up of layers, most of which are immutable with the exception of a writeable upper layer. A union file system provides a logical view when the container is running. (OverlayFS is a union mount filesystem implementation for Linux). The union file system works on top of the other file-systems. It gives a single coherent and unified view to files and directories of separate file-system. In other words, it mounts multiple directories to a single root. It is more of a mounting mechanism than a file system.</p>
 </div>
 <div class="paragraph">
 <p>Today you are the container builder, so the important aspects to understand are:</p>
@@ -400,7 +400,7 @@ The figure below shows the extract of a container image and how the internals of
 <p>A Containerfile is a text based file which provides instructions to assemble an image. <strong>Each row in a Containerfile corresponds to a new layer</strong>. The available commands that are usable inside a Containerfile and a Dockerfile are equivalent.</p>
 </div>
 <div class="paragraph">
-<p>The Containerfile below is a of a mysql image from the <a href="https://catalog.redhat.com/software/containers/search?q=mysql&amp;p=1" target="_blank" rel="noopener">Red Hat Container Catalog</a>.</p>
+<p>The Containerfile below is a mysql image from the <a href="https://catalog.redhat.com/software/containers/search?q=mysql&amp;p=1" target="_blank" rel="noopener">Red Hat Container Catalog</a>.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -530,7 +530,7 @@ d65aecc325a4 ubi8/ubi      /bin/bash  3 secs ago Exited (0) 5 secs ago peaceful_
 <h2 id="container_tools"><a class="anchor" href="#container_tools"></a>6. Container Tools</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The open source community have created new container tools to <strong>eliminate the required use of root access and a daemon process</strong> compared with how Docker is designed.</p>
+<p>The open source community has created new container tools to <strong>eliminate the required use of root access and a daemon process</strong> compared with how Docker is designed.</p>
 </div>
 <div class="paragraph">
 <p>These new tools <strong>buildah, skopeo and podman</strong> each provide more focussed functionality. You can think of <strong>podman as a developers replacement for Docker</strong>,
@@ -572,7 +572,7 @@ podman run -dt -p 8080:8080/tcp registry.fedoraproject.org/f29/httpd</pre>
 <div class="sect2">
 <h3 id="_buildah"><a class="anchor" href="#_buildah"></a>Buildah</h3>
 <div class="paragraph">
-<p>Buildah can an act as a drop-in replacement for the Docker daemon’s docker build command (i.e., building images with a traditional Dockerfile) but is flexible enough to allow you to build images with whatever tools you prefer to use. ( bud = build-using-dockerfile )</p>
+<p>Buildah can act as a drop-in replacement for the Docker daemon’s docker build command (i.e., building images with a traditional Dockerfile) but is flexible enough to allow you to build images with whatever tools you prefer to use. ( bud = build-using-dockerfile )</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -603,7 +603,7 @@ it results in a single layer (great news for union file system performance). Fur
 <p>Start with creating a working container with Buildah.</p>
 <div class="paragraph">
 <p>The following saves the container name into the $container variable to use in subsequent commands. You can view working containers with the buildah
-containers commmand.</p>
+containers command.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -712,7 +712,7 @@ The registry essentially acts as a place to store container images and share the
 <p>great for individuals or small teams</p>
 </li>
 <li>
-<p>get up and running quickly as possible. Basic in their abilities.</p>
+<p>get up and running as quickly as possible. Basic in their abilities.</p>
 </li>
 <li>
 <p>easy to use</p>

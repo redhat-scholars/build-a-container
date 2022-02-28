@@ -531,12 +531,12 @@ Storing signatures
 <h2 id="enter_container"><a class="anchor" href="#enter_container"></a>2. Look inside a running container</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Whilst the container is running, we are able to "look inside" the container.  The experience is much the same to <code>telnet</code> ing or <code>ssh</code> ing into a remote instance or virtual machine.</p>
+<p>Whilst the container is running, we are able to "look inside" the container.  The experience is much the same as <code>telnet</code> ing or <code>ssh</code> ing into a remote instance or virtual machine.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>First though, let&#8217;s record what&#8217;s going on with the container&#8217;s host, namely the virtual machine that is running your code-server instance.  We&#8217;ll use this to compare to what we find inside the container.  Run the following command in the terminal to gather some intel about the host (and save it to a place where code-server can display it!)</p>
+<p>First though, let&#8217;s record what&#8217;s going on with the container&#8217;s host, namely the virtual machine that is running your code-server instance.  We&#8217;ll use this to compare what we find inside the container.  Run the following command in the terminal to gather some intel about the host (and save it to a place where code-server can display it!)</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &gt; /tmp/hostinfo.txt &lt;&lt;EOF
@@ -564,7 +564,7 @@ EOF</code></pre>
 </div>
 </li>
 <li>
-<p>Next, let&#8217;s use the VS Code editor to see what our command found out. Use the following to load the file in the editor. If this doesnt work use the steps below to open.</p>
+<p>Next, let&#8217;s use the VS Code editor to see what our command found out. Use the following to load the file in the editor. If this doesn&#8217;t work use the steps below to open.</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">/usr/lib/code-server/bin/code-server -r /tmp/hostinfo.txt</code></pre>
@@ -834,7 +834,7 @@ VERSION="7.9 (Maipo)"
 </td>
 <td class="content">
 <div class="paragraph">
-<p>If the comparison document seems to cramped, you can double-click on the tab of the comparison (circled in red in the image below) to expand the size of it out to be easier to read (e.g. it will compress the Browser Preview window to the right).</p>
+<p>If the comparison document seems too cramped, you can double-click on the tab of the comparison (circled in red in the image below) to expand the size of it to be easier to read (e.g. it will compress the Browser Preview window to the right).</p>
 </div>
 <div class="paragraph">
 <p>Double-click the tab again to restore it to its original size</p>
@@ -918,7 +918,7 @@ VERSION="7.9 (Maipo)"
 </div>
 </li>
 <li>
-<p>You should now see the file appear in your <strong>Explorer</strong>.  Click on it to view the contents.  It should match the visitors that you entered previously. Alternative run the following command to load it.</p>
+<p>You should now see the file appear in your <strong>Explorer</strong>.  Click on it to view the contents.  It should match the visitors that you entered previously. Alternatively run the following command to load it.</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">/usr/lib/code-server/bin/code-server -r /home/%USER%/container-workshop/visitor_info.txt</code></pre>
@@ -1009,7 +1009,7 @@ VERSION="7.9 (Maipo)"
 <h2 id="committing_containers"><a class="anchor" href="#committing_containers"></a>5. Committing Containers to Images</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Even though our <strong>container is stopped, it&#8217;s still around</strong>! You might wonder why we would want to keep a container around even after we have stopped it.  Turns out it has to do with the fact that we might want to <strong>create a new image from the container we&#8217;ve just run</strong>.</p>
+<p>Even though our <strong>container has stopped, it&#8217;s still around</strong>! You might wonder why we would want to keep a container around even after we have stopped it.  Turns out it has to do with the fact that we might want to <strong>create a new image from the container we&#8217;ve just run</strong>.</p>
 </div>
 <div class="paragraph">
 <p>Containers are by their nature immutable.  While they are running, however, changes are being made to their file systems.  When containers are stopped, we might want to <strong>commit</strong> those changes that were made to the filesystem whilst running.
@@ -1024,7 +1024,7 @@ VERSION="7.9 (Maipo)"
 </td>
 <td class="content">
 <div class="paragraph">
-<p>For those from an operations background, it&#8217;s a little like creating an image snapshot from a Virtual Machine when its stopped.  That image can then be used to boot up a different VM in a desired state quickly.</p>
+<p>For those from an operations background, it&#8217;s a little like creating an image snapshot from a Virtual Machine when it&#8217;s stopped.  That image can then be used to boot up a different VM in a desired state quickly.</p>
 </div>
 </td>
 </tr>
@@ -1255,7 +1255,7 @@ quay.io/bfarr/container-workshop-httpd  0.0.6   ec71626c6cd3  3 hours ago    265
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Execute the following command (which should be familar from earlier in this section)</p>
+<p>Execute the following command (which should be familiar from earlier in this section)</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
@@ -1305,7 +1305,7 @@ quay.io/bfarr/container-workshop-httpd  0.0.6   ec71626c6cd3  3 hours ago    265
 <p>&#8203;</p>
 </div>
 <div class="paragraph">
-<p>Before we throw our hands up in disgust, remember that we had the foresight of <em>committing</em> our previously running web server container to a new image called <code>container-workshop-commit</code>.  This image should container all the changes we made on top of the <code>my-web-server</code> that we just ran and allow us access to the info that does not exist in the <code>quay.io/bfarr/container-workshop-httpd:0.0.6</code>.</p>
+<p>Before we throw our hands up in disgust, remember that we had the foresight of <em>committing</em> our previously running web server container to a new image called <code>container-workshop-commit</code>.  This image should contain all the changes we made on top of the <code>my-web-server</code> that we just ran and allow us access to the info that does not exist in the <code>quay.io/bfarr/container-workshop-httpd:0.0.6</code>.</p>
 </div>
 <div class="paragraph">
 <p>&#8203;</p>
