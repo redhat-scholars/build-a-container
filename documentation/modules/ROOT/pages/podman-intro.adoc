@@ -145,9 +145,9 @@ Now that we have a container up and running, let's poke around inside the contai
 [#enter_container]
 == 2. Look inside a running container
 
-Whilst the container is running, we are able to "look inside" the container.  The experience is much the same to `telnet` ing or `ssh` ing into a remote instance or virtual machine.
+Whilst the container is running, we are able to "look inside" the container.  The experience is much the same as `telnet` ing or `ssh` ing into a remote instance or virtual machine.
 
-. First though, let's record what's going on with the container's host, namely the virtual machine that is running your code-server instance.  We'll use this to compare to what we find inside the container.  Run the following command in the terminal to gather some intel about the host (and save it to a place where code-server can display it!)
+. First though, let's record what's going on with the container's host, namely the virtual machine that is running your code-server instance.  We'll use this to compare what we find inside the container.  Run the following command in the terminal to gather some intel about the host (and save it to a place where code-server can display it!)
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -156,7 +156,7 @@ include::partial$gather_info.adoc[]
 ----
 +
 {zwsp} +
-. Next, let's use the VS Code editor to see what our command found out. Use the following to load the file in the editor. If this doesnt work use the steps below to open.
+. Next, let's use the VS Code editor to see what our command found out. Use the following to load the file in the editor. If this doesn't work use the steps below to open.
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -296,7 +296,7 @@ image::container-info-select.png[]
 +
 [TIP]
 ====
-If the comparison document seems to cramped, you can double-click on the tab of the comparison (circled in red in the image below) to expand the size of it out to be easier to read (e.g. it will compress the Browser Preview window to the right).
+If the comparison document seems too cramped, you can double-click on the tab of the comparison (circled in red in the image below) to expand the size of it to be easier to read (e.g. it will compress the Browser Preview window to the right).
 
 Double-click the tab again to restore it to its original size
 ====
@@ -340,7 +340,7 @@ image::info-diff.jpg[]
 include::partial$copy_visitor_info.adoc[]
 +
 {zwsp} +
-. You should now see the file appear in your *Explorer*.  Click on it to view the contents.  It should match the visitors that you entered previously. Alternative run the following command to load it.
+. You should now see the file appear in your *Explorer*.  Click on it to view the contents.  It should match the visitors that you entered previously. Alternatively run the following command to load it.
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -405,7 +405,7 @@ CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES
 [#committing_containers]
 == 5. Committing Containers to Images
 
-Even though our **container is stopped, it's still around**! You might wonder why we would want to keep a container around even after we have stopped it.  Turns out it has to do with the fact that we might want to **create a new image from the container we've just run**.
+Even though our **container has stopped, it's still around**! You might wonder why we would want to keep a container around even after we have stopped it.  Turns out it has to do with the fact that we might want to **create a new image from the container we've just run**.
 
 Containers are by their nature immutable.  While they are running, however, changes are being made to their file systems.  When containers are stopped, we might want to **commit** those changes that were made to the filesystem whilst running.
 {zwsp}
@@ -413,7 +413,7 @@ Containers are by their nature immutable.  While they are running, however, chan
 
 [NOTE]
 ====
-For those from an operations background, it's a little like creating an image snapshot from a Virtual Machine when its stopped.  That image can then be used to boot up a different VM in a desired state quickly.
+For those from an operations background, it's a little like creating an image snapshot from a Virtual Machine when it's stopped.  That image can then be used to boot up a different VM in a desired state quickly.
 
 ====
 {zwsp}
@@ -529,7 +529,7 @@ CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES
 
 Let's say we want to take a look at our visitor_info.txt file that we copied out of the container and have since deleted from the host.  Let's start up our container to try to do that again
 
-. Execute the following command (which should be familar from earlier in this section) 
+. Execute the following command (which should be familiar from earlier in this section) 
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -558,7 +558,7 @@ Error: "/var/log/www/visitor_info.txt" could not be found on container {apache-s
 
 {zwsp}
 
-Before we throw our hands up in disgust, remember that we had the foresight of _committing_ our previously running web server container to a new image called `{apache-committed-container-image}`.  This image should container all the changes we made on top of the `{apache-server-container-name}` that we just ran and allow us access to the info that does not exist in the `{apache-server-image-insecure}`.
+Before we throw our hands up in disgust, remember that we had the foresight of _committing_ our previously running web server container to a new image called `{apache-committed-container-image}`.  This image should contain all the changes we made on top of the `{apache-server-container-name}` that we just ran and allow us access to the info that does not exist in the `{apache-server-image-insecure}`.
 
 {zwsp}
 

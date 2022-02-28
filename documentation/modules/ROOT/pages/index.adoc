@@ -13,7 +13,8 @@ image::horizon.jpeg[Containers!,width=437,height=271]
 
 This is because they provide a universal and portable packaging method for workloads and are the stepping stone to a fully automated and agile environment.
 
-We know from speaking many people that it’s **hard to find talent, solutions or answers to what’s best for your organization**. Containers and Kubernetes are hand in glove but without first understanding Containers it's a lot to take in.
+Kubernetes is the leading Container orchestration engine, but it's complex and can be **hard for organisations to find talent or properly evaluate solutions**. 
+Navigating the world of Kubernetes solutions is difficult without first understanding Containers. Not just containers but running containers in an enterprise compliant manner, that is securely and efficiently. This workshop seeks to help address that.
 
 This **3hr immersive session** is a crash course introduction to containers, what you should be concerned about and steps you can take to securely containerise applications. Specifically we look at:
 
@@ -53,7 +54,7 @@ image::Logo-Red_Hat-Enterprise_Linux_8-A-Standard-RGB.png[RHEL 8!,width=320,heig
 
 {zwsp}
 
-Interest in containers technology continues to grow, as more organizations realize the benefits they can provide for how they manage applications and infrastructure.
+Interest in container technology continues to grow, as more organizations realize the benefits they can provide for how they manage applications and infrastructure.
 But it’s easy to get lost in all the hype and forget what containers are really about. Ultimately, **containers are a feature of Linux**.
 Containers have been a part of the Linux operating system for more than a decade, and go back even further in UNIX.
 That’s why, despite the very recent introduction of Windows containers, the majority of containers we see are in fact Linux containers. That also means that if you’re deploying containers, your Linux choices matter a lot.

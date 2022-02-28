@@ -208,7 +208,7 @@ Storing signatures
 exit
 ----
 
-=== Testing commited container
+=== Testing committed container
 
 Now that we committed a new image, we can test this committed image
 

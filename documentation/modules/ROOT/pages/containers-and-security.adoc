@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 _30 MINUTE EXERCISE_
 
-If you looking to run containers in any kind of production capacity, simply knowing _how_ to run a container is not enough.  Ensuring that the container is _secure_ is as critical as making sure any production facing infrastructure is secure.
+If you are looking to run containers in any kind of production capacity, simply knowing _how_ to run a container is not enough.  Ensuring that the container is _secure_ is as critical as making sure any production facing infrastructure is secure.
 
 Sometimes people can be lulled into a false sense of security around containers because of the sense that they are isolated from the host (e.g. VM). However, in the previous sections we made allowances to get our containers up and running, some of which we link:podman-intro.html?{guide-query-string}#security_vuln[highlighted previously^].
 

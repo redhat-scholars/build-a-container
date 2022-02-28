@@ -61,7 +61,7 @@ image::ocp-developer-perspective.jpg[]
 
 === Console Login
 
-For this section we're going to want to issue commands to OpenShift from the commandline.  OpenShift has a CLI called `oc` footnote:[`oc` is built on top of `kubectl`, the generic Kubernetes CLI.  Any command you can issue with `kubectl` you can issue with `oc`, but `oc` builds upon `kubectl` with OpenShift specific commands, such as `oc login`] which we will leverage.
+For this section we're going to want to issue commands to OpenShift from the command line.  OpenShift has a CLI called `oc` footnote:[`oc` is built on top of `kubectl`, the generic Kubernetes CLI.  Any command you can issue with `kubectl` you can issue with `oc`, but `oc` builds upon `kubectl` with OpenShift specific commands, such as `oc login`] which we will leverage.
 
 Here again, choose the proper tab for your setup
 
@@ -236,7 +236,7 @@ Now we have our image in a place where we can refer to it
 
 The simplest way to get a container image up and running in OpenShift is with the `oc run` command.  This will create what's called a `pod` to house our container that runs based on the image definition we just uploaded to the ImageStream
 
-. One of benefits of using ImageStreams is that the cluster internal addresss of the ImageStream repo does not require authentication.  Let's use that for the image location for running our pod
+. One of the benefits of using ImageStreams is that the cluster internal address of the ImageStream repo does not require authentication.  Let's use that for the image location for running our pod
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -266,7 +266,7 @@ oc run \
 pod/my-web-server created
 ----
 +
-. Switch to the OpenShift Console (UI) and look at the link:https://console-openshift-console.apps.{CLUSTER_SUBDOMAIN}/topology/ns/{OCP_PROJECT}?view=graph[developer perpective for your project^].  You should see the pod running
+. Switch to the OpenShift Console (UI) and look at the link:https://console-openshift-console.apps.{CLUSTER_SUBDOMAIN}/topology/ns/{OCP_PROJECT}?view=graph[developer perspective for your project^].  You should see the pod running
 +
 .Our image running in OpenShift
 image::ocp-running-secure-image.jpg[]
@@ -274,7 +274,7 @@ image::ocp-running-secure-image.jpg[]
 [#expose_container]
 == Exposing Container Website
 
-Our container is running in OpenShift, but we'd like the rest of the world to have access to our guestbook.  To do this on OpenShift we create a `Service` in that "exposes" our pod and then a `Route` that "exposes" our service to the world outside the OpenShift cluster.
+Our container is running in OpenShift, but we'd like the rest of the world to have access to our guestbook.  To do this on OpenShift we create a `Service` that "exposes" our pod and then a `Route` that "exposes" our service to the world outside the OpenShift cluster.
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]

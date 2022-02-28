@@ -273,7 +273,7 @@ cp pass:[${WORKING_CONTAINER_OLD_IMAGE_MOUNT}]/etc/httpd/conf/httpd.conf /home/{
 +
 image::guestbook-files.png[]
 +
-. Now that we've retrieved the files, we can exit the `buildah unshare` sesssion
+. Now that we've retrieved the files, we can exit the `buildah unshare` session
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]

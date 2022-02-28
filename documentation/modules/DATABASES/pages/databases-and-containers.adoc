@@ -60,7 +60,7 @@ e658d0e1d5c1  quay.io/bfarr/mysql-80:latest  run-mysqld --defa...  13 minutes ag
 <.> Notice that this is the name we assigned the container above
 
 == Create the Database
-. Lets view the sql file which we will run against our database. Use the command below or alternatively you can open via the code server menu. You will notice it creates a table and inserts some rows into the table.
+. Let's view the sql file which we will run against our database. Use the command below or alternatively you can open via the code server menu. You will notice it creates a table and inserts some rows into the table.
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -68,7 +68,7 @@ e658d0e1d5c1  quay.io/bfarr/mysql-80:latest  run-mysqld --defa...  13 minutes ag
 /usr/lib/code-server/bin/code-server -r /home/{USER}/container-workshop/sql/example_database.sql
 ----
 +
-. Now lets run this sql against our database providing via the mysql cli that is running in the container.  To do this we will use the `podman exec` command
+. Now lets run this sql against our database via the mysql cli that is running in the container.  To do this we will use the `podman exec` command
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -86,7 +86,7 @@ cat /home/{user}/container-workshop/sql/example_database.sql | \#<.>
 <.> The command that we mean to run
 
 == Run a Query
-Your VS Code server IDE has a MYSQL extension installed that we will use to run a query. We will use this to run a simole select statement to demonstrate that the database UI tools that are traditionally used can
+Your VS Code server IDE has a MYSQL extension installed that we will use to run a query. We will use this to run a simple select statement to demonstrate that the database UI tools that are traditionally used can
 continue to be used with containerised databases. Though we are simply here using local url and port settings, when containers run in a container platform such as OpenShift there are cli tools that help to
 tunnel the port to your local desktop or ports can be exposed outside the cluster.
 

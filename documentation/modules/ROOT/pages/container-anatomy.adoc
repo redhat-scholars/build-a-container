@@ -25,7 +25,7 @@ image::OCI-logo.svg[OCI Logo!,width=320,height=80]
 
 [#container_image_format]
 == 2. Container Image Format
-Container images are made up of layers, most which are immutable with the exception of a writeable upper layer. A union file system provides a logical view when the container is running. (OverlayFS is a union mount filesystem implementation for Linux). The union file system works on top of the other file-systems. It gives a single coherent and unified view to files and directories of separate file-system. In other words, it mounts multiple directories to a single root. It is more of a mounting mechanism than a file system.
+Container images are made up of layers, most of which are immutable with the exception of a writeable upper layer. A union file system provides a logical view when the container is running. (OverlayFS is a union mount filesystem implementation for Linux). The union file system works on top of the other file-systems. It gives a single coherent and unified view to files and directories of separate file-system. In other words, it mounts multiple directories to a single root. It is more of a mounting mechanism than a file system.
 
 Today you are the container builder, so the important aspects to understand are:
 
@@ -53,7 +53,7 @@ The above container image was exported to a tar file with the podman link:https:
 
 A Containerfile is a text based file which provides instructions to assemble an image. **Each row in a Containerfile corresponds to a new layer**. The available commands that are usable inside a Containerfile and a Dockerfile are equivalent.
 
-The Containerfile below is a of a mysql image from the link:https://catalog.redhat.com/software/containers/search?q=mysql&p=1[Red Hat Container Catalog,window=_blank].
+The Containerfile below is a mysql image from the link:https://catalog.redhat.com/software/containers/search?q=mysql&p=1[Red Hat Container Catalog,window=_blank].
 
 image::dissectingimage.jpg[Dissecting an Image!]
 
@@ -134,7 +134,7 @@ d65aecc325a4 ubi8/ubi      /bin/bash  3 secs ago Exited (0) 5 secs ago peaceful_
 [#container_tools]
 == 6. Container Tools
 
-The open source community have created new container tools to **eliminate the required use of root access and a daemon process** compared with how Docker is designed.
+The open source community has created new container tools to **eliminate the required use of root access and a daemon process** compared with how Docker is designed.
 
 These new tools **buildah, skopeo and podman** each provide more focussed functionality. You can think of **podman as a developers replacement for Docker**,
 **skopeo** as a simpler way to inspect and copy images and **buildah** provides specialist ways of building images whether from a Containerfile or interactively.
@@ -161,7 +161,7 @@ podman run -dt -p 8080:8080/tcp registry.fedoraproject.org/f29/httpd
 
 === Buildah
 
-Buildah can an act as a drop-in replacement for the Docker daemon’s docker build command (i.e., building images with a traditional Dockerfile) but is flexible enough to allow you to build images with whatever tools you prefer to use. ( bud = build-using-dockerfile )
+Buildah can act as a drop-in replacement for the Docker daemon’s docker build command (i.e., building images with a traditional Dockerfile) but is flexible enough to allow you to build images with whatever tools you prefer to use. ( bud = build-using-dockerfile )
 ----
 buildah bud -t hello .
 ----
@@ -180,7 +180,7 @@ To use Buildah in an interactive mode:
 . Start with creating a working container with Buildah.
 +
 The following saves the container name into the $container variable to use in subsequent commands. You can view working containers with the buildah
-containers commmand.
+containers command.
 +
 ----
 # container=$(buildah from registry.access.redhat.com/ubi8/python-38)
@@ -254,7 +254,7 @@ There are two types of container registry: public and private.
 === Public registries are:
 
 * great for individuals or small teams
-* get up and running quickly as possible. Basic in their abilities.
+* get up and running as quickly as possible. Basic in their abilities.
 * easy to use
 
 === Private registries have:

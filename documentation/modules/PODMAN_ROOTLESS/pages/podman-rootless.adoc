@@ -67,7 +67,7 @@ In Podman, there is a new set of user IDs (UIDs) and group IDs (GIDs) which are 
 
 image::uidpodman.png[table!]
 
-To understand this further, where podman is running as non-root, we can see the the uid as viewed on the host by
+To understand this further, where podman is running as non-root, we can see the uid as viewed on the host by
 looking at the uid map.  To view use the following command.
 ----
 $ podman unshare cat /proc/self/uid_map
@@ -80,7 +80,7 @@ This result shows that UID 0 is mapped to my UID, 3267, while UID 1 is mapped to
 
 == Problem! - Container could not create a file
 
-With rootless mode you may a problem in that the user of the container does not have permissions on the host volume.
+With rootless mode you may have a problem in that the user of the container does not have permissions on the host volume.
 
 First lets run the busybox container as user 123 and mount a directory on the host ./src which will be mapped to /dest in our container
 [.console-input]
@@ -89,7 +89,7 @@ First lets run the busybox container as user 123 and mount a directory on the ho
 podman run -dit --volume ./src:/dest:z --user 123:123 --name busybox busybox
 ----
 
-Confirm the user id thats running.
+Confirm the user id that's running.
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
@@ -103,7 +103,7 @@ Lets now list the directory via the container
 podman exec busybox ls -ld /dest
 ----
 
-Now lets simulate the container creating a file in our mounted directory. For instance in a real use case this could be a database container running as a postrgres user that is creating index files.
+Now lets simulate the container creating a file in our mounted directory. For instance in a real use case this could be a database container running as a postgres user that is creating index files.
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
@@ -112,7 +112,7 @@ podman exec busybox touch /dest/file
 
 Did it work? The issue is that the directory created was owned by your UID. This UID looks like root inside of the container and we are not running busybox with the root user. Therefore, the container is unable to write to the directory.
 
-So lets allow the user (UID 123 in the containers) to own and write to the directory.
+So let's allow the user (UID 123 in the containers) to own and write to the directory.
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -128,7 +128,7 @@ Now when we try the command again it works.
 podman exec busybox touch /dest/file
 ----
 
-Now lets view the directory as it would be in a container with this unshare command.
+Now let's view the directory as it would be in a container with this unshare command.
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----

@@ -68,7 +68,7 @@ volumes:
 Up to now, support for Docker Compose, the command-line utility that orchestrates multiple Docker containers for local development, was missing. With Podman 3, we have begun to support Compose.
 
 Docker Compose is a python based application which is used to co-ordinate multiple containers. It communicates with docker behind the scenes via an API layer. With RHEL 8 and the removal of docker as a package,
-this restful API backend has now been implemented to use daemonless Podman. Docker compose requires root access and the this experience of Docker-compose with root access is now available in Podman.
+this restful API backend has now been implemented to use daemonless Podman. Docker compose requires root access and this experience of Docker-compose with root access is now available in Podman.
 
 The api requires the podman-docker package to be installed and the podman api to be enabled which we have seen with RHEL Cockpit.
 
@@ -173,15 +173,15 @@ $
 == Using Podman to bridge to Kubernetes
 
 In this exercise we will look out how Podman can provide a bridge to Kubernetes by generating or using kubernetes based yaml files rather than Docker compose yaml files.
-With Docker and Podman we have been running containers so far, but with this step we will use "pods" which are the  lowest schedulable unit in kubernetes. Pods can container
+With Docker and Podman we have been running containers so far, but with this step we will use "pods" which are the  lowest schedulable unit in kubernetes. Pods can contain
 one or more containers.
 
-Podman pods are similiar to kubernetes pods in the sense that they can contain one or more containers at a time. With podman play command, you can import kubernetes pod definitions in yaml format.
+Podman pods are similar to kubernetes pods in the sense that they can contain one or more containers at a time. With podman play command, you can import kubernetes pod definitions in yaml format.
 
 image::podman-pod-architecture.png[Gitea!]
 
 Every Podman pod includes an "infra" container. Its purpose is to hold the namespaces associated but it does nothing, but go to sleep. Its purpose is to hold the namespaces associated with the pod and allow podman
-to connect other containers to the pod.  This allows you to start and stop containers within the POD and the pod will stay running, where as if the primary container
+to connect other containers to the pod.  This allows you to start and stop containers within the POD and the pod will stay running, whereas if the primary container
 controlled the pod, this would not be possible.
 
 With our previous docker compose file run docker-compose and find the container names which are running.
@@ -346,7 +346,7 @@ Stopping gitea-postgres_db_1    ... done
 $
 ----
 
-So lets now run the gitea process as a pod with 2 containers rather than the docker compose file. The following file has been created on from the generated yaml file by podman on both containers.
+So lets now run the gitea process as a pod with 2 containers rather than the docker compose file. The following file has been created from the generated yaml file by podman on both containers.
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
@@ -533,7 +533,7 @@ https://developers.redhat.com/developer-sandbox/activities/get-started-with-your
 If you are trying to deploy in the sandbox from docker.io container registry , there can be errors if docker pull limits are reached due to the popularity of the sandboxes. In this case you can adjust the image in the yaml to the following
 
 == Wrap up
-The Red Hat engineers have taken a step towards suupport of Docker compose with Podman. It has been a Minumum Viable Product (MVP) approach which brings the same experience (running as root). This is an area that will continue to develop given some of the Podman fundamentals such as not running as priveleged is not yet 100%. However it should enable the ability for organisations to move their Docker compose setups to Podman and embrace Kubernetes standards.
+The Red Hat engineers have taken a step towards support of Docker compose with Podman. It has been a Minimum Viable Product (MVP) approach which brings the same experience (running as root). This is an area that will continue to develop given some of the Podman fundamentals such as not running as privileged is not yet 100%. However it should enable the ability for organisations to move their Docker compose setups to Podman and embrace Kubernetes standards.
 
 One known caveat is that Podman has not and will not implement the Swarm function. Therefore, if your Docker Compose instance uses Swarm, it will not work with Podman.
 With the 3.0 release, Podman can now work nicely with Docker Compose to orchestrate containers, which is a huge step toward daemonless container management on Linux.
