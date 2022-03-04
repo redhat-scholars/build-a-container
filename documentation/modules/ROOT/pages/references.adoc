@@ -24,6 +24,7 @@ The following list is our pick of articles and websites that provide information
 
 . link:https://www.stackrox.com/post/2019/09/docker-security-101/[Docker Container Security 101: Risks and 33 Best Practices,window=_blank]
 
+. link:https://developer.ibm.com/learningpaths/universal-application-image/design-universal-image/[Best practices for designing a universal application image,window=_blank]
 
 
 === Courses
