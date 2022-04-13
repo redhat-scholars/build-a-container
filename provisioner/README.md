@@ -44,7 +44,7 @@ The `github.com/ansible/workshops` contains an Ansible Playbook `provision_lab.y
 
 ### Setup (per workshop)
 
-* Define the following variables in a file passed in using `-e @extra_vars.yml`
+* Define the following variables in a file passed in using `-e @extra_vars.yaml`
 
 ```yaml
 ---
@@ -126,7 +126,7 @@ Please read this blog for more information: [https://www.ansible.com/blog/ansibl
   * in a local directory named after the workshop (e.g. testworkshop/instructor_inventory)
   * By default there will be a website `ec2_name_prefix.workshop_dns_zone` (e.g. `testworkshop.rhdemo.io`)
 
-    * **NOTE:** It is possible to change the DNS domain (right now this is only supported via a AWS Route 53 Hosted Zone) using the parameter `workshop_dns_zone` in your `extra_vars.yml` file.
+    * **NOTE:** It is possible to change the DNS domain (right now this is only supported via a AWS Route 53 Hosted Zone) using the parameter `workshop_dns_zone` in your `extra_vars.yaml` file.
     * **NOTE:** The playbook does not create the route53 zone and must exist prior to running the playbook.
 
 ### Accessing instructor inventory
