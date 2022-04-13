@@ -95,7 +95,7 @@ For more extra_vars examples, look at the following:
 * Run the playbook:
 
 ```bash
-ansible-playbook provision_lab.yml -e @extra_vars.yml
+ansible-playbook provision_lab.yml -e @extra_vars.yaml
 ```
 
 * Login to the AWS EC2 console and you will see instances being created.  For example:
@@ -158,13 +158,13 @@ To destroy all the EC2 instances after training is complete:
 * Run the playbook:
 
 ```bash
-ansible-playbook teardown_lab.yml -e @extra_vars.yml
+ansible-playbook teardown_lab.yml -e @extra_vars.yaml
 ```
 
 * Optionally you can enable verbose debug output of the information gathered that drives the teardown process by passing the extra optional variable `debug_teardown=true`. Example:
 
 ```bash
-ansible-playbook teardown_lab.yml -e @extra_vars.yml -e debug_teardown=true
+ansible-playbook teardown_lab.yml -e @extra_vars.yaml -e debug_teardown=true
 ```
 
 ## Demos
