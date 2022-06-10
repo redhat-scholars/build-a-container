@@ -386,7 +386,7 @@
 <p>Next we tell buildah to implicitly create a "working container" from our currently vulnerable image:</p>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER=$(buildah from quay.io/bfarr/container-workshop-httpd) <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER=$(buildah --storage-driver=vfs from quay.io/bfarr/container-workshop-httpd) <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -430,7 +430,7 @@ ef575a8a3408     *     60dde8abf76e quay.io/bfarr/container-wo... container-work
 <p>We can then use buildah to effectively mount the root of the container&#8217;s filesystem</p>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER_MOUNT_POINT=$(buildah mount ${CONTAINER}) \<i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER_MOUNT_POINT=$(buildah --storage-driver=vfs mount ${CONTAINER}) \<i class="conum" data-value="1"></i><b>(1)</b>
 && echo "Container ${CONTAINER}'s filesystem mounted on host at ${CONTAINER_MOUNT_POINT}"</code></pre>
 </div>
 </div>
