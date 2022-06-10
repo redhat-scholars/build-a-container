@@ -67,7 +67,7 @@ buildah unshare
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-CONTAINER=$(buildah from {apache-server-image-insecure-image}) #<.>
+CONTAINER=$(buildah --storage-driver=vfs from {apache-server-image-insecure-image}) #<.>
 ----
 <.> We're effectively assigning a shell variable `CONTAINER` to the id of the buildah container that starts with the state of the image we want to update
 +
@@ -96,7 +96,7 @@ ef575a8a3408     *     60dde8abf76e quay.io/bfarr/container-wo... container-work
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-CONTAINER_MOUNT_POINT=$(buildah mount pass:[${CONTAINER}]) \#<.>
+CONTAINER_MOUNT_POINT=$(buildah --storage-driver=vfs mount pass:[${CONTAINER}]) \#<.>
 pass:[&&] echo "Container pass:[${CONTAINER}]'s filesystem mounted on host at pass:[${CONTAINER_MOUNT_POINT}]"
 ----
 <.> CONTAINER_MOUNT_POINT is getting set with the path to the mount in the host filesystem.  We store it in a shell variable because this tends to be a long path
