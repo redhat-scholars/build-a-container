@@ -32,13 +32,22 @@ sudo yum install slirp4netns podman -y
 Create a new user account using commands like below. The user is automatically configured to be able to use rootless Podman.
 The useradd command automatically sets the range of accessible user and group IDs automatically in the /etc/subuid and /etc/subgid files.
 
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 useradd -c "Joe Jones" joe
+----
+
+Set the password for the new user
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
 passwd joe
 ----
 
 Connect to the user. Using su or su - commands do not set the correct environment variables.
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
 ----
 ssh joe@localhost
 ----
@@ -82,7 +91,14 @@ This result shows that UID 0 is mapped to my UID, 3267, while UID 1 is mapped to
 
 With rootless mode you may have a problem in that the user of the container does not have permissions on the host volume.
 
-First lets run the busybox container as user 123 and mount a directory on the host ./src which will be mapped to /dest in our container
+Create a directory to map into our container.
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+mkdir src
+----
+
+Lets run the busybox container as user 123 and mount a directory on the host (./src) which will be mapped to /dest in our container. 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
