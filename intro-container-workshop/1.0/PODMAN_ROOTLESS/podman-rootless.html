@@ -330,18 +330,25 @@ However, with the feature called "Rootless Containers" generally available as of
 <p>Create a new user account using commands like below. The user is automatically configured to be able to use rootless Podman.
 The useradd command automatically sets the range of accessible user and group IDs automatically in the /etc/subuid and /etc/subgid files.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">useradd -c "Joe Jones" joe
-passwd joe</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">useradd -c "Joe Jones" joe</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Set the password for the new user</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">passwd joe</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Connect to the user. Using su or su - commands do not set the correct environment variables.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre>ssh joe@localhost</pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ssh joe@localhost</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -401,7 +408,15 @@ looking at the uid map.  To view use the following command.</p>
 <p>With rootless mode you may have a problem in that the user of the container does not have permissions on the host volume.</p>
 </div>
 <div class="paragraph">
-<p>First lets run the busybox container as user 123 and mount a directory on the host ./src which will be mapped to /dest in our container</p>
+<p>Create a directory to map into our container.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir src</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Lets run the busybox container as user 123 and mount a directory on the host (./src) which will be mapped to /dest in our container.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
