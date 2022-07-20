@@ -386,7 +386,7 @@
 <p>Next we tell buildah to implicitly create a "working container" from our currently vulnerable image:</p>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER=$(buildah --storage-driver=vfs from quay.io/bfarr/container-workshop-httpd) <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER=$(buildah from quay.io/bfarr/container-workshop-httpd) <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
