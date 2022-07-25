@@ -319,7 +319,7 @@ image::info-diff.jpg[]
 |Linux
 
 |*Distro*
-|RHEL: version 8.4
+|RHEL: version 8.6
 |RHEL: version 7.9
 
 |*User*

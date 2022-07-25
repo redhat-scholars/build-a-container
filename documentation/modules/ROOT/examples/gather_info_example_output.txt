@@ -6,14 +6,14 @@ uid=0(root) gid=0(root) groups=0(root) context=system_u:system_r:unconfined_serv
 OS Version:
 ----------
 NAME="Red Hat Enterprise Linux"
-VERSION="8.4 (Ootpa)"
+VERSION="8.6 (Ootpa)"
 ID="rhel"
 ID_LIKE="fedora"
 
 REDHAT_BUGZILLA_PRODUCT="Red Hat Enterprise Linux 8"
-REDHAT_BUGZILLA_PRODUCT_VERSION=8.4
+REDHAT_BUGZILLA_PRODUCT_VERSION=8.6
 REDHAT_SUPPORT_PRODUCT="Red Hat Enterprise Linux"
-REDHAT_SUPPORT_PRODUCT_VERSION="8.4"
+REDHAT_SUPPORT_PRODUCT_VERSION="8.6"
 
 Processes:
 ---------
