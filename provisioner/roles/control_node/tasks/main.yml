@@ -13,6 +13,12 @@
     owner: "{{ username }}"
     group: "{{ username }}"
 
+- name: Install storage.conf in etc directory
+  template:
+    src: storage.conf.j2
+    dest: "/etc/containers/storage.conf"
+    mode: 0644
+
 - name: Install vimrc in home directory
   template:
     src: vimrc.j2
