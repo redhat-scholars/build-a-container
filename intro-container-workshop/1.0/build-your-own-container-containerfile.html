@@ -202,23 +202,11 @@
     <span class="nav-text"><em>Module II</em></span>
   </li>
   <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
     <a class="nav-link" href="containers-and-security.html">Container Security</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="containers-and-security.html#exploit_containers">Exploit a Container</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="containers-and-security.html#run_containers_responsibly">Run Containers Responsibly</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="containers-and-security.html#scanning_containers">Scanning Containers for Security Issues</a>
-  </li>
-</ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="build-your-own-container.html">Building Securely</a>
+    <a class="nav-link" href="build-your-own-container.html">Build a Container</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="build-your-own-container.html">Build your own Secure Container</a>
@@ -239,7 +227,22 @@
     <span class="nav-text">&#8203;</span>
   </li>
   <li class="nav-item" data-depth="1">
-    <span class="nav-text"><em>Module III</em></span>
+    <span class="nav-text"><em>Extensions</em></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="METASPLOIT/containers-and-security.html">Metasploit</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="METASPLOIT/containers-and-security.html#exploit_containers">Exploit a Container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="METASPLOIT/containers-and-security.html#run_containers_responsibly">Run Containers Responsibly</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="METASPLOIT/containers-and-security.html#test_secure_container">Testing our Secure Container</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="DATABASES/databases-and-containers.html">Containerized Databases</a>
@@ -290,7 +293,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">BUILD-A-CONTAINER</a></li>
-    <li><a href="build-your-own-container.html">Building Securely</a></li>
+    <li><a href="build-your-own-container.html">Build a Container</a></li>
     <li><a href="build-your-own-container-containerfile.html">Buildah and Containerfiles</a></li>
   </ul>
 </nav>
@@ -311,12 +314,12 @@
 </div>
 <div class="paragraph">
 <p>&#8203;<br>
-Though we&#8217;ve fixed the issue with <code>quay.io/bfarr/container-workshop-httpd:0.0.6</code> by using the <code>buildah</code> native command line tools to fix it, there are are still additional steps we could take to make this image even more resilient against attack or exploit.  Here are two issues:</p>
+Though we&#8217;ve fixed the issue with <code>quay.io/bfarr/container-workshop-httpd:0.0.6</code> by using the <code>buildah</code> native command line tools to fix it, there are are still additional steps we could take to make this image even more resilient against attack or exploit.  Two core issues are:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>The web server is running on port 80 in the container.  This is a privileged port.  Better to have this run in a privileged port above 1024 (such as 8080)</p>
+<p>The web server is running on privileged port 80 in the container.  Better to have this run in a privileged port above 1024 (such as 8080)</p>
 </li>
 <li>
 <p>Running as a specific user can be problematic as that user can implicitly have privileges afforded to them via <code>sudo</code> (either at runtime or in the ongoing maintenance of the container).  It would be better if we could run the container as the unknown or "anonymous" user</p>
@@ -324,10 +327,10 @@ Though we&#8217;ve fixed the issue with <code>quay.io/bfarr/container-workshop-h
 </ul>
 </div>
 <div class="paragraph">
-<p>What&#8217;s more, we have no record of the step-by-step changes we&#8217;ve made to the container that we might store in revision control.  One (valid) option would be to store all the buildah cli commands we issued in a shell script.</p>
+<p>We also have no record of how our previous fix was applied. Though we could store cli commands in a shell script, a better option popularized by container tools like <code>docker</code> is the <code>Dockerfile</code> (or, more generically, <code>Containerfile</code>) way of defining new containers.</p>
 </div>
 <div class="paragraph">
-<p>Another option, popularized by container tools like <code>docker</code> is the <code>Dockerfile</code> (or, more generically, <code>Containerfile</code>) way of defining new containers.  Let&#8217;s investigate the <code>quay.io/bfarr/container-workshop-httpd:0.0.6</code> 's <code>Containerfile</code> to see if we can address the points above</p>
+<p>Let&#8217;s investigate the <code>quay.io/bfarr/container-workshop-httpd:0.0.6</code> 's <code>Containerfile</code> to see if we can address the points above</p>
 </div>
 </div>
 </div>
@@ -340,29 +343,29 @@ Though we&#8217;ve fixed the issue with <code>quay.io/bfarr/container-workshop-h
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>To start, let&#8217;s create a folder where we&#8217;ll do the work of building our container.  Right click on the <code>container-workshop</code> folder in the explorer, select <code>New Folder</code>.  Name the new folder <code>secure-container</code></p>
-<div class="paragraph">
-<p><span class="image"><img src="_images/new-folder.png" alt="new folder" width="500"></span>
-<span class="image"><img src="_images/create-container-folder.png" alt="create container folder" width="300"></span></p>
-</div>
-</li>
-<li>
 <p>In a normal user terminal, change into this newly created directory</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd /home/%USER%/container-workshop/secure-container</code></pre>
 </div>
 </div>
-</li>
-<li>
-<p>Next we&#8217;re going to create a new Containerfile.  Right-click on the <code>secure-container</code> folder and select <code>New File</code>.</p>
 <div class="paragraph">
-<div class="title">New Containerfile</div>
-<p><span class="image"><img src="_images/new-containerfile.png" alt="new containerfile"></span></p>
+<p>&#8203;</p>
 </div>
 </li>
 <li>
-<p>The Containerfile you just created should appear in the editor window.  We&#8217;ll be slowly adding to this Containerfile bit by bit</p>
+<p>An empty file has been initialised called Containerfile which we will use to edit, open this in the editor.</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">/usr/lib/code-server/bin/code-server -r /home/%USER%/container-workshop/secure-container/Containerfile</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</li>
+<li>
+<p>The empty Containerfile should appear in the editor window.  We&#8217;ll be slowly adding to this Containerfile bit by bit</p>
 </li>
 <li>
 <p>Copy the lines below, open the <code>Containerfile</code>, use <span class="keyseq"><kbd>CTRL</kbd>+<kbd>a</kbd></span> (or <span class="keyseq"><kbd>CMD</kbd>+<kbd>a</kbd></span> on MacOS) to select all the lines of the <code>Containerfile</code> and paste to replace with the contents below.  <em>The highlighted lines are the lines that we&#8217;re adding</em></p>
@@ -383,6 +386,9 @@ USER root <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 <td><code>USER</code> indicates that we want to operate as the <code>root</code> user for all the commands that follow, until another <code>USER</code> directive is found</td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </li>
 <li>
@@ -415,30 +421,34 @@ USER root <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>You should see output something like this:</p>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code>STEP 1: FROM registry.access.redhat.com/ubi7
+<pre class="highlightjs highlight"><code>Trying to pull registry.access.redhat.com/ubi7:latest...
 Getting image source signatures
 Checking if image destination supports signatures
-Copying blob 93156a512b98 done
-Copying blob f8c518873786 done
-Copying config 67d3aabcdb done
+Copying blob 1cc60fbe16bd done
+Copying blob ffb0ffdba2a9 done
+Copying config 5d69408f88 done
 Writing manifest to image destination
 Storing signatures
-STEP 2: USER root
-STEP 3: COMMIT localhost/secure-container <i class="conum" data-value="1"></i><b>(1)</b>
+STEP 2/2: USER root
+COMMIT localhost/secure-container <i class="conum" data-value="1"></i><b>(1)</b>
 Getting image source signatures
-Copying blob 01d2fb866535 skipped: already exists
-Copying blob 9e12a51e507a skipped: already exists
+Copying blob 63c0270243d0 skipped: already exists
+Copying blob cbd5a225fe2d skipped: already exists
 Copying blob 5f70bf18a086 done
-Copying config 3d4cd1585c done
+Copying config 1bfdcbed3c done
 Writing manifest to image destination
 Storing signatures
---&gt; 3d4cd1585cd
-3d4cd1585cd258b57399e3cd74516bca85ea745a1066e6ff26e1ee170122d232</code></pre>
+--&gt; 1bfdcbed3c8
+Successfully tagged localhost/secure-container:latest
+1bfdcbed3c8de9b6ff4379510d90b49728c99d3b6a73f804aae4761aced129ad</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -448,6 +458,9 @@ Storing signatures
 <td>Notice that the <code>COMMIT</code> command is implicit and reminiscent of the buildah native command that we issued</td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </li>
 <li>
@@ -473,6 +486,9 @@ Storing signatures
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[root@0c388bc22ff6 /]#</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </li>
 <li>
@@ -549,6 +565,9 @@ Description : The GNU Bourne Again shell (Bash) is a shell or command language
 </div>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>Notice that the version (highlighted), is the same version that we installed using the buildah command line <a href="#upgrade_bash">here</a></p>
@@ -598,6 +617,9 @@ USER root
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>Now from the terminal run the following command to build our container</p>
@@ -608,6 +630,9 @@ USER root
   -t localhost/secure-container \
   /home/%USER%/container-workshop/secure-container</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </li>
 <li>
@@ -722,6 +747,9 @@ Storing signatures
 7ca1aec798cefd27597d423beb41087afd112c5915d1cdea34269a46665866f9</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 </ol>
 </div>
@@ -790,6 +818,9 @@ Storing signatures
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>Open your Browser Preview window and paste the following URL in the navbar to see a familiar sight (or "site", if you will)</p>
@@ -802,6 +833,9 @@ Storing signatures
 <div class="content">
 <img src="_images/apache-test-page-trimmed.jpg" alt="apache test page trimmed">
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </li>
 <li>
@@ -816,6 +850,9 @@ Storing signatures
 <img src="_images/guestbook-not-found.png" alt="guestbook not found">
 </div>
 <div class="title">Figure 1. Guestbook functionality does not exist in the container</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </li>
 <li>
@@ -851,6 +888,9 @@ Storing signatures
 <pre class="highlightjs highlight"><code>[root@ansible-1 ~]#</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>Next we&#8217;ll run the next few commands to mount the old insecure container</p>
@@ -874,6 +914,9 @@ Storing signatures
 WORKING_CONTAINER_OLD_IMAGE_MOUNT=$(buildah mount ${WORKING_CONTAINER_OLD})</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>Now we don&#8217;t want very many files from the old container, we only want the files involved with our guestbook website.  We can pull them out and into our <code>Containerfile</code> working directory by running the following commands</p>
@@ -884,6 +927,9 @@ cp ${WORKING_CONTAINER_OLD_IMAGE_MOUNT}/var/www/html/hello.html /home/%USER%/con
 cp ${WORKING_CONTAINER_OLD_IMAGE_MOUNT}/etc/httpd/conf/httpd.conf /home/%USER%/container-workshop/secure-container</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>At this point you should see the three files appear in the <code>secure-container</code> directory.  You can also click on them and take a look at them like you would any file on the host</p>
@@ -891,6 +937,9 @@ cp ${WORKING_CONTAINER_OLD_IMAGE_MOUNT}/etc/httpd/conf/httpd.conf /home/%USER%/c
 <div class="content">
 <img src="_images/guestbook-files.png" alt="guestbook files">
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </li>
 <li>
@@ -964,6 +1013,9 @@ RUN yum install -y httpd &amp;&amp; yum update -y &amp;&amp; yum clean all
 </li>
 <li>
 <p>Use <span class="keyseq"><kbd>CTRL</kbd>+<kbd>f</kbd></span> (or <span class="keyseq"><kbd>CMD</kbd>+<kbd>f</kbd></span>) to search for the <code>Listen</code> directive near the start of the <code>httpd.conf</code></p>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>Change this line so that it matches the highlighted line so that the server listens on port 8080 (instead of 80)</p>
@@ -988,6 +1040,9 @@ ServerRoot "/etc/httpd"
 #</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>Next, in anticipation of our next step, we don&#8217;t want the configuration to specify that our web server should run as <code>root</code>.  Remove (or comment out) the lines that are struckthrough in your <code>httpd.conf</code></p>
@@ -1009,6 +1064,9 @@ ServerRoot "/etc/httpd"
 # 'Main' server configuration</pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>Next let&#8217;s rebuild the container so that it includes the edits we just made to <code>httpd.conf</code> locally</p>
@@ -1019,6 +1077,9 @@ ServerRoot "/etc/httpd"
   -t localhost/secure-container \
   /home/%USER%/container-workshop/secure-container</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </li>
 <li>
@@ -1045,6 +1106,9 @@ Storing signatures
 </div>
 </li>
 </ol>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </div>
 <div class="sect2">
@@ -1078,6 +1142,9 @@ Storing signatures
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>You&#8217;ll notice that it fails with this error message</p>
@@ -1088,17 +1155,16 @@ Storing signatures
 AH00059: Remove it before continuing if it is corrupted.</code></pre>
 </div>
 </div>
-</li>
-</ol>
-</div>
 <div class="paragraph">
 <p>The issue here is that by default an arbitrary user won&#8217;t have access to most of the files that the webserver needs to run.  This is where the fact that our arbitrary user will always be part of the <code>root</code> group (<code>gid</code>: <code>0</code>) will come in handy.  We need to make sure that the <code>root</code> group is assigned to the files and folders that the webserver needs and that the group has appropriate permissions.</p>
 </div>
 <div class="paragraph">
 <p>The process for doing this might be one of trial and error if you&#8217;re not familiar with the software that you&#8217;re attempting to run in the container.  In this case we know exactly which directories need to be adjusted.  Let&#8217;s return to the <code>Containerfile</code></p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
+</li>
 <li>
 <p>Copy the lines below, open the <code>Containerfile</code>, use <span class="keyseq"><kbd>CTRL</kbd>+<kbd>a</kbd></span> (or <span class="keyseq"><kbd>CMD</kbd>+<kbd>a</kbd></span> on MacOS) to select all the lines of the <code>Containerfile</code> and paste to replace with the contents below.  <em>The highlighted lines are the lines that we&#8217;re adding</em></p>
 <div class="listingblock console-input">
@@ -1204,6 +1270,9 @@ USER 1001
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>Build the container</p>
@@ -1214,6 +1283,9 @@ USER 1001
   -t localhost/secure-container \
   /home/%USER%/container-workshop/secure-container</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </li>
 <li>
@@ -1237,6 +1309,9 @@ Storing signatures
 --&gt; 8d4a377b076
 8d4a377b0765f588561fa9f842a6c19459431c4f360bf0baac2d8a623983a5f5</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </li>
 <li>
@@ -1264,6 +1339,9 @@ Storing signatures
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>You&#8217;ll notice that we can no longer hit the webserver at port 8081 (or it&#8217;s at least very unlikely that we can) and instead we need to find out the port that podman assigned on the host.  Capture that with this command:</p>
@@ -1271,7 +1349,7 @@ Storing signatures
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">HOST_PORT=$(podman ps \<i class="conum" data-value="1"></i><b>(1)</b>
     -f name=my-web-server \<i class="conum" data-value="2"></i><b>(2)</b>
-    --format json | jq -r ".[0].Ports[0].hostPort") <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+    --format json | jq -r ".[0].Ports[0].host_port") <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1290,6 +1368,9 @@ Storing signatures
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>Next, we&#8217;re pretty-print the url of our guestbook so that we can paste it into our Browser Preview window</p>
@@ -1297,6 +1378,9 @@ Storing signatures
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo "http://localhost:${HOST_PORT}/hello.html"</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </li>
 <li>
@@ -1320,6 +1404,9 @@ Storing signatures
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>You should now see your guestbook</p>
@@ -1328,6 +1415,9 @@ Storing signatures
 <img src="_images/apache-guestbook-page-random-port.jpg" alt="apache guestbook page random port">
 </div>
 <div class="title">Figure 2. Guestbook, but now at an arbitrary port</div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </li>
 <li>
@@ -1338,11 +1428,17 @@ Storing signatures
 </div>
 <div class="title">Figure 3. Notice the random uid (yours will vary)</div>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>Congratulations!  You&#8217;ve build a secure container from the ground up.  Next we&#8217;ll look at ways of getting our container out there in the world using Kubernetes.</p>
+<p><strong>Congratulations!</strong>  You&#8217;ve built a secure container from the ground up.  Next we&#8217;ll look at ways of getting our container out there in the world using Kubernetes.</p>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </div>
 </div>
@@ -1359,7 +1455,7 @@ Storing signatures
 </div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="build-your-own-container.html" class="query-params-link">Building Securely</a></span>
+  <span class="prev"><a href="build-your-own-container.html" class="query-params-link">Build a Container</a></span>
   <span class="next"><a href="deploy-container.html" class="query-params-link">Deploying to OpenShift</a></span>
 </nav>
 </article>

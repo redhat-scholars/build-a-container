@@ -202,23 +202,11 @@
     <span class="nav-text"><em>Module II</em></span>
   </li>
   <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
     <a class="nav-link" href="containers-and-security.html">Container Security</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="containers-and-security.html#exploit_containers">Exploit a Container</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="containers-and-security.html#run_containers_responsibly">Run Containers Responsibly</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="containers-and-security.html#scanning_containers">Scanning Containers for Security Issues</a>
-  </li>
-</ul>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="build-your-own-container.html">Building Securely</a>
+    <a class="nav-link" href="build-your-own-container.html">Build a Container</a>
 <ul class="nav-list">
   <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="build-your-own-container.html">Build your own Secure Container</a>
@@ -239,7 +227,22 @@
     <span class="nav-text">&#8203;</span>
   </li>
   <li class="nav-item" data-depth="1">
-    <span class="nav-text"><em>Module III</em></span>
+    <span class="nav-text"><em>Extensions</em></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="METASPLOIT/containers-and-security.html">Metasploit</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="METASPLOIT/containers-and-security.html#exploit_containers">Exploit a Container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="METASPLOIT/containers-and-security.html#run_containers_responsibly">Run Containers Responsibly</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="METASPLOIT/containers-and-security.html#test_secure_container">Testing our Secure Container</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="DATABASES/databases-and-containers.html">Containerized Databases</a>
@@ -290,7 +293,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">BUILD-A-CONTAINER</a></li>
-    <li><a href="build-your-own-container.html">Building Securely</a></li>
+    <li><a href="build-your-own-container.html">Build a Container</a></li>
   </ul>
 </nav>
   <div class="edit-this-page"><a href="file:///Users/bfarr/projects/build-a-container/documentation/modules/ROOT/pages/build-your-own-container.adoc">Edit this Page</a></div>
@@ -304,7 +307,7 @@
 <p><em>10 MINUTE EXERCISE</em></p>
 </div>
 <div class="paragraph">
-<p>In this chapter we&#8217;ll try to make the container image we&#8217;ve been using a bit more secure using a related tool to <code>podman</code>, namely <code>buildah</code>.</p>
+<p>In this chapter we&#8217;ll try to make the container image we&#8217;ve been using a bit more secure using <code>buildah</code>.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -348,6 +351,9 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">%USER%</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>Next, as a non-root user we need to do some setup that will allow buildah to interact with the container in this native command mode.  Run the following in the terminal</p>
@@ -373,6 +379,9 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">buildah unshare</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>You should notice that upon running the command your terminal turns to look like a root terminal.  You are not actually root, but rather working within a "namespace" that makes you appear as root when it comes to interacting with buildah&#8217;s containers</p>
@@ -380,6 +389,9 @@
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[root@ansible-1 ~]#</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </li>
 <li>
@@ -411,6 +423,9 @@
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>To confirm that our working container is up, we can run the following command (which is a little like <code>podman ps</code> but for "working containers")</p>
@@ -424,6 +439,9 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">CONTAINER ID  BUILDER  IMAGE ID     IMAGE NAME                       CONTAINER NAME
 ef575a8a3408     *     60dde8abf76e quay.io/bfarr/container-wo... container-workshop-httpd-working-container</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </li>
 <li>
@@ -451,9 +469,12 @@ ef575a8a3408     *     60dde8abf76e quay.io/bfarr/container-wo... container-work
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The highlighted section will be different on your instance.  This is just making clear where the container mount point is</td>
+<td>The highlighted section will be different on your instance.  This is just making clear where the container mount point is.</td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </li>
 <li>
@@ -486,6 +507,9 @@ drwxrwxrwt.  7 root root 46 May 30 08:29 tmp
 drwxr-xr-x. 13 root root 19 Apr 20 03:58 usr
 drwxr-xr-x. 19 root root 17 May 30 08:29 var</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </li>
 <li>
@@ -526,6 +550,9 @@ drwxr-xr-x. 19 root root 17 May 30 08:29 var</code></pre>
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>&#8203;</p>
 </div>
 </li>
 <li>
@@ -577,6 +604,9 @@ Installed products updated.
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>Now we will commit these changes to a new image locally on the host that we&#8217;ll test.  We commit the changes with</p>
@@ -603,6 +633,9 @@ Installed products updated.
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>This should yield output like the following</p>
@@ -627,6 +660,9 @@ Storing signatures
 6b4a460f1e4077bd64b862fcdabe93928779e441ed3e84bb161e8cead079a3e0</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&#8203;</p>
+</div>
 </li>
 <li>
 <p>Now we can <code>exit</code> the unshare environment so that we can properly test out our container fix</p>
@@ -638,220 +674,11 @@ Storing signatures
 </li>
 </ol>
 </div>
-<div class="sect2">
-<h3 id="_testing_committed_container"><a class="anchor" href="#_testing_committed_container"></a>Testing committed container</h3>
-<div class="paragraph">
-<p>Now that we committed a new image, we can test this committed image</p>
-</div>
-<div class="paragraph">
-<p>Make sure there are no containers running with the <code>my-web-server</code></p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman rm -f my-web-server</code></pre>
-</div>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>If there were a container running you would see something like:</p>
-</div>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">17af59003b1f956717b2a90919119b20bca1133e3677999f628f00e026a0079f</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And if there weren&#8217;t one running you would see something like:</p>
-</div>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Error: failed to evict container: "": failed to find container "my-web-server" in state: no container with name or ID my-web-server found: no such container</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If the output you see is either of the above, it&#8217;s okay to proceed.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Run the new container "rootlessly" in the terminal by running the following command:</p>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
-    -d \
-    -p 8081:80/tcp \<i class="conum" data-value="1"></i><b>(1)</b>
-    --name my-web-server \
-    -v /home/%USER%/container-workshop:/var/log/www:Z \
-    localhost/container-workshop-httpd-secure</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Since our new container image is virtually identical to the original one (except for the new bash package) and we&#8217;re forwarding the same ports we can now attempt to exploit the container again with the configuration from before</td>
-</tr>
-</table>
-</div>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>Let&#8217;s return to our metasploit terminal (<strong>Terminal 2</strong>) for the next section</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>If you have accidentally closed your metasploit terminal, you can recreate/reopen it by following <a href="metasploit_setup_standalone.html?USER=%USER%&amp;CLUSTER_SUBDOMAIN=%CLUSTER_SUBDOMAIN%" target="_blank" rel="noopener">these instructions</a> fully in the other tab and then returning to this point in the lab.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>If you&#8217;ve left your terminal open, you may need to first press <kbd>RETURN</kbd> to get back to the metasploit command line.  When you do so you may be greeted with the following prompt:</p>
-</div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset1_terminal-2"></a>Terminal 2</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_terminal-2">
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Terminate channel 1? [<mark>y</mark>/N]</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>Just enter <code>y</code> to get back to the metasploit prompt:</p>
-</div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset2_terminal-2"></a>Terminal 2</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset2_terminal-2">
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">msf6 exploit(multi/http/apache_mod_cgi_bash_env_exec) &gt;</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>Next run the following command in the <strong>metasploit</strong> terminal (<strong>Terminal 2</strong>)</p>
-</div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset3_terminal-2"></a>Terminal 2</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset3_terminal-2">
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">check</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And this should result in the following output:</p>
-</div>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[*] 127.0.0.1:8081 - The target is <mark>not</mark> exploitable.</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>Congratulations!  You&#8217;d fixed the shellshock exploit of the original <code>quay.io/bfarr/container-workshop-httpd</code> container!</p>
-</div>
 <div class="sidebarblock">
 <div class="content">
-<div class="title">TIP</div>
-<div class="paragraph">
-<p>You are now done with metasploit and Terminal 2.  You can close down that terminal with the following commands:</p>
-</div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset4_terminal-2"></a>Terminal 2</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset4_terminal-2">
-<div class="paragraph">
-<p>First exit out of metasploit</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">exit</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Which should return you to the lab instance terminal</p>
-</div>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[%USER%@ansible-1 ~]$</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And now exit out of that terminal</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">exit</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Which should return you terminal to a single "unsplit" terminal window</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/terminal-unsplit.jpg" alt="terminal unsplit">
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
 <div class="paragraph">
 <p>Next let&#8217;s look at how we can make our container even more resilient against attack by using another popular way of building containers.</p>
+</div>
 </div>
 </div>
 </div>
