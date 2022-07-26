@@ -24,13 +24,6 @@ Let's investigate the `{apache-server-image-insecure}` 's `Containerfile` to see
 
 A `Containerfile` defines one (or more) base images and a number operations to perform in those images to create a new image.  
 
-. To start, let's create a folder where we'll do the work of building our container.  Right click on the `container-workshop` folder in the explorer, select `New Folder`.  Name the new folder `secure-container`
-+
-image:new-folder.png[width=500]
-image:create-container-folder.png[width=300]
-+
-{zwsp}
-+
 . In a normal user terminal, change into this newly created directory
 +
 [.console-input]
@@ -40,14 +33,17 @@ cd /home/{USER}/container-workshop/secure-container
 ----
 {zwsp}
 +
-. Next we're going to create a new Containerfile.  Right-click on the `secure-container` folder and select `New File`.
+. An empty file has been initialised called Containerfile which we will use to edit, open this in the editor.
 +
-.New Containerfile
-image:new-containerfile.png[]
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+/usr/lib/code-server/bin/code-server -r /home/{USER}/container-workshop/secure-container/Containerfile
+----
 +
 {zwsp}
 +
-. The Containerfile you just created should appear in the editor window.  We'll be slowly adding to this Containerfile bit by bit
+. The empty Containerfile should appear in the editor window.  We'll be slowly adding to this Containerfile bit by bit
 +
 include::partial$containerfile_paste_snippet.adoc[]
 +

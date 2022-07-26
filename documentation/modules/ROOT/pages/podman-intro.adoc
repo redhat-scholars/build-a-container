@@ -109,7 +109,7 @@ include::partial$podman_ps.adoc[]
 . Finally, return to the Browser Preview panel and hit the reload button.  You should see the following web page indicating that an Apache webserver is running:
 +
 .Test Page
-image::apache-test-page-trimmed.png[]
+image::apache-test-page-trimmed.jpg[]
 +
 . Our website has more than a test page, it also has a visitor form (like straight out of the 90s!).  Let's take a look by navigating to this address (use the copy button to copy the URL and paste it into the Browser Preview panel): 
 +
@@ -270,6 +270,7 @@ podman cp \
 <.> The `{apache-server-container-name}:<path>` indicates that the `path` is inside the container (i.e. container filesystem) that we named with the `--name` option at the time we issued the `podman run` command
 <.> This path, undecorated by a container name or id, indicates that we are referencing a path on the host (i.e. local filesystem)
 +
+{zwsp} +
 . Next, lets view the files, the following command can be run in the terminal.
 +
 [.console-input]
