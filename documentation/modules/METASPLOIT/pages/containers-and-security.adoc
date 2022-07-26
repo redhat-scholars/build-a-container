@@ -661,6 +661,7 @@ Congratulations!  You'd fixed the shellshock exploit of the original `{apache-se
 .TIP
 ****
 You are now done with metasploit and {metasploit-terminal}.  You can close down that terminal with the following commands:
+****
 
 [tabs]
 ====

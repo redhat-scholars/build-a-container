@@ -18,11 +18,11 @@ Navigating the world of Kubernetes solutions is difficult without first understa
 
 This **3hr immersive session** is a crash course introduction to containers, what you should be concerned about and steps you can take to securely containerise applications. Specifically we look at:
 
-<.> Best practices in creating secure and containerised applications
-<.> Run, manage and deploy containers
-<.> Security exploits and how to address them
-<.> Container provenance
-<.> Hands on building a secure container
+. Best practices in creating secure and containerised applications
+. Run, manage and deploy containers
+. Security exploits and how to address them
+. Container provenance
+. Hands on building a secure container
 
 The hands-on workshop is for developers, operations, architects or anyone curious about what makes up a container and how to use them in a linux environment.
 

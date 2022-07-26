@@ -225,3 +225,4 @@ exit
 ****
 
 Next let's look at how we can make our container even more resilient against attack by using another popular way of building containers.
+****

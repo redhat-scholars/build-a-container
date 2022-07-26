@@ -93,7 +93,7 @@ Copying config 5d69408f88 done
 Writing manifest to image destination
 Storing signatures
 STEP 2/2: USER root 
-COMMIT localhost/secure-container
+COMMIT localhost/secure-container #<.>
 Getting image source signatures
 Copying blob 63c0270243d0 skipped: already exists  
 Copying blob cbd5a225fe2d skipped: already exists  
