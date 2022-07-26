@@ -1,0 +1,20 @@
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+STEP 1: FROM registry.access.redhat.com/ubi7
+...
+STEP 9: RUN chown -R 1001:0 /var/log/httpd/ && chmod -R g=u /var/log/httpd/
+STEP 10: EXPOSE 8080/tcp 
+STEP 11: USER 1001
+STEP 12: CMD /usr/sbin/httpd -DFOREGROUND 
+STEP 13: COMMIT localhost/secure-container
+Getting image source signatures
+Copying blob 01d2fb866535 skipped: already exists  
+Copying blob 9e12a51e507a skipped: already exists  
+Copying blob 03c598179387 done  
+Copying config 8d4a377b07 done  
+Writing manifest to image destination
+Storing signatures
+--> 8d4a377b076
+8d4a377b0765f588561fa9f842a6c19459431c4f360bf0baac2d8a623983a5f5
+----

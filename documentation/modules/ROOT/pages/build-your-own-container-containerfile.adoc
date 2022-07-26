@@ -10,14 +10,14 @@ _25 MINUTE EXERCISE_
 image::buildah.png[Buildah!,width=320,height=78]
 
 {zwsp} +
-Though we've fixed the issue with `{apache-server-image-insecure}` by using the `buildah` native command line tools to fix it, there are are still additional steps we could take to make this image even more resilient against attack or exploit.  Here are two issues:
+Though we've fixed the issue with `{apache-server-image-insecure}` by using the `buildah` native command line tools to fix it, there are are still additional steps we could take to make this image even more resilient against attack or exploit.  Two core issues are:
 
-* The web server is running on port 80 in the container.  This is a privileged port.  Better to have this run in a privileged port above 1024 (such as 8080)
+* The web server is running on privileged port 80 in the container.  Better to have this run in a privileged port above 1024 (such as 8080)
 * Running as a specific user can be problematic as that user can implicitly have privileges afforded to them via `sudo` (either at runtime or in the ongoing maintenance of the container).  It would be better if we could run the container as the unknown or "anonymous" user
 
-What's more, we have no record of the step-by-step changes we've made to the container that we might store in revision control.  One (valid) option would be to store all the buildah cli commands we issued in a shell script.  
+We also have no record of how our previous fix was applied. Though we could store cli commands in a shell script, a better option popularized by container tools like `docker` is the `Dockerfile` (or, more generically, `Containerfile`) way of defining new containers.  
 
-Another option, popularized by container tools like `docker` is the `Dockerfile` (or, more generically, `Containerfile`) way of defining new containers.  Let's investigate the `{apache-server-image-insecure}` 's `Containerfile` to see if we can address the points above
+Let's investigate the `{apache-server-image-insecure}` 's `Containerfile` to see if we can address the points above
 
 [#basic_containerfile]
 == Basic Containerfile
@@ -29,6 +29,8 @@ A `Containerfile` defines one (or more) base images and a number operations to p
 image:new-folder.png[width=500]
 image:create-container-folder.png[width=300]
 +
+{zwsp}
++
 . In a normal user terminal, change into this newly created directory
 +
 [.console-input]
@@ -36,11 +38,14 @@ image:create-container-folder.png[width=300]
 ----
 cd /home/{USER}/container-workshop/secure-container
 ----
+{zwsp}
 +
 . Next we're going to create a new Containerfile.  Right-click on the `secure-container` folder and select `New File`.
 +
 .New Containerfile
 image:new-containerfile.png[]
++
+{zwsp}
 +
 . The Containerfile you just created should appear in the editor window.  We'll be slowly adding to this Containerfile bit by bit
 +
@@ -54,6 +59,8 @@ USER root #<.>
 ----
 <.> `FROM` is the base container that this container will start from.  `ubi7` stands for link:https://www.redhat.com/en/blog/introducing-red-hat-universal-base-image["Universal Base Image"^].  It will serve as a secure basis for the rest of our container.  See more information on ubi below
 <.> `USER` indicates that we want to operate as the `root` user for all the commands that follow, until another `USER` directive is found
++
+{zwsp}
 +
 . To get a sense of what we've done, let's build a container from this Containerfile using `buildah`.  Run the following command:
 +
@@ -69,6 +76,8 @@ buildah bud \#<.>
 <.> `-f` indicates a the name of the Containerfile that should be used (in this instance, the one that just created)
 <.> `-t` names the tag that should be given to the resultant image
 <.> The final parameter is the directory in which the command should be run
++
+{zwsp}
 +
 . You should see output something like this:
 +
@@ -98,6 +107,8 @@ Successfully tagged localhost/secure-container:latest
 ----
 <.> Notice that the `COMMIT` command is implicit and reminiscent of the buildah native command that we issued
 +
+{zwsp}
++
 . Let's take a look inside the container we've just created and check to see if we need to address the bash vulnerability
 +
 [.console-input]
@@ -116,6 +127,7 @@ podman run \
 ----
 [root@0c388bc22ff6 /]#
 ----
+{zwsp}
 +
 . Let's take a look at the version of `bash` that's running
 +
@@ -143,6 +155,7 @@ exit
 ----
 --
 ====
+{zwsp}
 +
 . Notice that the version (highlighted), is the same version that we installed using the buildah command line <<upgrade_bash,here>>
 +
@@ -169,13 +182,19 @@ USER root
 ----
 <.> The `RUN` directive allows us to run a command as the user currently selected by the `USER` directive.  In this instance we chain a bunch of yum commands together to install our httpd server, ensure that all our packages are up to date (there may have been CVE patches since the last publishing of the ubi base image), and cleanup any temporary files (as we don't want these bloating the size of our final image)
 +
+{zwsp}
++
 . Now from the terminal run the following command to build our container 
 +
 include::partial$buildah_bud_no_annotations.adoc[]
 +
+{zwsp}
++
 . This should yield output similarfootnote:[Packages that are upgraded by yum will vary based on which packages have been updated by Red Hat since the last published ubi image] to the following:
 +
 include::partial$buildah_bud_output_run.adoc[]
++
+{zwsp}
 
 === Test Generic Apache Install in Container
 
@@ -183,7 +202,6 @@ Let's see if this image has a webserver running now.  First let's clean up any o
 
 :stop-container-name: {apache-server-container-name}
 include::partial$ensure_no_running_container.adoc[]
-
 . Run the following command in the terminal
 +
 [.console-input]
@@ -198,6 +216,8 @@ podman run \
 ----
 <.> As we did above with `bash`, we are now wanting to run `httpd` as the root process of {apache-server-containerfile-image} and this time we're providing that command the `-DFOREGROUND` argument
 +
+{zwsp}
++
 . Open your Browser Preview window and paste the following URL in the navbar to see a familiar sight (or "site", if you will)
 +
 [.console-input]
@@ -207,6 +227,8 @@ http://localhost:8081
 ----
 +
 image::apache-test-page-trimmed.jpg[]
++
+{zwsp}
 +
 . This is encouraging, but we don't yet have the non-boilerplate aspects of our site in the container.  For instance, if we navigate to our rudimentary guestbook functionality by pasting the following in the Browser Preview navbar
 +
@@ -218,6 +240,8 @@ http://localhost:8081/hello.html
 +
 .Guestbook functionality does not exist in the container
 image::guestbook-not-found.png[]
++
+{zwsp}
 +
 . We'll address this problem in the next section.  For now, let's stop and remove this container by running the following
 +
@@ -246,6 +270,8 @@ buildah unshare
 [root@ansible-1 ~]# 
 ----
 +
+{zwsp}
++
 . Next we'll run the next few commands to mount the old insecure container
 +
 [NOTE]
@@ -260,6 +286,8 @@ WORKING_CONTAINER_OLD=$(buildah from {apache-server-image-insecure-image})
 WORKING_CONTAINER_OLD_IMAGE_MOUNT=$(buildah mount pass:[${WORKING_CONTAINER_OLD}])
 ----
 +
+{zwsp}
++
 . Now we don't want very many files from the old container, we only want the files involved with our guestbook website.  We can pull them out and into our `Containerfile` working directory by running the following commands
 +
 [.console-input]
@@ -270,9 +298,13 @@ cp pass:[${WORKING_CONTAINER_OLD_IMAGE_MOUNT}]/var/www/html/hello.html /home/{US
 cp pass:[${WORKING_CONTAINER_OLD_IMAGE_MOUNT}]/etc/httpd/conf/httpd.conf /home/{USER}/container-workshop/secure-container
 ----
 +
+{zwsp}
++
 . At this point you should see the three files appear in the `secure-container` directory.  You can also click on them and take a look at them like you would any file on the host
 +
 image::guestbook-files.png[]
++
+{zwsp}
 +
 . Now that we've retrieved the files, we can exit the `buildah unshare` session
 +
@@ -322,6 +354,9 @@ For our apache webserver we're going to need to change its default configuration
 image::httpd-conf.jpg[]
 +
 . Use kbd:[CTRL+f] (or kbd:[CMD+f]) to search for the `Listen` directive near the start of the `httpd.conf`
++
+{zwsp}
++
 . Change this line so that it matches the highlighted line so that the server listens on port 8080 (instead of 80)
 +
 [.console-input]
@@ -346,6 +381,8 @@ ServerRoot "/etc/httpd"
 #
 ----
 +
+{zwsp}
++
 . Next, in anticipation of our next step, we don't want the configuration to specify that our web server should run as `root`.  Remove (or comment out) the lines that are struckthrough in your `httpd.conf`
 +
 [subs="+macros,+specialchars,+quotes"]
@@ -366,14 +403,19 @@ ServerRoot "/etc/httpd"
 # 'Main' server configuration
 ----
 +
+{zwsp}
++
 . Next let's rebuild the container so that it includes the edits we just made to `httpd.conf` locally
 +
 include::partial$buildah_bud_no_annotations.adoc[]
++
+{zwsp}
 +
 . This should yield output similar to before but appended with the following (`...` represents content that has been omitted)
 +
 include::partial$buildah_bud_output_copy.adoc[]
 
+{zwsp}
 
 === Running as an "Arbitrary User"
 
@@ -396,6 +438,8 @@ podman run \
 ----
 <.> `-u` allows us to override the user the container should be run as.  In this case we're using `pass:[${RANDOM}]` footnote:[Random is an internal bash function that returns a pseudorandom integer in the range 0-32767.  See also link:http://www.ing.iac.es/~docs/external/bash/abs-guide/randomvar.html#:~:text=%24RANDOM%20is%20an%20internal%20Bash,to%20generate%20an%20encryption%20key.&text=Jipe%20points%20out%20a%20set,number%20between%206%20and%2030.[here]] offset by 1000 (to prevent collisions with existing users in the container)
 +
+{zwsp}
++
 . You'll notice that it fails with this error message
 +
 [.console-output]
@@ -405,11 +449,13 @@ AH00558: httpd: Could not reliably determine the server's fully qualified domain
 (13)#Permission denied#: AH00058: Error retrieving pid file /run/httpd/httpd.pid
 AH00059: Remove it before continuing if it is corrupted.
 ----
-
++
 The issue here is that by default an arbitrary user won't have access to most of the files that the webserver needs to run.  This is where the fact that our arbitrary user will always be part of the `root` group (`gid`: `0`) will come in handy.  We need to make sure that the `root` group is assigned to the files and folders that the webserver needs and that the group has appropriate permissions.
-
++
 The process for doing this might be one of trial and error if you're not familiar with the software that you're attempting to run in the container.  In this case we know exactly which directories need to be adjusted.  Let's return to the `Containerfile`
-
++
+{zwsp}
++
 include::partial$containerfile_paste_snippet.adoc[]
 +
 [.console-input]
@@ -484,13 +530,19 @@ USER 1001
 <.> as with port forwarding in `podman run` we can specify the protocol (tcp)
 <.> This is the same command we were running manually with podman run
 +
+{zwsp}
++
 . Build the container
 +
 include::partial$buildah_bud_no_annotations.adoc[]
 +
+{zwsp}
++
 . This should yield output similar to before but appended with the following (... represents content that has been omitted)
 +
 include::partial$buildah_bud_output_cmd.adoc[]
++
+{zwsp}
 +
 . Run [#finished_container]#the container# again to test it (notice the differences in the command)
 +
@@ -508,6 +560,8 @@ podman run \
 <.> the `-P` flag leverages the `EXPOSE` directives from the `Containerfile` and forwards all exposed ports to *random* ports on the host
 <.> notice that no command is provided on the command line
 +
+{zwsp}
++
 . You'll notice that we can no longer hit the webserver at port 8081 (or it's at least very unlikely that we can) and instead we need to find out the port that podman assigned on the host.  Capture that with this command: 
 +
 [.console-input]
@@ -521,6 +575,8 @@ HOST_PORT=$(podman ps \#<.>
 <.> This returns only information for containers with the name `{apache-server-container-name}`
 <.> `--format` returns extended information in JSON format which we pipe to the `jq` command to quickly parse the JSON for the field we're after
 +
+{zwsp}
++
 . Next, we're pretty-print the url of our guestbook so that we can paste it into our Browser Preview window
 +
 [.console-input]
@@ -528,6 +584,8 @@ HOST_PORT=$(podman ps \#<.>
 ----
 echo "http://localhost:pass:[${HOST_PORT}]/hello.html"
 ----
++
+{zwsp}
 +
 . Copy the echo'ed string into the Browser Preview window
 +
@@ -538,14 +596,22 @@ If you hover over the string in the terminal window with your mouse you might be
 image::dont-click-link.png[]
 ====
 +
+{zwsp}
++
 . You should now see your guestbook
 +
 .Guestbook, but now at an arbitrary port
 image::apache-guestbook-page-random-port.jpg[]
 +
+{zwsp}
++
 . Finally, go ahead and "sign" the guestbook by entering your *name* (such as "Alice") and pressing `Log to Guestbook`.  When you do so, you should see the following page
 +
 .Notice the random uid (yours will vary)
 image::arbitrary-user-guestbook.jpg[]
++
+{zwsp}
 
-Congratulations!  You've build a secure container from the ground up.  Next we'll look at ways of getting our container out there in the world using Kubernetes.
+*Congratulations!*  You've built a secure container from the ground up.  Next we'll look at ways of getting our container out there in the world using Kubernetes.
+
+{zwsp}

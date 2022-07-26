@@ -1,5 +1,9 @@
 * {zwsp}
-* __Module III__
+* __Extensions__
+* xref:METASPLOIT:containers-and-security.adoc[Metasploit]
+** xref:METASPLOIT:containers-and-security.adoc#exploit_containers[Exploit a Container]
+** xref:METASPLOIT:containers-and-security.adoc#run_containers_responsibly[Run Containers Responsibly]
+** xref:METASPLOIT:containers-and-security.adoc#test_secure_container[Testing our Secure Container]
 * xref:DATABASES:databases-and-containers.adoc#[Containerized Databases]
 * xref:PODMAN_COMPOSE:compose-container.adoc[Docker Compose & Pods]
 * xref:PODMAN_ROOTLESS:podman-rootless.adoc[Rootless Containers]

@@ -1,0 +1,8 @@
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman cp \
+  {apache-server-container-name}:/var/log/www/visitor_info.txt \
+  {container-workshop-exercise-path} #<.>
+----
+<.> This is a path on your local VM to the container-workshop directory you see in the *Explorer*

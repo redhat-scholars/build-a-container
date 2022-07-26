@@ -35,6 +35,8 @@ Would you like to use and setup a new database (recommended)?
 ----
 ****
 +
+{zwsp}
++
 . When it's done initializing, you should see output something like this (ASCII art, "tip", and `LHOST` will vary)
 +
 [.console-output]

