@@ -75,25 +75,26 @@ buildah bud \#<.>
 [.console-output]
 [source,subs="+macros,+attributes"]
 ----
-STEP 1: FROM registry.access.redhat.com/ubi7
+Trying to pull registry.access.redhat.com/ubi7:latest...
 Getting image source signatures
 Checking if image destination supports signatures
-Copying blob 93156a512b98 done  
-Copying blob f8c518873786 done  
-Copying config 67d3aabcdb done  
+Copying blob 1cc60fbe16bd done  
+Copying blob ffb0ffdba2a9 done  
+Copying config 5d69408f88 done  
 Writing manifest to image destination
 Storing signatures
-STEP 2: USER root 
-STEP 3: COMMIT {apache-server-containerfile-image} #<.>
+STEP 2/2: USER root 
+COMMIT localhost/secure-container
 Getting image source signatures
-Copying blob 01d2fb866535 skipped: already exists  
-Copying blob 9e12a51e507a skipped: already exists  
+Copying blob 63c0270243d0 skipped: already exists  
+Copying blob cbd5a225fe2d skipped: already exists  
 Copying blob 5f70bf18a086 done  
-Copying config 3d4cd1585c done  
+Copying config 1bfdcbed3c done  
 Writing manifest to image destination
 Storing signatures
---> 3d4cd1585cd
-3d4cd1585cd258b57399e3cd74516bca85ea745a1066e6ff26e1ee170122d232
+--> 1bfdcbed3c8
+Successfully tagged localhost/secure-container:latest
+1bfdcbed3c8de9b6ff4379510d90b49728c99d3b6a73f804aae4761aced129ad
 ----
 <.> Notice that the `COMMIT` command is implicit and reminiscent of the buildah native command that we issued
 +
@@ -514,7 +515,7 @@ podman run \
 ----
 HOST_PORT=$(podman ps \#<.>
     -f name={apache-server-container-name} \#<.>
-    --format json | jq -r ".[0].Ports[0].hostPort") #<.>
+    --format json | jq -r ".[0].Ports[0].host_port") #<.>
 ----
 <.> The output of this string of commands will give us the port on the host that is forwarded to our exposed container port
 <.> This returns only information for containers with the name `{apache-server-container-name}`
