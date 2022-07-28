@@ -28,9 +28,9 @@
 * {zwsp}
 * __Module II__
 * xref:containers-and-security.adoc[Container Security]
-* xref:build-your-own-container.adoc[Build a Container]
-** xref:build-your-own-container.adoc[Build your own Secure Container]
-** xref:build-your-own-container-containerfile.adoc[Buildah and Containerfiles]
+* xref:build-your-own-container.adoc[Build a Secure Container]
+** xref:build-your-own-container.adoc[Using Buildah Interactively]
+** xref:build-your-own-container-containerfile.adoc[Using Buildah with Containerfiles]
 * xref:deploy-container.adoc[Deploying to OpenShift]
 
 

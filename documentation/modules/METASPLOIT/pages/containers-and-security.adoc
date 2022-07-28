@@ -5,28 +5,35 @@ include::_attributes.adoc[]
 :description: Introduction to Containers, Container Security and Container Tools including Podman and Buildah
 :keywords: docker, podman, buildah, skopeo, security, secure containers, containers, Red Hat, RHEL, Linux, Containerization, cloud, build a container, workshop, cloud native, openshift
 
-_25 MINUTE EXERCISE_
+_15 MINUTE EXERCISE_
 
 In Module II you saw a video of how the Metasploit tool can be used to gain access into a container and a host that has vulnerabilities. in this extension exercise you can try it out for yourself.
 [NOTE]
 ====
-Before running this exercise you will have needed to complete Module II.
+Before running the second half of this exercise you will have needed to complete Module II and built the secure container image: localhost/secure-container 
 ====
 
 [#exploit_containers]
 == Exploiting a Vulnerable Container
 
-In order to get a sense of how consequential these security exploits can be, let's exploit some of the issues in the containers we already have running
+In previous exercises we have highlighted the risk of the link:https://en.wikipedia.org/wiki/Shellshock_(software_bug)[Shellshock vulnerability^] vulnerability in the container image `{apache-server-image-insecure}`
 
-image:Shellshock-logo.png[role=right,width=50]
-Our `{apache-server-image-insecure}` has a huge vulnerability in it that is further excerbated by the manner in which we've run our container.  The vulnerability is the (in)famous link:https://en.wikipedia.org/wiki/Shellshock_(software_bug)[Shellshock vulnerability^] 
+In order to get a sense of how consequential these security exploits can be, let's use Metasploit can exploit it.
 
-. First ensure the `{apache-server-image-insecure}` is running by running the following command in the terminal
+. First as `root` lets run the `{apache-server-image-insecure}` as we did in Module I. Previous containers can be stopped and removed.
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-podman ps
+podman stop -a
+podman rm -a
+podman run \
+    --privileged \
+    -d \
+    -p 8081:80/tcp \
+    --name my-web-server \
+    -v /home/%USER%/container-workshop:/var/log/www:Z \
+    quay.io/bfarr/container-workshop-httpd:0.0.6
 ----
 +
 {zwsp}
@@ -370,7 +377,7 @@ Yields all the information about the private key!
 ====
 
 [#run_containers_responsibly]
-== Run containers responsibly
+== Run Containers responsibly
 
 Following the link:https://en.wikipedia.org/wiki/Principle_of_least_privilege[principle of least privilege^], there is a lot we could have done to limit the damage of any attacker such as:
 
@@ -379,249 +386,26 @@ Following the link:https://en.wikipedia.org/wiki/Principle_of_least_privilege[pr
 * don't run containers as root
 * ensure that your containers do not include known vulnerabilities or CVEs
 
-For the purposes of this lab, we're only going to investigate the last two items on this list.  
+The same exercise above can be run when the container is run as a non-root user. The difference will be is that unlike before, the files on the host will be created as `{USER}`, that is, the user that ran the `podman` command and not `root` as it appeared from inside the container
 
-[#non_root_containers]
-=== Non-root containers
-
-Most containerization runtimes, such as Docker, effectively require all containers to run as root by way of the Docker daemon on the system. 
-
-Podman is different in that regard.  Because it does not rely on a root-level service to be active to be able to run a container, containers can instead be run as normal users on the system.  How it does this is a bit beyond the scope of this workshop, but in short it does this through linux user namespace mapping.  
-
-When running as a non-root user on the host system, any container that is setup to run as root (like our apache webserver container) will present instead as the user who started the container to the host system.  This can further limit exposure of the host system.  Let's try this out.
-
-. First, before we do anything else, be sure to shutdown the currently running container
-+
-[tabs]
-====
-Terminal 1::
-+
---
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-podman rm -f {apache-server-container-name}
-----
---
-====
-+
-. Once you enter that command to kill (and remove) the container, you'll notice the following in your metasploit terminal
-+
-[tabs]
-====
-{metasploit-terminal}::
-+
---
-[.console-output]
-[source,bash,subs="+macros,+attributes"]
-----
-[*] 127.0.0.1 - Meterpreter session 1 closed.  Reason: Died
-----
---
-====
-+
-. For most of the lab we have been running as the `root` user.  We're now going to run some commands to make sure we fall back to running as a normal unprivileged user
-+
-[tabs]
-====
-Terminal 1::
-+
---
-. First confirm that you are currently the `root` user
-+
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-whoami
-----
-+
-. ensure the you see the following (if not you may have already logged out)
-+
-[.console-output]
-[source,bash,subs="+macros,+attributes"]
-----
-root
-----
-+
-. then run the following command to exit `sudo` session
-+
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-exit
-----
-+
-. Check to ensure you are no longer the root user in the terminal by running the following command
-+
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-whoami
-----
-+
-. Ensure that the output of the command is the following:
-+
-[.console-output]
-[source,bash,subs="+macros,+attributes"]
-----
-{USER}
-----
-+
-.TIP
-****
-If the user displayed as the output of `whoami` does not match the `{USER}` ensure you followed the instructions <<non_root_containers,here>> correctly or ask for assistance.
-****
---
-====
-+
-. Now we'll run our webserver much like we did before but _this time as a non-root user_
-+
-[tabs]
-====
-Terminal 1::
-+
---
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-podman run \
-    --privileged \#<.>
-    -d \
-    -p 8081:80/tcp \ 
-    --name {apache-server-container-name} \
-    -v {container-workshop-exercise-path}:/var/log/www:Z \
-    {apache-server-image-insecure}
-----
-<.> Despite what we learned in the previous sections about the risks inherent in running with `--privileged` we are going to use that flag again when running the container rootlessly.  You'll see soon why this is OK
---
-====
-
-[NOTE]
-====
-You will notice that the container needs to be downloaded again.  Didn't we do this already?  We did, but as `root`.  Each user keeps their own local container storage separate from all other users.
-====
-
-include::partial$metasploit_shell_return.adoc[]
-
-include::partial$metasploit_exploit_shell.adoc[]
-
-Now with your shell setup from metasploit, run the following command:
-
-[tabs]
-====
-{metasploit-terminal}::
-+
---
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-touch /var/log/www/hello_from_rootless_podman.txt
-----
---
-====
-
-[NOTE]
-====
-When you create the file, you should see a file appear in the `container_workshop` in the explorer
-====
-
-[tabs]
-====
-{metasploit-terminal}::
-+
---
-. Run the following command to look at the permissions of the file
-+
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-ls -l /var/log/www/hello_from_rootless_podman.txt
-----
-+
-. It should appear that the files are created by root
-+
-[.console-output]
-[source,bash,subs="+macros,+attributes,+quotes"]
-----
--rw-r--r--. 1 #root# #root# 0 Jun 14 13:25 /var/log/www/hello_from_rootless_podman.txt
-----
-+
-. This makes sense as you are still running in the container as root.  Prove this by running:
-+
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-whoami
-----
-+
-[.console-output]
-[source,bash,subs="+macros,+attributes"]
-----
-root
-----
---
-====
-
-The noteworthy part is what we see on the *host* filesystem.  From the main shell (which is running directly on the host and not in a container), let's take a look at the file we created (that recently appeared in the explorer)
-
-[tabs]
-====
-Terminal 1::
-+
---
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-ls -l {container-workshop-exercise-path}/hello_from_rootless_podman.txt
-----
-
-[.console-output]
-[source,bash,subs="+macros,+attributes,+quotes"]
-----
--rw-r--r--. 1 #student1# #student1# 0 Jun 14 13:25 /home/student1/container-workshop/hello_from_rootless_podman.txt
-----
---
-====
-
-The key here is that unlike before, the files on the host were created as `{USER}`, that is, the user that ran the `podman` command and not `root` as it appeared from inside the container
-
-Podman is able to accomplish this through "namespacing" and mapping container UIDs to different UIDs on the host.  Any container running as `root` when running as rootless podman will always present to the host (such as via volume mounts) as the user that ran the rootless podman command in the first place.
+Podman is able to accomplish this through "namespacing" and mapping container UIDs to different UIDs on the host.  (See table in Rootless Containers extension) Any container running as `root` when running as rootless podman will always present to the host (such as via volume mounts) as the user that ran the rootless podman command in the first place.
 
 This affords an additional layer of (preventative) security as even containers that think they are running as root are not actually running with such privileges on the host
-
-Finally, remember how we ran this container with the `--privileged` flag even though we know that it confers extra powers to the container?  Let's try our `fdisk` trick again
-
-[tabs]
-====
-{metasploit-terminal}::
-+
---
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-fdisk -l
-----
-
-But this time it will appear as if we had not run with the `--privileged` flag at all:
-
---
-====
-
-This is again due to the fact that the container is not actually running as root on the host system, it is running as `{USER}` and `{USER}` does not have permissions to run `fdisk` normally.  Hence rootless containers afford additional layers of security on top of the ones we indicated already
 
 [#test_secure_container]
 == Testing our Secure Container
 
 In Module II you built a new image and we will now test this with Metasploit.
 
-:stop-container-name: {apache-server-container-name}
-include::partial$ensure_no_running_container.adoc[]
-
 . Run the new container "rootlessly" in the terminal by running the following command: 
 +
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
+sudo podman stop -a
+sudo podman rm -a
+podman stop -a
+podman rm -a
 podman run \
     -d \
     -p 8081:80/tcp \#<.>
@@ -656,46 +440,7 @@ And this should result in the following output:
 --
 ====
 
-Congratulations!  You'd fixed the shellshock exploit of the original `{apache-server-image-insecure-image}` container!
+*Congratulations!*  You'd fixed the shellshock exploit of the original `{apache-server-image-insecure-image}` container!
 
-.TIP
-****
-You are now done with metasploit and {metasploit-terminal}.  You can close down that terminal with the following commands:
-****
+You are now done with metasploit and {metasploit-terminal}.  You can now exit out of metasploit and close down that terminal.
 
-[tabs]
-====
-{metasploit-terminal}::
-+
---
-
-First exit out of metasploit
-
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-exit
-----
-
-Which should return you to the lab instance terminal
-
-[.console-output]
-[source,bash,subs="+macros,+attributes"]
-----
-[{USER}@ansible-1 ~]$
-----
-
-And now exit out of that terminal
-
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-exit
-----
-
-Which should return you terminal to a single "unsplit" terminal window
-
-image::terminal-unsplit.jpg[]
-
---
-====

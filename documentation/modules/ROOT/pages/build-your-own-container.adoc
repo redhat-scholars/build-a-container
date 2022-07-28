@@ -1,6 +1,6 @@
 include::_attributes.adoc[]
 
-= Build your own Secure Container
+= Using Buildah Interactively
 :navtitle: Build your own Secure Container
 :description: Introduction to Containers, Container Security and Container Tools including Podman and Buildah
 :keywords: docker, podman, buildah, skopeo, security, secure containers, containers, Red Hat, RHEL, Linux, Containerization, cloud, build a container, workshop, cloud native, openshift
@@ -14,7 +14,7 @@ image::buildah.png[Buildah!,width=320,height=78]
 `buildah` is used to create OCI-compliant container images, such as the `{apache-server-image-insecure-image}` that we've been using.  We'll start by fixing a the security vulnerability we found in the link:containers-and-security.html?FOO=bar[previous section^].
 
 [#buildah_native]
-== Buildah native commands
+== Fixing the Vulnerability with Buildah Interactively
 
 One of the things that makes `buildah` unique is the ability to interact with container images from the host's command line.  (As we'll see in the next section, it also allows the creation of images from a `Dockerfile` or, more generically a " `Containerfile` ").  This will make it easy for us to remediate the vulnerability we found in the last section.
 
