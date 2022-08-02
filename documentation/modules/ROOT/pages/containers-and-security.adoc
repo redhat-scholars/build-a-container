@@ -16,6 +16,8 @@ Sometimes people can be lulled into a false sense of security around containers 
 
 In order to get a sense of how consequential these security exploits can be, the folowing video demonstrates how the Metasploit tool can hack into our container and even the host!
 
+video::S47uwUBRyD4[youtube, width=800, height=600]
+
 The Metasploit extension exercise offer you the ability to try this for yourself and how it can be fixed!
 
 
