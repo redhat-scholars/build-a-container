@@ -223,6 +223,11 @@ Normally a team would already have custom content handy on the host already.  In
 [source,bash,subs="+macros,+attributes"]
 ----
 WORKING_CONTAINER_OLD=$(buildah from {apache-server-image-insecure-image}) 
+----
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
 WORKING_CONTAINER_OLD_IMAGE_MOUNT=$(buildah mount pass:[${WORKING_CONTAINER_OLD}])
 ----
 +
@@ -234,15 +239,29 @@ WORKING_CONTAINER_OLD_IMAGE_MOUNT=$(buildah mount pass:[${WORKING_CONTAINER_OLD}
 [source,bash,subs="+macros,+attributes"]
 ----
 cp pass:[${WORKING_CONTAINER_OLD_IMAGE_MOUNT}]/var/www/cgi-bin/log-visitor.sh /home/{USER}/container-workshop/secure-container
+----
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
 cp pass:[${WORKING_CONTAINER_OLD_IMAGE_MOUNT}]/var/www/html/hello.html /home/{USER}/container-workshop/secure-container
+----
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
 cp pass:[${WORKING_CONTAINER_OLD_IMAGE_MOUNT}]/etc/httpd/conf/httpd.conf /home/{USER}/container-workshop/secure-container
 ----
 +
 {zwsp}
 +
-. At this point you should see the three files appear in the `secure-container` directory.  You can also click on them and take a look at them like you would any file on the host
+. At this point you should see the three files appear in the `secure-container` directory.  
 +
-image::guestbook-files.png[]
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+ls /home/{USER}/container-workshop/secure-container
+----
 +
 {zwsp}
 +

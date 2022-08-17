@@ -342,6 +342,12 @@ Let's take a quick look at how OpenShift adds a layer of protection around our r
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
+podman pull {apache-server-image-insecure}
+----
++
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
 podman tag \
     {apache-server-image-insecure} \
     pass:[${OCP_REGISTRY_URL}]:insecure #<.>
