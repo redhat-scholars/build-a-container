@@ -796,8 +796,12 @@ Storing signatures
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">WORKING_CONTAINER_OLD=$(buildah from quay.io/bfarr/container-workshop-httpd)
-WORKING_CONTAINER_OLD_IMAGE_MOUNT=$(buildah mount ${WORKING_CONTAINER_OLD})</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">WORKING_CONTAINER_OLD=$(buildah from quay.io/bfarr/container-workshop-httpd)</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">WORKING_CONTAINER_OLD_IMAGE_MOUNT=$(buildah mount ${WORKING_CONTAINER_OLD})</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -808,9 +812,17 @@ WORKING_CONTAINER_OLD_IMAGE_MOUNT=$(buildah mount ${WORKING_CONTAINER_OLD})</cod
 <p>Now we don&#8217;t want very many files from the old container, we only want the files involved with our guestbook website.  We can pull them out and into our <code>Containerfile</code> working directory by running the following commands</p>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp ${WORKING_CONTAINER_OLD_IMAGE_MOUNT}/var/www/cgi-bin/log-visitor.sh /home/%USER%/container-workshop/secure-container
-cp ${WORKING_CONTAINER_OLD_IMAGE_MOUNT}/var/www/html/hello.html /home/%USER%/container-workshop/secure-container
-cp ${WORKING_CONTAINER_OLD_IMAGE_MOUNT}/etc/httpd/conf/httpd.conf /home/%USER%/container-workshop/secure-container</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp ${WORKING_CONTAINER_OLD_IMAGE_MOUNT}/var/www/cgi-bin/log-visitor.sh /home/%USER%/container-workshop/secure-container</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp ${WORKING_CONTAINER_OLD_IMAGE_MOUNT}/var/www/html/hello.html /home/%USER%/container-workshop/secure-container</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp ${WORKING_CONTAINER_OLD_IMAGE_MOUNT}/etc/httpd/conf/httpd.conf /home/%USER%/container-workshop/secure-container</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -818,10 +830,10 @@ cp ${WORKING_CONTAINER_OLD_IMAGE_MOUNT}/etc/httpd/conf/httpd.conf /home/%USER%/c
 </div>
 </li>
 <li>
-<p>At this point you should see the three files appear in the <code>secure-container</code> directory.  You can also click on them and take a look at them like you would any file on the host</p>
-<div class="imageblock">
+<p>At this point you should see the three files appear in the <code>secure-container</code> directory.</p>
+<div class="listingblock console-input">
 <div class="content">
-<img src="_images/guestbook-files.png" alt="guestbook files">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ls /home/%USER%/container-workshop/secure-container</code></pre>
 </div>
 </div>
 <div class="paragraph">
