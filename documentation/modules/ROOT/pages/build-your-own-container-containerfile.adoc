@@ -390,7 +390,7 @@ When a container is run with an arbitrary user, the only thing that we are guara
 podman run \
     --rm \
     -u pass:[$((1000 + ${RANDOM}))] \#<.>
-    -p 8081:80/tcp \ 
+    -p 8080:8080/tcp \
     --name {apache-server-container-name} \
     {apache-server-containerfile-image} \
     /usr/sbin/httpd -DFOREGROUND 
@@ -449,7 +449,7 @@ For starters, it's a little annoying that we have to manually specify the `httpd
 podman run \
     --rm \
     -u pass:[$((1000 + ${RANDOM}))] \
-    -p 8081:8080/tcp
+    -p 8080:8080/tcp
     --name {apache-server-container-name} \
     {apache-server-containerfile-image} \
     #/usr/sbin/httpd -DFOREGROUND#
