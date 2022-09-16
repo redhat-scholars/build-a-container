@@ -42,3 +42,7 @@
     user_role: edit
     user_name: "student{{ item }}"
   loop: "{{ range(1, num_users + 1)|list }}"
+
+- name: Expose internal registry
+  shell: |
+    oc patch configs.imageregistry.operator.openshift.io/cluster --patch '{"spec":{"defaultRoute":true}}' --type=merge
