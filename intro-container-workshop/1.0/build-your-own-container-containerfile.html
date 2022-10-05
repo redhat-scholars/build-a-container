@@ -1026,7 +1026,7 @@ Storing signatures
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
     --rm \
     -u $((1000 + ${RANDOM})) \<i class="conum" data-value="1"></i><b>(1)</b>
-    -p 8081:80/tcp \
+    -p 8080:8080/tcp \
     --name my-web-server \
     localhost/secure-container \
     /usr/sbin/httpd -DFOREGROUND</code></pre>
@@ -1115,7 +1115,7 @@ RUN chmod 755 /var/www/cgi-bin/log-visitor.sh
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman run \
     --rm \
     -u $((1000 + ${RANDOM})) \
-    -p 8081:8080/tcp
+    -p 8080:8080/tcp
     --name my-web-server \
     localhost/secure-container \
     <mark>/usr/sbin/httpd -DFOREGROUND</mark></code></pre>
