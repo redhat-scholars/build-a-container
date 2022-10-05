@@ -139,7 +139,7 @@ Let's go back to the container that we finished link:build-your-own-container-co
 
 === OpenShift and Image Registries
 
-In order to be able to run an image in OpenShift or Kubernetes we need to put our image somewhere we're OpenShift can find it.  This usually involves uplaoding the image to either a public or private container registry.  Public registries include Red Hat's link:quay.io[quay.io^] and Docker's link:https://hub.docker.com/[Docker Hub^]
+In order to be able to run an image in OpenShift or Kubernetes we need to put our image somewhere where OpenShift can find it.  This usually involves uploading the image to either a public or private container registry.  Public registries include Red Hat's link:quay.io[quay.io^] and Docker's link:https://hub.docker.com/[Docker Hub^]
 
 One of the features that OpenShift adds to Kubernetes is an in-built container registry called an `ImageStream`.  We're going to create an `ImageStream` to upload our container to where OpenShift can find it.
 
