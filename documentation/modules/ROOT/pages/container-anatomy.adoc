@@ -105,7 +105,7 @@ Containers fully qualified image registry path is below:
 image::container-identification.png[Container Identification!]
 [NOTE]
 ====
-If you only reference a container by its short name i.e.  rhel8/mysql-80:latest , there will be an assumption made as to which register to try. For example in RHEL 8, the default registries that will be looked up are
+If you only reference a container by its short name i.e.  rhel8/mysql-80:latest , there will be an assumption made as to which registry to try. For example in RHEL 8, the default registries that will be looked up are
 registry.access.redhat.com, registry.redhat.io, docker.io
 
 Red Hat recommends that users always use fully qualified names when referring to container images in any context.
