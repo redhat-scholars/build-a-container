@@ -120,7 +120,7 @@ Like the container image specification, there is a link:https://github.com/openc
 image::runtimespec.png[Extract!]
 
 
-The state of a container includes properties like OCI Version, status, process id (pid) and container ID. The container id and must be unique across all containers on this host and can be found with the following command:
+The state of a container includes properties like OCI Version, status, process id (pid) and container ID. The container id must be unique across all containers on this host and can be found with the following command:
 
 ----
 podman ps
@@ -269,7 +269,7 @@ and optimized for automation.
 
 === Red Hat's Enterprise Container Registry
 Red Hat Quay is a private container image registry that enables you to build, distribute, and deploy containers with the storage you need to scale quickly.
-It analyzes your images for security vulnerabilities using Clair, identifying potential issues and addressing them before they become security risks.
+It analyzes your images for security vulnerabilities using built-in Clair, identifying potential issues and addressing them before they become security risks.
 {zwsp}
 
 image::rh_quay_black.svg[Red Hat Quay!]
