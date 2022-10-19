@@ -487,7 +487,7 @@ The figure below shows the extract of a container image and how the internals of
 </td>
 <td class="content">
 <div class="paragraph">
-<p>If you only reference a container by its short name i.e.  rhel8/mysql-80:latest , there will be an assumption made as to which register to try. For example in RHEL 8, the default registries that will be looked up are
+<p>If you only reference a container by its short name i.e.  rhel8/mysql-80:latest , there will be an assumption made as to which registry to try. For example in RHEL 8, the default registries that will be looked up are
 registry.access.redhat.com, registry.redhat.io, docker.io</p>
 </div>
 <div class="paragraph">
@@ -514,7 +514,7 @@ registry.access.redhat.com, registry.redhat.io, docker.io</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The state of a container includes properties like OCI Version, status, process id (pid) and container ID. The container id and must be unique across all containers on this host and can be found with the following command:</p>
+<p>The state of a container includes properties like OCI Version, status, process id (pid) and container ID. The container id must be unique across all containers on this host and can be found with the following command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -750,7 +750,7 @@ and optimized for automation.</p>
 <h3 id="_red_hats_enterprise_container_registry"><a class="anchor" href="#_red_hats_enterprise_container_registry"></a>Red Hat&#8217;s Enterprise Container Registry</h3>
 <div class="paragraph">
 <p>Red Hat Quay is a private container image registry that enables you to build, distribute, and deploy containers with the storage you need to scale quickly.
-It analyzes your images for security vulnerabilities using Clair, identifying potential issues and addressing them before they become security risks.
+It analyzes your images for security vulnerabilities using built-in Clair, identifying potential issues and addressing them before they become security risks.
 &#8203;</p>
 </div>
 <div class="imageblock">

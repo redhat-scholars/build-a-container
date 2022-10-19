@@ -319,7 +319,7 @@ Though we&#8217;ve fixed the issue with <code>quay.io/bfarr/container-workshop-h
 <div class="ulist">
 <ul>
 <li>
-<p>The web server is running on privileged port 80 in the container.  Better to have this run in a privileged port above 1024 (such as 8080)</p>
+<p>The web server is running on privileged port 80 in the container.  Better to have this run on a non-privileged port above 1024 (such as 8080)</p>
 </li>
 <li>
 <p>Running as a specific user can be problematic as that user can implicitly have privileges afforded to them via <code>sudo</code> (either at runtime or in the ongoing maintenance of the container).  It would be better if we could run the container as the unknown or "anonymous" user</p>
@@ -757,7 +757,7 @@ Storing signatures
 <p>So far we have got a container image that is able to run a generic apache site, but how do we customize this to run our specific site?  This is where another Container file directive, <code>COPY</code> comes in.</p>
 </div>
 <div class="paragraph">
-<p>In this section we&#8217;re going to get a little help from the builah native commands to retrieve our custom content from our old container
+<p>In this section we&#8217;re going to get a little help from the buildah native commands to retrieve our custom content from our old container
 <code>quay.io/bfarr/container-workshop-httpd</code>.  Then we&#8217;re going to show how we can use <code>COPY</code> and the Containerfile to get those assets onto our container</p>
 </div>
 <div class="olist arabic">
