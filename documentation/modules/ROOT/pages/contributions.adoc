@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 This workshop was built by a team who are really passionate about container technology and educating others.
 
-Credits for the workshop go to Benjamin Farr, Shane Boulden, Brian Stinehart, Ben Blasco, Alfred Lang, Marc Hildenbrand along with a number of colleagues who helped refine it. 
+Credits for the workshop go to Benjamin Farr, Shane Boulden, Brian Stinehart, Ben Blasco, Andreas Spanner, Matt Parkinson, Alfred Lang, Marc Hildenbrand along with a number of colleagues who helped refine it. 
 
 === Contact
 
