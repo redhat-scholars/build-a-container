@@ -392,7 +392,7 @@ image::terminal-split.jpg[]
 Terminal 2::
 +
 --
-To monitor our pod from the terminal we're going to use a tool called `stern` (see here for more info).  It allows us to aggregate and view logs from our Kubernetes cluster.
+To monitor our pod from the terminal we're going to use a tool called `stern` (link:https://github.com/stern/stern[see here for more info^]).  It allows us to aggregate and view logs from our Kubernetes cluster.
 
 To set up a log watch enter the following command
 
