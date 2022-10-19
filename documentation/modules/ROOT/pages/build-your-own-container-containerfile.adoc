@@ -193,7 +193,7 @@ include::partial$buildah_bud_output_run.adoc[]
 
 So far we have got a container image that is able to run a generic apache site, but how do we customize this to run our specific site?  This is where another Container file directive, `COPY` comes in.  
 
-In this section we're going to get a little help from the builah native commands to retrieve our custom content from our old container 
+In this section we're going to get a little help from the buildah native commands to retrieve our custom content from our old container 
 `quay.io/bfarr/container-workshop-httpd`.  Then we're going to show how we can use `COPY` and the Containerfile to get those assets onto our container
 
 . First let's leverage `buildah` to pull our custom website files onto our host.  We'll need to mount the container and since we're not a root user we're going to first need to issue
