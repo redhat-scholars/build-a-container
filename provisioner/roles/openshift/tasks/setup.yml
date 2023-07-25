@@ -17,7 +17,7 @@
     ocp_cluster_subdomain: "{{ oc_subdomain.stdout }}"
 
 - name: Get Local Secret File
-  shell: oc get secret htpasswd-secret -n openshift-config -o jsonpath={'.data.htpasswd'} | base64 -d > /tmp/passwd
+  shell: oc get secret htpasswd -n openshift-config -o jsonpath={'.data.htpasswd'} | base64 -d > /tmp/passwd
 
 - name: Add or Update users and passwords
   shell: htpasswd -b /tmp/passwd student{{item}} {{user_password}}
@@ -25,7 +25,7 @@
 
 - name: Patch secret
   shell: |
-    oc patch secret htpasswd-secret -n openshift-config --type='json' -p='[{"op" : "replace", "path" : "/data/htpasswd", "value" : "'"$(base64 -w 0 /tmp/passwd)"'"}]'
+    oc patch secret htpasswd -n openshift-config --type='json' -p='[{"op" : "replace", "path" : "/data/htpasswd", "value" : "'"$(base64 -w 0 /tmp/passwd)"'"}]'
     
 - name: Set up user projects
   k8s:
